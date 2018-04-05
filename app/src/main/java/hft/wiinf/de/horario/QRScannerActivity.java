@@ -13,19 +13,19 @@ import com.google.zxing.integration.android.IntentResult;
 
 public class QRScannerActivity extends AppCompatActivity
 {
-    private Button scan_btn;
+    private Button scanner_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        scan_btn = (Button) findViewById(R.id.scan_btn);
+        setContentView(R.layout.activity_reader);
+        scanner_btn = (Button) findViewById(R.id.scanner_btn);
         final Activity activity = this;
-        scan_btn.setOnClickListener(new View.OnClickListener() {
+        scanner_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 IntentIntegrator integrator = new IntentIntegrator(activity);
-                integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
+                integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
                 integrator.setPrompt("Scan");
                 integrator.setCameraId(0);
                 integrator.setBeepEnabled(false);
@@ -34,6 +34,7 @@ public class QRScannerActivity extends AppCompatActivity
             }
         });
     }
+    //TODO Der Output und der Abbruch müssen noch ausgearbeitet werden
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Horario</string>
+    <string name="Test">Test</string>
+    <string name="title_activity_test">Test</string>
 </resources>
