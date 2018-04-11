@@ -9,7 +9,7 @@ import android.util.Log;
 public class TabActivity extends AppCompatActivity {
 
     private static final String TAG = "TabActivity";
-    private SectionsPageAdapter mSectionsPageAdapter;
+    private SectionsPageAdapterActivity mSectionsPageAdapter;
     private ViewPager mViewPager;
 
     @Override
@@ -18,7 +18,7 @@ public class TabActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tab);
         Log.d(TAG, "onCrate: Starting.");
 
-        mSectionsPageAdapter = new SectionsPageAdapter(getSupportFragmentManager());
+        mSectionsPageAdapter = new SectionsPageAdapterActivity(getSupportFragmentManager());
 
         //Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager)findViewById(R.id.container);
@@ -26,17 +26,17 @@ public class TabActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabBarLayout);
         tabLayout.setupWithViewPager(mViewPager);
-        tabLayout.getTabAt(0).setIcon(R.drawable.ic_android_black_24dp);
-        tabLayout.getTabAt(1).setIcon(R.drawable.ic_android_black2_24dp);
-        tabLayout.getTabAt(2).setIcon(R.drawable.ic_android_black3_24dp);
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_add_a_photo_white_24px);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_event_note_white_24px);
+        tabLayout.getTabAt(2).setIcon(R.drawable.ic_settings_white_24px);
 
     }
 
     private void setupViewPager(ViewPager viewPager){
-        SectionsPageAdapter adapter = new SectionsPageAdapter((getSupportFragmentManager()));
-        adapter.addFragment(new NewEvent(),"");
-        adapter.addFragment(new Calendar(), "");
-        adapter.addFragment(new Setting(), "");
+        SectionsPageAdapterActivity adapter = new SectionsPageAdapterActivity((getSupportFragmentManager()));
+        adapter.addFragment(new NewEventActivity(),"");
+        adapter.addFragment(new CalendarActivity(), "");
+        adapter.addFragment(new SettingActivity(), "");
         viewPager.setAdapter(adapter);
     }
 }
