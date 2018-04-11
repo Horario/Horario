@@ -1,26 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
+        android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".FragmentThree">
+    android:layout_height="match_parent">
 
 
     <TextView
-        android:id="@+id/textTab3"
+        android:id="@+id/newEventTab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:text="Tab3"
+        android:text="@string/newEvent"
         android:textSize="25sp"
         android:layout_marginTop="40dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/btnTEST3"
-        android:text="TESTBTN 3"/>
+        android:id="@+id/btnTEST1"
+        android:text="TESTBTN 1"/>
 
 </RelativeLayout>

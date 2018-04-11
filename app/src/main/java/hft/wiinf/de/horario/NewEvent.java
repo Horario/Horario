@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class FragmentOne extends Fragment {
+public class NewEvent extends Fragment {
     private static final String TAG = "Tab1Fragment";
     private Button btnTEST1;
 
@@ -19,7 +19,7 @@ public class FragmentOne extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_tab1, container, false);
+        View view = inflater.inflate(R.layout.new_event, container, false);
         btnTEST1 = view.findViewById(R.id.btnTEST1);
         btnTEST1.setOnClickListener(new View.OnClickListener() {
             @Override

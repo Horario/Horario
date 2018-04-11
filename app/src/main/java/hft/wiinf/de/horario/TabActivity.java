@@ -24,7 +24,7 @@ public class TabActivity extends AppCompatActivity {
         mViewPager = (ViewPager)findViewById(R.id.container);
         setupViewPager(mViewPager);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabBarLayout);
         tabLayout.setupWithViewPager(mViewPager);
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_android_black_24dp);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_android_black2_24dp);
@@ -34,9 +34,9 @@ public class TabActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager){
         SectionsPageAdapter adapter = new SectionsPageAdapter((getSupportFragmentManager()));
-        adapter.addFragment(new FragmentOne(),"");
-        adapter.addFragment(new FragmentTwo(), "");
-        adapter.addFragment(new FragmentThree(), "");
+        adapter.addFragment(new NewEvent(),"");
+        adapter.addFragment(new Calendar(), "");
+        adapter.addFragment(new Setting(), "");
         viewPager.setAdapter(adapter);
     }
 }
