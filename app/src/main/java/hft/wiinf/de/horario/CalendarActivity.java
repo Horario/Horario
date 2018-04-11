@@ -8,9 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
-
-public class Calendar extends Fragment {
-    private static final String TAG = "Tab2Fragment";
+//TODO Kommentieren und Java Doc Info Schreiben
+public class CalendarActivity extends Fragment {
+    private static final String TAG = "CalendarFragmentActivity";
     private Button btnTEST2;
 
 
@@ -19,7 +19,7 @@ public class Calendar extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.calendar, container, false);
+        View view = inflater.inflate(R.layout.activity_calendar, container, false);
         btnTEST2 = view.findViewById(R.id.btnTEST2);
         btnTEST2.setOnClickListener(new View.OnClickListener() {
             @Override

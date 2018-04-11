@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 public class TabActivity extends AppCompatActivity {
-
+//TODO Kommentieren und Java Doc Info Schreiben
     private static final String TAG = "TabActivity";
     private SectionsPageAdapterActivity mSectionsPageAdapter;
     private ViewPager mViewPager;
