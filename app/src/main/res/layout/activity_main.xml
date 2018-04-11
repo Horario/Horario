@@ -28,6 +28,16 @@
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <Button
+        android:id="@+id/view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/genbtn"
+        android:layout_below="@+id/scnbtn"
+        android:text="Viewansicht"
+        app:layout_constraintStart_toStartOf="@+id/textView2"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    <Button
         android:id="@+id/genbtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

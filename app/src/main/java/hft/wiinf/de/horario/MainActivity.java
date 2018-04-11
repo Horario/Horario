@@ -8,30 +8,46 @@ import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
-private Button scnbtn;
-private Button genbtn;
+    private Button scnbtn;
+    private Button genbtn;
+    private Button view;
+
+
     //TODO JavaDoc Konforme Beschreibung in allen Klassen aufschreiben
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        scnbtn = (Button)findViewById(R.id.scnbtn);
-        final Activity activity = this;
-        scnbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-             startActivity(new Intent(MainActivity.this, QRScannerActivity.class));
-            }
-        });
-        genbtn = (Button)findViewById(R.id.genbtn);
-        final Activity activity1 =this;
-        genbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, QRGeneratorActivity.class));
-            }
-        });
 
+
+        //Buttons
+        scnbtn = (Button) findViewById(R.id.scnbtn);
+        final Activity activity = this;
+        scnbtn.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(MainActivity.this, QRScannerActivity.class));
+                    }
+                });
+        genbtn = (Button) findViewById(R.id.genbtn);
+        final Activity activity1 = this;
+        genbtn.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(MainActivity.this, QRGeneratorActivity.class));
+                    }
+                });
+
+        view = (Button) findViewById(R.id.view);
+        final Activity activity2 = this;
+        view.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(MainActivity.this, TabActivity.class));
+                    }
+                });
     }
-    
 }
