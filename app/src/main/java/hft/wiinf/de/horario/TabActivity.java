@@ -34,9 +34,9 @@ public class TabActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager){
         SectionsPageAdapter adapter = new SectionsPageAdapter((getSupportFragmentManager()));
-        adapter.addFragment(new FragmentOne(),"TAB1");
-        adapter.addFragment(new FragmentTwo(), "TAB2");
-        adapter.addFragment(new FragmentThree(), "TAB3");
+        adapter.addFragment(new FragmentOne(),"");
+        adapter.addFragment(new FragmentTwo(), "");
+        adapter.addFragment(new FragmentThree(), "");
         viewPager.setAdapter(adapter);
     }
 }
