@@ -3,23 +3,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Calendar">
+    android:layout_height="match_parent">
 
 
     <TextView
-        android:id="@+id/calendarTab"
+        android:id="@+id/settingTab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:text="@string/calendar"
+        android:text="@string/setting"
         android:textSize="25sp"
         android:layout_marginTop="40dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/btnTEST2"
-        android:text="TESTBTN 2"/>
+        android:id="@+id/btnTEST3"
+        android:text="TESTBTN 3"/>
 
 </RelativeLayout>

@@ -1,4 +1,4 @@
-package hft.wiinf.de.horario;
+package hft.wiinf.de.horario.View;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
+
+import hft.wiinf.de.horario.R;
+
 //TODO Kommentieren und Java Doc Info Schreiben
 public class SettingActivity extends Fragment {
     private static final String TAG = "SettingFragmentActivity";
@@ -19,7 +22,7 @@ public class SettingActivity extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.activity_setting, container, false);
+        View view = inflater.inflate(R.layout.activity_settings, container, false);
         btnTEST3 = view.findViewById(R.id.btnTEST3);
         btnTEST3.setOnClickListener(new View.OnClickListener() {
             @Override
