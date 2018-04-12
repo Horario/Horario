@@ -28,4 +28,5 @@ dependencies {
 
     compile 'com.github.sundeepk:compact-calendar-view:2.0.3-beta'
 
+    implementation 'com.android.support:design:27.1.0'
 }

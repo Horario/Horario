@@ -2,6 +2,10 @@ package hft.wiinf.de.horario;
 
 import org.junit.Test;
 
+import java.util.Date;
+
+import hft.wiinf.de.horario.view.CalendarActivity;
+
 import static org.junit.Assert.*;
 
 /**
@@ -9,9 +13,8 @@ import static org.junit.Assert.*;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-public class ExampleUnitTest {
+public class CalendarTest {
     @Test
-    public void addition_isCorrect() {
-        assertEquals(4, 2 + 2);
+    public void addEvent() {
     }
 }
