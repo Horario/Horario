@@ -7,9 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
-import hft.wiinf.de.horario.View.CalendarActivity;
-import hft.wiinf.de.horario.View.NewEventActivity;
-import hft.wiinf.de.horario.View.SettingActivity;
+import hft.wiinf.de.horario.view.CalendarActivity;
+import hft.wiinf.de.horario.view.NewEventActivity;
+import hft.wiinf.de.horario.view.SettingActivity;
 
 public class TabActivity extends AppCompatActivity {
     //TODO Kommentieren und Java Doc Info Schreiben
