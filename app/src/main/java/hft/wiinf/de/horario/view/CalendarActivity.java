@@ -1,4 +1,4 @@
-package hft.wiinf.de.horario.view;
+package hft.wiinf.de.horario.View;
 
 import android.graphics.Color;
 import android.os.Bundle;
