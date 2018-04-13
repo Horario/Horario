@@ -17,14 +17,25 @@ android {
         }
     }
 }
-
+/**
+ * Add the Zxing Library to make the QR-Code Scanner usable
+ * IMPORTANT:
+ * To use the Version 3.3.0 is an SDK Version 14+ necessary
+ */
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:27.1.0'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    //implementation 'com.android.support:appcompat-v7:27.1.0'
+    implementation('com.journeyapps:zxing-android-embedded:3.6.0') { transitive = false }
+    implementation 'com.android.support:appcompat-v7:25.3.1'
+    // Version 23+ is required
+    implementation 'com.google.zxing:core:3.3.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.android.support:design:25.1.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    implementation 'com.android.support:design:25.3.1'
+
 
     compile 'com.github.sundeepk:compact-calendar-view:2.0.3-beta'
 
