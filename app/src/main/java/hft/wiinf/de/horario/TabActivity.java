@@ -12,7 +12,7 @@ import hft.wiinf.de.horario.View.NewEventActivity;
 import hft.wiinf.de.horario.View.SettingActivity;
 
 public class TabActivity extends AppCompatActivity {
-//TODO Kommentieren und Java Doc Info Schreiben
+    //TODO Kommentieren und Java Doc Info Schreiben
     private static final String TAG = "TabActivity";
     private SectionsPageAdapterActivity mSectionsPageAdapter;
     private ViewPager mViewPager;
@@ -27,10 +27,10 @@ public class TabActivity extends AppCompatActivity {
         mSectionsPageAdapter = new SectionsPageAdapterActivity(getSupportFragmentManager());
 
         //Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager)findViewById(R.id.container);
+        mViewPager = (ViewPager) findViewById(R.id.container);
         setupViewPager(mViewPager);
 
-       tabLayout = (TabLayout) findViewById(R.id.tabBarLayout);
+        tabLayout = (TabLayout) findViewById(R.id.tabBarLayout);
         tabLayout.setupWithViewPager(mViewPager);
 
         //TODO Change Picture (DesignTeam)
@@ -39,37 +39,48 @@ public class TabActivity extends AppCompatActivity {
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_android_black3_24dp);
     }
 
+    //Method will be called after UI-Elements are created
     public void onStart() {
         super.onStart();
+        //Listener that will check when a Tab is selected, unselected and reselected
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            //Do something if Tab is selected. Parameters: selected Tab.--- Info: tab.getPosition() == x for check which Tab
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                if(tab.getPosition() == 2){
-
-                }
             }
+
+            //Do something if Tab is unselected. Parameters: selected Tab.--- Info: tab.getPosition() == x for check which Tab
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                if(tab.getPosition() == 2){
-                   mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_settings).setVisibility(View.GONE);
-                   mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_main).setVisibility(View.VISIBLE);
+                //check if settings Tab is unselected
+                if (tab.getPosition() == 2) {
+                    //Set Visibility of mainLayout to Visible and the rest to Gone, to see only the overview
+                    mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_settings).setVisibility(View.GONE);
+                    mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_support).setVisibility(View.GONE);
+                    mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_feedback).setVisibility(View.GONE);
+                    mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_copyright).setVisibility(View.GONE);
+                    mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_main).setVisibility(View.VISIBLE);
                 }
             }
+
+            //Do something if Tab is reselected. Parameters: selected Tab.--- Info: tab.getPosition() == x for check which Tab
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_settings).setVisibility(View.GONE);
-                mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_main).setVisibility(View.VISIBLE);
+                if (tab.getPosition() == 2) {
+                    //Set Visibility of mainLayout to Visible and the rest to Gone, to see only the overview
+                    mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_settings).setVisibility(View.GONE);
+                    mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_support).setVisibility(View.GONE);
+                    mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_feedback).setVisibility(View.GONE);
+                    mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_copyright).setVisibility(View.GONE);
+                    mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_main).setVisibility(View.VISIBLE);
+                }
             }
         });
     }
 
-    public void onResume() {
-        super.onResume();
-    }
-
-    private void setupViewPager(ViewPager viewPager){
+    private void setupViewPager(ViewPager viewPager) {
         SectionsPageAdapterActivity adapter = mSectionsPageAdapter;
-        adapter.addFragment(new NewEventActivity(),"");
+        adapter.addFragment(new NewEventActivity(), "");
         adapter.addFragment(new CalendarActivity(), "");
         adapter.addFragment(new SettingActivity(), "");
         viewPager.setAdapter(adapter);
