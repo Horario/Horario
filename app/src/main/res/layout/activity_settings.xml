@@ -105,7 +105,6 @@
 
         <EditText
             android:id="@+id/settings_settings_editText_username"
-            android:labelFor=" "
             android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"

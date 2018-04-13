@@ -55,11 +55,15 @@ public class TabActivity extends AppCompatActivity {
                 //check if settings Tab is unselected
                 if (tab.getPosition() == 2) {
                     //Set Visibility of mainLayout to Visible and the rest to Gone, to see only the overview
-                    mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_settings).setVisibility(View.GONE);
-                    mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_support).setVisibility(View.GONE);
-                    mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_feedback).setVisibility(View.GONE);
-                    mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_copyright).setVisibility(View.GONE);
-                    mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_main).setVisibility(View.VISIBLE);
+                    try {
+                        mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_settings).setVisibility(View.GONE);
+                        mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_support).setVisibility(View.GONE);
+                        mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_feedback).setVisibility(View.GONE);
+                        mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_copyright).setVisibility(View.GONE);
+                        mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_main).setVisibility(View.VISIBLE);
+                    } catch (NullPointerException e) {
+                        Log.d(TAG, "TabActivity:" + e.getMessage());
+                    }
                 }
             }
 
@@ -68,11 +72,15 @@ public class TabActivity extends AppCompatActivity {
             public void onTabReselected(TabLayout.Tab tab) {
                 if (tab.getPosition() == 2) {
                     //Set Visibility of mainLayout to Visible and the rest to Gone, to see only the overview
-                    mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_settings).setVisibility(View.GONE);
-                    mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_support).setVisibility(View.GONE);
-                    mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_feedback).setVisibility(View.GONE);
-                    mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_copyright).setVisibility(View.GONE);
-                    mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_main).setVisibility(View.VISIBLE);
+                    try {
+                        mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_settings).setVisibility(View.GONE);
+                        mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_support).setVisibility(View.GONE);
+                        mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_feedback).setVisibility(View.GONE);
+                        mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_copyright).setVisibility(View.GONE);
+                        mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_main).setVisibility(View.VISIBLE);
+                    } catch (NullPointerException e) {
+                        Log.d(TAG, "TabActivity:" + e.getMessage());
+                    }
                 }
             }
         });
