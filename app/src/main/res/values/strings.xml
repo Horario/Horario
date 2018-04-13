@@ -17,6 +17,6 @@
     <string name="feedback_zur_app_text">Feedback zur App</string>
     <string name="username_text">Benutzername :</string>
     <string name="allowpush_text">Push Nachrichten erlauben :</string>
-    <string name="reminder_text">Erinnerungen</string>
+    <string name="reminder_text">Erinnerungen :</string>
     <string name="minutesBefore_text">Minuten vorher</string>
 </resources>

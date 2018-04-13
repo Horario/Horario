@@ -12,13 +12,13 @@ import android.widget.RelativeLayout;
 import hft.wiinf.de.horario.R;
 
 
-public class SettingActivity extends Fragment {
+public class SettingsActivity extends Fragment {
 
     private static final String TAG = "SettingFragmentActivity";
     Button button_settings, button_support, button_copyright, button_feedback;
     RelativeLayout rLayout_main, rLayout_settings, rLayout_support, rLayout_copyright, rLayout_feedback;
 
-    public SettingActivity() {
+    public SettingsActivity() {
     }
 
     @Nullable

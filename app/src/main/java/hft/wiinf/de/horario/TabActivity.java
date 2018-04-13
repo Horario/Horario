@@ -9,7 +9,7 @@ import android.view.View;
 
 import hft.wiinf.de.horario.view.CalendarActivity;
 import hft.wiinf.de.horario.view.NewEventActivity;
-import hft.wiinf.de.horario.view.SettingActivity;
+import hft.wiinf.de.horario.view.SettingsActivity;
 
 public class TabActivity extends AppCompatActivity {
     //TODO Kommentieren und Java Doc Info Schreiben
@@ -22,7 +22,7 @@ public class TabActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab);
-        Log.d(TAG, "onCrate: Starting.");
+        Log.d(TAG, "onCreate: Starting.");
 
         mSectionsPageAdapter = new SectionsPageAdapterActivity(getSupportFragmentManager());
 
@@ -90,7 +90,7 @@ public class TabActivity extends AppCompatActivity {
         SectionsPageAdapterActivity adapter = mSectionsPageAdapter;
         adapter.addFragment(new NewEventActivity(), "");
         adapter.addFragment(new CalendarActivity(), "");
-        adapter.addFragment(new SettingActivity(), "");
+        adapter.addFragment(new SettingsActivity(), "");
         viewPager.setAdapter(adapter);
     }
 }
