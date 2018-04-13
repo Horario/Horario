@@ -10,7 +10,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:name="com.orm.SugarApp"
+        android:name="com.activeandroid.app.Application"
         tools:replace="android:icon">
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -19,11 +19,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!-- meta tags for database-->
-        <meta-data android:name="DATABASE" android:value="horario.db" />
-        <meta-data android:name="VERSION" android:value="1" />
-        <meta-data android:name="QUERY_LOG" android:value="true" />
-        <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="de.hftstuttgart.wiinf.horario.model" />
+        <meta-data android:name="AA_DB_NAME" android:value="horario.db" />
     </application>
 
 </manifest>
