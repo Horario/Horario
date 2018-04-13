@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
-//TODO Kommentieren und Java Doc Info Schreiben //wird gemacht
+//TODO Kommentieren und Java Doc Info Schreiben
 class SectionsPageAdapterActivity extends FragmentPagerAdapter{
 
     private final List<Fragment>mFragmentList = new ArrayList<>();
