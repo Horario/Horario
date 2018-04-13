@@ -44,19 +44,21 @@ public class TabActivity extends AppCompatActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                if(tab.getPosition() == 2){
 
+                }
             }
-
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
                 if(tab.getPosition() == 2){
-                    mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_settings).setVisibility(View.GONE);
-                    mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_main).setVisibility(View.VISIBLE);
+                   mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_settings).setVisibility(View.GONE);
+                   mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_main).setVisibility(View.VISIBLE);
                 }
             }
-
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
+                mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_settings).setVisibility(View.GONE);
+                mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_main).setVisibility(View.VISIBLE);
             }
         });
     }

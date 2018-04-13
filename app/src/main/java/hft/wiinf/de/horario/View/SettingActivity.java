@@ -2,9 +2,7 @@ package hft.wiinf.de.horario.View;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +52,30 @@ public class SettingActivity extends Fragment{
             public void onClick(View v) {
                 rLayout_main.setVisibility(View.GONE);
                 rLayout_settings.setVisibility(View.VISIBLE);
+            }
+        });
+
+        button_feedback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rLayout_main.setVisibility(View.GONE);
+                rLayout_feedback.setVisibility(View.VISIBLE);
+            }
+        });
+
+        button_copyright.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rLayout_main.setVisibility(View.GONE);
+                rLayout_copyright.setVisibility(View.VISIBLE);
+            }
+        });
+
+        button_support.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rLayout_main.setVisibility(View.GONE);
+                rLayout_support.setVisibility(View.VISIBLE);
             }
         });
     }
