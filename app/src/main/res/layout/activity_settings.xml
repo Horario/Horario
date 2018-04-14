@@ -170,6 +170,4 @@
             android:layout_height="wrap_content"
             android:text="Feedback" />
     </RelativeLayout>
-
-
 </RelativeLayout>

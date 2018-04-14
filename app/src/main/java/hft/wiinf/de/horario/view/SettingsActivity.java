@@ -3,6 +3,7 @@ package hft.wiinf.de.horario.view;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,10 +13,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import hft.wiinf.de.horario.R;
-
+import hft.wiinf.de.horario.controller.PersonController;
+import hft.wiinf.de.horario.hft.winf.de.horario.model.Person;
 
 public class SettingsActivity extends Fragment {
 
@@ -23,6 +24,7 @@ public class SettingsActivity extends Fragment {
     Button button_settings, button_support, button_copyright, button_feedback;
     RelativeLayout rLayout_main, rLayout_settings, rLayout_support, rLayout_copyright, rLayout_feedback;
     EditText editTextUsername;
+    Person person;
 
     public SettingsActivity() {
     }
@@ -38,6 +40,11 @@ public class SettingsActivity extends Fragment {
     //Method will be called directly after View is created
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
+        try {
+            person = PersonController.getPersonWhoIam();
+        }catch(NullPointerException e){
+            Log.d(TAG, "SettingsActivity:" + e.getMessage());
+        }
 
         //Initialize all Gui-Elements
         button_settings = (Button) view.findViewById(R.id.settings_button_settings);
@@ -52,6 +59,11 @@ public class SettingsActivity extends Fragment {
         rLayout_support = (RelativeLayout) view.findViewById(R.id.settings_relativeLayout_support);
 
         editTextUsername = (EditText) view.findViewById(R.id.settings_settings_editText_username);
+
+        //If username is already saved -> pull it from db an set Text equal to it
+        if(person != null) {
+            editTextUsername.setText(person.getName());
+        }
 
         //Everything that needs to happen after click on "Settings" button
         //set Visibility of mainLayout to Gone and settingsLayout to Visible
@@ -93,13 +105,21 @@ public class SettingsActivity extends Fragment {
             }
         });
 
-        //Everything that needs to happen after Username was written in the EditText
+        //Everything that needs to happen after Username was written in the EditText-Field
         editTextUsername.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(actionId == EditorInfo.IME_ACTION_DONE){
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
                     String inputText = v.getText().toString();
-                    Toast.makeText(view.getContext(),inputText,Toast.LENGTH_LONG).show();
+
+                    if(person != null){
+                        person.setName(inputText);
+                        PersonController.addPersonMe(person);
+                    } else{
+                        //ToDo: get correct phoneNumber
+                        person = new Person(true,"007",inputText);
+                        PersonController.addPersonMe(person);
+                    }
                 }
                 return false;
             }
