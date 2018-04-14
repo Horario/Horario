@@ -3,11 +3,16 @@ package hft.wiinf.de.horario.view;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import hft.wiinf.de.horario.R;
 
@@ -17,6 +22,7 @@ public class SettingsActivity extends Fragment {
     private static final String TAG = "SettingFragmentActivity";
     Button button_settings, button_support, button_copyright, button_feedback;
     RelativeLayout rLayout_main, rLayout_settings, rLayout_support, rLayout_copyright, rLayout_feedback;
+    EditText editTextUsername;
 
     public SettingsActivity() {
     }
@@ -31,7 +37,7 @@ public class SettingsActivity extends Fragment {
 
     //Method will be called directly after View is created
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(final View view, Bundle savedInstanceState) {
 
         //Initialize all Gui-Elements
         button_settings = (Button) view.findViewById(R.id.settings_button_settings);
@@ -44,6 +50,8 @@ public class SettingsActivity extends Fragment {
         rLayout_feedback = (RelativeLayout) view.findViewById(R.id.settings_relativeLayout_feedback);
         rLayout_settings = (RelativeLayout) view.findViewById(R.id.settings_relativeLayout_settings);
         rLayout_support = (RelativeLayout) view.findViewById(R.id.settings_relativeLayout_support);
+
+        editTextUsername = (EditText) view.findViewById(R.id.settings_settings_editText_username);
 
         //Everything that needs to happen after click on "Settings" button
         //set Visibility of mainLayout to Gone and settingsLayout to Visible
@@ -82,6 +90,18 @@ public class SettingsActivity extends Fragment {
             public void onClick(View v) {
                 rLayout_main.setVisibility(View.GONE);
                 rLayout_support.setVisibility(View.VISIBLE);
+            }
+        });
+
+        //Everything that needs to happen after Username was written in the EditText
+        editTextUsername.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId == EditorInfo.IME_ACTION_DONE){
+                    String inputText = v.getText().toString();
+                    Toast.makeText(view.getContext(),inputText,Toast.LENGTH_LONG).show();
+                }
+                return false;
             }
         });
     }
