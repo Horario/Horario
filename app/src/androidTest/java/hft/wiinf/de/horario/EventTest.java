@@ -1,9 +1,6 @@
 package hft.wiinf.de.horario;
 
-import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
-
-import com.orm.SugarRecord;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -17,8 +14,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-import hft.wiinf.de.horario.hft.winf.de.horario.model.Event;
-import hft.wiinf.de.horario.hft.winf.de.horario.model.Person;
+import hft.wiinf.de.horario.model.Event;
+import hft.wiinf.de.horario.model.Person;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;

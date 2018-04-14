@@ -1,6 +1,4 @@
-package hft.wiinf.de.horario.hft.winf.de.horario.model;
-
-import hft.wiinf.de.horario.R;
+package hft.wiinf.de.horario.model;
 
 public enum Repetition {
     //Types of repetition serial appointment

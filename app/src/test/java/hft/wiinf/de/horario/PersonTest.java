@@ -1,14 +1,9 @@
 package hft.wiinf.de.horario;
 
-import com.orm.SugarRecord;
-
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import hft.wiinf.de.horario.hft.winf.de.horario.model.Person;
-
-import static org.junit.Assert.*;
+import hft.wiinf.de.horario.model.Person;
 
 /**
  * Example local unit test, which will execute on the development machine (host).

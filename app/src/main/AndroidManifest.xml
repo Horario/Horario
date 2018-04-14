@@ -20,6 +20,11 @@
             </intent-filter>
         </activity>
         <meta-data android:name="AA_DB_NAME" android:value="horario.db" />
+        <meta-data android:name="AA_DB_VERSION" android:value="3" />
+        <meta-data
+        android:name="AA_MODELS"
+        android:value="hft.wiinf.de.horario.model.Event, hft.wiinf.de.horario.model.Person, hft.winf.de.horario.model.RepetitionDate" />
+
     </application>
 
 </manifest>

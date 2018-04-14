@@ -1,19 +1,12 @@
-package hft.wiinf.de.horario.hft.winf.de.horario.model;
+package hft.wiinf.de.horario.model;
 
-
-import android.content.Context;
-import android.provider.CalendarContract;
 
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
-import com.activeandroid.query.From;
 import com.activeandroid.query.Select;
-import com.orm.SugarRecord;
 
 import java.sql.Time;
-import java.time.LocalDateTime;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,11 +22,9 @@ public class Event extends Model {
 @Column
     private String description;
 @Column
-    private Date date = new Date();
+    private Date startTime = new Time(0);
 @Column
-    private Time startTime = new Time(0);
-@Column
-    private Time endTime = new Time(0);
+    private Date endTime = new Time(0);
 @Column
     private boolean accepted = false;
 @Column
@@ -44,8 +35,11 @@ public class Event extends Model {
     private Repetition repetition = Repetition.NONE;
 //al dates where the event is repeated
     @Column
-    private List<Date> repetitionDates = new LinkedList<>();
+    private List<RepetitionDate> repetitionDates = new LinkedList<>();
 
+    public Event(){
+    super();
+    }
 
     //TODO Serial Events
     public static List<Event> findEventByTimePeriod (Date startDate, Date endDate){
@@ -71,27 +65,20 @@ public class Event extends Model {
         this.description = description;
     }
 
-    public Date getDate() {
-        return date;
-    }
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public Time getStartTime() {
+    public Date getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Time startTime) {
+    public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
 
-    public Time getEndTime() {
+    public Date getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Time endTime) {
+    public void setEndTime(Date endTime) {
         this.endTime = endTime;
     }
 
@@ -129,11 +116,16 @@ public class Event extends Model {
     }
 
     public List<Date> getRepetitionDates() {
-        return repetitionDates;
+        List<Date> dates = new LinkedList<>();
+        for (RepetitionDate repetionDate:this.repetitionDates)
+            dates.add(repetionDate.getDate());
+        return dates;
     }
 
     public void setRepetitionDates(List<Date> repetitionDates) {
-        this.repetitionDates = repetitionDates;
+        repetitionDates.clear();
+        for (Date date:repetitionDates)
+            repetitionDates.add(date);
     }
 }
 

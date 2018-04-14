@@ -5,25 +5,22 @@ import android.support.test.runner.AndroidJUnit4;
 
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.activeandroid.Model;
 import com.activeandroid.query.Delete;
-import com.activeandroid.query.From;
 import com.activeandroid.query.Select;
 
 import org.junit.runner.RunWith;
 
 import java.sql.Time;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import hft.wiinf.de.horario.hft.winf.de.horario.model.Event;
-import hft.wiinf.de.horario.hft.winf.de.horario.model.Person;
-import hft.wiinf.de.horario.hft.winf.de.horario.model.Repetition;
+import hft.wiinf.de.horario.model.Event;
+import hft.wiinf.de.horario.model.Person;
+import hft.wiinf.de.horario.model.Repetition;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
@@ -98,12 +95,12 @@ new Delete().from(Event.class).execute();
         Event repeatingEvent = new Event();
         repeatingEvent.setDate(new Date(-86400000));
         List<Date> repetitionDates = new LinkedList<>();
-        repetitionDates.add(new Date(0));
+        repetitionDates.add(new Date(1));
         repeatingEvent.setRepetition(Repetition.DAILY);
         repeatingEvent.setRepetitionDates(repetitionDates);
         repeatingEvent.save();
         List<Event> events = Event.findEventByTimePeriod(new Date(0), new Date(86400000));
-        List<Model> execute = new Select().from(Event.class).where("date=172800000").execute();
+        List<Model> execute = new Select().from(Event.class).where("date BETWEEN -1 AND 172800000").execute();
         assertThat(events.size(), is(1));
         assertTrue(events.contains(event));
         assertFalse(events.contains(repeatingEvent));
