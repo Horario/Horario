@@ -1,4 +1,4 @@
-package hft.wiinf.de.horario.View;
+package hft.wiinf.de.horario.view;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
