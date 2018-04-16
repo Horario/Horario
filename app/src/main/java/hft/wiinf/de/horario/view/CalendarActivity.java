@@ -1,8 +1,10 @@
 package hft.wiinf.de.horario.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import hft.wiinf.de.horario.R;
 public class CalendarActivity extends Fragment {
     private static final String TAG = "CalendarFragmentActivity";
     private Button btnTEST2;
+    private Button gotoScanner;
 
 
     @Nullable
@@ -30,10 +33,13 @@ public class CalendarActivity extends Fragment {
                 Toast.makeText(getActivity(), "Button2 wurde gedrückt", Toast.LENGTH_SHORT).show();
             }
         });
-
-
-
-
+        gotoScanner = view.findViewById(R.id.gotoscanner);
+        gotoScanner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), hft.wiinf.de.horario.QRScannerActivity.class));
+            }
+        });
 
         return view;
     }
