@@ -37,11 +37,11 @@ public class EventOverview extends Activity {
 
     public ArrayAdapter iterateOverMonth(){
         ArrayList<String> eventArray = new ArrayList<>();
-        Date day = CalendarActivity.selectedMonth;
+        Date day = new Date(CalendarActivity.selectedMonth.getTime());
         int endDate = CalendarActivity.selectedMonth.getMonth();
         while (day.getMonth() <= endDate){
             eventArray.add(df.format(day));
-            day.setTime(day.getTime() + 86400000);
+            day.setTime(day.getTime() + 86400000); //TODO rework?
             //TODO Termine aus der DB wählen die am jeweiligen Tag stattfinden
         }
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, eventArray);
