@@ -3,13 +3,24 @@
     <string name="Test">Test</string>
     <string name="title_activity_test">Test</string>
     <string name="title_activity_tab">TabActivity</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
-    <string name="tab_text_3">Tab 3</string>
+    <string name="newEventTabText">Tab_1</string>
+    <string name="calendarTabText">Tab_2</string>
+    <string name="settingTabText">Tab_3</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="button_name_scan">SCAN</string>
     <string name="button_show_data">showData</string>
     <string name="title_activity_scan">QRCode Scanner</string>
 
+    <string name="setting">Setting</string>
+    <string name="newEvent">newEvent</string>
+    <string name="calendar">calendar</string>
+    <string name="settings_text">Einstellungen</string>
+    <string name="support_text">Support</string>
+    <string name="copyright_text">Impressum</string>
+    <string name="feedback_zur_app_text">Feedback zur App</string>
+    <string name="username_text">Benutzername :</string>
+    <string name="allowpush_text">Push Nachrichten erlauben :</string>
+    <string name="reminder_text">Erinnerungen :</string>
+    <string name="minutesBefore_text">Minuten vorher</string>
 </resources>
