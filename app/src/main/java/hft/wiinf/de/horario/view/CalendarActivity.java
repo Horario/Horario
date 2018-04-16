@@ -34,7 +34,7 @@ public class CalendarActivity extends Fragment {
     TextView calendarTvMonth;
     TextView calendarTvDay;
 
-    DateFormat monthFormat = new SimpleDateFormat("MMMM yyyy", Locale.GERMAN); //TODO maybe flexible location(like calendar itself)?
+    DateFormat monthFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
 
 
     @Nullable
@@ -54,7 +54,7 @@ public class CalendarActivity extends Fragment {
         calendarCvCalendar.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
             public void onDayClick(Date dateClicked) {
-                DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMAN);
+                DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
                 calendarTvDay.setText(df.format(dateClicked));
                 calendarLvList.setAdapter(getAdapter(dateClicked));
             }
