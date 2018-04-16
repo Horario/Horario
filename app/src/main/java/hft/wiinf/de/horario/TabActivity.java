@@ -7,11 +7,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
+
+import com.activeandroid.ActiveAndroid;
+
 import hft.wiinf.de.horario.view.CalendarActivity;
 import hft.wiinf.de.horario.view.NewEventActivity;
 import hft.wiinf.de.horario.view.SettingsActivity;
 
 public class TabActivity extends AppCompatActivity {
+
     //TODO Kommentieren und Java Doc Info Schreiben
     private static final String TAG = "TabActivity";
     private SectionsPageAdapterActivity mSectionsPageAdapter;
@@ -22,7 +26,9 @@ public class TabActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab);
-        Log.d(TAG, "onCreate: Starting.");
+
+        //Start DB
+        ActiveAndroid.initialize(this);
 
         mSectionsPageAdapter = new SectionsPageAdapterActivity(getSupportFragmentManager());
 

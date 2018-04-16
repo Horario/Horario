@@ -1,5 +1,13 @@
 <resources>
     <string name="app_name">Horario</string>
+
+
+
+
+    <string name="CreateAppointment_Dropdown_repetition_yearly">jährlich</string>
+    <string name="CreateAppointment_Dropdown_repetition_monthly">monatlich</string>
+    <string name="CreateAppointment_Dropdown_repetition_weekly">wöchentlich</string>
+    <string name="CreateAppointment_Dropdown_repetition_daily">täglich</string>
     <string name="Test">Test</string>
     <string name="title_activity_test">Test</string>
     <string name="title_activity_tab">TabActivity</string>
@@ -20,6 +28,7 @@
     <string name="copyright_text">Impressum</string>
     <string name="feedback_zur_app_text">Feedback zur App</string>
     <string name="username_text">Benutzername :</string>
+    <string name="username_hint">Benutzername</string>
     <string name="allowpush_text">Push Nachrichten erlauben :</string>
     <string name="reminder_text">Erinnerungen :</string>
     <string name="minutesBefore_text">Minuten vorher</string>
