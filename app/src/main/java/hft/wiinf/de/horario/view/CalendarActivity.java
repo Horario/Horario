@@ -3,6 +3,7 @@ package hft.wiinf.de.horario.view;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,6 +66,13 @@ public class CalendarActivity extends Fragment {
 
         });
 
+        /** TODO */
+        calendarTvMonth.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "test", Toast.LENGTH_SHORT).show(); //TODO just for testing, delete
+            }
+        });
 
         return view;
     }
@@ -82,6 +90,8 @@ public class CalendarActivity extends Fragment {
         eventArray.add("Test eins"); //TODO just for testing, delete
         ArrayAdapter adapter = new ArrayAdapter(this.getActivity(), android.R.layout.simple_list_item_1, eventArray);
         return adapter;
-
     }
+
+
+
 }

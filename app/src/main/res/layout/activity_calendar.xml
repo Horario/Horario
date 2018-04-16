@@ -61,6 +61,8 @@
         android:backgroundTint="#ffe95451"
         android:backgroundTintMode="src_atop"
         android:text="TextView"
+        android:onClick="onMonthClick"
+        android:clickable="true"
         app:layout_constraintBottom_toTopOf="@+id/calendarCvCalendar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
