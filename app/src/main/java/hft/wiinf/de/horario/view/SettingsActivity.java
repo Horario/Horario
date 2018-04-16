@@ -132,7 +132,9 @@ public class SettingsActivity extends Fragment {
                 } else{
                     Toast toast = Toast.makeText(view.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
                     toast.show();
-                    editTextUsername.setText(person.getName());
+                    if(person != null) {
+                        editTextUsername.setText(person.getName());
+                    }
                     return true;
                 }
                 return false;
