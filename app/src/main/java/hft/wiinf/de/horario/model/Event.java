@@ -28,6 +28,7 @@ public class Event extends Model {
 @Column
     private boolean accepted = false;
 @Column
+//TODO: LIst are not saved in DB, perhaps save only ID
     private List<Person> personAccepted = new LinkedList();
 @Column
     private List<Person> personCancelled = new LinkedList<>();
@@ -36,10 +37,7 @@ public class Event extends Model {
 //al dates where the event is repeated
     @Column
     private List<RepetitionDate> repetitionDates = new LinkedList<>();
-
-    public Event(){
-    super();
-    }
+    
 
     //TODO Serial Events
     public static List<Event> findEventByTimePeriod (Date startDate, Date endDate){

@@ -77,6 +77,7 @@ public class EventTest{
     }
     @Test
     //saves and search event of a date period
+    //TODO: SQL
     public void searchByTimePeriod(){
         event.save();
         Event beforeEvent = event;
