@@ -1,15 +1,14 @@
 package hft.wiinf.de.horario.view;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +29,7 @@ public class CalendarActivity extends Fragment {
     private static final String TAG = "CalendarFragmentActivity";
 
     public static CompactCalendarView calendarCvCalendar;
+    public static Date selectedMonth;
     ListView calendarLvList;
     TextView calendarTvMonth;
     TextView calendarTvDay;
@@ -50,6 +50,7 @@ public class CalendarActivity extends Fragment {
 
         Date today = new Date();
         calendarTvMonth.setText(monthFormat.format(today)); //initialize month field
+        selectedMonth = today;
 
         calendarCvCalendar.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
@@ -62,6 +63,7 @@ public class CalendarActivity extends Fragment {
             @Override
             public void onMonthScroll(Date firstDayOfNewMonth) {
                 calendarTvMonth.setText(monthFormat.format(firstDayOfNewMonth)); //is updating month field after a swipe
+                selectedMonth = firstDayOfNewMonth;
             }
 
         });
@@ -70,7 +72,9 @@ public class CalendarActivity extends Fragment {
         calendarTvMonth.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "test", Toast.LENGTH_SHORT).show(); //TODO just for testing, delete
+                //Toast.makeText(getActivity(), "test", Toast.LENGTH_SHORT).show(); //TODO just for testing, delete
+                Intent i = new Intent(getActivity(), EventOverview.class);
+                startActivity(i);
             }
         });
 

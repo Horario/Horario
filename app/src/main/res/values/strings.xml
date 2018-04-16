@@ -19,4 +19,5 @@
     <string name="allowpush_text">Push Nachrichten erlauben :</string>
     <string name="reminder_text">Erinnerungen :</string>
     <string name="minutesBefore_text">Minuten vorher</string>
+    <string name="title_activity_event_overview">EventOverview</string>
 </resources>

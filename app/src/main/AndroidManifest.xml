@@ -19,7 +19,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity
+            android:name=".view.EventOverview"
+            android:label="@string/title_activity_event_overview"></activity>
     </application>
 
 </manifest>
