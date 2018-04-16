@@ -34,7 +34,7 @@ public class CalendarActivity extends Fragment {
     TextView calendarTvMonth;
     TextView calendarTvDay;
 
-    DateFormat monthFormat = new SimpleDateFormat("MMMM", Locale.GERMAN); //TODO maybe flexible location(like calendar itself)?
+    DateFormat monthFormat = new SimpleDateFormat("MMMM yyyy", Locale.GERMAN); //TODO maybe flexible location(like calendar itself)?
 
 
     @Nullable
