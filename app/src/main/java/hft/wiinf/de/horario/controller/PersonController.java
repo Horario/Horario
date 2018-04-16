@@ -9,6 +9,7 @@ import hft.wiinf.de.horario.hft.winf.de.horario.model.Person;
 public class PersonController {
 
     public static void addPersonMe(Person person){
+
         person.save();
     }
 
