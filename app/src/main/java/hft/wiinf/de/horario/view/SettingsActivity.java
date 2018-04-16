@@ -142,6 +142,7 @@ public class SettingsActivity extends Fragment {
         });
     }
 
+    
     @Override
     public void onResume() {
         super.onResume();
