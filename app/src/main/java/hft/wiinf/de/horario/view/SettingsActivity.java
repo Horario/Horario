@@ -116,6 +116,7 @@ public class SettingsActivity extends Fragment {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 String inputText = v.getText().toString();
 
+                //RegEx: no whitespace at the beginning
                 Pattern pattern_username = Pattern.compile("^([\\S]).*");
                 Matcher matcher_username = pattern_username.matcher(inputText);
 
@@ -129,12 +130,18 @@ public class SettingsActivity extends Fragment {
                         PersonController.addPersonMe(person);
                     }
                 } else{
-                    Toast toast = Toast.makeText(view.getContext(), "Benutzername darf nicht mit Leerzeichen anfangen!", Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(view.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
                     toast.show();
                     return true;
                 }
                 return false;
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        editTextUsername.setText(person.getName());
     }
 }
