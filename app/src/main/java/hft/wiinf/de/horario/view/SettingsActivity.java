@@ -79,6 +79,9 @@ public class SettingsActivity extends Fragment {
             public void onClick(View v) {
                 rLayout_main.setVisibility(View.GONE);
                 rLayout_settings.setVisibility(View.VISIBLE);
+                if (person != null) {
+                    editTextUsername.setText(person.getName());
+                }
             }
         });
 
