@@ -4,7 +4,7 @@ import com.activeandroid.query.Select;
 
 import java.util.List;
 
-import hft.wiinf.de.horario.hft.winf.de.horario.model.Person;
+import hft.wiinf.de.horario.model.Person;
 
 public class PersonController {
 

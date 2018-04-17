@@ -1,6 +1,5 @@
 package hft.wiinf.de.horario.view;
 
-import android.graphics.PathEffect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -21,7 +20,7 @@ import java.util.regex.Pattern;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.PersonController;
-import hft.wiinf.de.horario.hft.winf.de.horario.model.Person;
+import hft.wiinf.de.horario.model.Person;
 
 public class SettingsActivity extends Fragment {
 
@@ -77,6 +76,7 @@ public class SettingsActivity extends Fragment {
             public void onClick(View v) {
                 rLayout_main.setVisibility(View.GONE);
                 rLayout_settings.setVisibility(View.VISIBLE);
+                editTextUsername.clearFocus();
             }
         });
 
@@ -129,6 +129,7 @@ public class SettingsActivity extends Fragment {
                         person = new Person(true,"007",inputText);
                         PersonController.addPersonMe(person);
                     }
+                    editTextUsername.clearFocus();
                 } else{
                     Toast toast = Toast.makeText(view.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
                     toast.show();

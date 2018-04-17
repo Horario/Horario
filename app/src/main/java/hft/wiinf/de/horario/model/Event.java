@@ -1,4 +1,4 @@
-package hft.wiinf.de.horario.hft.winf.de.horario.model;
+package hft.wiinf.de.horario.model;
 
 
 import com.activeandroid.Model;
