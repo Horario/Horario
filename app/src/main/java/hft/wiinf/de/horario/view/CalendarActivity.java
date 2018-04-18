@@ -34,7 +34,8 @@ public class CalendarActivity extends Fragment {
     TextView calendarTvMonth;
     TextView calendarTvDay;
 
-    DateFormat monthFormat = new SimpleDateFormat("MMMM yyyy", Locale.GERMAN); //TODO maybe flexible location(like calendar itself)?
+    DateFormat monthFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
+    DateFormat dayFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
 
 
     @Nullable
@@ -51,18 +52,21 @@ public class CalendarActivity extends Fragment {
         Date today = new Date();
         calendarTvMonth.setText(monthFormat.format(today)); //initialize month field
         selectedMonth = today;
+        calendarTvDay.setText(dayFormat.format(today));
 
         calendarCvCalendar.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
             public void onDayClick(Date dateClicked) {
-                DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMAN);
-                calendarTvDay.setText(df.format(dateClicked));
+
+                calendarTvDay.setText(dayFormat.format(dateClicked));
                 calendarLvList.setAdapter(getAdapter(dateClicked));
             }
 
             @Override
             public void onMonthScroll(Date firstDayOfNewMonth) {
                 calendarTvMonth.setText(monthFormat.format(firstDayOfNewMonth)); //is updating month field after a swipe
+                DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
+                calendarTvDay.setText(dayFormat.format(firstDayOfNewMonth));
                 selectedMonth = firstDayOfNewMonth;
             }
 
