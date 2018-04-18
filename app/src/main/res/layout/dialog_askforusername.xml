@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    tools:context=".TabActivity"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <Button
+        android:id="@+id/dialog_username_button_save"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="136dp"
+        android:text="@string/save_text" />
+
+    <Button
+        android:id="@+id/dialog_username_button_later"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/dialog_username_button_save"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="@string/later_text" />
+
+    <EditText
+        android:id="@+id/dialog_EditText_Username"
+        android:layout_width="305dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="39dp"
+        android:hint="@string/username_hint"
+        android:inputType="textPersonName" />
+
+</RelativeLayout>
