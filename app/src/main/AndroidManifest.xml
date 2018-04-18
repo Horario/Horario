@@ -22,7 +22,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".QRScannerActivity"></activity>
+
 
         <activity android:name=".CaptureActivityPortrait"
             android:screenOrientation="sensor"

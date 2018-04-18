@@ -1,46 +1,60 @@
 package hft.wiinf.de.horario.view;
 
-import android.content.Intent;
+
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
-
+import android.widget.RelativeLayout;
 import hft.wiinf.de.horario.R;
+
 
 //TODO Kommentieren und Java Doc Info Schreiben
 public class CalendarActivity extends Fragment {
     private static final String TAG = "CalendarFragmentActivity";
-    private Button btnTEST2;
-    private Button gotoScanner;
+    private RelativeLayout rLayout_fragment, rLayout_main;
 
 
-    @Nullable
+    //Temp Method to Change on Frame CaledarActivity with QRScannerActivity Fragments
+    //ToDo Diese Methode muss später auf den Floatingbutten gebunden werden dazu brauch es auch eine Anpassung der XML stattfinden. -> Es muss ein neuer Container erstellt werden in den dann die das Fragment geladen wird. Zielsetzung bis ende der Weoche sollte das gehen!
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.activity_calendar, container, false);
+        Button scnbtn = (Button) v.findViewById(R.id.gotoscanner);
 
-        View view = inflater.inflate(R.layout.activity_calendar, container, false);
-        btnTEST2 = view.findViewById(R.id.btnTEST2);
-        btnTEST2.setOnClickListener(new View.OnClickListener() {
+        //Change onClick the Fragment CalendarActivity with the QRScannerActivity
+        scnbtn.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("LongLogTag")
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "Button2 wurde gedrückt", Toast.LENGTH_SHORT).show();
-            }
-        });
-        gotoScanner = view.findViewById(R.id.gotoscanner);
-        gotoScanner.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), hft.wiinf.de.horario.QRScannerActivity.class));
-            }
+                try {
+
+
+                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.newFragment, new QRScannerActivity());
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                    rLayout_main.setVisibility(View.GONE);
+                    rLayout_fragment.setVisibility(View.VISIBLE);
+                }catch (NullPointerException e){
+                Log.d(TAG, "CalendarActivity:" + e.getMessage());
+            }}
         });
 
-        return view;
+
+        return v;
     }
+
+    //Method will be called directly after View is created
+    public void onViewCreated(final View v, Bundle saveInstanceStage) {
+        rLayout_fragment = (RelativeLayout) v.findViewById(R.id.newFragment);
+        rLayout_main = (RelativeLayout) v.findViewById(R.id.calendar_relativeLayout_main);
+    }
+
 }
