@@ -144,6 +144,8 @@ public class SettingsActivity extends Fragment {
                         person = new Person(true, "007", inputText);
                         PersonController.addPersonMe(person);
                     }
+                    Toast toast = Toast.makeText(view.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT);
+                    toast.show();
                     editTextUsername.setFocusable(false);
                     editTextUsername.setFocusableInTouchMode(false);
                 } else {

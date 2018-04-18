@@ -28,5 +28,5 @@
     <string name="titleDialogUsername">Bitte vergeben Sie einen Benutzernamen :)</string>
     <string name="save_text">speichern</string>
     <string name="later_text">Später</string>
-    <string name="UserIsNull">Bitte geben Sie einen gültigen Benutzernamen ein!</string>
+    <string name="thanksForUsername">Benutzername wurde gespeichert! </string>
 </resources>

@@ -159,32 +159,18 @@ public class TabActivity extends AppCompatActivity {
                 if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches()) {
                     //ToDo: Flo - PhoneNumber
                     personMe = new Person(true, "007", dialog_inputUsername);
+                    PersonController.addPersonMe(personMe);
+
+                    Toast toast = Toast.makeText(v.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT);
+                    toast.show();
+
+                    alertDialogAskForUsername.cancel();
                     return false;
                 } else {
                     Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
                     toast.show();
                     return true;
                 }
-            }
-        });
-
-        alertDialogAskForUsername.findViewById(R.id.dialog_username_button_save).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (personMe != null) {
-                    PersonController.addPersonMe(personMe);
-                    alertDialogAskForUsername.cancel();
-                } else {
-                    Toast toast = Toast.makeText(v.getContext(), R.string.UserIsNull, Toast.LENGTH_SHORT);
-                    toast.show();
-                }
-            }
-        });
-
-        alertDialogAskForUsername.findViewById(R.id.dialog_username_button_later).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alertDialogAskForUsername.cancel();
             }
         });
     }
