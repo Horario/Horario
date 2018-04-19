@@ -1,4 +1,4 @@
-package hft.wiinf.de.horario.hft.winf.de.horario.model;
+package hft.wiinf.de.horario.model;
 
 import hft.wiinf.de.horario.R;
 

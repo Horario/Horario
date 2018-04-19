@@ -38,7 +38,7 @@
             android:value="1" />
         <meta-data
             android:name="AA_MODELS"
-            android:value="hft.wiinf.de.horario.model.Event, hft.wiinf.de.horario.model.Person, hft.winf.de.horario.model.RepetitionDate" />
+            android:value="model.Event, model.Person, model.RepetitionDate" />
     </application>
 
 </manifest>

@@ -2,6 +2,8 @@
     <string name="app_name">Horario</string>
 
 
+
+
     <string name="CreateAppointment_Dropdown_repetition_yearly">jährlich</string>
     <string name="CreateAppointment_Dropdown_repetition_monthly">monatlich</string>
     <string name="CreateAppointment_Dropdown_repetition_weekly">wöchentlich</string>
@@ -30,7 +32,5 @@
     <string name="allowpush_text">Push Nachrichten erlauben :</string>
     <string name="reminder_text">Erinnerungen :</string>
     <string name="minutesBefore_text">Minuten vorher</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="noValidUsername">Benutzername darf nicht mit Leerzeichen anfangen!</string>
 </resources>
