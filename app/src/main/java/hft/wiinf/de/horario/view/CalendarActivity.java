@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -52,6 +53,7 @@ public class CalendarActivity extends Fragment {
         Date today = new Date();
         calendarTvMonth.setText(monthFormat.format(today)); //initialize month field
         calendarTvDay.setText(dayFormat.format(today));
+        calendarLvList.setAdapter(getAdapter(today));
 
         calendarCvCalendar.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
@@ -67,7 +69,6 @@ public class CalendarActivity extends Fragment {
                 DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
                 calendarTvDay.setText(dayFormat.format(firstDayOfNewMonth));
             }
-
         });
 
         /** TODO */
@@ -78,8 +79,19 @@ public class CalendarActivity extends Fragment {
             }
         });
 
+        //Listener for the list view in the day overview
+        calendarLvList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = (String) parent.getItemAtPosition(position);
+                Toast.makeText(getActivity(), selectedItem, Toast.LENGTH_SHORT).show();
+            }
+        });
+
         return view;
     }
+
+
 
     //TODO just a placeholder, maybe need a rework (1523318400000L)
     public static void addEvent(Date date){
@@ -92,6 +104,7 @@ public class CalendarActivity extends Fragment {
         //TODO Datenbank zugriff, um alle Termine für das Datum zu erhalten und diese dann in die List zu speichern.
         ArrayList<String> eventArray = new ArrayList<>();
         eventArray.add("Test eins"); //TODO just for testing, delete
+        eventArray.add("Test zwei"); //TODO just for testing, delete
         ArrayAdapter adapter = new ArrayAdapter(this.getActivity(), android.R.layout.simple_list_item_1, eventArray);
         return adapter;
     }
