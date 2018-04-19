@@ -1,12 +1,9 @@
 package hft.wiinf.de.horario.controller;
 
 import android.util.Log;
-
 import com.activeandroid.query.Select;
-
 import java.util.List;
-
-import hft.wiinf.de.horario.hft.winf.de.horario.model.Person;
+import hft.wiinf.de.horario.model.*;
 
 public class PersonController {
 
