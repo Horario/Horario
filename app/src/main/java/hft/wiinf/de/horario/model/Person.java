@@ -15,6 +15,36 @@ public class Person extends Model{
     private Long acceptedEvent = null;
     @Column(name = "event_canceled")
     private Long canceledEvent = null;
+    @Column
+    boolean isItMe = false;
+
+    //Use this constructor for person that using this specific app (owner)
+    public Person(boolean isItMe, String phoneNumber, String name) {
+        super();
+        this.isItMe = isItMe;
+        this.phoneNumber = phoneNumber;
+        this.name = name;
+    }
+
+    //Use this constructor for persons that is not the current(real) user of this specific app
+    public Person(String phoneNumber, String name) {
+        super();
+        this.isItMe = false;
+        this.phoneNumber = phoneNumber;
+        this.name = name;
+    }
+
+    public Person() {
+        super();
+    }
+
+    public boolean isItMe() {
+        return isItMe;
+    }
+
+    public void setItMe(boolean itMe) {
+        this.isItMe = itMe;
+    }
 
     //getter-setter
     public String getPhoneNumber() {

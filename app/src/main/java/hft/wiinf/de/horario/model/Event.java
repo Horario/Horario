@@ -16,7 +16,7 @@ import java.util.List;
 // Class for both standard and serial event
 //start and enddate are both dates, not as in the gui one date and two times
 
-@Table(name="events")
+@Table(name = "events")
 public class Event extends Model {
     @Column
     private Person creator = new Person();
