@@ -4,6 +4,7 @@ package hft.wiinf.de.horario.model;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 
 import java.sql.Time;
@@ -17,32 +18,29 @@ import java.util.List;
 
 @Table(name="events")
 public class Event extends Model {
-@Column
-    private Person creator = new Person();
-@Column
-    private String description;
-@Column
-    private Date startTime = new Time(0);
-@Column
-    private Date endTime = new Time(0);
-@Column
-    private boolean accepted = false;
-@Column
-//TODO: LIst are not saved in DB, perhaps save only ID
-    private List<Person> personAccepted = new LinkedList();
-@Column
-    private List<Person> personCancelled = new LinkedList<>();
-@Column
-    private Repetition repetition = Repetition.NONE;
-//al dates where the event is repeated
     @Column
-    private List<RepetitionDate> repetitionDates = new LinkedList<>();
-    
+    private Person creator = new Person();
+    @Column
+    private String description;
+    @Column
+    private String place;
+    @Column
+    private Date startTime = new Time(0);
+    @Column
+    private Date endTime = new Time(0);
+    @Column
+    private boolean accepted = false;
 
-    //TODO Serial Events
-    public static List<Event> findEventByTimePeriod (Date startDate, Date endDate){
-        List<Model> s = new Select().from(Event.class).where("date < 0").execute();
-        return new LinkedList<>();
+    @Column
+    private Repetition repetition = Repetition.NONE;
+
+    private List<Repetitiondate> repetitiondates = new LinkedList<>();
+
+
+    //get all events that start between the start and enddate (both including) or serial events that have a repetition there
+    public static List<Event> findEventByTimePeriod(Date startDate, Date endDate) {
+        List<Event> events = new Select().from(Event.class).leftJoin(Repetitiondate.class).on("events.id=repetitiondates.event_id").where("starttime between ? AND ?", startDate.getTime(), endDate.getTime()).or("date BETWEEN ? AND ?", startDate.getTime(), endDate.getTime()).execute();
+        return events;
     }
 
 //getter-setter
@@ -63,6 +61,13 @@ public class Event extends Model {
         this.description = description;
     }
 
+    public String getPlace() {
+        return place;
+    }
+
+    public void setPlace(String place) {
+        this.place = place;
+    }
 
     public Date getStartTime() {
         return startTime;
@@ -90,19 +95,29 @@ public class Event extends Model {
 
 
     public List<Person> getPersonAccepted() {
-        return personAccepted;
+        return getMany(Person.class, "event_accepted");
     }
 
     public void setPersonAccepted(List<Person> personAccepted) {
-        this.personAccepted = personAccepted;
+        if (getId() != null && this.getPersonAccepted() != null && this.getPersonAccepted().size() > 0)
+            new Delete().from(Person.class).where("event_accepted=?", getId());
+        for (Person p : personAccepted) {
+            p.setAcceptedEvent(getId());
+            p.save();
+        }
     }
 
+
     public List<Person> getPersonCancelled() {
-        return personCancelled;
+        return getMany(Person.class, "event_canceled");
     }
 
     public void setPersonCancelled(List<Person> personCancelled) {
-        this.personCancelled = personCancelled;
+        new Delete().from(Person.class).where("event_canceled=?", getId());
+        for (Person p : personCancelled) {
+            p.setAcceptedEvent(getId());
+            p.save();
+        }
     }
 
     public Repetition getRepetition() {
@@ -113,17 +128,21 @@ public class Event extends Model {
         this.repetition = repetition;
     }
 
-    public List<Date> getRepetitionDates() {
-        List<Date> dates = new LinkedList<>();
-        for (RepetitionDate repetionDate:this.repetitionDates)
-            dates.add(repetionDate.getDate());
-        return dates;
+    public List<Repetitiondate> getRepetitionDates() {
+        return getMany(Repetitiondate.class, "event_id");
     }
 
-    public void setRepetitionDates(List<Date> repetitionDates) {
-        repetitionDates.clear();
-        for (Date date:repetitionDates)
-            repetitionDates.add(date);
+    public void setRepetitionDates(List<Repetitiondate> repetitionDates) {
+        if (getId() == null || getId() > 0)
+            this.save();
+        if (this.repetitiondates != null && this.repetitiondates.size() > 1)
+            new Delete().from(Repetitiondate.class).where("event_id=?", getId());
+        for (Repetitiondate date : repetitionDates) {
+            date.setEventId(getId());
+            date.save();
+        }
+
     }
+
 }
 

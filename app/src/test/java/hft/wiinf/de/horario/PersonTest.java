@@ -10,7 +10,6 @@ import hft.wiinf.de.horario.model.Person;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-
 public class PersonTest {
     Person person = new Person();
     //delete all persons from database to ensure corrects test results

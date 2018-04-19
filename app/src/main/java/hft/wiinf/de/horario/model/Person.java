@@ -9,8 +9,12 @@ import com.activeandroid.annotation.Table;
 public class Person extends Model{
     @Column
     String phoneNumber = "";
-    @Column()
+    @Column
     String name="";
+    @Column(name = "event_Accepted")
+    private Long acceptedEvent = null;
+    @Column(name = "event_canceled")
+    private Long canceledEvent = null;
 
     //getter-setter
     public String getPhoneNumber() {
@@ -21,6 +25,10 @@ public class Person extends Model{
         this.phoneNumber = phoneNumber;
     }
 
+    void setCanceledEvent(Long canceledEvent) {
+        this.canceledEvent = canceledEvent;
+    }
+
     public String getName() {
         return name;
     }
@@ -28,4 +36,10 @@ public class Person extends Model{
     public void setName(String name) {
         this.name = name;
     }
+
+    void setAcceptedEvent(Long acceptedEvent) {
+        this.acceptedEvent = acceptedEvent;
+    }
+
+
 }

@@ -8,4 +8,23 @@
     <string name="CreateAppointment_Dropdown_repetition_monthly">monatlich</string>
     <string name="CreateAppointment_Dropdown_repetition_weekly">wöchentlich</string>
     <string name="CreateAppointment_Dropdown_repetition_daily">täglich</string>
+    <string name="Test">Test</string>
+    <string name="title_activity_test">Test</string>
+    <string name="title_activity_tab">TabActivity</string>
+    <string name="newEventTabText"></string>
+    <string name="calendarTabText"></string>
+    <string name="settingTabText"></string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="setting">Setting</string>
+    <string name="newEvent">newEvent</string>
+    <string name="calendar">calendar</string>
+    <string name="settings_text">Einstellungen</string>
+    <string name="support_text">Support</string>
+    <string name="copyright_text">Impressum</string>
+    <string name="feedback_zur_app_text">Feedback zur App</string>
+    <string name="username_text">Benutzername :</string>
+    <string name="allowpush_text">Push Nachrichten erlauben :</string>
+    <string name="reminder_text">Erinnerungen :</string>
+    <string name="minutesBefore_text">Minuten vorher</string>
 </resources>

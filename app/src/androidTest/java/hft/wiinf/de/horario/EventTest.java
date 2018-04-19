@@ -13,7 +13,6 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-
 import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
 
@@ -40,7 +39,7 @@ public class EventTest{
         event.setCreator(new Person());
         event.setDescription("Testevent");
         event.setAccepted(true);
-        event.setDate(new Date());
+        ;
         event.setStartTime(new Time(Calendar.getInstance().getTimeInMillis()));
         Calendar.getInstance().add(Calendar.HOUR,14);
         event.setEndTime(new Time(Calendar.getInstance().getTimeInMillis()));
@@ -81,10 +80,10 @@ public class EventTest{
     public void searchByTimePeriod(){
         event.save();
         Event beforeEvent = event;
-        beforeEvent.setDate(new Date(-1));
+        beforeEvent.setStartTime(new Date(-1));
         beforeEvent.save();
         Event afterEvent = event;
-        beforeEvent.setDate(Calendar.getInstance().getTime());
+        afterEvent.setStartTime(Calendar.getInstance().getTime());
         afterEvent.save();
         List<Event> events = Event.findEventByTimePeriod(new Date(0),new Date(86400000));
         assertEquals(1, events.size());
