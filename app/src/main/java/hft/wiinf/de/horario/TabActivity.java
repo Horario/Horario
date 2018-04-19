@@ -65,6 +65,8 @@ public class TabActivity extends AppCompatActivity {
     //Method will be called after UI-Elements are created
     public void onStart() {
         super.onStart();
+        //Select calendar by default
+        tabLayout.getTabAt(1).select();
         //Listener that will check when a Tab is selected, unselected and reselected
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             //Do something if Tab is selected. Parameters: selected Tab.--- Info: tab.getPosition() == x for check which Tab

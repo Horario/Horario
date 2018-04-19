@@ -23,19 +23,19 @@
 
             <android.support.design.widget.TabItem
                 android:id="@+id/newEventTab"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/newEventTabText" />
 
             <android.support.design.widget.TabItem
                 android:id="@+id/calendarTab"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/calendarTabText" />
 
             <android.support.design.widget.TabItem
                 android:id="@+id/settingTab"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/settingTabText" />
 
