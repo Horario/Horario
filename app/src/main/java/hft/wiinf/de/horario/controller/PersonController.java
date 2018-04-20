@@ -6,28 +6,45 @@ import com.activeandroid.query.Select;
 
 import java.util.List;
 
+import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
 
 public class PersonController {
 
-    public static void addPersonMe(Person person){
+    public static void addPersonMe(Person person) {
         try {
             person.save();
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.d("PersonController", "addPersonMe:" + e.getMessage());
         }
     }
 
-    public List<Person> getAllPersons(){
+    public static Person getPersonWhoIam() {
+        return new Select()
+                .from(Person.class)
+                .where("isItMe = ?", true)
+                .executeSingle();
+    }
+
+    public static List<Person> getAllPersons() {
         return new Select()
                 .from(Person.class)
                 .execute();
     }
 
-    public static Person getPersonWhoIam(){
-        return new Select()
-                .from(Person.class)
-                .where("isItMe = ?", true)
-                .executeSingle();
+    public static void savePerson(Person person) {
+        person.save();
+    }
+
+    public static void deletePerson(Person person) {
+        person.delete();
+    }
+
+    public static List<Person> getEventAcceptedPersons(Event event) {
+        return new Select().from(Person.class).where("event_accepted=?", event.getId()).execute();
+    }
+
+    public static List<Person> getEventCancelledPersons(Event event) {
+        return new Select().from(Person.class).where("event_cacncelled=?", event.getId()).execute();
     }
 }

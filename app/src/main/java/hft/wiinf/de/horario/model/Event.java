@@ -1,41 +1,44 @@
 package hft.wiinf.de.horario.model;
 
 
+import android.support.annotation.NonNull;
+
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
-import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 
-import java.sql.Time;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
 
 // Class for both standard and serial event
-//start and enddate are both dates, not as in the gui one date and two times
+//start and endtime are both dates, not as in the gui one date and two times
 
 @Table(name = "events")
 public class Event extends Model {
     @Column
-    private Person creator = new Person();
+    private Person creator;
     @Column
-    private String description;
+    private String description = "";
     @Column
-    private String place;
+    private String place = "";
     @Column
-    private Date startTime = new Time(0);
+    private Date startTime = new Date();
     @Column
-    private Date endTime = new Time(0);
+    private Date endTime = new Date();
     @Column
-    private boolean accepted = false;
-
+    private boolean accepted;
     @Column
     private Repetition repetition = Repetition.NONE;
 
-    private List<Repetitiondate> repetitiondates = new LinkedList<>();
+    public Event(Person creator) {
+        this.creator = creator;
+    }
 
+    public Event() {
+        super();
+    }
 
     //get all events that start between the start and enddate (both including) or serial events that have a repetition there
     public static List<Event> findEventByTimePeriod(Date startDate, Date endDate) {
@@ -49,15 +52,12 @@ public class Event extends Model {
         return creator;
     }
 
-    public void setCreator(Person creator) {
-        this.creator = creator;
-    }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(@NonNull String description) {
         this.description = description;
     }
 
@@ -65,7 +65,7 @@ public class Event extends Model {
         return place;
     }
 
-    public void setPlace(String place) {
+    public void setPlace(@NonNull String place) {
         this.place = place;
     }
 
@@ -73,7 +73,7 @@ public class Event extends Model {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(@NonNull Date startTime) {
         this.startTime = startTime;
     }
 
@@ -81,7 +81,7 @@ public class Event extends Model {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(@NonNull Date endTime) {
         this.endTime = endTime;
     }
 
@@ -91,33 +91,6 @@ public class Event extends Model {
 
     public void setAccepted(boolean accepted) {
         this.accepted = accepted;
-    }
-
-
-    public List<Person> getPersonAccepted() {
-        return getMany(Person.class, "event_accepted");
-    }
-
-    public void setPersonAccepted(List<Person> personAccepted) {
-        if (getId() != null && this.getPersonAccepted() != null && this.getPersonAccepted().size() > 0)
-            new Delete().from(Person.class).where("event_accepted=?", getId());
-        for (Person p : personAccepted) {
-            p.setAcceptedEvent(getId());
-            p.save();
-        }
-    }
-
-
-    public List<Person> getPersonCancelled() {
-        return getMany(Person.class, "event_canceled");
-    }
-
-    public void setPersonCancelled(List<Person> personCancelled) {
-        new Delete().from(Person.class).where("event_canceled=?", getId());
-        for (Person p : personCancelled) {
-            p.setAcceptedEvent(getId());
-            p.save();
-        }
     }
 
     public Repetition getRepetition() {
@@ -132,17 +105,8 @@ public class Event extends Model {
         return getMany(Repetitiondate.class, "event_id");
     }
 
-    public void setRepetitionDates(List<Repetitiondate> repetitionDates) {
-        if (getId() == null || getId() > 0)
-            this.save();
-        if (this.repetitiondates != null && this.repetitiondates.size() > 1)
-            new Delete().from(Repetitiondate.class).where("event_id=?", getId());
-        for (Repetitiondate date : repetitionDates) {
-            date.setEventId(getId());
-            date.save();
-        }
-
-    }
-
 }
+
+
+
 

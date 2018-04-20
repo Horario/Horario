@@ -1,5 +1,7 @@
 package hft.wiinf.de.horario.model;
 
+import android.support.annotation.NonNull;
+
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
@@ -10,36 +12,26 @@ import java.util.Date;
 @Table(name = "repetitiondates")
 public class Repetitiondate extends Model {
     @Column
-    private Date date;
+    private Date date = new Date(0);
     @Column(name = "event_id")
-    private Long eventId = null;
+    private Event event = new Event();
 
     public Date getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(@NonNull Date date) {
         this.date = date;
     }
 
-    public Long getEventId() {
-        return eventId;
+    public Event getEventId() {
+        return event;
     }
 
-    public void setEventId(Long eventId) {
-        this.eventId = eventId;
+    public void setEvent(@NonNull Event event) {
+        this.event = event;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Repetitiondate)) return false;
-        if (!super.equals(o)) return false;
 
-        Repetitiondate that = (Repetitiondate) o;
-
-        if (!date.equals(that.date)) return false;
-        return eventId.equals(that.eventId);
-    }
 }
 

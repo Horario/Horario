@@ -28,7 +28,7 @@ import static org.junit.Assert.assertEquals;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 @RunWith(RobolectricTestRunner.class)
-public class ExampleInstrumentedTest {
+public class EventTest {
 
 
     @Before
@@ -38,7 +38,6 @@ new Delete().from(Event.class).execute();
         new Delete().from(Repetitiondate.class).execute();
         Event event = new Event();
         event.setAccepted(true);
-        event.setCreator(new Person());
         event.setDescription("Testevent");
         event.setAccepted(true);
         event.setStartTime(new Time(0));
