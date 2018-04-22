@@ -1,9 +1,14 @@
 package hft.wiinf.de.horario.view;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -31,6 +36,9 @@ public class SettingsActivity extends Fragment {
     RelativeLayout rLayout_main, rLayout_settings, rLayout_support, rLayout_copyright, rLayout_feedback;
     EditText editTextUsername;
     Person person;
+    private static final int SMS_PERMISSION_CODE = 0;
+    String phoneNo = "01729101821";
+    String sms = "Hello how are you=";
 
     public SettingsActivity() {
     }
@@ -79,6 +87,14 @@ public class SettingsActivity extends Fragment {
             public void onClick(View v) {
                 rLayout_main.setVisibility(View.GONE);
                 rLayout_settings.setVisibility(View.VISIBLE);
+
+                if(person == null){
+                    try {
+                        person = PersonController.getPersonWhoIam();
+                    } catch (NullPointerException e) {
+                        Log.d(TAG, "SettingsActivity:" + e.getMessage());
+                    }
+                }
                 if (person != null) {
                     editTextUsername.setText(person.getName());
                 }
@@ -102,6 +118,11 @@ public class SettingsActivity extends Fragment {
             public void onClick(View v) {
                 rLayout_main.setVisibility(View.GONE);
                 rLayout_copyright.setVisibility(View.VISIBLE);
+
+                //ToDo: Flo: SMS in richtige Datei
+                sendSMS(v);
+
+                //End of SMS
             }
         });
 
@@ -160,4 +181,55 @@ public class SettingsActivity extends Fragment {
             }
         });
     }
+
+    public void sendSMS(View v) {
+        if (!isSmsPermissionGranted()) {
+            requestReadAndSendSmsPermission();
+        } else {
+            try {
+                SmsManager smsManager = SmsManager.getDefault();
+                smsManager.sendTextMessage(phoneNo, null, sms, null, null);
+                Toast.makeText(v.getContext().getApplicationContext(), "SMS Sent!",
+                        Toast.LENGTH_LONG).show();
+            } catch (Exception e) {
+                Toast.makeText(v.getContext().getApplicationContext(),
+                        "SMS faild, please try again later!",
+                        Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public boolean isSmsPermissionGranted() {
+        return ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestReadAndSendSmsPermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.SEND_SMS)) {
+            // You may display a non-blocking explanation here, read more in the documentation:
+            // https://developer.android.com/training/permissions/requesting.html
+        }
+        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.SEND_SMS}, SMS_PERMISSION_CODE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case SMS_PERMISSION_CODE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
 }
+
+
