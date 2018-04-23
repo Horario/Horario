@@ -1,22 +1,17 @@
 package hft.wiinf.de.horario;
 
-import android.app.FragmentTransaction;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-
 
 import com.activeandroid.ActiveAndroid;
 
 import hft.wiinf.de.horario.view.CalendarActivity;
 import hft.wiinf.de.horario.view.NewEventActivity;
 import hft.wiinf.de.horario.view.SettingsActivity;
-
 public class TabActivity extends AppCompatActivity {
 
     //TODO Kommentieren und Java Doc Info Schreiben
