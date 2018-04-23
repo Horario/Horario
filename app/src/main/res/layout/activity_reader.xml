@@ -9,6 +9,18 @@
     android:paddingTop="16dp">
 
     <RelativeLayout
+        android:id="@+id/scanner_temp_Result"
+        android:layout_width="match_parent"
+        android:layout_height="468dp">
+
+        <TextView
+            android:id="@+id/scanner_temp_textview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="scanner result" />
+    </RelativeLayout>
+
+    <RelativeLayout
         android:id="@+id/scanner_temp_buttonframe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

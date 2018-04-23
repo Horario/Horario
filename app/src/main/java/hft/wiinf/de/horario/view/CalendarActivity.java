@@ -34,8 +34,6 @@ public class CalendarActivity extends Fragment {
             @Override
             public void onClick(View v) {
                 try {
-
-
                     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.newFragment, new QRScannerActivity());
                     fragmentTransaction.addToBackStack(null);
