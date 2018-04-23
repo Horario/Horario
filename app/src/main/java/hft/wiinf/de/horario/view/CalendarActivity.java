@@ -57,7 +57,7 @@ public class CalendarActivity extends Fragment {
         calendarTvDay.setText(dayFormat.format(today));
         calendarLvList.setAdapter(getAdapter(today));
 
-        //TODO just for testing, delete
+        //TODO just for testing (add entry to database), delete
         hft.wiinf.de.horario.model.Event test = new hft.wiinf.de.horario.model.Event();
         Date d = new Date(1524664223000L);
         test.setStartTime(d);
@@ -69,20 +69,22 @@ public class CalendarActivity extends Fragment {
 
         calendarCvCalendar.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
+            //when a day get clicked, the date field will be updated and the events for the day displayed in the ListView
             public void onDayClick(Date dateClicked) {
                 calendarTvDay.setText(dayFormat.format(dateClicked));
                 calendarLvList.setAdapter(getAdapter(dateClicked));
             }
 
             @Override
+            //handle everything when the user swipe the month
             public void onMonthScroll(Date firstDayOfNewMonth) {
-                calendarTvMonth.setText(monthFormat.format(firstDayOfNewMonth)); //is updating month field after swipe
+                calendarTvMonth.setText(monthFormat.format(firstDayOfNewMonth));
                 calendarTvDay.setText(dayFormat.format(firstDayOfNewMonth));
                 calendarLvList.setAdapter(getAdapter(firstDayOfNewMonth));
             }
         });
 
-        /** TODO */
+        /** TODO maybe get deleted */
         calendarTvMonth.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -90,12 +92,12 @@ public class CalendarActivity extends Fragment {
             }
         });
 
-        //Listener for the list view in the day overview
+        //handle actions after a event entry get clicked
         calendarLvList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedItem = (String) parent.getItemAtPosition(position);
-                Toast.makeText(getActivity(), selectedItem, Toast.LENGTH_SHORT).show();
+                String selectedItem = (String) parent.getItemAtPosition(position); //Get the clicked item as String
+                Toast.makeText(getActivity(), selectedItem, Toast.LENGTH_SHORT).show(); //TODO just for testing, delete
             }
         });
 
@@ -105,6 +107,7 @@ public class CalendarActivity extends Fragment {
 
 
     //TODO just a placeholder, maybe need a rework (1523318400000L)
+    //is marking the day in the calendar for the parameter date
     public static void addEvent(Date date){
         Event event = new Event(Color.BLUE, date.getTime());
         calendarCvCalendar.addEvent(event);
@@ -113,17 +116,19 @@ public class CalendarActivity extends Fragment {
     /** TODO need a description */
     public ArrayAdapter getAdapter(Date date){
         //TODO Testing
-        ArrayList<String> eventArray = new ArrayList<>();
-        Calendar c = Calendar.getInstance();
-        c.setTime(date);
-        c.add(Calendar.DAY_OF_MONTH, 1);
-        List<hft.wiinf.de.horario.model.Event> events = hft.wiinf.de.horario.model.Event.findEventByTimePeriod(date, c.getTime());
-        for (int i = 0; i<events.size(); i++){
-            eventArray.add(events.get(i).getDescription());
+        ArrayList<String> eventsAsString = new ArrayList<>();
+        Calendar endOfDay = Calendar.getInstance();
+        endOfDay.setTime(date);
+        endOfDay.add(Calendar.DAY_OF_MONTH, 1);
+        List<hft.wiinf.de.horario.model.Event> eventList = hft.wiinf.de.horario.model.Event.findEventByTimePeriod(date, endOfDay.getTime());
+        for (int i = 0; i<eventList.size(); i++){
+            eventsAsString.add(eventList.get(i).getDescription());
         }
-        ArrayAdapter adapter = new ArrayAdapter(this.getActivity(), android.R.layout.simple_list_item_1, eventArray);
+        ArrayAdapter adapter = new ArrayAdapter(this.getActivity(), android.R.layout.simple_list_item_1, eventsAsString);
         return adapter;
     }
+
+    //TODO neue Methode die alle DB Einträge bei Programmstart lädt und mit addEvent die markierung im Calendar durchführt
 
 
 
