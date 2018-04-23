@@ -18,6 +18,7 @@ import com.google.zxing.integration.android.IntentResult;
 import hft.wiinf.de.horario.CaptureActivityPortrait;
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.DatabaseHelperController;
+import hft.wiinf.de.horario.model.Event;
 
 
 public class QRScannerActivity extends Fragment {
@@ -27,7 +28,8 @@ public class QRScannerActivity extends Fragment {
     private Button showData_btn;
     private RelativeLayout mRelativeLayout_scanner_result;
     private TextView mTextureView_scanner_result;
-
+    private StringBuffer qrResultModefied;
+    private Event mEvent;
 
     //Neu
     public QRScannerActivity() {
@@ -36,7 +38,6 @@ public class QRScannerActivity extends Fragment {
     @Override
     public void onActivityCreated(Bundle savednstanceState) {
         super.onActivityCreated(savednstanceState);
-        //displayToast();
     }
 
     //The Scanner start with the Call form CalendarActivity directly
@@ -45,14 +46,17 @@ public class QRScannerActivity extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle saveInstanceState) {
         View view = inflater.inflate(R.layout.activity_reader, container, false);
-                return view;
+
+        return view;
+
+
     }
 
     @SuppressLint("ResourceType")
     public void onViewCreated(final View view, Bundle savedInstanceState) {
+
         mRelativeLayout_scanner_result = view.findViewById(R.id.scanner_temp_Result);
-        mTextureView_scanner_result=(TextView)view.findViewById(R.id.scanner_temp_textview);
-        //mTextureView_scanner_result.setText(displayToast(to);
+        mTextureView_scanner_result= view.findViewById(R.id.scanner_temp_textview);
         startScanner();
     }
 
@@ -72,20 +76,59 @@ public class QRScannerActivity extends Fragment {
 
     }
 
+    @SuppressLint("SetTextI18n")
     private void displayQRResult() {
 
         if (getActivity() != null && qrResult != null) {
+            qrResultModefied = new StringBuffer(qrResult);
+            qrResultModefied.replace(0, 111, "");
+            qrResultModefied.replace(76, 96, "");
+            qrResultModefied.replace(91, 137, "");
+            qrResultModefied.replace(47, 48, ":");
+            qrResultModefied.replace(69, 70, ":");
+            qrResultModefied.replace(30, 31, "");
+            qrResultModefied.replace(54, 55, "");
+            qrResultModefied.replace(76, 76, "");
 
-            mTextureView_scanner_result.setText(qrResult);
-            qrResult=null;
+            /* Modifiziert Ausgabe des QR Codes umd mit der DB zu testen!
+            SUMMARY:Mathe bei Herr Conradt
+            DTstart:20180421:124000
+            DTEND:20180424:134000
+            LOCATION:Labor
+
+            LOCATION = place in der DB
+            DTSTART = startTime in der DB
+            DTEND = endTime in der DB
+            SUMMARY = description in der DB
+             */
+           // mEvent = new Event();
+            //mEvent.setStartTime(java.sql.Time.valueOf(qrResultModefied.substring(47,54)));
+
+            mTextureView_scanner_result.setText(
+                    qrResultModefied.subSequence(8, 30)+"\n"+ //Summary
+                    qrResultModefied.subSequence(38, 46)+"\n"+ //startDatum
+                    qrResultModefied.subSequence(47, 54)+"\n"+ //startUhrzeit
+                    qrResultModefied.subSequence(59, 67)+"\n"+ //endDatum
+                    qrResultModefied.subSequence(68, 74)+"\n"+ //endUhrzeit
+                    qrResultModefied.subSequence(83, qrResultModefied.length())+"\n"); //Ort
+
+
+            qrResult = null;
         }
     }
 
     private void qrResultToDatabase(){
         if (getActivity() != null && qrResult != null) {
 
+            mEvent = new Event();
+            mEvent.setStartTime(java.sql.Time.valueOf(qrResultModefied.substring(47,54)));
+           // mEvent.setStartTime(mTextureView_scanner_result.setText(qrResultModefied.subSequence(47,54)));
 
-            qrResult=null;
+            //if(qrResultModefied.split("\n"))
+            //qrResultModefied.
+
+
+            //qrResult=null;
         }
 
 
