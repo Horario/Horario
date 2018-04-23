@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+
 import hft.wiinf.de.horario.R;
 
 
@@ -27,15 +28,13 @@ public class CalendarActivity extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.activity_calendar, container, false);
         Button scnbtn = (Button) v.findViewById(R.id.gotoscanner);
-
+        Button genbtn = (Button) v.findViewById(R.id.gotogenerator);
         //Change onClick the Fragment CalendarActivity with the QRScannerActivity
         scnbtn.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("LongLogTag")
             @Override
             public void onClick(View v) {
                 try {
-
-
                     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.newFragment, new QRScannerActivity());
                     fragmentTransaction.addToBackStack(null);
@@ -45,6 +44,23 @@ public class CalendarActivity extends Fragment {
                 }catch (NullPointerException e){
                 Log.d(TAG, "CalendarActivity:" + e.getMessage());
             }}
+        });
+
+        genbtn.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onClick(View v) {
+                try {
+                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.newFragment, new QRGeneratorActivity());
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                    rLayout_main.setVisibility(View.GONE);
+                    rLayout_fragment.setVisibility(View.VISIBLE);
+                }catch (NullPointerException e){
+                    Log.d(TAG, "CalendarActivity:" + e.getMessage());
+                }
+            }
         });
 
 
