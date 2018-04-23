@@ -8,8 +8,10 @@
 
     <com.github.sundeepk.compactcalendarview.CompactCalendarView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/calendarCvCalendar"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="250dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="28dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
@@ -20,8 +22,9 @@
         app:compactCalendarTargetHeight="250dp"
         app:compactCalendarTextColor="#fff"
         app:compactCalendarTextSize="12sp"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/calendarTvDay"
@@ -44,7 +47,6 @@
         android:backgroundTint="#ffe95451"
         android:backgroundTintMode="src_atop"
         android:clickable="true"
-        android:onClick="onMonthClick"
         android:text="TextView"
         app:layout_constraintBottom_toTopOf="@+id/calendarCvCalendar"
         app:layout_constraintEnd_toEndOf="parent"

@@ -79,6 +79,14 @@ public class SettingsActivity extends Fragment {
             public void onClick(View v) {
                 rLayout_main.setVisibility(View.GONE);
                 rLayout_settings.setVisibility(View.VISIBLE);
+
+                if(person == null){
+                    try {
+                        person = PersonController.getPersonWhoIam();
+                    } catch (NullPointerException e) {
+                        Log.d(TAG, "SettingsActivity:" + e.getMessage());
+                    }
+                }
                 if (person != null) {
                     editTextUsername.setText(person.getName());
                 }
@@ -144,6 +152,8 @@ public class SettingsActivity extends Fragment {
                         person = new Person(true, "007", inputText);
                         PersonController.addPersonMe(person);
                     }
+                    Toast toast = Toast.makeText(view.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT);
+                    toast.show();
                     editTextUsername.setFocusable(false);
                     editTextUsername.setFocusableInTouchMode(false);
                 } else {
