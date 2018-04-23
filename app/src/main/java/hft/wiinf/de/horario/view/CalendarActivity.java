@@ -21,7 +21,9 @@ import com.github.sundeepk.compactcalendarview.domain.Event;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import hft.wiinf.de.horario.R;
@@ -55,19 +57,28 @@ public class CalendarActivity extends Fragment {
         calendarTvDay.setText(dayFormat.format(today));
         calendarLvList.setAdapter(getAdapter(today));
 
+        //TODO just for testing, delete
+        hft.wiinf.de.horario.model.Event test = new hft.wiinf.de.horario.model.Event();
+        Date d = new Date(1524664223000L);
+        test.setStartTime(d);
+        d.setTime(1524664323000L);
+        test.setEndTime(d);
+        test.setDescription("Termin 1");
+        test.save();
+        addEvent(test.getStartTime());
+
         calendarCvCalendar.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
             public void onDayClick(Date dateClicked) {
-
                 calendarTvDay.setText(dayFormat.format(dateClicked));
                 calendarLvList.setAdapter(getAdapter(dateClicked));
             }
 
             @Override
             public void onMonthScroll(Date firstDayOfNewMonth) {
-                calendarTvMonth.setText(monthFormat.format(firstDayOfNewMonth)); //is updating month field after a swipe
-                DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
+                calendarTvMonth.setText(monthFormat.format(firstDayOfNewMonth)); //is updating month field after swipe
                 calendarTvDay.setText(dayFormat.format(firstDayOfNewMonth));
+                calendarLvList.setAdapter(getAdapter(firstDayOfNewMonth));
             }
         });
 
@@ -101,10 +112,15 @@ public class CalendarActivity extends Fragment {
 
     /** TODO need a description */
     public ArrayAdapter getAdapter(Date date){
-        //TODO Datenbank zugriff, um alle Termine für das Datum zu erhalten und diese dann in die List zu speichern.
+        //TODO Testing
         ArrayList<String> eventArray = new ArrayList<>();
-        eventArray.add("Test eins"); //TODO just for testing, delete
-        eventArray.add("Test zwei"); //TODO just for testing, delete
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.DAY_OF_MONTH, 1);
+        List<hft.wiinf.de.horario.model.Event> events = hft.wiinf.de.horario.model.Event.findEventByTimePeriod(date, c.getTime());
+        for (int i = 0; i<events.size(); i++){
+            eventArray.add(events.get(i).getDescription());
+        }
         ArrayAdapter adapter = new ArrayAdapter(this.getActivity(), android.R.layout.simple_list_item_1, eventArray);
         return adapter;
     }
