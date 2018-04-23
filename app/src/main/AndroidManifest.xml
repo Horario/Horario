@@ -10,6 +10,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:name="com.activeandroid.app.Application">
+        android:theme="@style/AppTheme"
         tools:replace="android:icon">
         <activity
             android:name=".TabActivity"
@@ -25,13 +27,12 @@
         <meta-data
             android:name="AA_DB_NAME"
             android:value="horario.db" />
-
         <meta-data
             android:name="AA_DB_VERSION"
-            android:value="1" />
+            android:value="12" />
         <meta-data
             android:name="AA_MODELS"
-            android:value="model.Event, model.Person, model.RepetitionDate" />
+            android:value="hft.wiinf.de.horario.model.Event, hft.wiinf.de.horario.model.Person, hft.wiinf.de.horario.model.Repetitiondate" />
     </application>
 
 </manifest>
