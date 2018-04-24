@@ -46,6 +46,7 @@ public class CalendarActivity extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
+        //initialize variables
         View view = inflater.inflate(R.layout.activity_calendar, container, false);
         calendarCvCalendar = view.findViewById(R.id.calendarCvCalendar);
         calendarTvMonth = view.findViewById(R.id.calendarTvMonth);
@@ -59,10 +60,8 @@ public class CalendarActivity extends Fragment {
 
         //TODO just for testing (add entry to database), delete
         hft.wiinf.de.horario.model.Event test = new hft.wiinf.de.horario.model.Event();
-        Date d = new Date(1524664223000L);
-        test.setStartTime(d);
-        d.setTime(1524664323000L);
-        test.setEndTime(d);
+        test.setStartTime(new Date(1524261326000L));
+        test.setEndTime(new Date(1524261326000L));
         test.setDescription("Termin 1");
         test.save();
         addEvent(test.getStartTime());
