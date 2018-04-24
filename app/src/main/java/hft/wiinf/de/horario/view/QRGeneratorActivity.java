@@ -19,7 +19,6 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
-import java.util.Calendar;
 import java.util.Date;
 
 import hft.wiinf.de.horario.R;
@@ -32,7 +31,9 @@ public class QRGeneratorActivity extends Fragment {
     private RelativeLayout mRelativeLayout_QRGenResult;
     private Button mButtonQRCreation;
     private BitMatrix mBitmatrix;
-    private String raum;
+    private Bitmap mBitmapOfQRCode;
+    private StringBuffer mDataBaseStringBuffer;
+    private String mDataBaseStringResult;
     private Event mEvent;
     //private Event mEvent;
 
@@ -48,18 +49,29 @@ public class QRGeneratorActivity extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_qrgenerator, container, false);
+
+        //Initial GUI
         mButtonQRCreation = view.findViewById(R.id.createQRCode);
-        raum = "SUMMARY:Mathe bei Herr Conradt\n" +
+        mQRGenImageViewResult= view.findViewById(R.id.generator_temp_imageView_result);
+        mRelativeLayout_QRGenResult = view.findViewById(R.id.qr_main);
+        mQRGenTextViewInput = view.findViewById(R.id.generator_temp_imput);
+
+        //Dummydaten für die DB zum Testen des QR Code Generators ... geht noch nicht
+        String place = "Labor";
+        Date startDatum;
+        Date endDatum;
+        String description = "Experimentelle Genetische versuche mit überresten von Hr. Albert Einstein. ";
+
+
+
+        /*raum = "SUMMARY:Mathe bei Herr Conradt\n" +
                 "DTstart:20180421T124000\n" +
                 "DTEND:20180424T134000\n" +
                 "LOCATION:Labor";
+        */
 
-        mEvent = new Event();
-        Date d = new Date();
-        mEvent.setStartTime(d);
-        mEvent.setEndTime(d);
-        mEvent.setDescription("test1");
-        mEvent.save();
+        // Merge the Data Base Informations to One String
+
 
 
 
@@ -70,10 +82,10 @@ public class QRGeneratorActivity extends Fragment {
             public void onClick(View v) {
                 MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
                 try {
-                    mBitmatrix = multiFormatWriter.encode(raum, BarcodeFormat.QR_CODE,200,200);
+                    mBitmatrix = multiFormatWriter.encode(mDataBaseStringResult, BarcodeFormat.QR_CODE,200,200);
                     BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-                    Bitmap bitmap = barcodeEncoder.createBitmap(mBitmatrix);
-                    mQRGenImageViewResult.setImageBitmap(bitmap);
+                    mBitmapOfQRCode = barcodeEncoder.createBitmap(mBitmatrix);
+                    mQRGenImageViewResult.setImageBitmap(mBitmapOfQRCode);
 
                 } catch (WriterException e) {
                     e.printStackTrace();
@@ -81,19 +93,11 @@ public class QRGeneratorActivity extends Fragment {
             }
         });
 
-        //Dummydaten für die DB zum Testen des QR Code Generators ... geht noch nicht
-
-        Calendar endZeit = Calendar.getInstance();
-        endZeit.add(Calendar.HOUR, 1);
-        Calendar startZeit = Calendar.getInstance();
 
 
-        mQRGenImageViewResult= view.findViewById(R.id.generator_temp_imageView_result);
-        mRelativeLayout_QRGenResult = view.findViewById(R.id.qr_main);
-        mQRGenTextViewInput = view.findViewById(R.id.generator_temp_imput);
 
-        mQRGenTextViewInput.setText(raum);
 
+        mQRGenTextViewInput.setText(mDataBaseStringResult);
         return view;
     }
 
