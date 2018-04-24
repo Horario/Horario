@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -18,6 +19,7 @@ import com.google.zxing.integration.android.IntentResult;
 import hft.wiinf.de.horario.CaptureActivityPortrait;
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.DatabaseHelperController;
+import hft.wiinf.de.horario.controller.EventController;
 import hft.wiinf.de.horario.model.Event;
 
 
@@ -54,9 +56,35 @@ public class QRScannerActivity extends Fragment {
 
     @SuppressLint("ResourceType")
     public void onViewCreated(final View view, Bundle savedInstanceState) {
-
         mRelativeLayout_scanner_result = view.findViewById(R.id.scanner_temp_Result);
         mTextureView_scanner_result= view.findViewById(R.id.scanner_temp_textview);
+
+        //Erstellen von vier Dummydatensätze
+        mEvent = new Event();
+        mEvent.setDescription("Hallo");
+        EventController.addEvent(mEvent);
+
+        Event mEvent2 = new Event();
+        mEvent2.setDescription("Selber Hallo!");
+        EventController.addEvent(mEvent2);
+
+/*
+        Event mEvent2 = new Event();
+        mEvent2.setStartTime();
+        EventController.addEvent(mEvent2);
+
+        Event mEvent3 = new Event();
+        mEvent3.setDescription("Toast3!");
+        EventController.addEvent(mEvent3);
+*/
+
+       /* String test2 = Event.load(Event.class, 2).toString();
+        Toast.makeText(getContext(), test2, Toast.LENGTH_SHORT).show();
+
+
+        String test3 = Event.load(Event.class, 3).toString();
+        Toast.makeText(getContext(), test3, Toast.LENGTH_SHORT).show();
+        */
         startScanner();
     }
 
@@ -78,7 +106,6 @@ public class QRScannerActivity extends Fragment {
 
     @SuppressLint("SetTextI18n")
     private void displayQRResult() {
-
         if (getActivity() != null && qrResult != null) {
             qrResultModefied = new StringBuffer(qrResult);
             qrResultModefied.replace(0, 111, "");
@@ -101,8 +128,6 @@ public class QRScannerActivity extends Fragment {
             DTEND = endTime in der DB
             SUMMARY = description in der DB
              */
-           // mEvent = new Event();
-            //mEvent.setStartTime(java.sql.Time.valueOf(qrResultModefied.substring(47,54)));
 
             mTextureView_scanner_result.setText(
                     qrResultModefied.subSequence(8, 30)+"\n"+ //Summary
@@ -120,17 +145,9 @@ public class QRScannerActivity extends Fragment {
     private void qrResultToDatabase(){
         if (getActivity() != null && qrResult != null) {
 
-            mEvent = new Event();
-            mEvent.setStartTime(java.sql.Time.valueOf(qrResultModefied.substring(47,54)));
-           // mEvent.setStartTime(mTextureView_scanner_result.setText(qrResultModefied.subSequence(47,54)));
-
-            //if(qrResultModefied.split("\n"))
-            //qrResultModefied.
-
-
-            //qrResult=null;
+            String test = Event.load(Event.class, 1).toString();
+            Toast.makeText(getContext(), test, Toast.LENGTH_SHORT).show();
         }
-
 
     }
     @Override
@@ -144,81 +161,6 @@ public class QRScannerActivity extends Fragment {
             }
             displayQRResult();
         }
-
-
-        /*//Temp Button for Testing the Database Input
-        showData_btn = view.findViewById(R.id.showData_btn);
-        viewAll();
-        myDb = new DatabaseHelperController(getActivity());
-        return view;
     }
 
-
-    //Use the Scanningresult to put them in den DataBase
-    //TODO Der Output und der Abbruch müssen noch ausgearbeitet werden
-    /*@SuppressLint("LongLogTag")
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        IntentResult result = IntentIntegrator.parseActivityResult(
-                requestCode, resultCode, data);
-
-             if (result != null) {
-            if (result.getContents() == null) {
-                    /*FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.newFragment, new CalendarActivity());
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
-                    //rLayout_main.setVisibility(View.GONE);
-                    //rLayout_fragment.setVisibility(View.VISIBLE);*/
-    /*             Toast.makeText(getActivity(), "you cancelled the scanning", Toast.LENGTH_LONG).show();
-            }
-            else {
-                   /* FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.newFragment, new CalendarActivity());
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
-                    //rLayout_main.setVisibility(View.GONE);
-                    //rLayout_fragment.setVisibility(View.VISIBLE);
-                    //myDb.insertData(result.getContents());*/
-      /*              Toast.makeText(getActivity(), result.getContents(), Toast.LENGTH_LONG).show();
-                }
-            }
-            else{
-                super.onActivityResult(requestCode, resultCode, data);
-            }
-        }
-    */
-        //Temp Method to Show the DB entries
-     /*   public void viewAll () {
-            showData_btn.setOnClickListener(
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Cursor res = myDb.getAllData();
-                            if (res.getCount() == 0) {
-                                showMessage("Error", "Nothing in Database");
-                                return;
-                            }
-
-                            StringBuffer buffer = new StringBuffer();
-                            while (res.moveToNext()) {
-                                buffer.append("Id: " + res.getString(0) + "\n");
-                                buffer.append("Text: " + res.getString(1) + "\n\n");
-                            }
-                            //show all data
-                            showMessage("Data", buffer.toString());
-                        }
-                    }
-            );
-        }
-
-        //ToDo Was macht diese Methode eigentlich genau?
-        public void showMessage (String title, String Message){
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setCancelable(true);
-            builder.setTitle(title);
-            builder.setMessage(Message);
-            builder.show();
-     */
-    }
 }
