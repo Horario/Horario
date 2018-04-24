@@ -20,7 +20,7 @@
         android:id="@+id/calendar_relativeLayout_main">
 
 
-        <Button
+    <Button
             android:id="@+id/gotoscanner"
             android:layout_width="140dp"
             android:layout_height="wrap_content"

@@ -12,17 +12,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
-
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import hft.wiinf.de.horario.R;
-import hft.wiinf.de.horario.model.Event;
 
 public class QRGeneratorActivity extends Fragment {
     private static final String TAG = "QRGeneratorFragmentActivity";
@@ -34,8 +32,6 @@ public class QRGeneratorActivity extends Fragment {
     private Bitmap mBitmapOfQRCode;
     private StringBuffer mDataBaseStringBuffer;
     private String mDataBaseStringResult;
-    private Event mEvent;
-    //private Event mEvent;
 
     public QRGeneratorActivity() {
         // Required empty public constructor
@@ -58,21 +54,16 @@ public class QRGeneratorActivity extends Fragment {
 
         //Dummydaten für die DB zum Testen des QR Code Generators ... geht noch nicht
         String place = "Labor";
-        Date startDatum;
-        Date endDatum;
-        String description = "Experimentelle Genetische versuche mit überresten von Hr. Albert Einstein. ";
-
-
-
-        /*raum = "SUMMARY:Mathe bei Herr Conradt\n" +
-                "DTstart:20180421T124000\n" +
-                "DTEND:20180424T134000\n" +
-                "LOCATION:Labor";
-        */
+        Date startDatum = new Date();
+            String startDate = new SimpleDateFormat("yyyy-MM-dd").format(startDatum);
+        Date endDatum = new Date();
+            String endDate = new SimpleDateFormat("yyyy-MM-dd").format(endDatum);
+        String description = "Experimentelle genetische Versuche mit Überresten von Hr. Albert Einstein. ";
 
         // Merge the Data Base Informations to One String
-
-
+        mDataBaseStringBuffer = new StringBuffer();
+        mDataBaseStringBuffer.append(place+"\n"+description+"\n"+startDate+"\n"+endDate);
+        mDataBaseStringResult = mDataBaseStringBuffer.toString();
 
 
         //Create a QR Code and Show it in the ImageView.
@@ -92,10 +83,6 @@ public class QRGeneratorActivity extends Fragment {
                 }
             }
         });
-
-
-
-
 
         mQRGenTextViewInput.setText(mDataBaseStringResult);
         return view;
