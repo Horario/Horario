@@ -6,10 +6,8 @@ import android.support.annotation.NonNull;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
-import com.activeandroid.query.Select;
 
 import java.util.Date;
-import java.util.List;
 
 
 // Class for both standard and serial event
@@ -29,9 +27,6 @@ public class Event extends Model {
     private Date endTime = new Date();
     @Column
     private boolean accepted;
-    @Column
-    private Repetition repetition = Repetition.NONE;
-
     public Event(Person creator) {
         this.creator = creator;
     }
@@ -40,18 +35,17 @@ public class Event extends Model {
         super();
     }
 
-    //get all events that start between the start and enddate (both including) or serial events that have a repetition there
-    public static List<Event> findEventByTimePeriod(Date startDate, Date endDate) {
-        List<Event> events = new Select().from(Event.class).leftJoin(Repetitiondate.class).on("events.id=repetitiondates.event_id").where("starttime between ? AND ?", startDate.getTime(), endDate.getTime()).or("date BETWEEN ? AND ?", startDate.getTime(), endDate.getTime()).execute();
-        return events;
-    }
+
 
 //getter-setter
+
+    public void setCreator(Person creator) {
+        this.creator = creator;
+    }
 
     public Person getCreator() {
         return creator;
     }
-
 
     public String getDescription() {
         return description;
@@ -73,7 +67,7 @@ public class Event extends Model {
         return startTime;
     }
 
-    public void setStartTime(@NonNull Date startTime) {
+    public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
 
@@ -81,7 +75,7 @@ public class Event extends Model {
         return endTime;
     }
 
-    public void setEndTime(@NonNull Date endTime) {
+    public void setEndTime(Date endTime) {
         this.endTime = endTime;
     }
 
@@ -93,17 +87,6 @@ public class Event extends Model {
         this.accepted = accepted;
     }
 
-    public Repetition getRepetition() {
-        return repetition;
-    }
-
-    public void setRepetition(Repetition repetition) {
-        this.repetition = repetition;
-    }
-
-    public List<Repetitiondate> getRepetitionDates() {
-        return getMany(Repetitiondate.class, "event_id");
-    }
 
 }
 

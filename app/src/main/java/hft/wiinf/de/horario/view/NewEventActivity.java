@@ -14,21 +14,16 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.LinkedList;
-import java.util.List;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
 import hft.wiinf.de.horario.controller.PersonController;
-import hft.wiinf.de.horario.controller.RepetitiondateController;
 import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Repetition;
-import hft.wiinf.de.horario.model.Repetitiondate;
 
 //TODO Kommentieren und Java Doc Info Schreiben
 public class NewEventActivity extends Fragment {
@@ -132,7 +127,6 @@ public class NewEventActivity extends Fragment {
     }
 
     public void getEndTime() {
-        Toast.makeText(this.getContext(), "START", Toast.LENGTH_LONG);
         TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -144,12 +138,8 @@ public class NewEventActivity extends Fragment {
                 ((EditText) getView().findViewById(R.id.newEvent_textEdit_endTime)).setText(format.format(endTime.getTime()));
             }
         };
-        System.out.println("BEFORE");
-        Toast.makeText(this.getContext(), "before Dialog", Toast.LENGTH_LONG);
         TimePickerDialog dialog = new TimePickerDialog(this.getContext(), listener, endTime.get(Calendar.HOUR), endTime.get(Calendar.MINUTE), true);
-        Toast.makeText(this.getContext(), "before Show", Toast.LENGTH_LONG);
         dialog.show();
-        Toast.makeText(this.getContext(), "shown", Toast.LENGTH_LONG);
     }
 
     public void getEndOfRepetition() {
@@ -172,12 +162,13 @@ public class NewEventActivity extends Fragment {
         event.setDescription(((EditText) getView().findViewById(R.id.newEvent_editText_description)).getText().toString());
         event.setStartTime(startTime.getTime());
         event.setEndTime(endTime.getTime());
-        event.setRepetition(getRepetition());
-        if (event.getRepetition() != Repetition.NONE)
-            RepetitiondateController.saveRepetitiondates(setRepetitionDate(event), event);
         event.setPlace(((EditText) getView().findViewById(R.id.newEvent_textEdit_room)).getText().toString());
-        EventController.saveEvent(event);
-
+        Repetition repetition = getRepetition();
+        if (repetition == Repetition.NONE)
+            EventController.saveEvent(event);
+        else {
+            EventController.saveSerialevent(event, repetition, endOfRepetition);
+        }
     }
 
     private Repetition getRepetition() {
@@ -195,30 +186,5 @@ public class NewEventActivity extends Fragment {
                 return Repetition.DAILY;
 
         }
-    }
-
-    private List<Repetitiondate> setRepetitionDate(Event event) {
-        int fieldNumber;
-        switch (event.getRepetition()) {
-            case DAILY:
-                fieldNumber = Calendar.DAY_OF_MONTH;
-                break;
-            case WEEKLY:
-                fieldNumber = Calendar.WEEK_OF_YEAR;
-                break;
-            case MONTHLY:
-                fieldNumber = Calendar.MONTH;
-                break;
-            default:
-                fieldNumber = Calendar.YEAR;
-        }
-        Calendar calendar = startTime;
-        List<Repetitiondate> date = new LinkedList<>();
-        calendar.add(fieldNumber, 1);
-        while (calendar.before(endOfRepetition)) {
-            calendar.add(fieldNumber, 1);
-            date.add(new Repetitiondate(calendar.getTime()));
-        }
-        return date;
     }
 }

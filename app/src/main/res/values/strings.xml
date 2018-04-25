@@ -1,13 +1,7 @@
 <resources>
     <string name="app_name">Horario</string>
+    <string name="event_repetition">Wiederholungshäufigkeit</string>
 
-
-
-
-    <string name="CreateAppointment_Dropdown_repetition_yearly">jährlich</string>
-    <string name="CreateAppointment_Dropdown_repetition_monthly">monatlich</string>
-    <string name="CreateAppointment_Dropdown_repetition_weekly">wöchentlich</string>
-    <string name="CreateAppointment_Dropdown_repetition_daily">täglich</string>
     <string name="Test">Test</string>
     <string name="title_activity_test">Test</string>
     <string name="title_activity_tab">TabActivity</string>
@@ -17,7 +11,7 @@
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="setting">Setting</string>
-    <string name="newEvent">newEvent</string>
+    <string name="newEvent">Termin anlegen</string>
     <string name="calendar">calendar</string>
     <string name="settings_text">Einstellungen</string>
     <string name="support_text">Support</string>
@@ -29,4 +23,18 @@
     <string name="reminder_text">Erinnerungen :</string>
     <string name="minutesBefore_text">Minuten vorher</string>
     <string name="noValidUsername">Benutzername darf nicht mit Leerzeichen anfangen!</string>
+    <string name="event_Description">Terminbeschreibung</string>
+    <string name="event_date">Datum</string>
+    <string name="event_startTime">Startzeit</string>
+    <string name="event_endtime">Endzeit</string>
+    <string name="event_serialEvent">Serientermin</string>
+    <string name="event_endOfRepetition">wiederholen bis</string>
+    <string name="event_save">Termin speichern</string>
+    <string name="event_room">Raum</string>
+    <string-array name="event_repetitions">
+        <item name="event_repetition_yearly">jährlich</item>
+        <item name="event_repetition_monthly">monatlich</item>
+        <item name="event_repetition_weekly">wöchentlich</item>
+        <item name="event_repetition_daily">täglich</item>
+    </string-array>
 </resources>

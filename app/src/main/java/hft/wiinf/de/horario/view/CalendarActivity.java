@@ -21,7 +21,6 @@ public class CalendarActivity extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.activity_calendar, container, false);
         btnTEST2 = view.findViewById(R.id.btnTEST2);
         btnTEST2.setOnClickListener(new View.OnClickListener() {

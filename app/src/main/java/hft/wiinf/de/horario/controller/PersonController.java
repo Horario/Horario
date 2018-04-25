@@ -26,6 +26,7 @@ public class PersonController {
                 .executeSingle();
     }
 
+    //get all persons
     public static List<Person> getAllPersons() {
         return new Select()
                 .from(Person.class)
@@ -40,11 +41,13 @@ public class PersonController {
         person.delete();
     }
 
+    //get persons that accepted the event
     public static List<Person> getEventAcceptedPersons(Event event) {
         return new Select().from(Person.class).where("event_accepted=?", event.getId()).execute();
     }
 
+    //get all persons that cancelled the event
     public static List<Person> getEventCancelledPersons(Event event) {
-        return new Select().from(Person.class).where("event_cacncelled=?", event.getId()).execute();
+        return new Select().from(Person.class).where("event_canceled=?", event.getId()).execute();
     }
 }
