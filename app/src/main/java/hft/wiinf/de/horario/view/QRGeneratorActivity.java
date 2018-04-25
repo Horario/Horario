@@ -36,6 +36,7 @@ public class QRGeneratorActivity extends Fragment {
     private StringBuffer mDataBaseStringBufferResult;
     private Event mEvent;
     private Event mEvent2;
+    private Event mEvent3;
 
     public QRGeneratorActivity() {
         // Required empty public constructor
@@ -51,7 +52,7 @@ public class QRGeneratorActivity extends Fragment {
         mRelativeLayout_QRGenResult = view.findViewById(R.id.qr_main);
         mQRGenTextViewInput = view.findViewById(R.id.generator_textView_text_output);
 
-        //Erstellen von zwei Dummydaten
+        //Erstellen von drei Dummydaten
         Date startDate = new Date();
         Date endDate = new Date();
 
@@ -60,14 +61,22 @@ public class QRGeneratorActivity extends Fragment {
         mEvent.setPlace("Labor 3");
         mEvent.setStartTime(startDate);
         mEvent.setEndTime(endDate);
-        EventController.addEvent(mEvent);
+        EventController.saveEvent(mEvent);
 
         mEvent2 = new Event();
-        mEvent.setDescription("Mathe mit Hr. Conradt");
-        mEvent.setPlace("1/208");
-        mEvent.setStartTime(startDate);
-        mEvent.setEndTime(endDate);
-        EventController.addEvent(mEvent2);
+        mEvent2.setDescription("Mathe mit Hr. Conradt");
+        mEvent2.setPlace("1/208");
+        mEvent2.setStartTime(startDate);
+        mEvent2.setEndTime(endDate);
+        EventController.saveEvent(mEvent2);
+
+        mEvent3 = new Event();
+        mEvent3.setDescription("Quell des Wissens kann ein DataLake sein");
+        mEvent3.setPlace("Hallenbad");
+        mEvent3.setStartTime(startDate);
+        mEvent3.setEndTime(endDate);
+        EventController.saveEvent(mEvent3);
+
         return view;
     }
 
@@ -83,8 +92,6 @@ public class QRGeneratorActivity extends Fragment {
         mDataBaseStringBufferResult.append(simpleDateFormat.format(mEvent.getStartTime())+"\n");
         mDataBaseStringBufferResult.append(simpleDateFormat.format(mEvent.getEndTime())+"\n");
         mDataBaseStringBufferResult.append(mEvent.getPlace()+"\n");
-
-
 
         //Create a QR Code and Show it in the ImageView.
         //ToDo Imput nicht fester String sondern muss aus DB kommen. Dazu müssen die Daten mit toString und StringBuffer zusammengeführt werden.

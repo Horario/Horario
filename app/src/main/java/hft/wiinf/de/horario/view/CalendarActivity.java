@@ -1,7 +1,5 @@
 package hft.wiinf.de.horario.view;
 
-
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -14,7 +12,6 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import hft.wiinf.de.horario.R;
-
 
 //TODO Kommentieren und Java Doc Info Schreiben
 public class CalendarActivity extends Fragment {
@@ -72,5 +69,4 @@ public class CalendarActivity extends Fragment {
         rLayout_fragment = (RelativeLayout) v.findViewById(R.id.newFragment);
         rLayout_main = (RelativeLayout) v.findViewById(R.id.calendar_relativeLayout_main);
     }
-
 }
