@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">Horario</string>
+    <string name="CreateAppointment_Dropdown_repetition_yearly">jährlich</string>
+    <string name="CreateAppointment_Dropdown_repetition_monthly">monatlich</string>
+    <string name="CreateAppointment_Dropdown_repetition_weekly">wöchentlich</string>
+    <string name="CreateAppointment_Dropdown_repetition_daily">täglich</string>
     <string name="event_repetition">Wiederholungshäufigkeit</string>
 
     <string name="Test">Test</string>
