@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Locale;
 
 import hft.wiinf.de.horario.R;
+import hft.wiinf.de.horario.controller.EventController;
 
 //TODO Kommentieren und Java Doc Info Schreiben
 public class CalendarActivity extends Fragment {
@@ -60,7 +61,7 @@ public class CalendarActivity extends Fragment {
 
         //TODO just for testing (add entry to database), delete
         hft.wiinf.de.horario.model.Event test = new hft.wiinf.de.horario.model.Event();
-        test.setStartTime(new Date(1524261326000L));
+        test.setStartTime(new Date(1524261326000L)); //20.04.18
         test.setEndTime(new Date(1524261326000L));
         test.setDescription("Termin 1");
         test.save();
@@ -119,7 +120,7 @@ public class CalendarActivity extends Fragment {
         Calendar endOfDay = Calendar.getInstance();
         endOfDay.setTime(date);
         endOfDay.add(Calendar.DAY_OF_MONTH, 1);
-        List<hft.wiinf.de.horario.model.Event> eventList = hft.wiinf.de.horario.model.Event.findEventByTimePeriod(date, endOfDay.getTime());
+        List<hft.wiinf.de.horario.model.Event> eventList = EventController.findEventsByTimePeriod(date, endOfDay.getTime());
         for (int i = 0; i<eventList.size(); i++){
             eventsAsString.add(eventList.get(i).getDescription());
         }
