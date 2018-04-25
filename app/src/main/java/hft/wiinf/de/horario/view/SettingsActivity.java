@@ -2,10 +2,15 @@ package hft.wiinf.de.horario.view;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.telephony.SmsManager;
@@ -36,9 +41,14 @@ public class SettingsActivity extends Fragment {
     RelativeLayout rLayout_main, rLayout_settings, rLayout_support, rLayout_copyright, rLayout_feedback;
     EditText editTextUsername;
     Person person;
-    private static final int SMS_PERMISSION_CODE = 0;
+
+    //SMS
+    private static final int SEND_SMS_PERMISSION_CODE = 1;
     String phoneNo = "01729101821";
-    String sms = "Hello how are you=";
+    String sms = "Hello how are you?";
+    String SENT = "SMS_SENT";
+    PendingIntent sentPI;
+    BroadcastReceiver smsSentReceiver;
 
     public SettingsActivity() {
     }
@@ -60,6 +70,9 @@ public class SettingsActivity extends Fragment {
         } catch (NullPointerException e) {
             Log.d(TAG, "SettingsActivity:" + e.getMessage());
         }
+
+        //SMS
+        sentPI = PendingIntent.getBroadcast(getActivity(),0,new Intent(SENT),0);
 
         //Initialize all Gui-Elements
         button_settings = (Button) view.findViewById(R.id.settings_button_settings);
@@ -182,43 +195,75 @@ public class SettingsActivity extends Fragment {
         });
     }
 
+
     public void sendSMS(View v) {
-        if (!isSmsPermissionGranted()) {
+        //Check if User has permission to send sms
+        if (!isSendSmsPermissionGranted()) {
             requestSendSmsPermission();
         } else {
             try {
                 SmsManager smsManager = SmsManager.getDefault();
-                smsManager.sendTextMessage(phoneNo, null, sms, null, null);
-                Toast.makeText(v.getContext().getApplicationContext(), "SMS Sent!",
-                        Toast.LENGTH_LONG).show();
+                smsManager.sendTextMessage(phoneNo, null, sms, sentPI, null);
             } catch (Exception e) {
-                Toast.makeText(v.getContext().getApplicationContext(),
-                        "SMS faild, please try again later!",
-                        Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
         }
     }
 
-    public boolean isSmsPermissionGranted() {
+    public boolean isSendSmsPermissionGranted() {
         return ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED;
     }
 
     private void requestSendSmsPermission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.SEND_SMS)) {
-            // You may display a non-blocking explanation here, read more in the documentation:
-            // https://developer.android.com/training/permissions/requesting.html
-        }
-        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.SEND_SMS}, SMS_PERMISSION_CODE);
+        //For Fragment: requestPermissions(permissionsList,REQUEST_CODE);
+        //For Activity: ActivityCompat.requestPermissions(this,permissionsList,REQUEST_CODE);
+        requestPermissions(new String[]{Manifest.permission.SEND_SMS}, SEND_SMS_PERMISSION_CODE);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        //Receiver will get message about what happened to the SMS and than do sth depending on the result
+        smsSentReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                switch (getResultCode()){
+                    case Activity.RESULT_OK:
+                        Toast.makeText(getContext().getApplicationContext(), R.string.sms_sent, Toast.LENGTH_SHORT).show();
+                        break;
+                    case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
+                        Toast.makeText(getContext().getApplicationContext(), R.string.generic_failure, Toast.LENGTH_SHORT).show();
+                        break;
+                    case SmsManager.RESULT_ERROR_NO_SERVICE:
+                        Toast.makeText(getContext().getApplicationContext(), R.string.noService, Toast.LENGTH_SHORT).show();
+                        break;
+                    case SmsManager.RESULT_ERROR_NULL_PDU:
+                        Toast.makeText(getContext().getApplicationContext(), R.string.nullPdu, Toast.LENGTH_SHORT).show();
+                        break;
+                    case SmsManager.RESULT_ERROR_RADIO_OFF:
+                        Toast.makeText(getContext().getApplicationContext(), R.string.radioOff, Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        };
+        getActivity().registerReceiver(smsSentReceiver, new IntentFilter(SENT));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getActivity().unregisterReceiver(smsSentReceiver);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
-            case SMS_PERMISSION_CODE: {
+            case SEND_SMS_PERMISSION_CODE: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    sendSMS(getActivity().getCurrentFocus());
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
