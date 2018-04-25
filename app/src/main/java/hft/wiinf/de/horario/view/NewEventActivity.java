@@ -1,29 +1,15 @@
 package hft.wiinf.de.horario.view;
 
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TimePicker;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import hft.wiinf.de.horario.R;
-import hft.wiinf.de.horario.controller.EventController;
-import hft.wiinf.de.horario.controller.PersonController;
-import hft.wiinf.de.horario.model.Event;
-import hft.wiinf.de.horario.model.Repetition;
 
 //TODO Kommentieren und Java Doc Info Schreiben
 public class NewEventActivity extends Fragment {
@@ -38,7 +24,7 @@ public class NewEventActivity extends Fragment {
         View view = inflater.inflate(R.layout.activity_new_event, container, false);
         return view;
     }
-
+/*
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         view.findViewById(R.id.newEvent_editText_Date).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -187,4 +173,5 @@ public class NewEventActivity extends Fragment {
 
         }
     }
+    */
 }
