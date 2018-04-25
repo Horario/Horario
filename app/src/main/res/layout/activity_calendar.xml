@@ -4,21 +4,23 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/calendarheadline_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:text="@string/calendar"
+        android:textColor="@android:color/holo_blue_bright"
+        android:textSize="25sp"
+        android:visibility="visible" />
+
     <RelativeLayout
         android:id="@+id/newFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:visibility="invisible">
-
-        <TextView
-            android:id="@+id/calendarTab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="40dp"
-            android:text="@string/calendar"
-            android:textSize="25sp" />
 
     </RelativeLayout>
 

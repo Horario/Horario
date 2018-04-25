@@ -34,10 +34,10 @@ public class TabActivity extends AppCompatActivity {
         mSectionsPageAdapter = new SectionsPageAdapterActivity(getSupportFragmentManager());
 
         //Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = findViewById(R.id.container);
         setupViewPager(mViewPager);
 
-        tabLayout = (TabLayout) findViewById(R.id.tabBarLayout);
+        tabLayout = findViewById(R.id.tabBarLayout);
         tabLayout.setupWithViewPager(mViewPager);
 
         //TODO Change Picture (DesignTeam)
