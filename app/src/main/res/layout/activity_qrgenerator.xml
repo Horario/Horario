@@ -12,14 +12,14 @@
         android:layout_alignParentTop="true">
 
         <ImageView
-            android:id="@+id/generator_temp_imageView_result"
+            android:id="@+id/generator_imageView_qrResult"
             android:layout_width="match_parent"
             android:layout_height="354dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true" />
 
         <TextView
-            android:id="@+id/generator_temp_imput"
+            android:id="@+id/generator_textView_text_output"
             android:layout_width="331dp"
             android:layout_height="139dp"
             android:layout_alignParentTop="true"
