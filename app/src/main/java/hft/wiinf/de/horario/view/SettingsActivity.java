@@ -88,7 +88,7 @@ public class SettingsActivity extends Fragment {
                 rLayout_main.setVisibility(View.GONE);
                 rLayout_settings.setVisibility(View.VISIBLE);
 
-                if(person == null){
+                if (person == null) {
                     try {
                         person = PersonController.getPersonWhoIam();
                     } catch (NullPointerException e) {
@@ -184,7 +184,7 @@ public class SettingsActivity extends Fragment {
 
     public void sendSMS(View v) {
         if (!isSmsPermissionGranted()) {
-            requestReadAndSendSmsPermission();
+            requestSendSmsPermission();
         } else {
             try {
                 SmsManager smsManager = SmsManager.getDefault();
@@ -204,7 +204,7 @@ public class SettingsActivity extends Fragment {
         return ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED;
     }
 
-    private void requestReadAndSendSmsPermission() {
+    private void requestSendSmsPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.SEND_SMS)) {
             // You may display a non-blocking explanation here, read more in the documentation:
             // https://developer.android.com/training/permissions/requesting.html
@@ -213,8 +213,7 @@ public class SettingsActivity extends Fragment {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             case SMS_PERMISSION_CODE: {
                 // If request is cancelled, the result arrays are empty.
