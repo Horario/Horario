@@ -16,15 +16,6 @@
         android:layout_centerHorizontal="true"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/showData_btn"
-            android:layout_width="155dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:text="@string/button_show_data"
-            android:visibility="visible" />
-
     </RelativeLayout>
 
 </RelativeLayout>

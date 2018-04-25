@@ -1,7 +1,10 @@
 package hft.wiinf.de.horario.view;
 
+import android.graphics.Color;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -9,15 +12,36 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.github.sundeepk.compactcalendarview.CompactCalendarView;
+import com.github.sundeepk.compactcalendarview.domain.Event;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import hft.wiinf.de.horario.R;
 
 //TODO Kommentieren und Java Doc Info Schreiben
 public class CalendarActivity extends Fragment {
     private static final String TAG = "CalendarFragmentActivity";
+
+    public static CompactCalendarView calendarCvCalendar;
+    ListView calendarLvList;
+    TextView calendarTvMonth;
+    TextView calendarTvDay;
+
+    DateFormat monthFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
+    DateFormat dayFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
     RelativeLayout newFragment_relativLayout, calendar_relativeLayout_main;
     TextView calendarHeadline_textView;
 
@@ -26,6 +50,34 @@ public class CalendarActivity extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_calendar, container, false);
+        calendarCvCalendar = view.findViewById(R.id.calendarCvCalendar);
+        calendarTvMonth = view.findViewById(R.id.calendarTvMonth);
+        calendarLvList = view.findViewById(R.id.calendarLvList);
+        calendarTvDay = view.findViewById(R.id.calendarTvDay);
+
+        Date today = new Date();
+        calendarTvMonth.setText(monthFormat.format(today)); //initialize month field
+        calendarTvDay.setText(dayFormat.format(today));
+
+        calendarCvCalendar.setListener(new CompactCalendarView.CompactCalendarViewListener() {
+            @Override
+            public void onDayClick(Date dateClicked) {
+
+                calendarTvDay.setText(dayFormat.format(dateClicked));
+                calendarLvList.setAdapter(getAdapter(dateClicked));
+            }
+
+            @Override
+            public void onMonthScroll(Date firstDayOfNewMonth) {
+                calendarTvMonth.setText(monthFormat.format(firstDayOfNewMonth)); //is updating month field after a swipe
+                DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
+                calendarTvDay.setText(dayFormat.format(firstDayOfNewMonth));
+            }
+
+        });
+
+        /** TODO */
+        calendarTvMonth.setOnClickListener(new View.OnClickListener(){
         //TestButtons
         Button scnbtn = view.findViewById(R.id.gotoscanner);
         Button genbtn = view.findViewById(R.id.gotogenerator);
@@ -33,6 +85,8 @@ public class CalendarActivity extends Fragment {
         scnbtn.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("LongLogTag")
             @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "test", Toast.LENGTH_SHORT).show(); //TODO just for testing, delete
             public void onClick(View view) {
                 try {
                     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -68,10 +122,29 @@ public class CalendarActivity extends Fragment {
 
         return view;
     }
+
+    //TODO just a placeholder, maybe need a rework (1523318400000L)
+    public static void addEvent(Date date){
+        Event event = new Event(Color.BLUE, date.getTime());
+        calendarCvCalendar.addEvent(event);
+    }
+
+    /** TODO need a description */
+    public ArrayAdapter getAdapter(Date date){
+        //TODO Datenbank zugriff, um alle Termine für das Datum zu erhalten und diese dann in die List zu speichern.
+        ArrayList<String> eventArray = new ArrayList<>();
+        eventArray.add("Test eins"); //TODO just for testing, delete
+        ArrayAdapter adapter = new ArrayAdapter(this.getActivity(), android.R.layout.simple_list_item_1, eventArray);
+        return adapter;
+    }
     //Method will be called directly after View is created
     public void onViewCreated(final View view, Bundle saveInstanceStage) {
         newFragment_relativLayout = view.findViewById(R.id.newFragment);
         calendar_relativeLayout_main = view.findViewById(R.id.calendar_relativeLayout_main);
         calendarHeadline_textView = view.findViewById(R.id.calendarheadline_textview);
     }
+}
+
+
+
 }
