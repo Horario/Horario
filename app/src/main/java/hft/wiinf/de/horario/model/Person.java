@@ -12,9 +12,9 @@ public class Person extends Model{
     @Column
     String name="";
     @Column(name = "event_Accepted")
-    private Long acceptedEvent = null;
+    private Event acceptedEvent = null;
     @Column(name = "event_canceled")
-    private Long canceledEvent = null;
+    private Event canceledEvent = null;
     @Column
     boolean isItMe = false;
 
@@ -55,7 +55,7 @@ public class Person extends Model{
         this.phoneNumber = phoneNumber;
     }
 
-    void setCanceledEvent(Long canceledEvent) {
+    public void setCanceledEvent(Event canceledEvent) {
         this.canceledEvent = canceledEvent;
     }
 
@@ -67,7 +67,7 @@ public class Person extends Model{
         this.name = name;
     }
 
-    void setAcceptedEvent(Long acceptedEvent) {
+    public void setAcceptedEvent(Event acceptedEvent) {
         this.acceptedEvent = acceptedEvent;
     }
 

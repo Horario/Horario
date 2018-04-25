@@ -112,10 +112,10 @@
             android:layout_marginEnd="42dp"
             android:layout_marginTop="-19dp"
             android:ems="10"
+            android:focusable="false"
             android:hint="@string/username_hint"
-            android:inputType="textPersonName"
             android:imeOptions="flagNoExtractUi"
-            android:focusable="false"/>
+            android:inputType="textPersonName" />
 
         <Switch
             android:id="@+id/settings_settings_Switch_allowPush"
