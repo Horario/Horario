@@ -3,14 +3,12 @@ package hft.wiinf.de.horario.view;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,8 +62,10 @@ public class CalendarActivity extends Fragment {
         test.setStartTime(new Date(1524261326000L)); //20.04.18
         test.setEndTime(new Date(1524261326000L));
         test.setDescription("Termin 1");
+        test.setAccepted(true);
         test.save();
-        addEvent(test.getStartTime());
+
+        updateCompactCalendar();
 
         calendarCvCalendar.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
@@ -106,11 +106,13 @@ public class CalendarActivity extends Fragment {
 
 
 
-    //TODO just a placeholder, maybe need a rework (1523318400000L)
     //is marking the day in the calendar for the parameter date
-    public static void addEvent(Date date){
-        Event event = new Event(Color.BLUE, date.getTime());
-        calendarCvCalendar.addEvent(event);
+    public static void updateCompactCalendar(){
+        List<hft.wiinf.de.horario.model.Event> acceptedEvents = EventController.findMyAcceptedEvents();
+        for (int i = 0; i<acceptedEvents.size(); i++){
+            Event event = new Event(Color.BLUE, acceptedEvents.get(i).getStartTime().getTime());
+            calendarCvCalendar.addEvent(event, false);
+        }
     }
 
     /** TODO need a description */
@@ -128,7 +130,7 @@ public class CalendarActivity extends Fragment {
         return adapter;
     }
 
-    //TODO neue Methode die alle DB Einträge bei Programmstart lädt und mit addEvent die markierung im Calendar durchführt
+    //TODO neue Methode die alle DB Einträge bei Programmstart lädt und mit updateCompactCalendar die markierung im Calendar durchführt
 
 
 
