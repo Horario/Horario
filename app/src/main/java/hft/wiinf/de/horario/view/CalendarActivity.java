@@ -1,10 +1,8 @@
 package hft.wiinf.de.horario.view;
 
-import android.graphics.Color;
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -15,8 +13,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -42,7 +38,8 @@ public class CalendarActivity extends Fragment {
 
     DateFormat monthFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
     DateFormat dayFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
-    RelativeLayout newFragment_relativLayout, calendar_relativeLayout_main;
+
+    RelativeLayout newFragment_relativLayout, calendar_temp_relativeLayout_main;
     TextView calendarHeadline_textView;
 
     //Temp Method to Change on Frame CaledarActivity with QRScannerActivity Fragments
@@ -50,10 +47,15 @@ public class CalendarActivity extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_calendar, container, false);
+
         calendarCvCalendar = view.findViewById(R.id.calendarCvCalendar);
         calendarTvMonth = view.findViewById(R.id.calendarTvMonth);
         calendarLvList = view.findViewById(R.id.calendarLvList);
         calendarTvDay = view.findViewById(R.id.calendarTvDay);
+
+        //ToDo -> TestButtons löschen
+        Button scnbtn = view.findViewById(R.id.gotoscanner);
+        Button genbtn = view.findViewById(R.id.gotogenerator);
 
         Date today = new Date();
         calendarTvMonth.setText(monthFormat.format(today)); //initialize month field
@@ -62,7 +64,6 @@ public class CalendarActivity extends Fragment {
         calendarCvCalendar.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
             public void onDayClick(Date dateClicked) {
-
                 calendarTvDay.setText(dayFormat.format(dateClicked));
                 calendarLvList.setAdapter(getAdapter(dateClicked));
             }
@@ -76,32 +77,28 @@ public class CalendarActivity extends Fragment {
 
         });
 
-        /** TODO */
-        calendarTvMonth.setOnClickListener(new View.OnClickListener(){
-        //TestButtons
-        Button scnbtn = view.findViewById(R.id.gotoscanner);
-        Button genbtn = view.findViewById(R.id.gotogenerator);
         //Change onClick the Fragment CalendarActivity with the QRScannerActivity
         scnbtn.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("LongLogTag")
             @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "test", Toast.LENGTH_SHORT).show(); //TODO just for testing, delete
             public void onClick(View view) {
                 try {
                     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.newFragment, new QRScannerActivity());
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
-                    calendar_relativeLayout_main.setVisibility(View.GONE);
-                    calendarHeadline_textView.setVisibility(View.GONE);
+                    calendar_temp_relativeLayout_main.setVisibility(View.GONE);
+                    calendarLvList.setVisibility(View.GONE);
+                    calendarTvDay.setVisibility(View.GONE);
+                    calendarTvMonth.setVisibility(View.GONE);
+                    calendarCvCalendar.setVisibility(View.GONE);
                     newFragment_relativLayout.setVisibility(View.VISIBLE);
                 } catch (NullPointerException e) {
                     Log.d(TAG, "CalendarActivity:" + e.getMessage());
                 }
             }
         });
-
+        //Change onClick the Fragment CalendarActivity with the QRGenerator
         genbtn.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("LongLogTag")
             @Override
@@ -111,40 +108,40 @@ public class CalendarActivity extends Fragment {
                     fragmentTransaction.replace(R.id.newFragment, new QRGeneratorActivity());
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
-                    calendar_relativeLayout_main.setVisibility(View.GONE);
-                    calendarHeadline_textView.setVisibility(View.GONE);
+                    calendar_temp_relativeLayout_main.setVisibility(View.GONE);
+                    calendarLvList.setVisibility(View.GONE);
+                    calendarTvDay.setVisibility(View.GONE);
+                    calendarTvMonth.setVisibility(View.GONE);
+                    calendarCvCalendar.setVisibility(View.GONE);
                     newFragment_relativLayout.setVisibility(View.VISIBLE);
                 } catch (NullPointerException e) {
                     Log.d(TAG, "CalendarActivity:" + e.getMessage());
                 }
             }
         });
-
         return view;
     }
-
     //TODO just a placeholder, maybe need a rework (1523318400000L)
-    public static void addEvent(Date date){
+    public static void addEvent(Date date) {
         Event event = new Event(Color.BLUE, date.getTime());
         calendarCvCalendar.addEvent(event);
     }
 
-    /** TODO need a description */
-    public ArrayAdapter getAdapter(Date date){
+    /**
+     * TODO need a description
+     */
+    public ArrayAdapter getAdapter(Date date) {
         //TODO Datenbank zugriff, um alle Termine für das Datum zu erhalten und diese dann in die List zu speichern.
         ArrayList<String> eventArray = new ArrayList<>();
         eventArray.add("Test eins"); //TODO just for testing, delete
         ArrayAdapter adapter = new ArrayAdapter(this.getActivity(), android.R.layout.simple_list_item_1, eventArray);
         return adapter;
     }
+
     //Method will be called directly after View is created
     public void onViewCreated(final View view, Bundle saveInstanceStage) {
         newFragment_relativLayout = view.findViewById(R.id.newFragment);
-        calendar_relativeLayout_main = view.findViewById(R.id.calendar_relativeLayout_main);
-        calendarHeadline_textView = view.findViewById(R.id.calendarheadline_textview);
-    }
-}
-
-
-
+        calendar_temp_relativeLayout_main = view.findViewById(R.id.calendar_temp_relativeLayout_main);
+        }
+        
 }

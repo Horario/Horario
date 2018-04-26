@@ -6,18 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".view.CalendarActivity">
 
-    <com.github.sundeepk.compactcalendarview.CompactCalendarView xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/calendarCvCalendar"
-    <TextView
-        android:id="@+id/calendarheadline_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
-        android:text="@string/calendar"
-        android:textColor="@android:color/holo_blue_bright"
-        android:textSize="25sp"
-        android:visibility="visible" />
 
     <RelativeLayout
         android:id="@+id/newFragment"
@@ -25,10 +13,37 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:visibility="invisible">
-
     </RelativeLayout>
 
     <RelativeLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:id="@+id/calendar_temp_relativeLayout_main">
+
+
+        <Button
+            android:id="@+id/gotoscanner"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="66dp"
+            android:layout_marginEnd="32dp"
+            android:text="Go To Scanner Temp" />
+
+        <Button
+            android:id="@+id/gotogenerator"
+            android:layout_width="113dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="43dp"
+            android:text="Go to QR Generator" />
+    </RelativeLayout>
+
+
+    <com.github.sundeepk.compactcalendarview.CompactCalendarView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/calendarCvCalendar"
         android:layout_width="wrap_content"
         android:layout_height="250dp"
         android:layout_marginEnd="8dp"
@@ -68,6 +83,7 @@
         android:backgroundTint="#ffe95451"
         android:backgroundTintMode="src_atop"
         android:clickable="true"
+        android:focusable="true"
         android:text="TextView"
         app:layout_constraintBottom_toTopOf="@+id/calendarCvCalendar"
         app:layout_constraintEnd_toEndOf="parent"
@@ -77,11 +93,12 @@
         app:layout_constraintVertical_bias="1.0"
         tools:background="#ffe95451" />
 
+    <!-- ToDo magrinBottom nach dem Testen von 50 auf 8 stellen! -->
     <ListView
         android:id="@+id/calendarLvList"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="50dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -91,27 +108,3 @@
         app:layout_constraintTop_toBottomOf="@+id/calendarTvDay" />
 
 </android.support.constraint.ConstraintLayout>
-        android:layout_height="wrap_content"
-        android:id="@+id/calendar_relativeLayout_main">
-
-
-    <Button
-            android:id="@+id/gotoscanner"
-            android:layout_width="140dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginBottom="66dp"
-            android:layout_marginEnd="32dp"
-            android:text="Go To Scanner Temp" />
-
-        <Button
-            android:id="@+id/gotogenerator"
-            android:layout_width="113dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="43dp"
-            android:text="Go to QR Generator" />
-    </RelativeLayout>
-</RelativeLayout>
