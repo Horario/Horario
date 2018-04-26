@@ -34,7 +34,7 @@ public class SettingsActivity extends Fragment {
 
     private static final String TAG = "SettingFragmentActivity";
     Button button_settings, button_support, button_copyright, button_feedback;
-    RelativeLayout rLayout_main, rLayout_settings, rLayout_support, rLayout_copyright, rLayout_feedback;
+    RelativeLayout rLayout_main, rLayout_settings, rLayout_invi, rLayout_support, rLayout_copyright, rLayout_feedback;
     EditText editTextUsername;
     Person person;
 
@@ -46,19 +46,7 @@ public class SettingsActivity extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_settings, container, false);
-        Button setting_button = (Button) view.findViewById(R.id.settings_button_settings);
-        rLayout_main = (RelativeLayout) view.findViewById(R.id.settings_relativeLayout_main);
 
-        setting_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentTransaction fr = getFragmentManager().beginTransaction();
-                fr.replace(R.id.settings_relativeLayout_main, new SettingsFragment());
-                fr.addToBackStack(null);
-                fr.commit();
-
-            }
-        });
         return view;
     }
 
@@ -72,6 +60,23 @@ public class SettingsActivity extends Fragment {
             Log.d(TAG, "SettingsActivity:" + e.getMessage());
         }
 
+        Button setting_button = (Button) view.findViewById(R.id.settings_button_settings);
+        rLayout_main = (RelativeLayout) view.findViewById(R.id.settings_relativeLayout_main);
+        rLayout_settings = view.findViewById(R.id.settings_relativeLayout_settings);
+        rLayout_invi = view.findViewById(R.id.settingsinvi);
+
+        setting_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction fr = getFragmentManager().beginTransaction();
+                fr.replace(R.id.settings_relativeLayout_settings, new SettingsFragment());
+                fr.addToBackStack(null);
+                fr.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                fr.commit();
+                rLayout_invi.setVisibility(View.GONE);
+                rLayout_settings.setVisibility(View.VISIBLE);
+            }
+        });
         //Initialize all Gui-Elements
 //        button_settings = (Button) view.findViewById(R.id.settings_button_settings);
 //        button_support = (Button) view.findViewById(R.id.settings_button_support);
