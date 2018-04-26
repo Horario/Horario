@@ -93,7 +93,4 @@ public class CalendarActivity extends Fragment {
         ArrayAdapter adapter = new ArrayAdapter(this.getActivity(), android.R.layout.simple_list_item_1, eventArray);
         return adapter;
     }
-
-
-
 }
