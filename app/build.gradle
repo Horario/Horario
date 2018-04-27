@@ -41,7 +41,6 @@ repositories {
     maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 }
 
-
 /**
  * Add the Zxing Library to make the QR-Code Scanner usable
  * IMPORTANT:

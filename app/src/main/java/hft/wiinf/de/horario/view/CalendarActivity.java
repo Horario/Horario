@@ -1,16 +1,15 @@
 package hft.wiinf.de.horario.view;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,8 +37,9 @@ public class CalendarActivity extends Fragment {
     TextView calendarTvMonth;
     TextView calendarTvDay;
 
-    DateFormat monthFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
-    DateFormat dayFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
+    static DateFormat monthFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
+    static DateFormat dayFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
+    public static Date selectedMonth;
 
 
     @Nullable
@@ -55,15 +55,16 @@ public class CalendarActivity extends Fragment {
         calendarTvDay = view.findViewById(R.id.calendarTvDay);
 
         Date today = new Date();
+        selectedMonth = today;
         calendarTvMonth.setText(monthFormat.format(today)); //initialize month field
         calendarTvDay.setText(dayFormat.format(today));
         calendarLvList.setAdapter(getAdapter(today));
 
         //TODO just for testing (add entry to database), delete
         hft.wiinf.de.horario.model.Event test = new hft.wiinf.de.horario.model.Event();
-        test.setStartTime(new Date(1524261326000L)); //20.04.18
-        test.setEndTime(new Date(1524261326000L));
-        test.setDescription("Termin 1");
+        test.setStartTime(new Date(1527413610000L)); //27.5.18
+        test.setEndTime(new Date(1527413610000L));
+        test.setDescription("Termin Test Overview 1");
         test.save();
         addEvent(test.getStartTime());
 
@@ -81,6 +82,7 @@ public class CalendarActivity extends Fragment {
                 calendarTvMonth.setText(monthFormat.format(firstDayOfNewMonth));
                 calendarTvDay.setText(dayFormat.format(firstDayOfNewMonth));
                 calendarLvList.setAdapter(getAdapter(firstDayOfNewMonth));
+                selectedMonth = firstDayOfNewMonth;
             }
         });
 
@@ -88,7 +90,8 @@ public class CalendarActivity extends Fragment {
         calendarTvMonth.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "test", Toast.LENGTH_SHORT).show(); //TODO just for testing, delete
+                Intent intent = new Intent(getContext(), EventOverviewActivity.class);
+                startActivity(intent);
             }
         });
 
