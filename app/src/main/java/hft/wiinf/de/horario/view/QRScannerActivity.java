@@ -25,7 +25,7 @@ public class QRScannerActivity extends Fragment {
         IntentIntegrator integrator = new IntentIntegrator(getActivity());
         integrator.setOrientationLocked(false);
         integrator.setCaptureActivity(CaptureActivityPortrait.class); //Necessary to use the intern Sensor for Orientation
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
         integrator.setPrompt("Termincode scannen\n" +
                 "Halte dein Smartphone vor den QR-Code und \n" +
                 "scanne ihn ab, um den Termin zu öffnen");

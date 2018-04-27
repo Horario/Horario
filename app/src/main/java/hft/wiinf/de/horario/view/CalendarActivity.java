@@ -143,5 +143,5 @@ public class CalendarActivity extends Fragment {
         newFragment_relativLayout = view.findViewById(R.id.newFragment);
         calendar_temp_relativeLayout_main = view.findViewById(R.id.calendar_temp_relativeLayout_main);
         }
-        
+
 }
