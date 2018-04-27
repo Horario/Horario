@@ -7,8 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.Calendar;
-
 import hft.wiinf.de.horario.R;
 
 public class NewEventActivity extends Fragment {
