@@ -35,6 +35,15 @@ public class Event extends Model {
         super();
     }
 
+    public Event(Person creator, String description, String place, Date startTime, Date endTime, boolean accepted){
+        this.creator = creator;
+        this.description = description;
+        this.place = place;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.accepted = accepted;
+    }
+
 
 
 //getter-setter

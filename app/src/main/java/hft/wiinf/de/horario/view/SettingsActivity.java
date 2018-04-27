@@ -31,7 +31,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import hft.wiinf.de.horario.R;
+import hft.wiinf.de.horario.controller.EventController;
+import hft.wiinf.de.horario.controller.FailedSMSController;
 import hft.wiinf.de.horario.controller.PersonController;
+import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
 
 public class SettingsActivity extends Fragment {
@@ -234,15 +237,19 @@ public class SettingsActivity extends Fragment {
                         break;
                     case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
                         Toast.makeText(getContext().getApplicationContext(), R.string.generic_failure, Toast.LENGTH_SHORT).show();
+                        saveFailedSMS();
                         break;
                     case SmsManager.RESULT_ERROR_NO_SERVICE:
                         Toast.makeText(getContext().getApplicationContext(), R.string.noService, Toast.LENGTH_SHORT).show();
+                        saveFailedSMS();
                         break;
                     case SmsManager.RESULT_ERROR_NULL_PDU:
                         Toast.makeText(getContext().getApplicationContext(), R.string.nullPdu, Toast.LENGTH_SHORT).show();
+                        saveFailedSMS();
                         break;
                     case SmsManager.RESULT_ERROR_RADIO_OFF:
                         Toast.makeText(getContext().getApplicationContext(), R.string.radioOff, Toast.LENGTH_SHORT).show();
+                        saveFailedSMS();
                         break;
                 }
             }
@@ -273,6 +280,14 @@ public class SettingsActivity extends Fragment {
             // other 'case' lines to check for other
             // permissions this app might request
         }
+    }
+
+    public void saveFailedSMS(){
+        Person person = new Person(phoneNo, "Florian");
+        PersonController.savePerson(person);
+        Event event = new Event(person, "TestEvent", "PlaceTest", null, null,false);
+        EventController.saveEvent(event);
+        FailedSMSController.addFailedSMS(event, person);
     }
 }
 

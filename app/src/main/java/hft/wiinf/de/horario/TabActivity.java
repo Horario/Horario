@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.activeandroid.ActiveAndroid;
+import com.facebook.stetho.Stetho;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -42,6 +43,7 @@ public class TabActivity extends AppCompatActivity {
 
         //Start DB
         ActiveAndroid.initialize(this);
+        Stetho.initializeWithDefaults(this);
 
         mSectionsPageAdapter = new SectionsPageAdapterActivity(getSupportFragmentManager());
 
