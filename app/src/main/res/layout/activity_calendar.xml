@@ -4,13 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.CalendarActivity"
-    tools:layout_editor_absoluteY="25dp">
+    tools:context=".view.CalendarActivity">
 
     <com.github.sundeepk.compactcalendarview.CompactCalendarView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/calendarCvCalendar"
         android:layout_width="wrap_content"
         android:layout_height="250dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="28dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         app:compactCalendarBackgroundColor="#ffe95451"
@@ -20,19 +22,25 @@
         app:compactCalendarTargetHeight="250dp"
         app:compactCalendarTextColor="#fff"
         app:compactCalendarTextSize="12sp"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="28dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/calendarTvDay"
-        android:layout_width="368dp"
+        android:layout_width="0dp"
         android:layout_height="26dp"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="306dp" />
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="28dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/calendarCvCalendar" />
 
     <TextView
         android:id="@+id/calendarTvMonth"
-        android:layout_width="384dp"
+        android:layout_width="0dp"
         android:layout_height="25dp"
         android:autoText="false"
         android:background="#ffe95451"
@@ -40,60 +48,25 @@
         android:backgroundTintMode="src_atop"
         android:clickable="true"
         android:text="TextView"
-        tools:background="#ffe95451"
-        tools:layout_editor_absoluteY="3dp" />
+        app:layout_constraintBottom_toTopOf="@+id/calendarCvCalendar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        tools:background="#ffe95451" />
 
     <ListView
         android:id="@+id/calendarLvList"
-        android:layout_width="368dp"
-        android:layout_height="219dp"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="340dp" />
-
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingActionButtonGoToScanner"
-        android:layout_width="50dp"
-        android:layout_height="100dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/floatingActionButtonCreateEvent"
-        android:layout_marginBottom="80dp"
-        android:layout_marginEnd="15dp"
-        android:backgroundTint="@color/colorPrimary"
-        android:clickable="true"
-        android:src="@android:drawable/ic_menu_camera"
-        android:visibility="visible"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingActionButtonCreateEvent"
-        android:layout_width="50dp"
-        android:layout_height="100dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="140dp"
-        android:layout_marginEnd="15dp"
-        android:backgroundTint="@color/colorPrimary"
-        android:clickable="true"
-        android:src="@android:drawable/ic_menu_today"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingActionButtonOpenClose"
-        android:layout_width="50dp"
-        android:layout_height="100dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/floatingActionButtonGoToScanner"
-        android:layout_marginBottom="20dp"
-        android:layout_marginEnd="15dp"
-        android:backgroundTint="@color/colorPrimaryDark"
-        android:clickable="true"
-        android:src="@android:drawable/ic_input_add"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/calendarTvDay" />
 
 </android.support.constraint.ConstraintLayout>

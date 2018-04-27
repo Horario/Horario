@@ -20,49 +20,4 @@
         android:id="@+id/btnTEST1"
         android:text="TESTBTN 1"/>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingActionButtonGoToScanner"
-        android:layout_width="50dp"
-        android:layout_height="100dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/floatingActionButtonCreateEvent"
-        android:layout_marginBottom="80dp"
-        android:layout_marginEnd="15dp"
-        android:backgroundTint="@color/colorPrimary"
-        android:clickable="true"
-        android:src="@android:drawable/ic_menu_camera"
-        android:visibility="visible"
-        layout_constraintBottom_toBottomOf="parent"
-        layout_constraintEnd_toEndOf="parent" />
-
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingActionButtonCreateEvent"
-        android:layout_width="50dp"
-        android:layout_height="100dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="140dp"
-        android:layout_marginEnd="15dp"
-        android:backgroundTint="@color/colorPrimary"
-        android:clickable="true"
-        android:src="@android:drawable/ic_menu_today"
-        android:visibility="visible"
-        layout_constraintBottom_toBottomOf="parent"
-        layout_constraintEnd_toEndOf="parent" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingActionButtonOpenClose"
-        android:layout_width="50dp"
-        android:layout_height="100dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/floatingActionButtonGoToScanner"
-        android:layout_marginBottom="20dp"
-        android:layout_marginEnd="15dp"
-        android:backgroundTint="@color/colorPrimaryDark"
-        android:clickable="true"
-        android:src="@android:drawable/ic_input_add"
-        layout_constraintBottom_toBottomOf="parent"
-        layout_constraintEnd_toEndOf="parent" />
-
 </RelativeLayout>
