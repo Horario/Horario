@@ -84,11 +84,8 @@ public class TabActivity extends AppCompatActivity {
                 if (tab.getPosition() == 2) {
                     //Set Visibility of mainLayout to Visible and the rest to Gone, to see only the overview
                     try {
-                        mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_settings).setVisibility(View.GONE);
-//                        mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_support).setVisibility(View.GONE);
-//                        mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_feedback).setVisibility(View.GONE);
-//                        mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_copyright).setVisibility(View.GONE);
-                        mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_main).setVisibility(View.VISIBLE);
+                        mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_helper).setVisibility(View.GONE);
+                        mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_button).setVisibility(View.VISIBLE);
 
                         //Leave edit mode from EditText in Settings (username)
                         mSectionsPageAdapter.getItem(2).getActivity().findViewById(R.id.settings_settings_editText_username).setFocusableInTouchMode(false);
@@ -106,14 +103,11 @@ public class TabActivity extends AppCompatActivity {
             //Do something if Tab is reselected. Parameters: selected Tab.--- Info: tab.getPosition() == x for check which Tab
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                if (tab.getPosition() == 2) {
+                if (tab.getPosition() == 2 ) {
                     //Set Visibility of mainLayout to Visible and the rest to Gone, to see only the overview
                     try {
-                        mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_settings).setVisibility(View.GONE);
-//                        mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_support).setVisibility(View.GONE);
-//                        mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_feedback).setVisibility(View.GONE);
-//                        mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_copyright).setVisibility(View.GONE);
-                        mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_main).setVisibility(View.VISIBLE);
+                        mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_helper).setVisibility(View.GONE);
+                        mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_button).setVisibility(View.VISIBLE);
 
                         //Leave edit mode from EditText in Settings (username)
                         mSectionsPageAdapter.getItem(2).getActivity().findViewById(R.id.settings_settings_editText_username).setFocusableInTouchMode(false);

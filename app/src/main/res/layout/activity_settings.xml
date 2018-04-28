@@ -2,55 +2,55 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/settings_relativeLayout_main"
-    android:background="?android:windowBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:visibility="visible">
 
     <RelativeLayout
-        android:id="@+id/settings_relativeLayout_settings"
+        android:id="@+id/settings_relativeLayout_helper"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone">
-    </RelativeLayout>
+        android:visibility="gone" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/settingsinvi"
+        android:id="@+id/settings_relativeLayout_button"
         android:visibility="visible">
-    <Button
-        android:id="@+id/settings_button_feedback"
-        android:layout_width="228dp"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="@string/feedback_zur_app_text" />
 
-    <Button
-        android:id="@+id/settings_button_support"
-        android:layout_width="228dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="86dp"
-        android:text="@string/support_text" />
+        <Button
+            android:id="@+id/settings_button_feedback"
+            android:layout_width="228dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/feedback_zur_app_text" />
 
-    <Button
-        android:id="@+id/settings_button_copyright"
-        android:layout_width="228dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="155dp"
-        android:text="@string/copyright_text" />
+        <Button
+            android:id="@+id/settings_button_support"
+            android:layout_width="228dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="86dp"
+            android:text="@string/support_text" />
 
-    <Button
-        android:id="@+id/settings_button_settings"
-        android:layout_width="228dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:text="@string/settings_text" />
+        <Button
+            android:id="@+id/settings_button_copyright"
+            android:layout_width="228dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="155dp"
+            android:text="@string/copyright_text" />
+
+        <Button
+            android:id="@+id/settings_button_settings"
+            android:layout_width="228dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:text="@string/settings_text" />
     </RelativeLayout>
 </RelativeLayout>

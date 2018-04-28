@@ -34,8 +34,7 @@ public class SettingsActivity extends Fragment {
 
     private static final String TAG = "SettingFragmentActivity";
     Button button_settings, button_support, button_copyright, button_feedback;
-    RelativeLayout rLayout_main, rLayout_settings, rLayout_invi, rLayout_support, rLayout_copyright, rLayout_feedback;
-    EditText editTextUsername;
+    RelativeLayout rLayout_settings_helper, rLayout_settings_button;
     Person person;
 
     public SettingsActivity() {
@@ -60,142 +59,68 @@ public class SettingsActivity extends Fragment {
             Log.d(TAG, "SettingsActivity:" + e.getMessage());
         }
 
-        Button setting_button = (Button) view.findViewById(R.id.settings_button_settings);
-        rLayout_main = (RelativeLayout) view.findViewById(R.id.settings_relativeLayout_main);
-        rLayout_settings = view.findViewById(R.id.settings_relativeLayout_settings);
-        rLayout_invi = view.findViewById(R.id.settingsinvi);
+        //Initialize all Gui-Elements
+        button_settings = (Button) view.findViewById(R.id.settings_button_settings);
+        button_support = (Button) view.findViewById(R.id.settings_button_support);
+        button_copyright = (Button) view.findViewById(R.id.settings_button_copyright);
+        button_feedback = (Button) view.findViewById(R.id.settings_button_feedback);
 
-        setting_button.setOnClickListener(new View.OnClickListener() {
+        rLayout_settings_helper = view.findViewById(R.id.settings_relativeLayout_helper);
+        rLayout_settings_button = view.findViewById(R.id.settings_relativeLayout_button);
+
+        //onCLickListener for every button in settings fragment
+        button_settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
-                fr.replace(R.id.settings_relativeLayout_settings, new SettingsFragment());
+                //settings_relativeLayout_helper: in this Layout all other layouts will be uploaded
+                fr.replace(R.id.settings_relativeLayout_helper, new SettingsSettingsFragment());
                 fr.addToBackStack(null);
                 fr.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                 fr.commit();
-                rLayout_invi.setVisibility(View.GONE);
-                rLayout_settings.setVisibility(View.VISIBLE);
+                //set settings-buttons invisible and new Layout_helper visible
+                rLayout_settings_button.setVisibility(View.GONE);
+                rLayout_settings_helper.setVisibility(View.VISIBLE);
             }
         });
-        //Initialize all Gui-Elements
-//        button_settings = (Button) view.findViewById(R.id.settings_button_settings);
-//        button_support = (Button) view.findViewById(R.id.settings_button_support);
-//        button_copyright = (Button) view.findViewById(R.id.settings_button_copyright);
-//        button_feedback = (Button) view.findViewById(R.id.settings_button_feedback);
 
-//        rLayout_main = (RelativeLayout) view.findViewById(R.id.settings_relativeLayout_main);
-//        rLayout_copyright = (RelativeLayout) view.findViewById(R.id.settings_relativeLayout_copyright);
-//        rLayout_feedback = (RelativeLayout) view.findViewById(R.id.settings_relativeLayout_feedback);
-//        rLayout_settings = (RelativeLayout) view.findViewById(R.id.settings_relativeLayout_settings);
-//        rLayout_support = (RelativeLayout) view.findViewById(R.id.settings_relativeLayout_support);
+        button_support.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction fr = getFragmentManager().beginTransaction();
+                fr.replace(R.id.settings_relativeLayout_helper, new SettingsSupportFragment());
+                fr.addToBackStack(null);
+                fr.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                fr.commit();
+                rLayout_settings_button.setVisibility(View.GONE);
+                rLayout_settings_helper.setVisibility(View.VISIBLE);
+            }
+        });
 
-//        editTextUsername = (EditText) view.findViewById(R.id.settings_settings_editText_username);
+        button_copyright.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction fr = getFragmentManager().beginTransaction();
+                fr.replace(R.id.settings_relativeLayout_helper, new SettingsCopyrightFragment());
+                fr.addToBackStack(null);
+                fr.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                fr.commit();
+                rLayout_settings_button.setVisibility(View.GONE);
+                rLayout_settings_helper.setVisibility(View.VISIBLE);
+            }
+        });
 
-        //If username is already saved -> pull it from db an set Text equal to it
-//        if (person != null) {
-//            editTextUsername.setText(person.getName());
-//        }
-//
-//        //Everything that needs to happen after click on "Settings" button
-//        //set Visibility of mainLayout to Gone and settingsLayout to Visible
-//        button_settings.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-//                fragmentTransaction.replace(R.id.settings_relativeLayout_settings, new SettingsFragment());
-//                fragmentTransaction.addToBackStack(null);
-//                fragmentTransaction.commit();
-//
-//
-//                rLayout_main.setVisibility(View.GONE);
-//                rLayout_settings.setVisibility(View.VISIBLE);
-//
-//                if(person == null){
-//                    try {
-//                        person = PersonController.getPersonWhoIam();
-//                    } catch (NullPointerException e) {
-//                        Log.d(TAG, "SettingsActivity:" + e.getMessage());
-//                    }
-//                }
-//                if (person != null) {
-//                    editTextUsername.setText(person.getName());
-//                }
-//            }
-//        });
-//
-//        //Everything that needs to happen after click on "Feedback" button
-//        //set Visibility of mainLayout to Gone and FeedbackLayout to Visible
-//        button_feedback.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                rLayout_main.setVisibility(View.GONE);
-//                rLayout_feedback.setVisibility(View.VISIBLE);
-//            }
-//        });
-//
-//        //Everything that needs to happen after click on "Copyright" button
-//        //set Visibility of mainLayout to Gone and copyrightLayout to Visible
-//        button_copyright.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                rLayout_main.setVisibility(View.GONE);
-//                rLayout_copyright.setVisibility(View.VISIBLE);
-//            }
-//        });
-//
-//        //Everything that needs to happen after click on "Support" button
-//        //set Visibility of mainLayout to Gone and supportLayout to Visible
-//        button_support.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                rLayout_main.setVisibility(View.GONE);
-//                rLayout_support.setVisibility(View.VISIBLE);
-//            }
-//        });
-//
-//        //Make EditText-Field editable
-//        editTextUsername.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                editTextUsername.setFocusable(true);
-//                editTextUsername.setFocusableInTouchMode(true);
-//                return false;
-//            }
-//        });
-//
-//        //Everything that needs to happen after Username was written in the EditText-Field
-//        editTextUsername.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//            @Override
-//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//                String inputText = v.getText().toString();
-//
-//                //RegEx: no whitespace at the beginning
-//                Pattern pattern_username = Pattern.compile("^([\\S]).*");
-//                Matcher matcher_username = pattern_username.matcher(inputText);
-//
-//                if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches()) {
-//                    if (person != null) {
-//                        person.setName(inputText);
-//                        PersonController.addPersonMe(person);
-//                    } else {
-//                        //ToDo: get correct phoneNumber
-//                        person = new Person(true, "007", inputText);
-//                        PersonController.addPersonMe(person);
-//                    }
-//                    Toast toast = Toast.makeText(view.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT);
-//                    toast.show();
-//                    editTextUsername.setFocusable(false);
-//                    editTextUsername.setFocusableInTouchMode(false);
-//                } else {
-//                    Toast toast = Toast.makeText(view.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
-//                    toast.show();
-//                    if (person != null) {
-//                        editTextUsername.setText(person.getName());
-//                    }
-//                    return true;
-//                }
-//                return false;
-//            }
-//        });
+        button_feedback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction fr = getFragmentManager().beginTransaction();
+                fr.replace(R.id.settings_relativeLayout_helper, new SettingsFeedbackFragment());
+                fr.addToBackStack(null);
+                fr.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                fr.commit();
+                rLayout_settings_button.setVisibility(View.GONE);
+                rLayout_settings_helper.setVisibility(View.VISIBLE);
+            }
+        });
     }
 }
