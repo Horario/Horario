@@ -20,6 +20,8 @@ public class Event extends Model {
     @Column
     private String description = "";
     @Column
+    private int creatorEventId;
+    @Column
     private String place = "";
     @Column
     private Date startTime = new Date();
@@ -35,13 +37,14 @@ public class Event extends Model {
         super();
     }
 
-    public Event(Person creator, String description, String place, Date startTime, Date endTime, boolean accepted){
+    public Event(Person creator, String description, String place,int creatorEventId, Date startTime, Date endTime, boolean accepted){
         this.creator = creator;
         this.description = description;
         this.place = place;
         this.startTime = startTime;
         this.endTime = endTime;
         this.accepted = accepted;
+        this.creatorEventId = creatorEventId;
     }
 
 
@@ -96,7 +99,13 @@ public class Event extends Model {
         this.accepted = accepted;
     }
 
+    public int getCreatorEventId() {
+        return creatorEventId;
+    }
 
+    public void setCreatorEventId(int creatorEventId) {
+        this.creatorEventId = creatorEventId;
+    }
 }
 
 

@@ -45,8 +45,5 @@
     <string name="later_text">Später</string>
     <string name="thanksForUsername">Benutzername wurde gespeichert! </string>
     <string name="sms_sent">SMS wurde versandt!</string>
-    <string name="generic_failure">Generic Failure</string>
-    <string name="noService">No Service!</string>
-    <string name="nullPdu">SMS send Failed because no pdu provided!</string>
-    <string name="radioOff">Radio Off</string>
+    <string name="sms_fail">SMS kann zur Zeit nicht verschickt werden! Es wird später automatisch erneut versucht!</string>
 </resources>

@@ -4,12 +4,16 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.PendingIntent;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -27,6 +31,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,7 +40,10 @@ import hft.wiinf.de.horario.controller.EventController;
 import hft.wiinf.de.horario.controller.FailedSMSController;
 import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.Event;
+import hft.wiinf.de.horario.model.FailedSMS;
 import hft.wiinf.de.horario.model.Person;
+import hft.wiinf.de.horario.service.FailedSMSService;
+import hft.wiinf.de.horario.utility.BundleUtlity;
 
 public class SettingsActivity extends Fragment {
 
@@ -45,13 +53,14 @@ public class SettingsActivity extends Fragment {
     EditText editTextUsername;
     Person person;
 
-    //SMS
-    private static final int SEND_SMS_PERMISSION_CODE = 1;
-    String phoneNo = "01729101821";
-    String sms = "Hello how are you?";
     String SENT = "SMS_SENT";
     PendingIntent sentPI;
     BroadcastReceiver smsSentReceiver;
+    Bundle sms;
+    String phoneNo = "01729101821";
+    String message ="Hellodedededede";
+
+    private static final int SEND_SMS_PERMISSION_CODE = 1;
 
     public SettingsActivity() {
     }
@@ -74,7 +83,6 @@ public class SettingsActivity extends Fragment {
             Log.d(TAG, "SettingsActivity:" + e.getMessage());
         }
 
-        //SMS
         sentPI = PendingIntent.getBroadcast(getActivity(),0,new Intent(SENT),0);
 
         //Initialize all Gui-Elements
@@ -136,8 +144,7 @@ public class SettingsActivity extends Fragment {
                 rLayout_copyright.setVisibility(View.VISIBLE);
 
                 //ToDo: Flo: SMS in richtige Datei
-                sendSMS(v);
-
+                sendSMS();
                 //End of SMS
             }
         });
@@ -198,15 +205,54 @@ public class SettingsActivity extends Fragment {
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        //Receiver will get message about what happened to the SMS and than do sth depending on the result
+        smsSentReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                switch (getResultCode()){
+                    case Activity.RESULT_OK:
+                        Toast.makeText(getContext(), R.string.sms_sent, Toast.LENGTH_SHORT).show();
+                        break;
+                    case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
+                        Toast.makeText(getContext(), R.string.sms_fail, Toast.LENGTH_SHORT).show();
+                        startJobSendSMS(phoneNo,message);
+                        break;
+                    case SmsManager.RESULT_ERROR_NO_SERVICE:
+                        Toast.makeText(getContext(), R.string.sms_fail, Toast.LENGTH_SHORT).show();
+                        startJobSendSMS(phoneNo,message);
+                        break;
+                    case SmsManager.RESULT_ERROR_NULL_PDU:
+                        Toast.makeText(getContext(), R.string.sms_fail, Toast.LENGTH_SHORT).show();
+                        startJobSendSMS(phoneNo,message);
+                        break;
+                    case SmsManager.RESULT_ERROR_RADIO_OFF:
+                        Toast.makeText(getContext(), R.string.sms_fail, Toast.LENGTH_SHORT).show();
+                        startJobSendSMS(phoneNo,message);
+                        break;
+                }
+            }
+        };
+        getActivity().registerReceiver(smsSentReceiver, new IntentFilter(SENT));
+    }
 
-    public void sendSMS(View v) {
+    @Override
+    public void onPause() {
+        super.onPause();
+        getActivity().unregisterReceiver(smsSentReceiver);
+    }
+
+
+    public void sendSMS() {
         //Check if User has permission to send sms
         if (!isSendSmsPermissionGranted()) {
             requestSendSmsPermission();
         } else {
             try {
                 SmsManager smsManager = SmsManager.getDefault();
-                smsManager.sendTextMessage(phoneNo, null, sms, sentPI, null);
+                smsManager.sendTextMessage("01729101821", null, "Heyho", sentPI, null);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -223,45 +269,8 @@ public class SettingsActivity extends Fragment {
         requestPermissions(new String[]{Manifest.permission.SEND_SMS}, SEND_SMS_PERMISSION_CODE);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
 
-        //Receiver will get message about what happened to the SMS and than do sth depending on the result
-        smsSentReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                switch (getResultCode()){
-                    case Activity.RESULT_OK:
-                        Toast.makeText(getContext().getApplicationContext(), R.string.sms_sent, Toast.LENGTH_SHORT).show();
-                        break;
-                    case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
-                        Toast.makeText(getContext().getApplicationContext(), R.string.generic_failure, Toast.LENGTH_SHORT).show();
-                        saveFailedSMS();
-                        break;
-                    case SmsManager.RESULT_ERROR_NO_SERVICE:
-                        Toast.makeText(getContext().getApplicationContext(), R.string.noService, Toast.LENGTH_SHORT).show();
-                        saveFailedSMS();
-                        break;
-                    case SmsManager.RESULT_ERROR_NULL_PDU:
-                        Toast.makeText(getContext().getApplicationContext(), R.string.nullPdu, Toast.LENGTH_SHORT).show();
-                        saveFailedSMS();
-                        break;
-                    case SmsManager.RESULT_ERROR_RADIO_OFF:
-                        Toast.makeText(getContext().getApplicationContext(), R.string.radioOff, Toast.LENGTH_SHORT).show();
-                        saveFailedSMS();
-                        break;
-                }
-            }
-        };
-        getActivity().registerReceiver(smsSentReceiver, new IntentFilter(SENT));
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        getActivity().unregisterReceiver(smsSentReceiver);
-    }
+        //getActivity().registerReceiver(smsSentReceiver, new IntentFilter(SENT));
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
@@ -270,7 +279,7 @@ public class SettingsActivity extends Fragment {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    sendSMS(getActivity().getCurrentFocus());
+                    sendSMS();
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
@@ -282,12 +291,26 @@ public class SettingsActivity extends Fragment {
         }
     }
 
-    public void saveFailedSMS(){
-        Person person = new Person(phoneNo, "Florian");
-        PersonController.savePerson(person);
-        Event event = new Event(person, "TestEvent", "PlaceTest", null, null,false);
-        EventController.saveEvent(event);
-        FailedSMSController.addFailedSMS(event, person);
+    public void startJobSendSMS(String phoneNo, String message){
+        sms = new Bundle();
+        sms.putString("phoneNo",phoneNo);
+        sms.putString("message",message);
+        sms.putInt("creatorID",1);
+        sms.putBoolean("accepted",false);
+
+        FailedSMS failedSMS = new FailedSMS(message,phoneNo,1,false);
+        saveFailedSMS(failedSMS);
+
+        PersistableBundle persBund = BundleUtlity.toPersistableBundle(sms);
+        JobScheduler jobScheduler = (JobScheduler) getActivity().getSystemService(Context.JOB_SCHEDULER_SERVICE);
+        jobScheduler.schedule(new JobInfo.Builder(1, new ComponentName(getActivity(), FailedSMSService.class))
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                .setExtras(persBund)
+                .build());
+    }
+
+    public void saveFailedSMS(FailedSMS failedSMS){
+        FailedSMSController.addFailedSMS(failedSMS);
     }
 }
 

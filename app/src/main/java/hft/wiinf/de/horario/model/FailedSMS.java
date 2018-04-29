@@ -5,36 +5,57 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
-@Table(name="FailedSMS")
-public class FailedSMS extends Model{
+@Table(name = "FailedSMS")
+public class FailedSMS extends Model {
 
-    @Column(name="event")
-    private Event event = null;
-    @Column(name="creator")
-    private Person creator = null;
+    @Column(name = "message")
+    String message = "";
+    @Column(name = "phoneNo")
+    String phoneNo = "";
+    @Column(name = "creatorID")
+    int creatorID;
+    @Column(name = "accepted")
+    boolean accepted;
 
-    public FailedSMS(){
-
+    public FailedSMS() {
     }
 
-    public FailedSMS(Event event, Person creator){
-        this.event = event;
-        this.creator = creator;
+    public FailedSMS(String message, String phoneNo, int creatorID, boolean accepted) {
+        this.message = message;
+        this.phoneNo = phoneNo;
+        this.creatorID = creatorID;
+        this.accepted = accepted;
     }
 
-    public Event getEvent() {
-        return event;
+    public String getMessage() {
+        return message;
     }
 
-    public void setEvent(Event event) {
-        this.event = event;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    public Person getCreator() {
-        return creator;
+    public String getPhoneNo() {
+        return phoneNo;
     }
 
-    public void setCreator(Person creator) {
-        this.creator = creator;
+    public void setPhoneNo(String phoneNo) {
+        this.phoneNo = phoneNo;
+    }
+
+    public int getCreatorID() {
+        return creatorID;
+    }
+
+    public void setCreatorID(int creatorID) {
+        this.creatorID = creatorID;
+    }
+
+    public boolean isAccepted() {
+        return accepted;
+    }
+
+    public void setAccepted(boolean accepted) {
+        this.accepted = accepted;
     }
 }
