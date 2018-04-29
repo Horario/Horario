@@ -57,7 +57,7 @@ public class SettingsActivity extends Fragment {
     PendingIntent sentPI;
     BroadcastReceiver smsSentReceiver;
     Bundle sms;
-    String phoneNo = "01729101821";
+    String phoneNo = "0000";
     String message ="Hellodedededede";
 
     private static final int SEND_SMS_PERMISSION_CODE = 1;
@@ -252,7 +252,7 @@ public class SettingsActivity extends Fragment {
         } else {
             try {
                 SmsManager smsManager = SmsManager.getDefault();
-                smsManager.sendTextMessage("01729101821", null, "Heyho", sentPI, null);
+                smsManager.sendTextMessage("000", null, "Heyho", sentPI, null);
             } catch (Exception e) {
                 e.printStackTrace();
             }
