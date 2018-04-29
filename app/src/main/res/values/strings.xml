@@ -6,7 +6,7 @@
     <string name="CreateAppointment_Dropdown_repetition_daily">täglich</string>
     <string name="Test">Test</string>
     <string name="title_activity_test">Test</string>
-    <string name="title_activity_tab">TabActivity</string>
+    <string name="title_activity_tab">Horario</string>
     <string name="newEventTabText"></string>
     <string name="calendarTabText"></string>
     <string name="settingTabText"></string>
@@ -25,7 +25,7 @@
     <string name="reminder_text">Erinnerungen :</string>
     <string name="minutesBefore_text">Minuten vorher</string>
     <string name="noValidUsername">Benutzername darf nicht mit Leerzeichen anfangen!</string>
-    <string name="titleDialogUsername">Bitte vergeben Sie einen Benutzernamen :)</string>
+    <string name="titleDialogUsername">Bitte vergeben Sie einen Benutzernamen!</string>
     <string name="save_text">speichern</string>
     <string name="later_text">Später</string>
     <string name="thanksForUsername">Benutzername wurde gespeichert! </string>
