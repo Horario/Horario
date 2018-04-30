@@ -5,7 +5,7 @@
     android:orientation="vertical">
 
     <RelativeLayout
-        android:id="@+id/newFragment"
+        android:id="@+id/calendar_relativeLayout_container_for_newFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -21,7 +21,7 @@
 
 
         <Button
-            android:id="@+id/gotoscanner"
+            android:id="@+id/calendar_temp_button_gotoscanner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"

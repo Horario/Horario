@@ -26,7 +26,7 @@ public class CalendarActivity extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.activity_calendar, container, false);
-        Button scnbtn = (Button) v.findViewById(R.id.gotoscanner);
+        Button scnbtn = (Button) v.findViewById(R.id.calendar_temp_button_gotoscanner);
 
         //Change onClick the Fragment CalendarActivity with the QRScannerActivity
         scnbtn.setOnClickListener(new View.OnClickListener() {
@@ -35,7 +35,7 @@ public class CalendarActivity extends Fragment {
             public void onClick(View v) {
                 try {
                     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.newFragment, new QRScannerActivity());
+                    fragmentTransaction.replace(R.id.calendar_relativeLayout_container_for_newFragment, new QRScannerActivity());
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
                     rLayout_main.setVisibility(View.GONE);
@@ -51,7 +51,7 @@ public class CalendarActivity extends Fragment {
 
     //Method will be called directly after View is created
     public void onViewCreated(final View v, Bundle saveInstanceStage) {
-        rLayout_fragment = (RelativeLayout) v.findViewById(R.id.newFragment);
+        rLayout_fragment = (RelativeLayout) v.findViewById(R.id.calendar_relativeLayout_container_for_newFragment);
         rLayout_main = (RelativeLayout) v.findViewById(R.id.calendar_relativeLayout_main);
     }
 

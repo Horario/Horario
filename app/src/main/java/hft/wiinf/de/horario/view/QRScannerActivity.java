@@ -1,10 +1,17 @@
 package hft.wiinf.de.horario.view;
 
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,24 +25,19 @@ import com.google.zxing.integration.android.IntentResult;
 
 import hft.wiinf.de.horario.CaptureActivityPortrait;
 import hft.wiinf.de.horario.R;
-import hft.wiinf.de.horario.controller.DatabaseHelperController;
-import hft.wiinf.de.horario.controller.EventController;
 import hft.wiinf.de.horario.model.Event;
 
 
-public class QRScannerActivity extends Fragment {
+public class QRScannerActivity extends Fragment implements ActivityCompat.OnRequestPermissionsResultCallback {
     private static final String TAG = "QRScannerFragmentActivity";
-    private DatabaseHelperController myDb;
+    private static final int PERMISSION_REQUEST_CAMERA = 0;
     private String qrResult;
-    private Button showData_btn;
-    private RelativeLayout mRelativeLayout_scanner_result;
-    private TextView mTextureView_scanner_result;
-    private StringBuffer qrResultModefied;
+    private RelativeLayout mScannerResult_RelativeLayout_Main, mScannerResult_RelativeLayout_ButtonFrame;
+    private RelativeLayout mTEST;
+    private TextView mScannerResult_TextureView_Headline, mScannerResult_TextureView_EventText;
+    private Button mScannerResult_Button_addEvent, mScannerResult_Buttone_saveWithoutassent, mScannerResult_Button_rejectEvent;
+    private StringBuffer mScannerResult_StingBuffer_QRResultModefied;
     private Event mEvent;
-
-    //Neu
-    public QRScannerActivity() {
-    }
 
     @Override
     public void onActivityCreated(Bundle savednstanceState) {
@@ -56,37 +58,81 @@ public class QRScannerActivity extends Fragment {
 
     @SuppressLint("ResourceType")
     public void onViewCreated(final View view, Bundle savedInstanceState) {
-        mRelativeLayout_scanner_result = view.findViewById(R.id.scanner_temp_Result);
-        mTextureView_scanner_result= view.findViewById(R.id.scanner_temp_textview);
+        mScannerResult_RelativeLayout_Main = view.findViewById(R.id.scanner_result_relativeLayout_main);
+        mScannerResult_TextureView_EventText = view.findViewById(R.id.scanner_result_textview_eventText);
+        mScannerResult_TextureView_Headline = view.findViewById(R.id.scanner_result_textView_headline);
+        mTEST = view.findViewById(R.id.scanner_result_temp_newFragment);
 
-        //Erstellen von vier Dummydatensätze
-        mEvent = new Event();
-        mEvent.setDescription("Hallo");
-        EventController.addEvent(mEvent);
-
-        Event mEvent2 = new Event();
-        mEvent2.setDescription("Selber Hallo!");
-        EventController.addEvent(mEvent2);
-
-/*
-        Event mEvent2 = new Event();
-        mEvent2.setStartTime();
-        EventController.addEvent(mEvent2);
-
-        Event mEvent3 = new Event();
-        mEvent3.setDescription("Toast3!");
-        EventController.addEvent(mEvent3);
-*/
-
-       /* String test2 = Event.load(Event.class, 2).toString();
-        Toast.makeText(getContext(), test2, Toast.LENGTH_SHORT).show();
-
-
-        String test3 = Event.load(Event.class, 3).toString();
-        Toast.makeText(getContext(), test3, Toast.LENGTH_SHORT).show();
-        */
-        startScanner();
+        showCameraPreview();
     }
+    private void showCameraPreview() {
+        // BEGIN_INCLUDE(startCamera)
+        // Check if the Camera permission has been granted
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_GRANTED) {
+            // Permission is already available, start camera preview
+            Snackbar.make(mScannerResult_RelativeLayout_Main, "HEy das ging ja vorher schon",
+                    Snackbar.LENGTH_SHORT).show();
+            startScanner();
+        } else {
+            // Permission is missing and must be requested.
+            requestCameraPermission();
+        }
+        // END_INCLUDE(startCamera)
+    }
+
+    /**
+     * Requests the {@link android.Manifest.permission#CAMERA} permission.
+     * If an additional rationale should be displayed, the user has to launch the request from
+     * a SnackBar that includes additional information.
+     */
+    private void requestCameraPermission() {
+        // Permission has not been granted and must be requested.
+        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                Manifest.permission.CAMERA)) {
+            // Provide an additional rationale to the user if the permission was not granted
+            // and the user would benefit from additional context for the use of the permission.
+            // Display a SnackBar with cda button to request the missing permission.
+            Snackbar.make(mScannerResult_RelativeLayout_Main, "Muss das hier gehen?",
+                    Snackbar.LENGTH_INDEFINITE).setAction("OK", new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Request the permission
+                    ActivityCompat.requestPermissions(getActivity(),
+                            new String[]{Manifest.permission.CAMERA},
+                            PERMISSION_REQUEST_CAMERA);
+                }
+            }).show();
+
+        } else {
+            Snackbar.make(mScannerResult_RelativeLayout_Main, "Cam ist nicht errichbar!", Snackbar.LENGTH_SHORT).show();
+            // Request the permission. The result will be received in onRequestPermissionResult().
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        // BEGIN_INCLUDE(onRequestPermissionsResult)
+        if (requestCode == PERMISSION_REQUEST_CAMERA) {
+            // Request for camera permission.
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission has been granted. Start camera preview Activity.
+                Snackbar.make(mScannerResult_RelativeLayout_Main, "Da geht ja was!!",
+                        Snackbar.LENGTH_SHORT)
+                        .show();
+                startScanner();
+            } else {
+                // Permission request was denied.
+                Snackbar.make(mScannerResult_RelativeLayout_Main, "Du darfst hier nicht rein!!!",
+                        Snackbar.LENGTH_SHORT)
+                        .show();
+            }
+        }
+        // END_INCLUDE(onRequestPermissionsResult)
+    }
+
 
     public void startScanner(){
         IntentIntegrator integrator = IntentIntegrator.forSupportFragment(this);
@@ -101,21 +147,33 @@ public class QRScannerActivity extends Fragment {
         integrator.setBeepEnabled(false);
         integrator.setBarcodeImageEnabled(false);
         integrator.initiateScan();
-
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "LongLogTag"})
     private void displayQRResult() {
         if (getActivity() != null && qrResult != null) {
-            qrResultModefied = new StringBuffer(qrResult);
-            qrResultModefied.replace(0, 111, "");
-            qrResultModefied.replace(76, 96, "");
-            qrResultModefied.replace(91, 137, "");
-            qrResultModefied.replace(47, 48, ":");
-            qrResultModefied.replace(69, 70, ":");
-            qrResultModefied.replace(30, 31, "");
-            qrResultModefied.replace(54, 55, "");
-            qrResultModefied.replace(76, 76, "");
+
+            try {
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.calendar_relativeLayout_container_for_newFragment, new test());
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+                mScannerResult_TextureView_Headline.setVisibility(View.GONE);
+                mScannerResult_TextureView_EventText.setVisibility(View.GONE);
+                mScannerResult_RelativeLayout_ButtonFrame.setVisibility(View.GONE);
+                mTEST.setVisibility(View.VISIBLE);
+            }catch (NullPointerException e){
+                Log.d(TAG, "QRScannerFragmentActivity" + e.getMessage());
+            }
+            mScannerResult_StingBuffer_QRResultModefied = new StringBuffer(qrResult);
+            mScannerResult_StingBuffer_QRResultModefied.replace(0, 111, "");
+            mScannerResult_StingBuffer_QRResultModefied.replace(76, 96, "");
+            mScannerResult_StingBuffer_QRResultModefied.replace(91, 137, "");
+            mScannerResult_StingBuffer_QRResultModefied.replace(47, 48, ":");
+            mScannerResult_StingBuffer_QRResultModefied.replace(69, 70, ":");
+            mScannerResult_StingBuffer_QRResultModefied.replace(30, 31, "");
+            mScannerResult_StingBuffer_QRResultModefied.replace(54, 55, "");
+            mScannerResult_StingBuffer_QRResultModefied.replace(76, 76, "");
 
             /* Modifiziert Ausgabe des QR Codes umd mit der DB zu testen!
             SUMMARY:Mathe bei Herr Conradt
@@ -129,15 +187,17 @@ public class QRScannerActivity extends Fragment {
             SUMMARY = description in der DB
              */
 
-            mTextureView_scanner_result.setText(
-                    qrResultModefied.subSequence(8, 30)+"\n"+ //Summary
-                    qrResultModefied.subSequence(38, 46)+"\n"+ //startDatum
-                    qrResultModefied.subSequence(47, 54)+"\n"+ //startUhrzeit
-                    qrResultModefied.subSequence(59, 67)+"\n"+ //endDatum
-                    qrResultModefied.subSequence(68, 74)+"\n"+ //endUhrzeit
-                    qrResultModefied.subSequence(83, qrResultModefied.length())+"\n"); //Ort
+            mScannerResult_TextureView_Headline.setText(
+                    mScannerResult_StingBuffer_QRResultModefied.subSequence(8,30)
+            );
 
 
+            mScannerResult_TextureView_EventText.setText(
+                    mScannerResult_StingBuffer_QRResultModefied.subSequence(38, 46)+"\n"+ //startDatum
+                    mScannerResult_StingBuffer_QRResultModefied.subSequence(47, 54)+"\n"+ //startUhrzeit
+                    mScannerResult_StingBuffer_QRResultModefied.subSequence(59, 67)+"\n"+ //endDatum
+                    mScannerResult_StingBuffer_QRResultModefied.subSequence(68, 74)+"\n"+ //endUhrzeit
+                    mScannerResult_StingBuffer_QRResultModefied.subSequence(83, mScannerResult_StingBuffer_QRResultModefied.length())+"\n"); //Ort
             qrResult = null;
         }
     }
@@ -162,5 +222,7 @@ public class QRScannerActivity extends Fragment {
             displayQRResult();
         }
     }
+
+
 
 }

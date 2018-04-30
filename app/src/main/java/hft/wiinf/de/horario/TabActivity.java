@@ -29,6 +29,7 @@ public class TabActivity extends AppCompatActivity {
         //Start DB
         ActiveAndroid.initialize(this);
 
+
         mSectionsPageAdapter = new SectionsPageAdapterActivity(getSupportFragmentManager());
 
         //Set up the ViewPager with the sections adapter.

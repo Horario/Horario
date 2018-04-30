@@ -2,8 +2,6 @@
     <string name="app_name">Horario</string>
 
 
-
-
     <string name="CreateAppointment_Dropdown_repetition_yearly">jährlich</string>
     <string name="CreateAppointment_Dropdown_repetition_monthly">monatlich</string>
     <string name="CreateAppointment_Dropdown_repetition_weekly">wöchentlich</string>
@@ -15,11 +13,6 @@
     <string name="calendarTabText">Tab_2</string>
     <string name="settingTabText">Tab_3</string>
     <string name="action_settings">Settings</string>
-    <string name="section_format">Hello World from section: %1$d</string>
-    <string name="button_name_scan">SCAN</string>
-    <string name="button_show_data">showData</string>
-    <string name="title_activity_scan">QRCode Scanner</string>
-
     <string name="setting">Setting</string>
     <string name="newEvent">newEvent</string>
     <string name="calendar">calendar</string>
@@ -33,4 +26,10 @@
     <string name="reminder_text">Erinnerungen :</string>
     <string name="minutesBefore_text">Minuten vorher</string>
     <string name="noValidUsername">Benutzername darf nicht mit Leerzeichen anfangen!</string>
+    <string name="termin_zusagen">Termin zusagen</string>
+    <string name="termin_ohne_zusage_speichern">Termin ohne Zusage speichern</string>
+    <string name="termin_ablehnen">Termin ablehnen</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
