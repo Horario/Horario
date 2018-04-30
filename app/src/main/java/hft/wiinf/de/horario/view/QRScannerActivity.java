@@ -10,8 +10,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -149,59 +147,36 @@ public class QRScannerActivity extends Fragment implements ActivityCompat.OnRequ
         integrator.initiateScan();
     }
 
+    //Check the Scanner Result
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            if (result.getContents() == null) {
+                qrResult = "Canceld";
+            } else {
+                qrResult = result.getContents();
+            }
+            displayQRResult();
+
+        }
+    }
+
     @SuppressLint({"SetTextI18n", "LongLogTag"})
     private void displayQRResult() {
         if (getActivity() != null && qrResult != null) {
 
-            try {
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.calendar_relativeLayout_container_for_newFragment, new test());
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-                mScannerResult_TextureView_Headline.setVisibility(View.GONE);
-                mScannerResult_TextureView_EventText.setVisibility(View.GONE);
-                mScannerResult_RelativeLayout_ButtonFrame.setVisibility(View.GONE);
-                mTEST.setVisibility(View.VISIBLE);
-            }catch (NullPointerException e){
-                Log.d(TAG, "QRScannerFragmentActivity" + e.getMessage());
-            }
             mScannerResult_StingBuffer_QRResultModefied = new StringBuffer(qrResult);
-            mScannerResult_StingBuffer_QRResultModefied.replace(0, 111, "");
-            mScannerResult_StingBuffer_QRResultModefied.replace(76, 96, "");
-            mScannerResult_StingBuffer_QRResultModefied.replace(91, 137, "");
-            mScannerResult_StingBuffer_QRResultModefied.replace(47, 48, ":");
-            mScannerResult_StingBuffer_QRResultModefied.replace(69, 70, ":");
-            mScannerResult_StingBuffer_QRResultModefied.replace(30, 31, "");
-            mScannerResult_StingBuffer_QRResultModefied.replace(54, 55, "");
-            mScannerResult_StingBuffer_QRResultModefied.replace(76, 76, "");
 
-            /* Modifiziert Ausgabe des QR Codes umd mit der DB zu testen!
-            SUMMARY:Mathe bei Herr Conradt
-            DTstart:20180421:124000
-            DTEND:20180424:134000
-            LOCATION:Labor
+            mScannerResult_TextureView_Headline.setText("Headline");
 
-            LOCATION = place in der DB
-            DTSTART = startTime in der DB
-            DTEND = endTime in der DB
-            SUMMARY = description in der DB
-             */
-
-            mScannerResult_TextureView_Headline.setText(
-                    mScannerResult_StingBuffer_QRResultModefied.subSequence(8,30)
-            );
-
-
-            mScannerResult_TextureView_EventText.setText(
-                    mScannerResult_StingBuffer_QRResultModefied.subSequence(38, 46)+"\n"+ //startDatum
-                    mScannerResult_StingBuffer_QRResultModefied.subSequence(47, 54)+"\n"+ //startUhrzeit
-                    mScannerResult_StingBuffer_QRResultModefied.subSequence(59, 67)+"\n"+ //endDatum
-                    mScannerResult_StingBuffer_QRResultModefied.subSequence(68, 74)+"\n"+ //endUhrzeit
-                    mScannerResult_StingBuffer_QRResultModefied.subSequence(83, mScannerResult_StingBuffer_QRResultModefied.length())+"\n"); //Ort
+            mScannerResult_TextureView_EventText.setText(qrResult);
             qrResult = null;
         }
     }
 
+    // Put the Scanned Result to the Database
+    //ToDo Speichern in die DB muss noch ausgearbeitet werden.
     private void qrResultToDatabase(){
         if (getActivity() != null && qrResult != null) {
 
@@ -210,19 +185,4 @@ public class QRScannerActivity extends Fragment implements ActivityCompat.OnRequ
         }
 
     }
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if (result != null) {
-            if (result.getContents() == null) {
-                qrResult = "Canceld";
-            } else {
-                qrResult = "Scanned from fragment:" + result.getContents();
-            }
-            displayQRResult();
-        }
-    }
-
-
-
 }
