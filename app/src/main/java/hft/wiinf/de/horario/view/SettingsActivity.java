@@ -18,6 +18,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -57,8 +58,8 @@ public class SettingsActivity extends Fragment {
     PendingIntent sentPI;
     BroadcastReceiver smsSentReceiver;
     Bundle sms;
-    String phoneNo = "0000";
-    String message ="Hellodedededede";
+    String phoneNo = "01729101821";
+    String message = "Hellodedededede";
 
     private static final int SEND_SMS_PERMISSION_CODE = 1;
 
@@ -83,7 +84,7 @@ public class SettingsActivity extends Fragment {
             Log.d(TAG, "SettingsActivity:" + e.getMessage());
         }
 
-        sentPI = PendingIntent.getBroadcast(getActivity(),0,new Intent(SENT),0);
+        sentPI = PendingIntent.getBroadcast(getActivity(), 0, new Intent(SENT), 0);
 
         //Initialize all Gui-Elements
         button_settings = (Button) view.findViewById(R.id.settings_button_settings);
@@ -212,25 +213,25 @@ public class SettingsActivity extends Fragment {
         smsSentReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                switch (getResultCode()){
+                switch (getResultCode()) {
                     case Activity.RESULT_OK:
                         Toast.makeText(getContext(), R.string.sms_sent, Toast.LENGTH_SHORT).show();
                         break;
                     case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
                         Toast.makeText(getContext(), R.string.sms_fail, Toast.LENGTH_SHORT).show();
-                        startJobSendSMS(phoneNo,message);
+                        startJobSendSMS(phoneNo, message);
                         break;
                     case SmsManager.RESULT_ERROR_NO_SERVICE:
                         Toast.makeText(getContext(), R.string.sms_fail, Toast.LENGTH_SHORT).show();
-                        startJobSendSMS(phoneNo,message);
+                        startJobSendSMS(phoneNo, message);
                         break;
                     case SmsManager.RESULT_ERROR_NULL_PDU:
                         Toast.makeText(getContext(), R.string.sms_fail, Toast.LENGTH_SHORT).show();
-                        startJobSendSMS(phoneNo,message);
+                        startJobSendSMS(phoneNo, message);
                         break;
                     case SmsManager.RESULT_ERROR_RADIO_OFF:
                         Toast.makeText(getContext(), R.string.sms_fail, Toast.LENGTH_SHORT).show();
-                        startJobSendSMS(phoneNo,message);
+                        startJobSendSMS(phoneNo, message);
                         break;
                 }
             }
@@ -252,7 +253,7 @@ public class SettingsActivity extends Fragment {
         } else {
             try {
                 SmsManager smsManager = SmsManager.getDefault();
-                smsManager.sendTextMessage("000", null, "Heyho", sentPI, null);
+                smsManager.sendTextMessage(phoneNo, null, "Heyho", sentPI, null);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -270,7 +271,7 @@ public class SettingsActivity extends Fragment {
     }
 
 
-        //getActivity().registerReceiver(smsSentReceiver, new IntentFilter(SENT));
+    //getActivity().registerReceiver(smsSentReceiver, new IntentFilter(SENT));
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
@@ -279,7 +280,13 @@ public class SettingsActivity extends Fragment {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    sendSMS();
+                    TelephonyManager manager = (TelephonyManager) getActivity().getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
+                    if (manager.getPhoneType() == TelephonyManager.DATA_CONNECTED) {
+                        sendSMS();
+                    } else {
+                        Toast.makeText(getContext(), R.string.sms_fail, Toast.LENGTH_SHORT).show();
+                        startJobSendSMS(phoneNo, message);
+                    }
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
@@ -291,25 +298,26 @@ public class SettingsActivity extends Fragment {
         }
     }
 
-    public void startJobSendSMS(String phoneNo, String message){
-        sms = new Bundle();
-        sms.putString("phoneNo",phoneNo);
-        sms.putString("message",message);
-        sms.putInt("creatorID",1);
-        sms.putBoolean("accepted",false);
-
-        FailedSMS failedSMS = new FailedSMS(message,phoneNo,1,false);
+    public void startJobSendSMS(String phoneNo, String message) {
+        FailedSMS failedSMS = new FailedSMS(message, phoneNo, 1, false);
         saveFailedSMS(failedSMS);
+
+        sms = new Bundle();
+        sms.putString("phoneNo", phoneNo);
+        sms.putString("message", message);
+        sms.putInt("creatorID", 1);
+        sms.putBoolean("accepted", false);
+        sms.putInt("id", failedSMS.getId().intValue());
 
         PersistableBundle persBund = BundleUtlity.toPersistableBundle(sms);
         JobScheduler jobScheduler = (JobScheduler) getActivity().getSystemService(Context.JOB_SCHEDULER_SERVICE);
-        jobScheduler.schedule(new JobInfo.Builder(1, new ComponentName(getActivity(), FailedSMSService.class))
+        jobScheduler.schedule(new JobInfo.Builder(failedSMS.getId().intValue(), new ComponentName(getActivity(), FailedSMSService.class))
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
                 .setExtras(persBund)
                 .build());
     }
 
-    public void saveFailedSMS(FailedSMS failedSMS){
+    public void saveFailedSMS(FailedSMS failedSMS) {
         FailedSMSController.addFailedSMS(failedSMS);
     }
 }

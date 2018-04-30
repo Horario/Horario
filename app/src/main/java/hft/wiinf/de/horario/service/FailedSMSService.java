@@ -27,7 +27,7 @@ public class FailedSMSService extends JobService {
         sendSMS(failedSMS);
         FailedSMSController.deleteFailedSMS(failedSMS.getMessage(),failedSMS.getCreatorID(),failedSMS.getPhoneNo());
         jobFinished(params, false);
-        addNotification(sms.getString("phoneNo"), sms.getString("message"));
+        addNotification(sms.getString("phoneNo"), sms.getString("message"), sms.getInt("id"));
         return true;
     }
 
@@ -46,7 +46,7 @@ public class FailedSMSService extends JobService {
         }
     }
 
-    private void addNotification(String phoneNo, String message) {
+    private void addNotification(String phoneNo, String message, int id) {
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(this, "")
                         .setSmallIcon(R.drawable.ic_android_black2_24dp)
@@ -60,7 +60,7 @@ public class FailedSMSService extends JobService {
 
         // Add as notification
         NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        manager.notify(0, builder.build());
+        manager.notify(id, builder.build());
     }
 }
 
