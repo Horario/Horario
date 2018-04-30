@@ -2,13 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/settings_relativeLayout_main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:orientation="vertical"
-    android:visibility="visible">
+    android:id="@+id/settings_relativeLayout_main"
+    android:visibility="visible"
+    android:background="?android:windowBackground">
 
     <RelativeLayout
         android:id="@+id/settings_relativeLayout_helper"
@@ -17,17 +14,21 @@
         android:visibility="gone" />
 
     <RelativeLayout
+        android:id="@+id/settings_relativeLayout_button"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/settings_relativeLayout_button"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:visibility="visible">
 
         <Button
-            android:id="@+id/settings_button_feedback"
+            android:id="@+id/settings_button_settings"
             android:layout_width="228dp"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/feedback_zur_app_text" />
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:text="@string/settings_text" />
 
         <Button
             android:id="@+id/settings_button_support"
@@ -48,83 +49,21 @@
             android:text="@string/copyright_text" />
 
         <Button
-            android:id="@+id/settings_button_settings"
+            android:id="@+id/settings_button_feedback"
             android:layout_width="228dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:text="@string/settings_text" />
+            android:layout_centerInParent="true"
+            android:text="@string/feedback_zur_app_text" />
 
         <Button
             android:id="@+id/testButton"
-            android:layout_width="wrap_content"
+            android:layout_width="104dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="25dp"
-            android:text="@string/settings_text"
-            android:textSize="30sp" />
-
-        <TextView
-            android:id="@+id/settings_settings_textView_username"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/settings_settings_textView_settings"
-            android:layout_marginTop="99dp"
-            android:text="@string/username_text" />
-
-        <TextView
-            android:id="@+id/settings_settings_textView_allowPush"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/settings_settings_textView_settings"
-            android:layout_marginTop="169dp"
-            android:text="@string/allowpush_text" />
-
-        <TextView
-            android:id="@+id/settings_settings_textView_reminder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/settings_settings_textView_settings"
-            android:layout_marginTop="234dp"
-            android:text="@string/reminder_text" />
-
-        <TextView
-            android:id="@+id/settings_settings_textView_minutesBefore"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/settings_settings_textView_reminder"
-            android:layout_toEndOf="@+id/settings_settings_textView_allowPush"
-            android:text="@string/minutesBefore_text" />
-
-        <EditText
-            android:id="@+id/settings_settings_editText_username"
-            android:layout_width="140dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignTop="@+id/settings_settings_textView_username"
-            android:layout_marginEnd="42dp"
-            android:layout_marginTop="-19dp"
-            android:ems="10"
-            android:focusable="false"
-            android:hint="@string/username_hint"
-            android:imeOptions="flagNoExtractUi"
-            android:inputType="textPersonName" />
-
-        <Switch
-            android:id="@+id/settings_settings_Switch_allowPush"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/settings_settings_textView_allowPush"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginBottom="25dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="57dp"
+            android:layout_marginEnd="34dp"
             android:text="test" />
+
     </RelativeLayout>
 </RelativeLayout>
