@@ -12,7 +12,7 @@
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#900a0b0a"
+        android:background="@color/zentea_darkgreyblue"
         android:paddingTop="@dimen/appbar_padding_top"
         android:theme="@style/AppTheme.AppBarOverlay">
 
@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="visible"
-            app:tabIndicatorColor="@color/green1">
+            app:tabIndicatorColor="@color/zentea_darkgreen">
 
             <android.support.design.widget.TabItem
                 android:id="@+id/newEventTab"
@@ -59,7 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
-        app:backgroundTint="@color/green1"
+        app:backgroundTint="@color/zentea_darkgreen"
         app:srcCompat="@drawable/ic_plusmenu" />
 
 </android.support.design.widget.CoordinatorLayout>
