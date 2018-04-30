@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -12,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -46,9 +46,6 @@ public class CalendarActivity extends Fragment {
     //ToDo Diese Methode muss später auf den Floatingbutten gebunden werden dazu brauch es auch eine Anpassung der XML stattfinden. -> Es muss ein neuer Container erstellt werden in den dann die das Fragment geladen wird. Zielsetzung bis ende der Weoche sollte das gehen!
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.activity_calendar, container, false);
 
         calendarCvCalendar = view.findViewById(R.id.calendarCvCalendar);
@@ -147,7 +144,4 @@ public class CalendarActivity extends Fragment {
         newFragment_relativLayout = view.findViewById(R.id.newFragment);
         calendar_temp_relativeLayout_main = view.findViewById(R.id.calendar_temp_relativeLayout_main);
         }
-
-}
-
 }
