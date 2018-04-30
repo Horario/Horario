@@ -7,19 +7,22 @@
           <option name="userName" value="" />
         </UrlAndUserName>
         <UrlAndUserName>
-          <option name="url" value="https://github.com/rietzfl/Horario" />
-          <option name="userName" value="" />
-        </UrlAndUserName>
-        <UrlAndUserName>
           <option name="url" value="https://github.com/WIP2Mario/QRPlaner.git" />
           <option name="userName" value="" />
         </UrlAndUserName>
       </list>
     </option>
 <<<<<<< HEAD
+<<<<<<< HEAD
     <option name="cloneParentDir" value="C:\Users\Christine\.AndroidStudio3.1" />
 =======
     <option name="cloneParentDir" value="C:\Users\Christine\StudioProjects\Horario-master" />
 >>>>>>> parent of 919cceb... AI-3.1.2 <Christine@Christine-PC Update vcs.xml
+=======
+    <option name="cloneParentDir" value="C:\Users\Christine\StudioProjects\Horario-master" />
+  </component>
+  <component name="Vcs.Log.App.Settings">
+    <option name="MIGRATED" value="true" />
+>>>>>>> parent of 0451e60... AI-3.1.2 <Christine@Christine-PC Merge branch 'master'
   </component>
 </application>
