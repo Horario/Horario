@@ -16,6 +16,10 @@
         </UrlAndUserName>
       </list>
     </option>
+<<<<<<< HEAD
     <option name="cloneParentDir" value="C:\Users\Christine\.AndroidStudio3.1" />
+=======
+    <option name="cloneParentDir" value="C:\Users\Christine\StudioProjects\Horario-master" />
+>>>>>>> parent of 919cceb... AI-3.1.2 <Christine@Christine-PC Update vcs.xml
   </component>
 </application>
