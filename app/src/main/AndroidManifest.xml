@@ -9,8 +9,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:name="com.activeandroid.app.Application">
-        android:theme="@style/AppTheme"
-        tools:replace="android:icon">
+
         <activity
             android:name=".TabActivity"
             android:label="@string/title_activity_tab"

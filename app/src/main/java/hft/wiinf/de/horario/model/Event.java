@@ -18,6 +18,8 @@ public class Event extends Model {
     @Column
     private Person creator;
     @Column
+    private int creatorEventId;
+    @Column
     private String description = "";
     @Column
     private String place = "";
@@ -85,6 +87,14 @@ public class Event extends Model {
 
     public void setAccepted(boolean accepted) {
         this.accepted = accepted;
+    }
+
+    public int getCreatorEventId() {
+        return creatorEventId;
+    }
+
+    public void setCreatorEventId(int creatorEventId) {
+        this.creatorEventId = creatorEventId;
     }
 
 
