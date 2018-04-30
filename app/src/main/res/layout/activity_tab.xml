@@ -20,8 +20,9 @@
             android:id="@+id/tabBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@android:color/background_dark"
             android:visibility="visible"
-            app:tabIndicatorColor="@color/zentea_darkgreen">
+            app:tabIndicatorColor="@android:color/darker_gray">
 
             <android.support.design.widget.TabItem
                 android:id="@+id/newEventTab"
