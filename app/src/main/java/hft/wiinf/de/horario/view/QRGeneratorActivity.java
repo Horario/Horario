@@ -49,7 +49,7 @@ public class QRGeneratorActivity extends Fragment {
         //Initial GUI
         mButtonQRCreation = view.findViewById(R.id.createQRCode);
         mQRGenImageViewResult= view.findViewById(R.id.generator_imageView_qrResult);
-        mRelativeLayout_QRGenResult = view.findViewById(R.id.qr_main);
+        mRelativeLayout_QRGenResult = view.findViewById(R.id.generator_texView_frame);
         mQRGenTextViewInput = view.findViewById(R.id.generator_textView_text_output);
 
         //Erstellen von drei Dummydaten
@@ -84,14 +84,20 @@ public class QRGeneratorActivity extends Fragment {
     public void onViewCreated(final View view, Bundle savedInstanceState) {
 
         //Modify the Dateformat form den DB to get a more readable Form
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy 'at' HH:mm:ss");
-
-        // Merge the Data Base Informations to one Single StringBuffer
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        SimpleDateFormat simpleTimeFormat = new SimpleDateFormat("HH:mm:ss");
+        String trenner = "|";
+        // Merge the Data Base Informations to one Single StringBuffer with the Format:
+        // Creator, StartDate, EndDate, StartTime, EndTime, Place, Description
         mDataBaseStringBufferResult = new StringBuffer();
-        mDataBaseStringBufferResult.append(mEvent.getDescription()+"\n");
+        mDataBaseStringBufferResult.append(mEvent.getCreator()+"\n");
+        mDataBaseStringBufferResult.append(mEvent.getCreatorEventId()+"\n");
         mDataBaseStringBufferResult.append(simpleDateFormat.format(mEvent.getStartTime())+"\n");
         mDataBaseStringBufferResult.append(simpleDateFormat.format(mEvent.getEndTime())+"\n");
+        mDataBaseStringBufferResult.append(simpleTimeFormat.format(mEvent.getStartTime())+"\n");
+        mDataBaseStringBufferResult.append(simpleTimeFormat.format(mEvent.getEndTime())+"\n");
         mDataBaseStringBufferResult.append(mEvent.getPlace()+"\n");
+        mDataBaseStringBufferResult.append(mEvent.getDescription()+trenner+"\n");
 
         //Create a QR Code and Show it in the ImageView.
         //ToDo Imput nicht fester String sondern muss aus DB kommen. Dazu müssen die Daten mit toString und StringBuffer zusammengeführt werden.
