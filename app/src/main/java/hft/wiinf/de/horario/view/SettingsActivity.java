@@ -76,7 +76,6 @@ public class SettingsActivity extends Fragment {
                 //settings_relativeLayout_helper: in this Layout all other layouts will be uploaded
                 fr.replace(R.id.settings_relativeLayout_helper, new SettingsSettingsFragment());
                 fr.addToBackStack(null);
-                fr.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                 fr.commit();
                 //set settings-buttons invisible and new Layout_helper visible
                 rLayout_settings_button.setVisibility(View.GONE);
@@ -90,7 +89,6 @@ public class SettingsActivity extends Fragment {
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
                 fr.replace(R.id.settings_relativeLayout_helper, new SettingsSupportFragment());
                 fr.addToBackStack(null);
-                fr.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                 fr.commit();
                 rLayout_settings_button.setVisibility(View.GONE);
                 rLayout_settings_helper.setVisibility(View.VISIBLE);
@@ -103,7 +101,6 @@ public class SettingsActivity extends Fragment {
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
                 fr.replace(R.id.settings_relativeLayout_helper, new SettingsCopyrightFragment());
                 fr.addToBackStack(null);
-                fr.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                 fr.commit();
                 rLayout_settings_button.setVisibility(View.GONE);
                 rLayout_settings_helper.setVisibility(View.VISIBLE);
@@ -116,7 +113,6 @@ public class SettingsActivity extends Fragment {
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
                 fr.replace(R.id.settings_relativeLayout_helper, new SettingsFeedbackFragment());
                 fr.addToBackStack(null);
-                fr.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                 fr.commit();
                 rLayout_settings_button.setVisibility(View.GONE);
                 rLayout_settings_helper.setVisibility(View.VISIBLE);
