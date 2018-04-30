@@ -58,7 +58,7 @@ public class SettingsActivity extends Fragment {
     PendingIntent sentPI;
     BroadcastReceiver smsSentReceiver;
     Bundle sms;
-    String phoneNo = "01729101821";
+    String phoneNo = "00000";
     String message = "Hellodedededede";
 
     private static final int SEND_SMS_PERMISSION_CODE = 1;
@@ -314,6 +314,7 @@ public class SettingsActivity extends Fragment {
         jobScheduler.schedule(new JobInfo.Builder(failedSMS.getId().intValue(), new ComponentName(getActivity(), FailedSMSService.class))
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
                 .setExtras(persBund)
+                .setPersisted(true)
                 .build());
     }
 
