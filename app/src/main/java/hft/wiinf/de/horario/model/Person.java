@@ -5,14 +5,17 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
 //class for a person with can (not) participate at an appointment or be the creator of an appointment
-@Table(name = "persons")
-public class Person extends Model {
-
-    @Column (name = "phoneNumber")
+@Table(name="persons")
+public class Person extends Model{
+    @Column
     String phoneNumber = "";
-    @Column(name = "name")
-    String name = "";
-    @Column (name = "isItMe")
+    @Column
+    String name="";
+    @Column(name = "event_Accepted")
+    private Event acceptedEvent = null;
+    @Column(name = "event_canceled")
+    private Event canceledEvent = null;
+    @Column
     boolean isItMe = false;
 
     //Use this constructor for person that using this specific app (owner)
@@ -52,6 +55,10 @@ public class Person extends Model {
         this.phoneNumber = phoneNumber;
     }
 
+    public void setCanceledEvent(Event canceledEvent) {
+        this.canceledEvent = canceledEvent;
+    }
+
     public String getName() {
         return name;
     }
@@ -59,4 +66,10 @@ public class Person extends Model {
     public void setName(String name) {
         this.name = name;
     }
+
+    public void setAcceptedEvent(Event acceptedEvent) {
+        this.acceptedEvent = acceptedEvent;
+    }
+
+
 }

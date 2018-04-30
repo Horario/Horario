@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="hft.wiinf.de.horario">
 
     <application
@@ -10,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:replace="android:icon">
+        android:name="com.activeandroid.app.Application">
+
         <activity
             android:name=".TabActivity"
             android:label="@string/title_activity_tab"
@@ -25,13 +25,12 @@
         <meta-data
             android:name="AA_DB_NAME"
             android:value="horario.db" />
-
         <meta-data
             android:name="AA_DB_VERSION"
-            android:value="1" />
+            android:value="12" />
         <meta-data
             android:name="AA_MODELS"
-            android:value="model.Event, model.Person, model.RepetitionDate" />
+            android:value="hft.wiinf.de.horario.model.Event, hft.wiinf.de.horario.model.Person, hft.wiinf.de.horario.model.Repetitiondate" />
     </application>
 
 </manifest>
