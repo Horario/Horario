@@ -46,6 +46,7 @@ public class SettingsActivity extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_settings, container, false);
 
+        super.onCreateView(inflater, container, savedInstanceState);
         return view;
     }
 
