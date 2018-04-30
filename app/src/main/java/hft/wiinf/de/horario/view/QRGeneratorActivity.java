@@ -23,17 +23,21 @@ import java.util.Date;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
+import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.Event;
+import hft.wiinf.de.horario.model.Person;
 
 public class QRGeneratorActivity extends Fragment {
     private static final String TAG = "QRGeneratorFragmentActivity";
-    private ImageView mQRGenImageViewResult;
-    private TextView mQRGenTextViewInput;
+    private ImageView mQRGenImageViewResult; //ToDo ImageView ist Temp Info und muss noch entfernt werden.
+    private TextView mQRGenerator_textView_descrition;
+    private TextView mQRGenerator_textView_headline;
     private RelativeLayout mRelativeLayout_QRGenResult;
-    private Button mButtonQRCreation;
+    private Button mQRGenerator_button_start_sharingFragment, mQRGenerator_button_start_eventFeedbackFragment;
     private BitMatrix mBitmatrix;
     private Bitmap mBitmapOfQRCode;
-    private StringBuffer mDataBaseStringBufferResult;
+    private Person mPerson;
+    private StringBuffer mQRGenerator_StringBuffer_headline, mQRGenerator_StringBuffer_description, mQRGenerator_Stringbuffer_bla;
     private Event mEvent;
     private Event mEvent2;
     private Event mEvent3;
@@ -47,12 +51,15 @@ public class QRGeneratorActivity extends Fragment {
         View view = inflater.inflate(R.layout.activity_qrgenerator, container, false);
 
         //Initial GUI
-        mButtonQRCreation = view.findViewById(R.id.createQRCode);
+        mQRGenerator_button_start_sharingFragment = view.findViewById(R.id.generator_button_start_shareFragment);
+        mQRGenerator_button_start_eventFeedbackFragment = view.findViewById(R.id.generator_button_show_eventReject);
+        mQRGenerator_textView_descrition = view.findViewById(R.id.generator_textView_text_output);
+        mQRGenerator_textView_headline = view.findViewById(R.id.generator_textView_Headline);
         mQRGenImageViewResult= view.findViewById(R.id.generator_imageView_qrResult);
         mRelativeLayout_QRGenResult = view.findViewById(R.id.generator_texView_frame);
-        mQRGenTextViewInput = view.findViewById(R.id.generator_textView_text_output);
 
         //Erstellen von drei Dummydaten
+        //ToDo Dummydaten löschen
         Date startDate = new Date();
         Date endDate = new Date();
 
@@ -77,47 +84,60 @@ public class QRGeneratorActivity extends Fragment {
         mEvent3.setEndTime(endDate);
         EventController.saveEvent(mEvent3);
 
+        mPerson = PersonController.getPersonWhoIam();
+
         return view;
     }
 
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
 
-        //Modify the Dateformat form den DB to get a more readable Form
+        //Modify the Dateformat form den DB to get a more readable Form for Date and Time disjunct
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
-        SimpleDateFormat simpleTimeFormat = new SimpleDateFormat("HH:mm:ss");
-        String trenner = "|";
+        SimpleDateFormat simpleTimeFormat = new SimpleDateFormat("HH:mm");
+
+        //Splitting String Element is the Pipe Symbol (on the Keyboard ALT Gr + <> Button = |)
+        String stringSplitSymbol = "|"; //
+
         // Merge the Data Base Informations to one Single StringBuffer with the Format:
         // Creator, StartDate, EndDate, StartTime, EndTime, Place, Description
-        mDataBaseStringBufferResult = new StringBuffer();
-        mDataBaseStringBufferResult.append(mEvent.getCreator()+"\n");
-        mDataBaseStringBufferResult.append(mEvent.getCreatorEventId()+"\n");
-        mDataBaseStringBufferResult.append(simpleDateFormat.format(mEvent.getStartTime())+"\n");
-        mDataBaseStringBufferResult.append(simpleDateFormat.format(mEvent.getEndTime())+"\n");
-        mDataBaseStringBufferResult.append(simpleTimeFormat.format(mEvent.getStartTime())+"\n");
-        mDataBaseStringBufferResult.append(simpleTimeFormat.format(mEvent.getEndTime())+"\n");
-        mDataBaseStringBufferResult.append(mEvent.getPlace()+"\n");
-        mDataBaseStringBufferResult.append(mEvent.getDescription()+trenner+"\n");
+        // Headline first
+        mQRGenerator_StringBuffer_headline = new StringBuffer();
+        mQRGenerator_StringBuffer_headline.append(simpleDateFormat.format(mEvent.getStartTime())+"\n");
+
+        // Description Window
+        //ToDo Verfeinerung durch IF abfrage ob es sich um ein Serientermin handelt dann kann demensprechen einen andere View eingefügt werden
+        mQRGenerator_StringBuffer_description = new StringBuffer();
+        mQRGenerator_StringBuffer_description.append("Am "+"\n");
+        mQRGenerator_StringBuffer_description.append(simpleDateFormat.format(mEvent.getStartTime())+"\n" + " von " + "\n");
+        mQRGenerator_StringBuffer_description.append(simpleTimeFormat.format(mEvent.getStartTime())+" bis ");
+        mQRGenerator_StringBuffer_description.append(simpleTimeFormat.format(mEvent.getEndTime())+" im Raum ");
+        mQRGenerator_StringBuffer_description.append(mEvent.getPlace()+"\n"+" Findet: ");
+        mQRGenerator_StringBuffer_description.append(mEvent.getDescription()+stringSplitSymbol+" statt."+"\n");
+        mQRGenerator_StringBuffer_description.append("Orangisator ist: ");
+        mQRGenerator_StringBuffer_description.append(mPerson.getName());
 
         //Create a QR Code and Show it in the ImageView.
         //ToDo Imput nicht fester String sondern muss aus DB kommen. Dazu müssen die Daten mit toString und StringBuffer zusammengeführt werden.
-        mButtonQRCreation.setOnClickListener(new View.OnClickListener() {
+        mQRGenerator_button_start_sharingFragment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
                 try {
                     //Change the StringBuffer to a String for Output in the LayoutView
-                    mBitmatrix = multiFormatWriter.encode(String.valueOf(mDataBaseStringBufferResult), BarcodeFormat.QR_CODE,200,200);
+                    mBitmatrix = multiFormatWriter.encode(String.valueOf(mQRGenerator_StringBuffer_description), BarcodeFormat.QR_CODE,200,200);
                     BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
                     mBitmapOfQRCode = barcodeEncoder.createBitmap(mBitmatrix);
                     mQRGenImageViewResult.setImageBitmap(mBitmapOfQRCode);
+
 
                 } catch (WriterException e) {
                     e.printStackTrace();
                 }
             }
         });
-        mQRGenTextViewInput.setText(mDataBaseStringBufferResult);
+        mQRGenerator_textView_headline.setText(mQRGenerator_StringBuffer_headline);
+        mQRGenerator_textView_descrition.setText(mQRGenerator_StringBuffer_description);
     }
 
 }
