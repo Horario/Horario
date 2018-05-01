@@ -12,11 +12,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.telephony.ServiceState;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -58,8 +60,8 @@ public class SettingsActivity extends Fragment {
     PendingIntent sentPI;
     BroadcastReceiver smsSentReceiver;
     Bundle sms;
-    String phoneNo = "00000";
-    String message = "Hellodedededede";
+    String phoneNo = "000000";
+    String message = "Ich habe leider die Grippe";
 
     private static final int SEND_SMS_PERMISSION_CODE = 1;
 
@@ -252,8 +254,9 @@ public class SettingsActivity extends Fragment {
             requestSendSmsPermission();
         } else {
             try {
+                String msg = ":Horario:" + "1" + "," + 0 + "," + message;
                 SmsManager smsManager = SmsManager.getDefault();
-                smsManager.sendTextMessage(phoneNo, null, "Heyho", sentPI, null);
+                smsManager.sendTextMessage(phoneNo, null, msg, sentPI, null);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -280,13 +283,8 @@ public class SettingsActivity extends Fragment {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    TelephonyManager manager = (TelephonyManager) getActivity().getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
-                    if (manager.getPhoneType() == TelephonyManager.DATA_CONNECTED) {
-                        sendSMS();
-                    } else {
-                        Toast.makeText(getContext(), R.string.sms_fail, Toast.LENGTH_SHORT).show();
-                        startJobSendSMS(phoneNo, message);
-                    }
+                    getActivity().registerReceiver(smsSentReceiver, new IntentFilter(SENT));
+                    sendSMS();
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
