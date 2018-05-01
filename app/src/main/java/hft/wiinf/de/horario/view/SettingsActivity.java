@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.BroadcastReceiver;
@@ -19,7 +20,9 @@ import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
+import android.telephony.SignalStrength;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -35,15 +38,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import hft.wiinf.de.horario.R;
-import hft.wiinf.de.horario.controller.EventController;
 import hft.wiinf.de.horario.controller.FailedSMSController;
 import hft.wiinf.de.horario.controller.PersonController;
-import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.FailedSMS;
 import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.service.FailedSMSService;
@@ -61,9 +61,9 @@ public class SettingsActivity extends Fragment {
     PendingIntent sentPI;
     BroadcastReceiver smsSentReceiver;
     Bundle sms;
-    String phoneNo = "0000000";
+    String phoneNo = "01729101821";
     String message = "Ich habe leider die Grippe";
-    TelephonyManager manager;
+    int phone_state;
 
     private static final int SEND_SMS_PERMISSION_CODE = 1;
 
@@ -75,6 +75,10 @@ public class SettingsActivity extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.activity_settings, container, false);
+
+        TelephonyManager tm = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
+        tm.listen(mPhoneListener, PhoneStateListener.LISTEN_SERVICE_STATE);
+
         return view;
     }
 
@@ -210,6 +214,14 @@ public class SettingsActivity extends Fragment {
         });
     }
 
+    private PhoneStateListener mPhoneListener = new PhoneStateListener() {
+        @Override
+        public void onServiceStateChanged(ServiceState serviceState) {
+            phone_state = serviceState.getState();
+            super.onServiceStateChanged(serviceState);
+        }
+    };
+
     @Override
     public void onResume() {
         super.onResume();
@@ -285,7 +297,7 @@ public class SettingsActivity extends Fragment {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (isDeviceConnected(getContext())){
+                    if (phone_state == ServiceState.STATE_IN_SERVICE) {
                         sendSMS();
                     } else {
                         Toast.makeText(getContext(), R.string.sms_fail, Toast.LENGTH_SHORT).show();
@@ -313,26 +325,17 @@ public class SettingsActivity extends Fragment {
         sms.putBoolean("accepted", false);
         sms.putInt("id", failedSMS.getId().intValue());
 
-        PersistableBundle persBund = BundleUtlity.toPersistableBundle(sms);
+       PersistableBundle persBund = BundleUtlity.toPersistableBundle(sms);
         JobScheduler jobScheduler = (JobScheduler) getActivity().getSystemService(Context.JOB_SCHEDULER_SERVICE);
         jobScheduler.schedule(new JobInfo.Builder(failedSMS.getId().intValue(), new ComponentName(getActivity(), FailedSMSService.class))
-                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
                 .setExtras(persBund)
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
                 .setPersisted(true)
                 .build());
     }
 
     public void saveFailedSMS(FailedSMS failedSMS) {
         FailedSMSController.addFailedSMS(failedSMS);
-    }
-
-    public static boolean isDeviceConnected(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
-            return true;
-        }
-        return false;
     }
 }
 

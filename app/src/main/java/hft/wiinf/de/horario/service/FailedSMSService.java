@@ -8,7 +8,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.telephony.PhoneStateListener;
+import android.telephony.ServiceState;
 import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.TabActivity;
@@ -19,15 +22,24 @@ import hft.wiinf.de.horario.utility.BundleUtlity;
 public class FailedSMSService extends JobService {
 
     Bundle sms;
+    int phone_state;
 
     @Override
     public boolean onStartJob(JobParameters params) {
-        sms = BundleUtlity.toBundle(params.getExtras());
-        FailedSMS failedSMS = new FailedSMS(sms.getString("message"),sms.getString("phoneNo"),sms.getInt("creatorID"),sms.getBoolean("accepted"));
-        sendSMS(failedSMS);
-        FailedSMSController.deleteFailedSMS(failedSMS.getMessage(),failedSMS.getCreatorID(),failedSMS.getPhoneNo());
-        jobFinished(params, false);
-        addNotification(sms.getString("phoneNo"), sms.getString("message"), sms.getInt("id"));
+        TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        tm.listen(mPhoneListener, PhoneStateListener.LISTEN_SERVICE_STATE);
+
+        if (phone_state == ServiceState.STATE_IN_SERVICE) {
+            sms = BundleUtlity.toBundle(params.getExtras());
+            FailedSMS failedSMS = new FailedSMS(sms.getString("message"), sms.getString("phoneNo"), sms.getInt("creatorID"), sms.getBoolean("accepted"));
+
+            sendSMS(failedSMS);
+            FailedSMSController.deleteFailedSMS(failedSMS.getMessage(), failedSMS.getCreatorID(), failedSMS.getPhoneNo());
+
+            jobFinished(params, false);
+            addNotification(sms.getString("phoneNo"), sms.getString("message"), sms.getInt("id"));
+            return true;
+        }
         return true;
     }
 
@@ -45,6 +57,14 @@ public class FailedSMSService extends JobService {
             e.printStackTrace();
         }
     }
+
+    private PhoneStateListener mPhoneListener = new PhoneStateListener() {
+        @Override
+        public void onServiceStateChanged(ServiceState serviceState) {
+            phone_state = serviceState.getState();
+            super.onServiceStateChanged(serviceState);
+        }
+    };
 
     private void addNotification(String phoneNo, String message, int id) {
         NotificationCompat.Builder builder =
