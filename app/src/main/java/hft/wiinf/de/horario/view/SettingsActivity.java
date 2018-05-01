@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
@@ -60,8 +61,9 @@ public class SettingsActivity extends Fragment {
     PendingIntent sentPI;
     BroadcastReceiver smsSentReceiver;
     Bundle sms;
-    String phoneNo = "000000";
+    String phoneNo = "0000000";
     String message = "Ich habe leider die Grippe";
+    TelephonyManager manager;
 
     private static final int SEND_SMS_PERMISSION_CODE = 1;
 
@@ -283,8 +285,12 @@ public class SettingsActivity extends Fragment {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getActivity().registerReceiver(smsSentReceiver, new IntentFilter(SENT));
-                    sendSMS();
+                    if (isDeviceConnected(getContext())){
+                        sendSMS();
+                    } else {
+                        Toast.makeText(getContext(), R.string.sms_fail, Toast.LENGTH_SHORT).show();
+                        startJobSendSMS(phoneNo, message);
+                    }
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
@@ -318,6 +324,15 @@ public class SettingsActivity extends Fragment {
 
     public void saveFailedSMS(FailedSMS failedSMS) {
         FailedSMSController.addFailedSMS(failedSMS);
+    }
+
+    public static boolean isDeviceConnected(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            return true;
+        }
+        return false;
     }
 }
 
