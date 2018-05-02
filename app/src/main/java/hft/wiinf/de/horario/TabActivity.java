@@ -1,7 +1,10 @@
 package hft.wiinf.de.horario;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -17,9 +20,11 @@ import android.widget.Toast;
 
 import com.activeandroid.ActiveAndroid;
 
+import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import hft.wiinf.de.horario.Service.NotificationReceiver;
 import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.view.CalendarActivity;
@@ -34,6 +39,8 @@ public class TabActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     TabLayout tabLayout;
     Person personMe;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

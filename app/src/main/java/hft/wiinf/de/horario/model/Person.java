@@ -17,6 +17,8 @@ public class Person extends Model{
     private Event canceledEvent = null;
     @Column
     boolean isItMe = false;
+    @Column
+    int notificationTime;
 
     //Use this constructor for person that using this specific app (owner)
     public Person(boolean isItMe, String phoneNumber, String name) {
@@ -24,6 +26,7 @@ public class Person extends Model{
         this.isItMe = isItMe;
         this.phoneNumber = phoneNumber;
         this.name = name;
+        this.notificationTime = 15;
     }
 
     //Use this constructor for persons that is not the current(real) user of this specific app
@@ -71,5 +74,11 @@ public class Person extends Model{
         this.acceptedEvent = acceptedEvent;
     }
 
+    public int getNotificationTime() {
+        return notificationTime;
+    }
 
+    public void setNotificationTime(int notificationTime) {
+        this.notificationTime = notificationTime;
+    }
 }

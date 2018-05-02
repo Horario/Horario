@@ -1,6 +1,10 @@
 package hft.wiinf.de.horario.view;
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,10 +21,17 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.sql.Time;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.SimpleTimeZone;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import hft.wiinf.de.horario.R;
+import hft.wiinf.de.horario.Service.NotificationReceiver;
 import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.Person;
 
@@ -31,6 +42,8 @@ public class SettingsActivity extends Fragment {
     RelativeLayout rLayout_main, rLayout_settings, rLayout_support, rLayout_copyright, rLayout_feedback;
     EditText editTextUsername;
     Person person;
+
+    private PendingIntent pendingIntent;
 
     public SettingsActivity() {
     }
@@ -53,6 +66,9 @@ public class SettingsActivity extends Fragment {
         } catch (NullPointerException e) {
             Log.d(TAG, "SettingsActivity:" + e.getMessage());
         }
+
+        Intent alarmIntent = new Intent(getActivity(), NotificationReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, alarmIntent, 0);
 
         //Initialize all Gui-Elements
         button_settings = (Button) view.findViewById(R.id.settings_button_settings);
@@ -78,10 +94,25 @@ public class SettingsActivity extends Fragment {
         button_settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Person person = new Person(true, "023131", "Flolilo");
+                Calendar cal = Calendar.getInstance();
+                cal.set(Calendar.YEAR, 2018);
+                cal.set(Calendar.MONTH, 4);
+                cal.set(Calendar.DAY_OF_MONTH, 2);
+                cal.set(Calendar.HOUR_OF_DAY, 19);
+                cal.set(Calendar.MINUTE, 59);
+                cal.set(Calendar.SECOND, 0);
+                cal.set(Calendar.MILLISECOND, 0);
+
+                long milli = cal.getTimeInMillis() - 15*60000;
+                
+                AlarmManager manager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+                manager.set(AlarmManager.RTC_WAKEUP, milli , pendingIntent);
+
                 rLayout_main.setVisibility(View.GONE);
                 rLayout_settings.setVisibility(View.VISIBLE);
 
-                if(person == null){
+                if (person == null) {
                     try {
                         person = PersonController.getPersonWhoIam();
                     } catch (NullPointerException e) {
