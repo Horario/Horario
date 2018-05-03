@@ -5,17 +5,15 @@
     android:layout_height="match_parent"
     tools:context=".view.QRSharingActivity">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/qrSharing_relativLayout_calendarActivity">
+        android:id="@+id/qrSharing_relativeLayout_calendarActivity">
 
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/qrShare_relativLayout_textViewFrame"
+        android:id="@+id/qrSharing_relativeLayout_textViewFrame"
         android:layout_width="match_parent"
         android:layout_height="220dp">
 
@@ -42,7 +40,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/qrShare_relativLayout_buttonFrame"
+        android:id="@+id/qrSharing_relativeLayout_buttonFrame"
         android:layout_width="match_parent"
         android:layout_height="147dp"
         android:layout_alignParentBottom="true"
@@ -73,7 +71,7 @@
         android:id="@+id/qrSharing_imageView_qrCode"
         android:layout_width="218dp"
         android:layout_height="200dp"
-        android:layout_above="@+id/qrShare_relativLayout_buttonFrame"
+        android:layout_above="@+id/qrSharing_relativeLayout_buttonFrame"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

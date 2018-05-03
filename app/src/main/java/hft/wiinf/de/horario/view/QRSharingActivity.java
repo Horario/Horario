@@ -25,6 +25,8 @@ import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import hft.wiinf.de.horario.R;
 
@@ -73,9 +75,9 @@ public class QRSharingActivity extends Fragment {
         View view = inflater.inflate(R.layout.activity_qrsharing, container, false);
 
         //GUI initial
-        mQRSharing_relativeLayout_buttonFrame = view.findViewById(R.id.qrShare_relativLayout_buttonFrame);
-        mQRSharing_reativeLayout_textViewFrame = view.findViewById(R.id.qrShare_relativLayout_textViewFrame);
-        mQRSharing_relativeLayout_calendarActivity = view.findViewById(R.id.qrSharing_relativLayout_calendarActivity);
+        mQRSharing_relativeLayout_buttonFrame = view.findViewById(R.id.qrSharing_relativeLayout_buttonFrame);
+        mQRSharing_reativeLayout_textViewFrame = view.findViewById(R.id.qrSharing_relativeLayout_textViewFrame);
+        mQRSharing_relativeLayout_calendarActivity = view.findViewById(R.id.qrSharing_relativeLayout_calendarActivity);
         mQRSharing_textView_headline = view.findViewById(R.id.qrSharing_textView_headline);
         mQRSharing_textView_description = view.findViewById(R.id.qrSharing_textView_description);
         mQRSharing_button_shareWith = view.findViewById(R.id.qrSharing_button_shareWith);
@@ -85,7 +87,7 @@ public class QRSharingActivity extends Fragment {
         //Start the QR Code GeneratorMethod and Show all Even Informations
         qrBitMapGenerator();
 
-        //Put StringBufffer in Array
+        //Put StringBufffer in an Array an split the Values to new String Variables
         //Index: 0 = StartDate; 1 = StartTime; 2= EndTime; 3=Descriptoin; 4=Location; 5=EventCreator
         try {
             String[] eventStringBufferResultAsArray = eventStringResultDescription().split("\\| ");
@@ -108,47 +110,48 @@ public class QRSharingActivity extends Fragment {
     public void onViewCreated(final View view, Bundle savedInstanceState) {
 
         //Button to Move to the Calendar View
-        mQRSharing_button_showInCalendar.setOnClickListener(new View.OnClickListener(){
+        mQRSharing_button_showInCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.qrSharing_relativLayout_calendarActivity, new CalendarActivity());
+                fragmentTransaction.replace(R.id.qrSharing_relativeLayout_calendarActivity, new CalendarActivity());
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
                 mQRSharing_relativeLayout_buttonFrame.setVisibility(View.GONE);
                 mQRSharing_imageView_qrCode.setVisibility(View.GONE);
                 mQRSharing_reativeLayout_textViewFrame.setVisibility(View.GONE);
                 mQRSharing_relativeLayout_calendarActivity.setVisibility(View.VISIBLE);
-
-
             }
         });
 
-
-
-
-
+        //Open a Chooser to Share the QR-Code over one of the User Apps
         mQRSharing_button_shareWith.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try{
-                    File imagePath = new File(getContext().getCacheDir(), "Horario");
-                    File newFile = new File(imagePath, "Horario.png");
+                try {
+                    File cachePath = new File(getContext().getCacheDir(), "images");
+                    cachePath.mkdirs(); // don't forget to make the directory
+                    FileOutputStream stream = new FileOutputStream(cachePath + "/image.png"); // overwrites this image every time
+                    mBitmapOfQRCode.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    stream.close();
+
+                    File imagePath = new File(getContext().getCacheDir(), "images");
+                    File newFile = new File(imagePath, "image.png");
                     Uri contentUri = FileProvider.getUriForFile(getContext(), "hft.wiinf.de.horario.fileprovider", newFile);
 
-                    Intent shareIntent = new Intent();
-                    shareIntent.setAction(Intent.ACTION_SEND);
-                    shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
-                    shareIntent.setType("image/jpeg");
-                    getContext().startActivity(Intent.createChooser(shareIntent, "Teilen via..."));
-
-                }catch (NullPointerException e) {
-                    e.printStackTrace();}
-
-
+                    if (contentUri != null) {
+                        Intent shareIntent = new Intent();
+                        shareIntent.setAction(Intent.ACTION_SEND);
+                        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // temp permission for receiving app to read this file
+                        shareIntent.setDataAndType(contentUri, getContext().getContentResolver().getType(contentUri));
+                        shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
+                        startActivity(Intent.createChooser(shareIntent, "Teilen via ... "));
+                    }
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
-
-
     }
 }
