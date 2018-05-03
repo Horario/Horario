@@ -3,13 +3,11 @@ package hft.wiinf.de.horario.view;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,10 +23,12 @@ import java.util.Locale;
 
 import hft.wiinf.de.horario.R;
 
-//TODO Kommentieren und Java Doc Info Schreiben
-public class CalendarActivity extends Fragment {
-    private static final String TAG = "CalendarFragmentActivity";
 
+//TODO Kommentieren und Java Doc Info Schreiben
+
+public class CalendarActivity extends Fragment {
+
+    private static final String TAG = "CalendarFragmentActivity";
     public static CompactCalendarView calendarCvCalendar;
     ListView calendarLvList;
     TextView calendarTvMonth;
@@ -37,6 +37,12 @@ public class CalendarActivity extends Fragment {
     DateFormat monthFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
     DateFormat dayFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
 
+
+    //TODO just a placeholder, maybe need a rework (1523318400000L)
+    public static void addEvent(Date date) {
+        Event event = new Event(Color.BLUE, date.getTime());
+        calendarCvCalendar.addEvent(event);
+    }
 
     @Nullable
     @Override
@@ -71,7 +77,7 @@ public class CalendarActivity extends Fragment {
         });
 
         /** TODO */
-        calendarTvMonth.setOnClickListener(new View.OnClickListener(){
+        calendarTvMonth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getActivity(), "test", Toast.LENGTH_SHORT).show(); //TODO just for testing, delete
@@ -81,14 +87,10 @@ public class CalendarActivity extends Fragment {
         return view;
     }
 
-    //TODO just a placeholder, maybe need a rework (1523318400000L)
-    public static void addEvent(Date date){
-        Event event = new Event(Color.BLUE, date.getTime());
-        calendarCvCalendar.addEvent(event);
-    }
-
-    /** TODO need a description */
-    public ArrayAdapter getAdapter(Date date){
+    /**
+     * TODO need a description
+     */
+    public ArrayAdapter getAdapter(Date date) {
         //TODO Datenbank zugriff, um alle Termine für das Datum zu erhalten und diese dann in die List zu speichern.
         ArrayList<String> eventArray = new ArrayList<>();
         eventArray.add("Test eins"); //TODO just for testing, delete

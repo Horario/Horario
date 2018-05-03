@@ -18,6 +18,8 @@ public class Event extends Model {
     @Column
     private Person creator;
     @Column
+    private String shortTitle = "";
+    @Column
     private String description = "";
     @Column
     private String place = "";
@@ -26,7 +28,14 @@ public class Event extends Model {
     @Column
     private Date endTime = new Date();
     @Column
-    private boolean accepted;
+    private Repetition repetition = Repetition.NONE;
+    @Column
+    private Date endDate = new Date();
+    @Column
+    private AcceptedState accepted;
+    @Column
+    private Event startEvent = null;
+
     public Event(Person creator) {
         this.creator = creator;
     }
@@ -45,6 +54,14 @@ public class Event extends Model {
 
     public Person getCreator() {
         return creator;
+    }
+
+    public String getShortTitle() {
+        return shortTitle;
+    }
+
+    public void setShortTitle(String shortTitle) {
+        this.shortTitle = shortTitle;
     }
 
     public String getDescription() {
@@ -79,15 +96,39 @@ public class Event extends Model {
         this.endTime = endTime;
     }
 
-    public boolean isAccepted() {
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public Repetition getRepetition() {
+        return repetition;
+    }
+
+    public void setRepetition(Repetition repetition) {
+        this.repetition = repetition;
+    }
+
+
+    public AcceptedState getAccepted() {
         return accepted;
     }
 
-    public void setAccepted(boolean accepted) {
+    public void setAccepted(AcceptedState accepted) {
         this.accepted = accepted;
     }
 
+    public Event getStartEvent() {
+        return startEvent;
+    }
 
+    public void setStartEvent(Event startEvent) {
+        this.startEvent = startEvent;
+    }
 }
 
 
