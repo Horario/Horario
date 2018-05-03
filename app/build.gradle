@@ -41,6 +41,12 @@ repositories {
     mavenCentral()
     maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 }
+
+/**
+ * Add the Zxing Library to make the QR-Code Scanner usable
+ * IMPORTANT:
+ * To use the Version 3.3.0 is an SDK Version 14+ necessary
+ */
 dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     testImplementation 'com.android.support:support-annotations:27.1.1'
@@ -63,4 +69,7 @@ dependencies {
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
     implementation 'com.google.zxing:core:3.3.0'
+    implementation 'com.android.support:design:27.1.0'
+    implementation 'com.android.support:design:27.1.1'
+    androidTestImplementation 'junit:junit:4.12'
 }
