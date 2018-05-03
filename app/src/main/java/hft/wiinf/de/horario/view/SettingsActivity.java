@@ -68,6 +68,8 @@ public class SettingsActivity extends Fragment {
         }
 
         Intent alarmIntent = new Intent(getActivity(), NotificationReceiver.class);
+        alarmIntent.putExtra("Event","Beispielevent");
+        alarmIntent.putExtra("Time","15");
         pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, alarmIntent, 0);
 
         //Initialize all Gui-Elements
@@ -95,19 +97,18 @@ public class SettingsActivity extends Fragment {
             @Override
             public void onClick(View v) {
                 Person person = new Person(true, "023131", "Flolilo");
+
                 Calendar cal = Calendar.getInstance();
                 cal.set(Calendar.YEAR, 2018);
                 cal.set(Calendar.MONTH, 4);
-                cal.set(Calendar.DAY_OF_MONTH, 2);
-                cal.set(Calendar.HOUR_OF_DAY, 19);
-                cal.set(Calendar.MINUTE, 59);
+                cal.set(Calendar.DAY_OF_MONTH, 3);
+                cal.set(Calendar.HOUR_OF_DAY, 15);
+                cal.set(Calendar.MINUTE, 45);
                 cal.set(Calendar.SECOND, 0);
                 cal.set(Calendar.MILLISECOND, 0);
 
-                long milli = cal.getTimeInMillis() - 15*60000;
-                
                 AlarmManager manager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-                manager.set(AlarmManager.RTC_WAKEUP, milli , pendingIntent);
+                manager.set(AlarmManager.RTC_WAKEUP, calcNotificationTime(cal.getTimeInMillis(),person) , pendingIntent);
 
                 rLayout_main.setVisibility(View.GONE);
                 rLayout_settings.setVisibility(View.VISIBLE);
@@ -199,5 +200,9 @@ public class SettingsActivity extends Fragment {
                 return false;
             }
         });
+    }
+
+    public long calcNotificationTime(long eventTimeInMillis, Person person){
+        return eventTimeInMillis - (person.getNotificationTime() * 60000);
     }
 }

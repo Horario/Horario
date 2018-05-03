@@ -14,15 +14,16 @@ public class NotificationReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        addNotification(context);
+        addNotification(context, intent);
+
     }
 
-    private void addNotification(Context context) {
+    private void addNotification(Context context, Intent intent) {
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(context, "")
                         .setSmallIcon(R.drawable.ic_android_black2_24dp)
                         .setContentTitle("ALARM")
-                        .setContentText("Das ist ein Alarm");
+                        .setContentText(intent.getStringExtra("Event") + " in " + intent.getStringExtra("Time") + " Minuten");
 
         Intent notificationIntent = new Intent(context, TabActivity.class);
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent,
