@@ -2,29 +2,15 @@ package hft.wiinf.de.horario.view;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import java.io.FileDescriptor;
-import java.io.PrintWriter;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.PersonController;
@@ -68,6 +54,7 @@ public class SettingsActivity extends Fragment {
 
         rLayout_settings_helper = view.findViewById(R.id.settings_relativeLayout_helper);
         rLayout_settings_button = view.findViewById(R.id.settings_relativeLayout_button);
+
 
         //onCLickListener for every button in settings fragment
         button_settings.setOnClickListener(new View.OnClickListener() {
