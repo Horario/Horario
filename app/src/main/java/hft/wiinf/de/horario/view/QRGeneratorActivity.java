@@ -1,22 +1,15 @@
 package hft.wiinf.de.horario.view;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
-import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,18 +22,12 @@ import hft.wiinf.de.horario.model.Person;
 
 public class QRGeneratorActivity extends Fragment {
     private static final String TAG = "QRGeneratorFragmentActivity";
-    private ImageView mQRGenImageViewResult; //ToDo ImageView ist Temp Info und muss noch entfernt werden.
-    private TextView mQRGenerator_textView_descrition;
-    private TextView mQRGenerator_textView_headline;
-    private RelativeLayout mRelativeLayout_QRGenResult;
+    private TextView mQRGenerator_textView_description, mQRGenerator_textView_headline;
+    private RelativeLayout mQRGenerator_RelativeLayout_show_qrSharingFragment;
     private Button mQRGenerator_button_start_sharingFragment, mQRGenerator_button_start_eventFeedbackFragment;
-    private BitMatrix mBitmatrix;
-    private Bitmap mBitmapOfQRCode;
     private Person mPerson;
-    private StringBuffer mQRGenerator_StringBuffer_headline, mQRGenerator_StringBuffer_description, mQRGenerator_Stringbuffer_bla;
-    private Event mEvent;
-    private Event mEvent2;
-    private Event mEvent3;
+    private StringBuffer mQRGenerator_StringBuffer_headline, mQRGenerator_StringBuffer_description, mQRGenerator_StringBuffer_test;
+    private Event mEvent, mEvent2, mEvent3;
 
     public QRGeneratorActivity() {
         // Required empty public constructor
@@ -51,12 +38,11 @@ public class QRGeneratorActivity extends Fragment {
         View view = inflater.inflate(R.layout.activity_qrgenerator, container, false);
 
         //Initial GUI
-        mQRGenerator_button_start_sharingFragment = view.findViewById(R.id.generator_button_start_shareFragment);
-        mQRGenerator_button_start_eventFeedbackFragment = view.findViewById(R.id.generator_button_show_eventReject);
-        mQRGenerator_textView_descrition = view.findViewById(R.id.generator_textView_text_output);
+        mQRGenerator_button_start_sharingFragment = view.findViewById(R.id.generator_button_start_qrShareingFragment);
+        mQRGenerator_button_start_eventFeedbackFragment = view.findViewById(R.id.generator_button_show_eventFeedbackFragment);
+        mQRGenerator_textView_description = view.findViewById(R.id.generator_textView_description);
         mQRGenerator_textView_headline = view.findViewById(R.id.generator_textView_Headline);
-        mQRGenImageViewResult= view.findViewById(R.id.generator_imageView_qrResult);
-        mRelativeLayout_QRGenResult = view.findViewById(R.id.generator_texView_frame);
+        mQRGenerator_RelativeLayout_show_qrSharingFragment = view.findViewById(R.id.generator_realtivLayout_show_qrSharingFragment);
 
         //Erstellen von drei Dummydaten
         //ToDo Dummydaten löschen
@@ -89,55 +75,65 @@ public class QRGeneratorActivity extends Fragment {
         return view;
     }
 
-    @Override
-    public void onViewCreated(final View view, Bundle savedInstanceState) {
-
+    public StringBuffer stringBufferGenerator(){
         //Modify the Dateformat form den DB to get a more readable Form for Date and Time disjunct
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
         SimpleDateFormat simpleTimeFormat = new SimpleDateFormat("HH:mm");
 
         //Splitting String Element is the Pipe Symbol (on the Keyboard ALT Gr + <> Button = |)
-        String stringSplitSymbol = "|"; //
+        String stringSplitSymbol = " | "; //
 
-        // Merge the Data Base Informations to one Single StringBuffer with the Format:
+        // Merge the Data Base Information to one Single StringBuffer with the Format:
         // Creator, StartDate, EndDate, StartTime, EndTime, Place, Description
-        // Headline first
-        mQRGenerator_StringBuffer_headline = new StringBuffer();
-        mQRGenerator_StringBuffer_headline.append(simpleDateFormat.format(mEvent.getStartTime())+"\n");
-
-        // Description Window
-        //ToDo Verfeinerung durch IF abfrage ob es sich um ein Serientermin handelt dann kann demensprechen einen andere View eingefügt werden
         mQRGenerator_StringBuffer_description = new StringBuffer();
-        mQRGenerator_StringBuffer_description.append("Am "+"\n");
-        mQRGenerator_StringBuffer_description.append(simpleDateFormat.format(mEvent.getStartTime())+"\n" + " von " + "\n");
-        mQRGenerator_StringBuffer_description.append(simpleTimeFormat.format(mEvent.getStartTime())+" bis ");
-        mQRGenerator_StringBuffer_description.append(simpleTimeFormat.format(mEvent.getEndTime())+" im Raum ");
-        mQRGenerator_StringBuffer_description.append(mEvent.getPlace()+"\n"+" Findet: ");
-        mQRGenerator_StringBuffer_description.append(mEvent.getDescription()+stringSplitSymbol+" statt."+"\n");
-        mQRGenerator_StringBuffer_description.append("Orangisator ist: ");
+        mQRGenerator_StringBuffer_description.append(simpleDateFormat.format(mEvent.getStartTime())+ stringSplitSymbol);
+        mQRGenerator_StringBuffer_description.append(simpleTimeFormat.format(mEvent.getStartTime())+ stringSplitSymbol);
+        mQRGenerator_StringBuffer_description.append(simpleTimeFormat.format(mEvent.getEndTime())+ stringSplitSymbol);
+        mQRGenerator_StringBuffer_description.append(mEvent.getPlace()+ stringSplitSymbol);
+        mQRGenerator_StringBuffer_description.append(mEvent.getDescription()+stringSplitSymbol);
         mQRGenerator_StringBuffer_description.append(mPerson.getName());
+
+        return mQRGenerator_StringBuffer_description;
+    }
+
+    @Override
+    public void onViewCreated(final View view, Bundle savedInstanceState) {
+        String [] eventStringBufferArray = String.valueOf(stringBufferGenerator()).split("\\|");
+        String startDate = eventStringBufferArray[0];
+        String startTime = eventStringBufferArray[1];
+        String endTime = eventStringBufferArray[2];
+        String description = eventStringBufferArray[4];
+        String location = eventStringBufferArray[3];
+        String eventCreator = eventStringBufferArray[5];
+
+        mQRGenerator_textView_headline.setText("Dein Termin"+"\n"+description+", "+startDate);
+        mQRGenerator_textView_description.setText(stringBufferGenerator());
 
         //Create a QR Code and Show it in the ImageView.
         //ToDo Imput nicht fester String sondern muss aus DB kommen. Dazu müssen die Daten mit toString und StringBuffer zusammengeführt werden.
         mQRGenerator_button_start_sharingFragment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
-                try {
-                    //Change the StringBuffer to a String for Output in the LayoutView
-                    mBitmatrix = multiFormatWriter.encode(String.valueOf(mQRGenerator_StringBuffer_description), BarcodeFormat.QR_CODE,200,200);
-                    BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-                    mBitmapOfQRCode = barcodeEncoder.createBitmap(mBitmatrix);
-                    mQRGenImageViewResult.setImageBitmap(mBitmapOfQRCode);
 
+                //Create a Bundle to Send the Information to an other Fragment
+                //The Bundle input is the StringBuffer with the EventInformation
+                QRSharingActivity qrSharingBundle = new QRSharingActivity();
+                Bundle bundle = new Bundle();
+                bundle.putString("qrStringBufferDescription", String.valueOf(mQRGenerator_StringBuffer_description));
+                qrSharingBundle.setArguments(bundle);
 
-                } catch (WriterException e) {
-                    e.printStackTrace();
-                }
+                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.generator_realtivLayout_show_qrSharingFragment, qrSharingBundle);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                    mQRGenerator_textView_headline.setVisibility(View.GONE);
+                    mQRGenerator_textView_description.setVisibility(View.GONE);
+                    mQRGenerator_button_start_sharingFragment.setVisibility(View.GONE);
+                    mQRGenerator_button_start_eventFeedbackFragment.setVisibility(View.GONE);
+                    mQRGenerator_RelativeLayout_show_qrSharingFragment.setVisibility(View.VISIBLE);
+
             }
         });
-        mQRGenerator_textView_headline.setText(mQRGenerator_StringBuffer_headline);
-        mQRGenerator_textView_descrition.setText(mQRGenerator_StringBuffer_description);
     }
 
 }

@@ -5,32 +5,29 @@
     android:orientation="vertical">
 
     <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/generator_realtivLayout_show_qrSharingFragment">
+
+    </RelativeLayout>
+
+    <RelativeLayout
         android:id="@+id/generator_texView_frame"
         android:layout_width="match_parent"
         android:layout_height="347dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true">
 
-
-        <ImageView
-            android:id="@+id/generator_imageView_qrResult"
-            android:layout_width="163dp"
-            android:layout_height="128dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="97dp" />
-
         <TextView
             android:id="@+id/generator_textView_Headline"
             android:layout_width="244dp"
             android:layout_height="46dp"
             android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/generator_textView_text_output"
             android:layout_marginTop="23dp"
             android:text="@string/headline" />
 
         <TextView
-            android:id="@+id/generator_textView_text_output"
+            android:id="@+id/generator_textView_description"
             android:layout_width="309dp"
             android:layout_height="111dp"
             android:layout_alignParentTop="true"
@@ -49,7 +46,7 @@
 
 
         <Button
-            android:id="@+id/generator_button_start_shareFragment"
+            android:id="@+id/generator_button_start_qrShareingFragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
@@ -59,7 +56,7 @@
             android:text="@string/qr_code_anzeigen" />
 
         <Button
-            android:id="@+id/generator_button_show_eventReject"
+            android:id="@+id/generator_button_show_eventFeedbackFragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"

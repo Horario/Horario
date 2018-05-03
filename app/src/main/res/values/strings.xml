@@ -45,6 +45,7 @@
     <string name="r_ckmeldungen_anzeigen">Rückmeldungen anzeigen</string>
     <string name="qr_code_anzeigen">QR Code anzeigen</string>
     <string name="headline">Headline</string>
+    <string name="teilen_via">Teilen via...</string>
     <string-array name="event_repetitions">
         <item name="event_repetition_yearly">jährlich</item>
         <item name="event_repetition_monthly">monatlich</item>
