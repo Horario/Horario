@@ -121,20 +121,5 @@ public class SettingsActivity extends Fragment {
                 rLayout_settings_helper.setVisibility(View.VISIBLE);
             }
         });
-
-        //Test for new Fragment
-        Button button_test = view.findViewById(R.id.testButton);
-
-        button_test.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentTransaction fr = getFragmentManager().beginTransaction();
-                fr.replace(R.id.settings_relativeLayout_helper, new AcceptSaveRejectEventFragment());
-                fr.addToBackStack(null);
-                fr.commit();
-                rLayout_settings_button.setVisibility(View.GONE);
-                rLayout_settings_helper.setVisibility(View.VISIBLE);
-            }
-        });
     }
 }
