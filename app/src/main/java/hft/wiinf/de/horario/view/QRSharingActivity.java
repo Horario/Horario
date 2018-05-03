@@ -101,6 +101,7 @@ public class QRSharingActivity extends Fragment {
             mQRSharing_textView_headline.setText(description);
         } catch (NullPointerException e) {
             Log.d(TAG, "QRSharingFragmentActivity:" + e.getMessage());
+
         }
 
         return view;

@@ -96,6 +96,7 @@ public class QRGeneratorActivity extends Fragment {
         mQRGenerator_StringBuffer_description.append(mPerson.getName());
 
         return mQRGenerator_StringBuffer_description;
+
     }
 
     @SuppressLint("LongLogTag")
