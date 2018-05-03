@@ -46,31 +46,29 @@ public class QRGeneratorActivity extends Fragment {
         mQRGenerator_textView_headline = view.findViewById(R.id.generator_textView_Headline);
         mQRGenerator_RelativeLayout_show_qrSharingFragment = view.findViewById(R.id.generator_realtivLayout_show_qrSharingFragment);
 
-        //Erstellen von drei Dummydaten
+        //Erstellen von zwei Dummydaten
         //ToDo Dummydaten löschen
         Date startDate = new Date();
         Date endDate = new Date();
 
         mEvent = new Event();
+        mEvent.setShortTitle("Biologie");
         mEvent.setDescription("Wir machen Experimente im Labor 3");
         mEvent.setPlace("Labor 3");
         mEvent.setStartTime(startDate);
         mEvent.setEndTime(endDate);
+        mEvent.setEndDate(endDate);
+        //mEvent.setStartEvent();
         EventController.saveEvent(mEvent);
 
         mEvent2 = new Event();
+        mEvent2.setShortTitle("Mathe");
         mEvent2.setDescription("Mathe mit Hr. Conradt");
         mEvent2.setPlace("1/208");
         mEvent2.setStartTime(startDate);
         mEvent2.setEndTime(endDate);
+        //mEvent2.setStartEvent();
         EventController.saveEvent(mEvent2);
-
-        mEvent3 = new Event();
-        mEvent3.setDescription("Quell des Wissens kann ein DataLake sein");
-        mEvent3.setPlace("Hallenbad");
-        mEvent3.setStartTime(startDate);
-        mEvent3.setEndTime(endDate);
-        EventController.saveEvent(mEvent3);
 
         mPerson = PersonController.getPersonWhoIam();
 

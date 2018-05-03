@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -11,10 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
@@ -44,6 +45,13 @@ public class CalendarActivity extends Fragment {
 
     //Temp Method to Change on Frame CaledarActivity with QRScannerActivity Fragments
     //ToDo Diese Methode muss später auf den Floatingbutten gebunden werden dazu brauch es auch eine Anpassung der XML stattfinden. -> Es muss ein neuer Container erstellt werden in den dann die das Fragment geladen wird. Zielsetzung bis ende der Weoche sollte das gehen!
+    //TODO just a placeholder, maybe need a rework (1523318400000L)
+    public static void addEvent(Date date) {
+        Event event = new Event(Color.BLUE, date.getTime());
+        calendarCvCalendar.addEvent(event);
+    }
+
+    @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_calendar, container, false);
@@ -64,6 +72,7 @@ public class CalendarActivity extends Fragment {
         calendarCvCalendar.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
             public void onDayClick(Date dateClicked) {
+
                 calendarTvDay.setText(dayFormat.format(dateClicked));
                 calendarLvList.setAdapter(getAdapter(dateClicked));
             }
@@ -119,19 +128,18 @@ public class CalendarActivity extends Fragment {
                 }
             }
         });
+
         return view;
     }
 
     //TODO just a placeholder, maybe need a rework (1523318400000L)
-    public static void addEvent(Date date) {
+    public static void addEvent(Date date){
         Event event = new Event(Color.BLUE, date.getTime());
         calendarCvCalendar.addEvent(event);
     }
 
-    /**
-     * TODO need a description
-     */
-    public ArrayAdapter getAdapter(Date date) {
+    /** TODO need a description */
+    public ArrayAdapter getAdapter(Date date){
         //TODO Datenbank zugriff, um alle Termine für das Datum zu erhalten und diese dann in die List zu speichern.
         ArrayList<String> eventArray = new ArrayList<>();
         eventArray.add("Test eins"); //TODO just for testing, delete
