@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 
 import hft.wiinf.de.horario.R;
 
@@ -15,7 +14,6 @@ import hft.wiinf.de.horario.R;
  */
 public class SettingsSupportFragment extends Fragment {
 
-    RelativeLayout rl;
 
     public SettingsSupportFragment() {
         // Required empty public constructor
