@@ -55,14 +55,16 @@ public class CalendarActivity extends Fragment {
         calendarTvDay = view.findViewById(R.id.calendarTvDay);
 
         Date today = new Date();
+        today.setHours(0);
+        today.setMinutes(0);
         calendarTvMonth.setText(monthFormat.format(today)); //initialize month field
         calendarTvDay.setText(dayFormat.format(today));
         calendarLvList.setAdapter(getAdapter(today));
 
         //TODO just for testing (add entry to database), delete
         hft.wiinf.de.horario.model.Event test = new hft.wiinf.de.horario.model.Event();
-        test.setStartTime(new Date(1524261326000L)); //20.04.18
-        test.setEndTime(new Date(1524261326000L));
+        test.setStartTime(new Date(1525465935000L)); //20.04.18 1524261326000L
+        test.setEndTime(new Date(1525419135000L));
         test.setDescription("Termin 1");
         test.save();
         addEvent(test.getStartTime());
