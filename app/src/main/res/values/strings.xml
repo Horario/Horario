@@ -45,4 +45,6 @@
     <string name="save_text">speichern</string>
     <string name="later_text">Später</string>
     <string name="thanksForUsername">Benutzername wurde gespeichert! </string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
 </resources>
