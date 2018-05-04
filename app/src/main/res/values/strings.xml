@@ -15,7 +15,7 @@
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="setting">Setting</string>
-    <string name="newEvent">Termin anlegen</string>
+    <string name="newEvent">newEvent</string>
     <string name="calendar">calendar</string>
     <string name="settings_text">Einstellungen</string>
     <string name="support_text">Support</string>
