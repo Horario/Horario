@@ -1,8 +1,13 @@
 package hft.wiinf.de.horario.view;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -16,7 +21,7 @@ import java.util.List;
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
 
-public class EventOverviewActivity extends AppCompatActivity {
+public class EventOverviewActivity extends Fragment {
 
     ListView overviewLvList;
     TextView overviewTvMonth;
@@ -24,19 +29,24 @@ public class EventOverviewActivity extends AppCompatActivity {
     Button overviewBtPrevious;
     Date selectedMonth = new Date(CalendarActivity.selectedMonth.getTime());
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.activity_event_overview, container, false);
+        return  view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         //initialize variables
-        setContentView(R.layout.activity_event_overview);
-        overviewLvList = findViewById(R.id.overviewTvList);
-        overviewTvMonth = findViewById(R.id.overviewTvMonth);
-        overviewBtNext = findViewById(R.id.overviewBtNext);
-        overviewBtPrevious = findViewById(R.id.overviewBtPrevious);
+        overviewLvList = view.findViewById(R.id.overviewTvList);
+        overviewTvMonth = view.findViewById(R.id.overviewTvMonth);
+        overviewBtNext = view.findViewById(R.id.overviewBtNext);
+        overviewBtPrevious = view.findViewById(R.id.overviewBtPrevious);
 
         update();
-
 
         overviewBtNext.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,7 +92,7 @@ public class EventOverviewActivity extends AppCompatActivity {
         if(eventArray.size() < 1){ //when no events this month do stuff
             eventArray.add("Du hast keine Termine diesen Monat");
         }
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, eventArray);
+        ArrayAdapter adapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, eventArray);
         return adapter;
     }
 }

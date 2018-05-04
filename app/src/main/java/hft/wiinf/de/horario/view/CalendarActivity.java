@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +38,8 @@ public class CalendarActivity extends Fragment {
     ListView calendarLvList;
     TextView calendarTvMonth;
     TextView calendarTvDay;
+    ConstraintLayout layoutCalendar;
+    ConstraintLayout layoutHelper;
 
     static DateFormat monthFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
     static DateFormat dayFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
@@ -53,6 +57,8 @@ public class CalendarActivity extends Fragment {
         calendarTvMonth = view.findViewById(R.id.calendarTvMonth);
         calendarLvList = view.findViewById(R.id.calendarLvList);
         calendarTvDay = view.findViewById(R.id.calendarTvDay);
+        layoutCalendar = view.findViewById(R.id.layoutCalendar);
+        layoutHelper = view.findViewById(R.id.layoutHelper);
 
         Date today = new Date();
         selectedMonth = today;
@@ -90,8 +96,12 @@ public class CalendarActivity extends Fragment {
         calendarTvMonth.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), EventOverviewActivity.class);
-                startActivity(intent);
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.layoutHelper, new EventOverviewActivity());
+                ft.addToBackStack(null);
+                ft.commit();
+                layoutCalendar.setVisibility(View.GONE);
+                layoutHelper.setVisibility(View.VISIBLE);
             }
         });
 
