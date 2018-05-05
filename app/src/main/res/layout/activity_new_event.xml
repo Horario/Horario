@@ -1,23 +1,306 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+
     android:layout_height="match_parent"
+
+    android:id="@+id/relativeLayout"
     android:orientation="vertical">
 
 
     <TextView
+
         android:id="@+id/newEventTab"
+
         android:layout_width="wrap_content"
+
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+
         android:layout_marginTop="40dp"
+
         android:text="@string/newEvent"
-        android:textSize="25sp" />
+
+        android:textSize="25sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <EditText
+
+        android:id="@+id/newEvent_editText_description"
+
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+
+        android:layout_marginEnd="20dp"
+
+        android:layout_marginTop="96dp"
+
+        android:ems="10"
+
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+
+        android:id="@+id/newEvent_textView_Description"
+
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="29dp"
+
+        android:layout_marginTop="111dp"
+
+        android:text="@string/event_Description"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+
+        android:id="@+id/newEvent_textView_Date"
+
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="157dp"
+
+        android:text="@string/event_date"
+        app:layout_constraintStart_toStartOf="@+id/newEvent_textView_Description"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <EditText
+
+        android:id="@+id/newEvent_editText_Date"
+
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+
+        android:ems="10"
+
+        android:focusable="false"
+
+        android:inputType="date"
+        app:layout_constraintStart_toStartOf="@+id/newEvent_editText_description"
+        app:layout_constraintTop_toBottomOf="@+id/newEvent_editText_description" />
+
+
+    <TextView
+
+        android:id="@+id/newEvent_textView_startTime"
+
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="209dp"
+
+        android:text="@string/event_startTime"
+        app:layout_constraintStart_toStartOf="@+id/newEvent_textView_Date"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <EditText
+
+        android:id="@+id/newEvent_editText_startTime"
+
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="199dp"
+
+        android:ems="10"
+
+        android:focusable="false"
+        app:layout_constraintStart_toStartOf="@+id/newEvent_editText_description"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+
+        android:id="@+id/newEvent_textView_endTime"
+
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+
+        android:text="@string/event_endtime"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/newEvent_textView_startTime"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <EditText
+
+        android:id="@+id/newEvent_textEdit_endTime"
+
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+
+        android:ems="10"
+
+        android:focusable="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/newEvent_editText_description"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <CheckBox
+
+        android:id="@+id/newEvent_checkBox_SerialEvent"
+
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+
+        android:layout_marginBottom="208dp"
+
+        android:checked="false"
+
+        android:text="@string/event_serialEvent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/newEventTab" />
+
+
+    <Spinner
+
+        android:id="@+id/newEvent_spinner_repetition"
+
+        android:layout_width="match_parent"
+
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="208dp"
+
+        android:entries="@string/event_repetition"
+
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newEvent_checkBox_SerialEvent" />
+
+
+    <TextView
+
+        android:id="@+id/newEvent_textView_repetition"
+
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+
+        android:text="@string/event_repetition"
+
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/newEvent_spinner_repetition"
+        app:layout_constraintStart_toStartOf="@+id/newEvent_textView_Date" />
+
+
+    <TextView
+
+        android:id="@+id/newEvent_textView_endOfRepetiton"
+
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+
+        android:layout_marginBottom="154dp"
+
+        android:text="@string/event_endOfRepetition"
+
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/newEvent_textView_Date" />
+
+
+    <EditText
+
+        android:id="@+id/newEvent_textEdit_endOfRepetition"
+
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+
+        android:ems="10"
+
+        android:focusable="false"
+        app:layout_constraintStart_toStartOf="@+id/newEvent_editText_description"
+        app:layout_constraintTop_toBottomOf="@+id/newEvent_spinner_repetition" />
+
 
     <Button
-        android:id="@+id/btnTEST1"
+
+        android:id="@+id/newEvent_button_save"
+
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+
+        android:layout_marginBottom="16dp"
+
+        android:text="@string/event_save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/newEvent_editText_description" />
+
+
+    <TextView
+
+        android:id="@+id/newEvent_textView_room"
+
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+
+        android:layout_marginBottom="86dp"
+
+        android:text="@string/event_room"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/newEvent_textView_startTime" />
+
+
+    <EditText
+
+        android:id="@+id/newEvent_textEdit_room"
+
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+
+        android:ems="10"
+
+        android:inputType="text"
+        app:layout_constraintBaseline_toBaselineOf="@+id/newEvent_textView_room"
+        app:layout_constraintStart_toStartOf="@+id/newEvent_editText_description" />
+
+    <EditText
+        android:id="@+id/newEvent_textEdit_shortTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TESTBTN 1" />
+        android:ems="10"
+        android:inputType="text|textPersonName"
+        tools:layout_editor_absoluteX="152dp"
+        tools:layout_editor_absoluteY="401dp" />
 
-</RelativeLayout>
+    <TextView
+        android:id="@+id/newEvent_textView_shortTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/event_shortTile"
+        tools:layout_editor_absoluteX="37dp"
+        tools:layout_editor_absoluteY="412dp" />
+
+
+</android.support.constraint.ConstraintLayout>

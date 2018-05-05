@@ -6,10 +6,8 @@ import android.support.annotation.NonNull;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
-import com.activeandroid.query.Select;
 
 import java.util.Date;
-import java.util.List;
 
 
 // Class for both standard and serial event
@@ -20,6 +18,8 @@ public class Event extends Model {
     @Column
     private Person creator;
     @Column
+    private String shortTitle = "";
+    @Column
     private String description = "";
     @Column
     private String place = "";
@@ -28,9 +28,14 @@ public class Event extends Model {
     @Column
     private Date endTime = new Date();
     @Column
-    private boolean accepted;
-    @Column
     private Repetition repetition = Repetition.NONE;
+    @Column
+    private Date endDate = new Date();
+    @Column
+    private AcceptedState accepted;
+    @Column
+    private Event startEvent = null;
+    private long creatorEventId;
 
     public Event(Person creator) {
         this.creator = creator;
@@ -40,18 +45,25 @@ public class Event extends Model {
         super();
     }
 
-    //get all events that start between the start and enddate (both including) or serial events that have a repetition there
-    public static List<Event> findEventByTimePeriod(Date startDate, Date endDate) {
-        List<Event> events = new Select().from(Event.class).leftJoin(Repetitiondate.class).on("events.id=repetitiondates.event_id").where("starttime between ? AND ?", startDate.getTime(), endDate.getTime()).or("date BETWEEN ? AND ?", startDate.getTime(), endDate.getTime()).execute();
-        return events;
-    }
+
 
 //getter-setter
+
+    public void setCreator(Person creator) {
+        this.creator = creator;
+    }
 
     public Person getCreator() {
         return creator;
     }
 
+    public String getShortTitle() {
+        return shortTitle;
+    }
+
+    public void setShortTitle(String shortTitle) {
+        this.shortTitle = shortTitle;
+    }
 
     public String getDescription() {
         return description;
@@ -73,7 +85,7 @@ public class Event extends Model {
         return startTime;
     }
 
-    public void setStartTime(@NonNull Date startTime) {
+    public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
 
@@ -81,16 +93,17 @@ public class Event extends Model {
         return endTime;
     }
 
-    public void setEndTime(@NonNull Date endTime) {
+    public void setEndTime(Date endTime) {
         this.endTime = endTime;
     }
 
-    public boolean isAccepted() {
-        return accepted;
+
+    public Date getEndDate() {
+        return endDate;
     }
 
-    public void setAccepted(boolean accepted) {
-        this.accepted = accepted;
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 
     public Repetition getRepetition() {
@@ -101,10 +114,30 @@ public class Event extends Model {
         this.repetition = repetition;
     }
 
-    public List<Repetitiondate> getRepetitionDates() {
-        return getMany(Repetitiondate.class, "event_id");
+
+    public AcceptedState getAccepted() {
+        return accepted;
     }
 
+    public void setAccepted(AcceptedState accepted) {
+        this.accepted = accepted;
+    }
+
+    public Event getStartEvent() {
+        return startEvent;
+    }
+
+    public void setStartEvent(Event startEvent) {
+        this.startEvent = startEvent;
+    }
+
+    public long getCreatorEventId() {
+        return creatorEventId;
+    }
+
+    public void setCreatorEventId(long creatorEventId) {
+        this.creatorEventId = creatorEventId;
+    }
 }
 
 
