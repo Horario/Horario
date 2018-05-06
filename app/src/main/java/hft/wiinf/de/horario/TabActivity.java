@@ -1,20 +1,17 @@
 package hft.wiinf.de.horario;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 
 import com.activeandroid.ActiveAndroid;
 
 import hft.wiinf.de.horario.view.CalendarActivity;
 import hft.wiinf.de.horario.view.NewEventActivity;
 import hft.wiinf.de.horario.view.SettingsActivity;
-
 public class TabActivity extends AppCompatActivity {
 
     //TODO Kommentieren und Java Doc Info Schreiben
@@ -68,14 +65,6 @@ public class TabActivity extends AppCompatActivity {
                         mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_feedback).setVisibility(View.GONE);
                         mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_copyright).setVisibility(View.GONE);
                         mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_main).setVisibility(View.VISIBLE);
-
-                        //Leave edit mode from EditText in Settings (username)
-                        mSectionsPageAdapter.getItem(2).getActivity().findViewById(R.id.settings_settings_editText_username).setFocusableInTouchMode(false);
-                        mSectionsPageAdapter.getItem(2).getActivity().findViewById(R.id.settings_settings_editText_username).setFocusable(false);
-
-                        //Close the keyboard on a tab change
-                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(mSectionsPageAdapter.getItem(2).getView().getApplicationWindowToken(), 0);
                     } catch (NullPointerException e) {
                         Log.d(TAG, "TabActivity:" + e.getMessage());
                     }
@@ -93,15 +82,6 @@ public class TabActivity extends AppCompatActivity {
                         mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_feedback).setVisibility(View.GONE);
                         mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_copyright).setVisibility(View.GONE);
                         mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_main).setVisibility(View.VISIBLE);
-
-                        //Leave edit mode from EditText in Settings (username)
-                        mSectionsPageAdapter.getItem(2).getActivity().findViewById(R.id.settings_settings_editText_username).setFocusableInTouchMode(false);
-                        mSectionsPageAdapter.getItem(2).getActivity().findViewById(R.id.settings_settings_editText_username).setFocusable(false);
-
-                        //Close the keyboard on a tab change
-                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(mSectionsPageAdapter.getItem(2).getView().getApplicationWindowToken(), 0);
-
                     } catch (NullPointerException e) {
                         Log.d(TAG, "TabActivity:" + e.getMessage());
                     }

@@ -4,20 +4,39 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <RelativeLayout
+        android:id="@+id/newFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="invisible">
 
-    <TextView
-        android:id="@+id/calendarTab"
+
+    </RelativeLayout>
+
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
-        android:text="@string/calendar"
-        android:textSize="25sp" />
+        android:id="@+id/calendar_relativeLayout_main">
+
 
     <Button
-        android:id="@+id/btnTEST2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TESTBTN 2" />
+            android:id="@+id/gotoscanner"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="66dp"
+            android:layout_marginEnd="32dp"
+            android:text="Go To Scanner Temp" />
 
+        <Button
+            android:id="@+id/gotogenerator"
+            android:layout_width="113dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="43dp"
+            android:text="Go to QR Generator" />
+    </RelativeLayout>
 </RelativeLayout>
