@@ -93,5 +93,9 @@
     <string name="empty_fields">Bitte füllen Sie alle Pflichtfelder aus</string>
     <string name="endTime_before_startTime">Die Endzeit darfnicht vor der Startzeit liegen.</string>
     <string name="endOfRepetition_before_endTime">Das Enddatum der Wiederholung darf nicht vor der Endzeit liegen</string>
+    <string name="savingSuccessful_new">neuen Termin anlegen</string>
+    <string name="savingSuccessful_qrcode">QR-Code anzeigen</string>
+    <string name="savingSuccessful_title">Der Termin wurde erfolgreich gespeichert. Was möchten Sie nun tun?</string>
+    <string name="event_saving_successful">Der Termin wurde erfolgreich gespeichert. Was möchten Sie nun tun?</string>
 
 </resources>

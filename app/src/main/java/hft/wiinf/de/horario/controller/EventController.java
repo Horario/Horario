@@ -98,7 +98,7 @@ public class EventController {
             temporary.add(fieldNumber, i);
             repetitionEvent.setEndTime(temporary.getTime());
             //if end of repetition is overruned, stop,p else save the new Event;
-            if (repetitionEvent.getStartTime().after(endOfRepetition.getTime()))
+            if (repetitionEvent.getStartTime().after(firstEvent.getEndDate()))
                 break;
             saveEvent(repetitionEvent);
         }
