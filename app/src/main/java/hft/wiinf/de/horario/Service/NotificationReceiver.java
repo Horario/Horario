@@ -19,11 +19,13 @@ public class NotificationReceiver extends BroadcastReceiver {
     }
 
     private void addNotification(Context context, Intent intent) {
+        String msg = "Erinnerung an \"" + intent.getStringExtra("Event") + "\" um " + intent.getIntExtra("Hour",0) + ":" + intent.getIntExtra("Minute",0) + " Uhr";
+
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(context, "")
                         .setSmallIcon(R.drawable.ic_android_black2_24dp)
-                        .setContentTitle("ALARM")
-                        .setContentText(intent.getStringExtra("Event") + " in " + intent.getStringExtra("Time") + " Minuten");
+                        .setContentTitle("Terminerinnerung")
+                        .setContentText(msg);
 
         Intent notificationIntent = new Intent(context, TabActivity.class);
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent,

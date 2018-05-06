@@ -14,6 +14,7 @@ import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.model.Repetition;
 
 public class EventController {
+
     //saves (update or create)an event
     public static void saveEvent(Event event) {
         event.save();

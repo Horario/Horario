@@ -19,6 +19,9 @@ public class Person extends Model{
     boolean isItMe = false;
     @Column
     int notificationTime;
+    @Column
+    boolean allowNotifications = true;
+
 
     //Use this constructor for person that using this specific app (owner)
     public Person(boolean isItMe, String phoneNumber, String name) {
@@ -80,5 +83,13 @@ public class Person extends Model{
 
     public void setNotificationTime(int notificationTime) {
         this.notificationTime = notificationTime;
+    }
+
+    public boolean isAllowNotifications() {
+        return allowNotifications;
+    }
+
+    public void setAllowNotifications(boolean allowNotifications) {
+        this.allowNotifications = allowNotifications;
     }
 }

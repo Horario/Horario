@@ -67,11 +67,6 @@ public class SettingsActivity extends Fragment {
             Log.d(TAG, "SettingsActivity:" + e.getMessage());
         }
 
-        Intent alarmIntent = new Intent(getActivity(), NotificationReceiver.class);
-        alarmIntent.putExtra("Event","Beispielevent");
-        alarmIntent.putExtra("Time","15");
-        pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, alarmIntent, 0);
-
         //Initialize all Gui-Elements
         button_settings = (Button) view.findViewById(R.id.settings_button_settings);
         button_support = (Button) view.findViewById(R.id.settings_button_support);
@@ -96,19 +91,29 @@ public class SettingsActivity extends Fragment {
         button_settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Person person = new Person(true, "023131", "Flolilo");
-
                 Calendar cal = Calendar.getInstance();
                 cal.set(Calendar.YEAR, 2018);
                 cal.set(Calendar.MONTH, 4);
-                cal.set(Calendar.DAY_OF_MONTH, 3);
-                cal.set(Calendar.HOUR_OF_DAY, 15);
-                cal.set(Calendar.MINUTE, 45);
+                cal.set(Calendar.DAY_OF_MONTH, 5);
+                cal.set(Calendar.HOUR_OF_DAY, 13);
+                cal.set(Calendar.MINUTE, 35);
                 cal.set(Calendar.SECOND, 0);
                 cal.set(Calendar.MILLISECOND, 0);
 
-                AlarmManager manager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-                manager.set(AlarmManager.RTC_WAKEUP, calcNotificationTime(cal.getTimeInMillis(),person) , pendingIntent);
+                if(PersonController.getPersonWhoIam() != null){
+                    Person notificationPerson = PersonController.getPersonWhoIam();
+                    if(notificationPerson.isAllowNotifications()) {
+                        Intent alarmIntent = new Intent(getActivity(), NotificationReceiver.class);
+                        alarmIntent.putExtra("Event","Beispielevent");
+                        alarmIntent.putExtra("Hour",cal.get(Calendar.HOUR));
+                        alarmIntent.putExtra("Minute",cal.get(Calendar.MINUTE));
+                        pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, alarmIntent, 0);
+
+                        AlarmManager manager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+                        manager.set(AlarmManager.RTC_WAKEUP, calcNotificationTime(cal.getTimeInMillis(), notificationPerson.getNotificationTime()), pendingIntent);
+                    }
+                }
+
 
                 rLayout_main.setVisibility(View.GONE);
                 rLayout_settings.setVisibility(View.VISIBLE);
@@ -202,7 +207,7 @@ public class SettingsActivity extends Fragment {
         });
     }
 
-    public long calcNotificationTime(long eventTimeInMillis, Person person){
-        return eventTimeInMillis - (person.getNotificationTime() * 60000);
+    public long calcNotificationTime(long eventTimeInMillis, int notificationTime){
+        return eventTimeInMillis - (notificationTime * 60000);
     }
 }

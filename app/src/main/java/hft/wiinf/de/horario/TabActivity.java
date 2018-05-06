@@ -21,11 +21,14 @@ import android.widget.Toast;
 import com.activeandroid.ActiveAndroid;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import hft.wiinf.de.horario.Service.NotificationReceiver;
+import hft.wiinf.de.horario.controller.EventController;
 import hft.wiinf.de.horario.controller.PersonController;
+import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.view.CalendarActivity;
 import hft.wiinf.de.horario.view.NewEventActivity;
@@ -67,6 +70,8 @@ public class TabActivity extends AppCompatActivity {
         if (PersonController.getPersonWhoIam() == null) {
             openDialogAskForUsername();
         }
+
+        addSomeEvents();
     }
 
     //Method will be called after UI-Elements are created
@@ -182,5 +187,34 @@ public class TabActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void addSomeEvents(){
+        Person person = new Person(true,"0711","Flolilo");
+        PersonController.savePerson(person);
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, 2018);
+        cal.set(Calendar.MONTH, 4);
+        cal.set(Calendar.DAY_OF_MONTH, 3);
+        cal.set(Calendar.HOUR_OF_DAY, 22);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+
+        Calendar cal1 = Calendar.getInstance();
+        cal1.set(Calendar.YEAR, 2018);
+        cal1.set(Calendar.MONTH, 4);
+        cal1.set(Calendar.DAY_OF_MONTH, 3);
+        cal1.set(Calendar.HOUR_OF_DAY, 21);
+        cal1.set(Calendar.MINUTE, 45);
+        cal1.set(Calendar.SECOND, 0);
+        cal1.set(Calendar.MILLISECOND, 0);
+
+        Event event1 = new Event(person,1,"Beispielevent1","HFT",cal.getTime(),null,true);
+        Event event2 = new Event(person,1,"Beispielevent2","HFT",cal1.getTime(),null,true);
+
+        EventController.saveEvent(event1);
+        EventController.saveEvent(event2);
     }
 }

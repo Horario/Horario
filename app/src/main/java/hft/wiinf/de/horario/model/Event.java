@@ -29,6 +29,17 @@ public class Event extends Model {
     private Date endTime = new Date();
     @Column
     private boolean accepted;
+
+    public Event(Person creator, int creatorEventId, String description, String place, Date startTime, Date endTime, boolean accepted){
+        this.creator = creator;
+        this.creatorEventId = creatorEventId;
+        this.description = description;
+        this.place = place;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.accepted = accepted;
+    }
+
     public Event(Person creator) {
         this.creator = creator;
     }
