@@ -46,7 +46,7 @@
 
     <string name="endOfRepetition_before_endTime">Das Enddatum der Wiederholung darf nicht vor der Endzeit liegen</string>
     <string name="event_saving_successful">Der termin wurde erfolgreich gespeichert. Was möchten Sie nun tun?</string>
-<string name="savingSuccessful_new">neuen termin erstellen</string>
+<string name="savingSuccessful_new">neuen Termin erstellen</string>
     <string name="savingSuccessful_qrcode">QRCode anzeigen</string>
 
     <string name="titleDialogUsername">Bitte vergeben Sie einen Benutzernamen :)</string>
@@ -56,6 +56,16 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="description_too_long">Die beschreibung darf nicht länger als 500 Zeichen sein.</string>
+    <string name="description_too_long">Die Beschreibung darf nicht länger als 500 Zeichen sein.</string>
     <string name="shortTitle_too_long">Der Kurztitel darf nicht länger als 100 Zeichen sein.</string>
+
+    <string-array name="push_times">
+        <item name="push_time_0">0</item>
+        <item name="push_time_5">5</item>
+        <item name="push_time_15">15</item>
+        <item name="push_time_30">30</item>
+        <item name="push_time_60">60</item>
+        <item name="push_time_90">90</item>
+        <item name="push_time_120">120</item>
+    </string-array>
 </resources>

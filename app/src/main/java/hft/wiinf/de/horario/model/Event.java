@@ -93,7 +93,6 @@ public class Event extends Model {
         this.endTime = endTime;
     }
 
-
     public Date getEndDate() {
         return endDate;
     }

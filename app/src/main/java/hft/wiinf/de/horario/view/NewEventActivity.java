@@ -73,7 +73,6 @@ public class NewEventActivity extends Fragment {
         spinner_repetition = view.findViewById(R.id.newEvent_spinner_repetition);
         editText_endOfRepetition = view.findViewById(R.id.newEvent_textEdit_endOfRepetition);
         textView_endofRepetiton = view.findViewById(R.id.newEvent_textView_endOfRepetiton);
-        spinner_repetition = view.findViewById(R.id.newEvent_spinner_repetition);
         textView_repetition = view.findViewById(R.id.newEvent_textView_repetition);
         button_save = view.findViewById(R.id.newEvent_button_save);
         edittext_date.setShowSoftInputOnFocus(false);
@@ -298,7 +297,7 @@ public class NewEventActivity extends Fragment {
         edittext_startTime.setText("");
         editText_endTime.setText("");
         checkBox_serialEvent.setChecked(false);
-        spinner_repetition.setSelection(0);
+        spinner_repetition.setSelected(false);
         editText_endOfRepetition.setText("");
         checkSerialEvent();
     }
