@@ -174,7 +174,7 @@ public class NewEventActivity extends Fragment {
             public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
                 startTime.set(year, month, dayOfMonth);
                 endTime.set(year, month, dayOfMonth);
-                DateFormat format = new SimpleDateFormat("dd.MM.YYYY");
+                DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
                 edittext_date.setText(format.format(startTime.getTime()));
             }
         };
@@ -221,7 +221,7 @@ public class NewEventActivity extends Fragment {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
                 endOfRepetition.set(year, month, dayOfMonth);
-                DateFormat format = new SimpleDateFormat("dd.MM.YYYY");
+                DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
                 editText_endOfRepetition.setText(format.format(endOfRepetition.getTime()));
             }
         };
@@ -332,7 +332,7 @@ public class NewEventActivity extends Fragment {
 
                 if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches()) {
                     //ToDo: Flo - PhoneNumber
-                    Person me = new Person("007", dialog_inputUsername);
+                    Person me = new Person(true,"007", dialog_inputUsername);
                     PersonController.addPersonMe(me);
 
                     Toast toast = Toast.makeText(v.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT);
