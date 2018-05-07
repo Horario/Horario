@@ -72,7 +72,7 @@ public class EventOverviewActivity extends Fragment {
 
     //get all events for the selected month and save them in a adapter
     public ArrayAdapter iterateOverMonth(Date date){ //TODO create own Adapter
-        ArrayList<String> eventArray = new ArrayList<>();
+        ArrayList<OverviewListItems> eventArray = new ArrayList<>();
         Date day = new Date(date.getTime());
         int endDate = date.getMonth();
         while (day.getMonth() <= endDate){
@@ -81,18 +81,20 @@ public class EventOverviewActivity extends Fragment {
             endOfDay.add(Calendar.DAY_OF_MONTH, 1);
             List<hft.wiinf.de.horario.model.Event> eventList = EventController.findEventsByTimePeriod(day, endOfDay.getTime());
             if (eventList.size()>0){
-                eventArray.add(CalendarActivity.dayFormat.format(day));
+                OverviewListItems item = new OverviewListItems(CalendarActivity.dayFormat.format(day));
+                item.createAppointment("Test", "12Uhr", "blue");
+                item.createAppointment("Test 2", "13Uhr", "blue");
+                System.out.println(item.getList().size());
+                eventArray.add(item);
             }
-            for (int i = 0; i<eventList.size(); i++){
-                eventArray.add(eventList.get(i).getDescription());
-            }
+
             //TODO was wenn keine Termine in diesem Monat sind, irgendeine Message anzeigen? Abhandeln über eventArray size
             day.setTime(endOfDay.getTimeInMillis());
         }
         if(eventArray.size() < 1){ //when no events this month do stuff
-            eventArray.add("Du hast keine Termine diesen Monat");
+
         }
-        ArrayAdapter adapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, eventArray);
+        OverviewAdapter adapter = new OverviewAdapter(getContext(), R.layout.adapter_overview_list, eventArray);
         return adapter;
     }
 }
