@@ -21,17 +21,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.sql.Time;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
-import java.util.SimpleTimeZone;
-import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import hft.wiinf.de.horario.R;
-import hft.wiinf.de.horario.Service.NotificationReceiver;
+import hft.wiinf.de.horario.service.NotificationReceiver;
 import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.Person;
 
@@ -107,6 +102,7 @@ public class SettingsActivity extends Fragment {
                         alarmIntent.putExtra("Event","Beispielevent");
                         alarmIntent.putExtra("Hour",cal.get(Calendar.HOUR));
                         alarmIntent.putExtra("Minute",cal.get(Calendar.MINUTE));
+                        alarmIntent.putExtra("Day",cal.getTime().getDate());
                         pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, alarmIntent, 0);
 
                         AlarmManager manager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);

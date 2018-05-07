@@ -1,4 +1,4 @@
-package hft.wiinf.de.horario.Service;
+package hft.wiinf.de.horario.service;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -19,7 +19,7 @@ public class NotificationReceiver extends BroadcastReceiver {
     }
 
     private void addNotification(Context context, Intent intent) {
-        String msg = "Erinnerung an \"" + intent.getStringExtra("Event") + "\" um " + intent.getIntExtra("Hour",0) + ":" + intent.getIntExtra("Minute",0) + " Uhr";
+        String msg = "Erinnerung an \"" + intent.getStringExtra("Event") + "\" am " + intent.getIntExtra("Day",0) + " um " + intent.getIntExtra("Hour",0) + ":" + intent.getIntExtra("Minute",0) + " Uhr";
 
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(context, "")

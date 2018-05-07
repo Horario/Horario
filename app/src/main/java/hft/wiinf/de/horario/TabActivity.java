@@ -1,10 +1,7 @@
 package hft.wiinf.de.horario;
 
-import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -19,13 +16,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.activeandroid.ActiveAndroid;
+import com.facebook.stetho.Stetho;
 
 import java.util.Calendar;
-import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import hft.wiinf.de.horario.Service.NotificationReceiver;
 import hft.wiinf.de.horario.controller.EventController;
 import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.Event;
@@ -52,6 +49,7 @@ public class TabActivity extends AppCompatActivity {
 
         //Start DB
         ActiveAndroid.initialize(this);
+        Stetho.initializeWithDefaults(this);
 
         mSectionsPageAdapter = new SectionsPageAdapterActivity(getSupportFragmentManager());
 
@@ -211,10 +209,15 @@ public class TabActivity extends AppCompatActivity {
         cal1.set(Calendar.SECOND, 0);
         cal1.set(Calendar.MILLISECOND, 0);
 
-        Event event1 = new Event(person,1,"Beispielevent1","HFT",cal.getTime(),null,true);
-        Event event2 = new Event(person,1,"Beispielevent2","HFT",cal1.getTime(),null,true);
+        Event event1 = new Event(person,1,"Beispielevent1","HFT",cal.getTime(),cal.getTime(),true);
+        Event event2 = new Event(person,1,"Beispielevent2","HFT",cal1.getTime(),cal.getTime(),true);
 
         EventController.saveEvent(event1);
         EventController.saveEvent(event2);
+
+        List<Event> allEvents = EventController.findMyAcceptedEvents();
+        for (Event event : allEvents) {
+            Log.d("TABACHTIVIY",event.getDescription());
+        }
     }
 }

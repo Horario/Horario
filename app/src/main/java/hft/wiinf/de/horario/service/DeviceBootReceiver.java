@@ -1,11 +1,10 @@
-package hft.wiinf.de.horario.Service;
+package hft.wiinf.de.horario.service;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import java.util.List;
@@ -19,24 +18,20 @@ public class DeviceBootReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
-            SQLiteDatabase db = context.openOrCreateDatabase("horario.db",context.MODE_PRIVATE,null);
+        Log.i("TAG", "Received action: " + intent.getAction());
+        //if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
             if (PersonController.getPersonWhoIam() != null) {
                 Person notificationPerson = PersonController.getPersonWhoIam();
-                Log.d("dede", "DeviceREboot: Event" + notificationPerson.getName());
                 if (notificationPerson.isAllowNotifications()) {
                     startNotification(context, intent, notificationPerson);
                 }
             }
-        }
+        //}
     }
 
     public void startNotification(Context context, Intent intent, Person notificationPerson) {
         List<Event> allEvents = EventController.findMyAcceptedEvents();
-        Log.d("dede", "DeviceREboot: Event" + notificationPerson.getName());
         for (Event event : allEvents) {
-            Log.d("dede", "DeviceREboot: Event");
-            Log.d("dede", "DeviceREboot: " + event.getDescription());
             Intent alarmIntent = new Intent(context, context.NOTIFICATION_SERVICE.getClass());
             alarmIntent.putExtra("Event", event.getDescription());
             alarmIntent.putExtra("Hour", event.getStartTime().getHours());
