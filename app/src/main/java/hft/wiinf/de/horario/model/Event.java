@@ -45,13 +45,13 @@ public class Event extends Model {
         super();
     }
 
-
+    //get all events that start between the start and enddate (both including) or serial events that have a repetition there
+    public static List<Event> findEventByTimePeriod(Date startDate, Date endDate) {
+        List<Event> events = new Select().from(Event.class).leftJoin(Repetitiondate.class).on("events.id=repetitiondates.event_id").where("starttime between ? AND ?", startDate.getTime(), endDate.getTime()).or("date BETWEEN ? AND ?", startDate.getTime(), endDate.getTime()).execute();
+        return events;
+    }
 
 //getter-setter
-
-    public void setCreator(Person creator) {
-        this.creator = creator;
-    }
 
     public Person getCreator() {
         return creator;
@@ -85,7 +85,7 @@ public class Event extends Model {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(@NonNull Date startTime) {
         this.startTime = startTime;
     }
 
@@ -93,7 +93,7 @@ public class Event extends Model {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(@NonNull Date endTime) {
         this.endTime = endTime;
     }
 
