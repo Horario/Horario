@@ -16,6 +16,7 @@ public class PersonController {
             Person me = PersonController.getPersonWhoIam();
             if (me == null)
                 person.save();
+            else
             me.setName(person.getName());
             me.save();
         } catch (Exception e) {

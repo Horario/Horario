@@ -58,8 +58,8 @@ public class TabActivity extends AppCompatActivity {
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_android_black_24dp);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_android_black2_24dp);
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_android_black3_24dp);
-
-        if (PersonController.getPersonWhoIam() == null) {
+personMe=PersonController.getPersonWhoIam();
+        if (personMe == null||personMe.getName().equals("")) {
             openDialogAskForUsername();
         }
     }
@@ -156,7 +156,7 @@ public class TabActivity extends AppCompatActivity {
 
                 if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches()) {
                     //ToDo: Flo - PhoneNumber
-                    personMe = new Person(true, "007", dialog_inputUsername);
+                    personMe = new Person(true,"007", dialog_inputUsername);
                     PersonController.addPersonMe(personMe);
 
                     Toast toast = Toast.makeText(v.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT);

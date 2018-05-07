@@ -80,11 +80,10 @@ public class EventController {
         saveEvent(firstEvent);
         for (int i = 1; ; i++) {
             //copy first event in new temporary event and update the needed field of start and end time
-            Event repetitionEvent = new Event();
+            Event repetitionEvent = new Event(firstEvent.getCreator());
             repetitionEvent.setPlace(firstEvent.getPlace());
             repetitionEvent.setDescription(firstEvent.getDescription());
             repetitionEvent.setAccepted(firstEvent.getAccepted());
-            repetitionEvent.setCreator(firstEvent.getCreator());
             repetitionEvent.setEndTime(firstEvent.getEndDate());
             repetitionEvent.setShortTitle(firstEvent.getShortTitle());
             repetitionEvent.setStartEvent(firstEvent);

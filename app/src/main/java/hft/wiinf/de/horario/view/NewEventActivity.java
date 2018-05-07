@@ -1,6 +1,7 @@
 package hft.wiinf.de.horario.view;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
@@ -59,8 +60,9 @@ public class NewEventActivity extends Fragment {
         return view;
     }
 
+
+
     public void onViewCreated(final View view, Bundle savedInstanceState) {
-        view.findViewById(R.id.newEvent_oldFragment).setVisibility(View.VISIBLE);
         edittext_shortTitle = view.findViewById(R.id.newEvent_textEdit_shortTitle);
         editText_description = view.findViewById(R.id.newEvent_editText_description);
         edittext_room = view.findViewById(R.id.newEvent_textEdit_room);
@@ -193,7 +195,7 @@ public class NewEventActivity extends Fragment {
                 edittext_startTime.setText(format.format(startTime.getTime()));
             }
         };
-        TimePickerDialog dialog = new TimePickerDialog(this.getContext(), listener, startTime.get(Calendar.HOUR), startTime.get(Calendar.MINUTE), true);
+        TimePickerDialog dialog = new TimePickerDialog(this.getContext(), listener, startTime.get(Calendar.HOUR_OF_DAY), startTime.get(Calendar.MINUTE), true);
         dialog.show();
     }
 
@@ -210,7 +212,7 @@ public class NewEventActivity extends Fragment {
                 editText_endTime.setText(format.format(endTime.getTime()));
             }
         };
-        TimePickerDialog dialog = new TimePickerDialog(this.getContext(), listener, endTime.get(Calendar.HOUR), endTime.get(Calendar.MINUTE), true);
+        TimePickerDialog dialog = new TimePickerDialog(this.getContext(), listener, endTime.get(Calendar.HOUR_OF_DAY), endTime.get(Calendar.MINUTE), true);
         dialog.show();
     }
 
@@ -232,7 +234,7 @@ public class NewEventActivity extends Fragment {
     public void onButtonClickSave() {
         if (checkValidity()) {
             Person me = PersonController.getPersonWhoIam();
-            if (me == null || me.getName() == null)
+            if (me == null || me.getName().equals(""))
                 askforUserName();
             else
                 saveEvent();
@@ -298,16 +300,27 @@ public class NewEventActivity extends Fragment {
         checkBox_serialEvent.setChecked(false);
         spinner_repetition.setSelection(0);
         editText_endOfRepetition.setText("");
+        checkSerialEvent();
     }
 
 
     private void askforUserName() {
-        final Dialog dialogAskForUsername = new Dialog(getContext());
-        dialogAskForUsername.setContentView(R.layout.dialog_askforusername);
+        final AlertDialog.Builder dialogAskForUsername = new AlertDialog.Builder(getContext());
+        dialogAskForUsername.setView(R.layout.dialog_askforusername);
         dialogAskForUsername.setTitle(R.string.titleDialogUsername);
         dialogAskForUsername.setCancelable(true);
-        dialogAskForUsername.show();
-        EditText username = dialogAskForUsername.findViewById(R.id.dialog_EditText_Username);
+
+        final AlertDialog alertDialogAskForUsername = dialogAskForUsername.create();
+        alertDialogAskForUsername.show();
+
+        EditText username =alertDialogAskForUsername.findViewById(R.id.dialog_EditText_Username);
+        alertDialogAskForUsername.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                PersonController.addPersonMe(new Person(true,"007",""));
+                saveEvent();
+            }
+        });
         username.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -320,30 +333,37 @@ public class NewEventActivity extends Fragment {
 
                 if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches()) {
                     //ToDo: Flo - PhoneNumber
-                    Person personMe = new Person("007", dialog_inputUsername);
-                    PersonController.addPersonMe(personMe);
+                    Person me = new Person("007", dialog_inputUsername);
+                    PersonController.addPersonMe(me);
 
-                    Toast.makeText(v.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT).show();
-                    return true;
-                } else {
-                    Toast.makeText(v.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT).show();
+                    Toast toast = Toast.makeText(v.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT);
+                    toast.show();
+
+                    alertDialogAskForUsername.cancel();
+                    PersonController.addPersonMe(new Person("007",""));
                     return false;
+                } else {
+                    Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
+                    toast.show();
+                    return true;
                 }
+
             }
         });
-        dialogAskForUsername.setOnDismissListener(
-                new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        saveEvent();
-                    }
-                }
-        );
     }
+
 
     private boolean checkValidity() {
         if (editText_description.getText().toString().equals("") || edittext_shortTitle.getText().toString().equals("") || edittext_date.getText().toString().equals("") || edittext_startTime.getText().toString().equals("") || editText_endTime.getText().toString().equals("") || edittext_room.getText().toString().equals("")) {
             Toast.makeText(getContext(), R.string.empty_fields, Toast.LENGTH_LONG).show();
+            return false;
+        }
+        if (editText_description.getText().length()>500){
+            Toast.makeText(getContext(), R.string.description_too_long, Toast.LENGTH_LONG).show();
+            return false;
+        }
+        if (editText_description.getText().length()>100){
+            Toast.makeText(getContext(), R.string.shortTitle_too_long, Toast.LENGTH_LONG).show();
             return false;
         }
         if (endTime.before(startTime)) {

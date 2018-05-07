@@ -6,8 +6,10 @@ import android.support.annotation.NonNull;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
 
 import java.util.Date;
+import java.util.List;
 
 
 // Class for both standard and serial event
@@ -43,12 +45,6 @@ public class Event extends Model {
 
     public Event() {
         super();
-    }
-
-    //get all events that start between the start and enddate (both including) or serial events that have a repetition there
-    public static List<Event> findEventByTimePeriod(Date startDate, Date endDate) {
-        List<Event> events = new Select().from(Event.class).leftJoin(Repetitiondate.class).on("events.id=repetitiondates.event_id").where("starttime between ? AND ?", startDate.getTime(), endDate.getTime()).or("date BETWEEN ? AND ?", startDate.getTime(), endDate.getTime()).execute();
-        return events;
     }
 
 //getter-setter
