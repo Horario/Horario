@@ -85,16 +85,14 @@ public class EventController {
             repetitionEvent.setDescription(firstEvent.getDescription());
             repetitionEvent.setAccepted(firstEvent.getAccepted());
             repetitionEvent.setCreator(firstEvent.getCreator());
-            repetitionEvent.setStartTime(firstEvent.getStartTime());
-            repetitionEvent.setEndTime(firstEvent.getEndTime());
             repetitionEvent.setEndTime(firstEvent.getEndDate());
             repetitionEvent.setShortTitle(firstEvent.getShortTitle());
             repetitionEvent.setStartEvent(firstEvent);
             Calendar temporary = new GregorianCalendar();
-            temporary.setTime(repetitionEvent.getStartTime());
+            temporary.setTime(firstEvent.getStartTime());
             temporary.add(fieldNumber, i);
             repetitionEvent.setStartTime(temporary.getTime());
-            temporary.setTime(repetitionEvent.getEndTime());
+            temporary.setTime(firstEvent.getEndTime());
             temporary.add(fieldNumber, i);
             repetitionEvent.setEndTime(temporary.getTime());
             //if end of repetition is overruned, stop,p else save the new Event;

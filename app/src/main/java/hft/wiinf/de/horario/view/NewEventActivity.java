@@ -27,6 +27,8 @@ import android.widget.Toast;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -58,6 +60,7 @@ public class NewEventActivity extends Fragment {
     }
 
     public void onViewCreated(final View view, Bundle savedInstanceState) {
+        view.findViewById(R.id.newEvent_oldFragment).setVisibility(View.VISIBLE);
         edittext_shortTitle = view.findViewById(R.id.newEvent_textEdit_shortTitle);
         editText_description = view.findViewById(R.id.newEvent_editText_description);
         edittext_room = view.findViewById(R.id.newEvent_textEdit_room);
@@ -76,7 +79,6 @@ public class NewEventActivity extends Fragment {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus)
-
                     getDate();
             }
         });
@@ -143,6 +145,11 @@ public class NewEventActivity extends Fragment {
                 onButtonClickSave();
             }
         });
+        if (getArguments()!=null){
+            Long eventId = getArguments().getLong("eventId");
+            if (eventId != null)
+                readGivenEvent(eventId);
+        }
     }
 
     private void checkSerialEvent() {
@@ -247,11 +254,12 @@ public class NewEventActivity extends Fragment {
             EventController.saveSerialevent(event);
         } else
             EventController.saveEvent(event);
-        openSavedSuccessfulDialog();
+        openSavedSuccessfulDialog(event.getId());
 
     }
 
-    private void openSavedSuccessfulDialog() {
+    private void openSavedSuccessfulDialog(final long eventId) {
+        clearEntrys();
         final Dialog dialogSavingSuccessful = new Dialog(getContext());
         dialogSavingSuccessful.setContentView(R.layout.dialog_savingsucessfull);
         dialogSavingSuccessful.setCancelable(true);
@@ -259,13 +267,23 @@ public class NewEventActivity extends Fragment {
         dialogSavingSuccessful.findViewById(R.id.savingSuccessful_button_new).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clearEntrys();
+                dialogSavingSuccessful.dismiss();
             }
         });
         dialogSavingSuccessful.findViewById(R.id.savingSuccessful_button_qrcode).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clearEntrys();
+                dialogSavingSuccessful.dismiss();
+                QRGeneratorActivity qrFrag= new QRGeneratorActivity();
+                Bundle bundle = new Bundle();
+                bundle.putLong("eventId",eventId);
+                qrFrag.setArguments(bundle);
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.newEvent_newFragment, qrFrag)
+                        .addToBackStack(null)
+                        .commit();
+                getView().findViewById(R.id.newEvent_oldFragment).setVisibility(View.INVISIBLE);
+                getView().findViewById(R.id.newEvent_newFragment).setVisibility(View.VISIBLE);
             }
         });
     }
@@ -353,6 +371,45 @@ public class NewEventActivity extends Fragment {
             default:
                 return Repetition.DAILY;
 
+        }
+    }
+
+    public void readGivenEvent(long eventId) {
+        Event event = EventController.getEventById(eventId);
+        if (event != null) {
+            edittext_shortTitle.setText(event.getShortTitle());
+            editText_description.setText(event.getDescription());
+            startTime.setTime(event.getStartTime());
+            DateFormat format = new SimpleDateFormat("dd.MM.YYYY");
+            edittext_date.setText(format.format(event.getStartTime()));
+            format = new SimpleDateFormat("HH:mm");
+            edittext_startTime.setText(format.format(event.getStartTime()));
+            endTime.setTime(event.getEndTime());
+            editText_endTime.setText(format.format(event.getEndTime()));
+            edittext_room.setText(event.getPlace());
+            checkBox_serialEvent.setChecked(event.getRepetition() != Repetition.NONE);
+            checkSerialEvent();
+            switch (event.getRepetition()) {
+                case YEARLY:
+                    spinner_repetition.setSelection(0);
+                    break;
+                case MONTHLY:
+                    spinner_repetition.setSelection(1);
+                    break;
+                case WEEKLY:
+                    spinner_repetition.setSelection(2);
+                    break;
+                case DAILY:
+                    spinner_repetition.setSelection(3);
+                    break;
+                default:
+                    spinner_repetition.setSelected(false);
+            }
+            endOfRepetition.setTime(event.getEndDate());
+            if (endOfRepetition != null) {
+                format = new SimpleDateFormat("dd.MM.YYYY");
+                editText_endOfRepetition.setText(format.format(endOfRepetition));
+            }
         }
     }
 }

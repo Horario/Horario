@@ -5,11 +5,17 @@
     android:layout_width="match_parent"
 
     android:layout_height="match_parent"
-
-    android:id="@+id/relativeLayout"
     android:orientation="vertical">
 
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+    android:id="@+id/newEvent_newFragment"
+        android:visibility="visible"></RelativeLayout>
+    <RelativeLayout android:id="@+id/newEvent_oldFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <TextView
 
         android:id="@+id/newEventTab"
@@ -278,7 +284,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="56dp"
-        android:text="@string/event_shortTile" />
+        android:text="@string/event_shortTitle" />
 
 
+</RelativeLayout>
 </RelativeLayout>

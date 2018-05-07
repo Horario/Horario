@@ -1,11 +1,5 @@
 <resources>
     <string name="app_name">Horario</string>
-
-
-    <string name="CreateAppointment_Dropdown_repetition_yearly">jährlich</string>
-    <string name="CreateAppointment_Dropdown_repetition_monthly">monatlich</string>
-    <string name="CreateAppointment_Dropdown_repetition_weekly">wöchentlich</string>
-    <string name="CreateAppointment_Dropdown_repetition_daily">täglich</string>
     <string name="Test">Test</string>
     <string name="title_activity_test">Test</string>
     <string name="title_activity_tab">TabActivity</string>
@@ -17,7 +11,7 @@
     <string name="button_name_scan">SCAN</string>
     <string name="button_show_data">showData</string>
     <string name="title_activity_scan">QRCode Scanner</string>
-
+    <string name="event_repetition">Wiederholungshäufigkeit</string>
     <string name="setting">Setting</string>
     <string name="newEvent">newEvent</string>
     <string name="calendar">calendar</string>
@@ -31,4 +25,32 @@
     <string name="reminder_text">Erinnerungen :</string>
     <string name="minutesBefore_text">Minuten vorher</string>
     <string name="noValidUsername">Benutzername darf nicht mit Leerzeichen anfangen!</string>
+    <string name="event_Description">Terminbeschreibung</string>
+    <string name="event_date">Datum</string>
+    <string name="event_startTime">Startzeit</string>
+    <string name="event_endtime">Endzeit</string>
+    <string name="event_serialEvent">Serientermin</string>
+    <string name="event_endOfRepetition">wiederholen bis</string>
+    <string name="event_save">Termin speichern</string>
+    <string name="event_room">Raum</string>
+    <string name="event_shortTitle">Kurztitel</string>
+    <string-array name="event_repetitions">
+        <item name="event_repetition_yearly">jährlich</item>
+        <item name="event_repetition_monthly">monatlich</item>
+        <item name="event_repetition_weekly">wöchentlich</item>
+        <item name="event_repetition_daily">täglich</item>
+    </string-array>
+    <string name="empty_fields">Bitte füllen Sie alle Pflichtfelder aus</string>
+
+    <string name="endTime_before_startTime">Die Endzeit darf nicht vor der Startzeit liegen.</string>
+
+    <string name="endOfRepetition_before_endTime">Das Enddatum der Wiederholung darf nicht vor der Endzeit liegen</string>
+    <string name="event_saving_successful">Der termin wurde erfolgreich gespeichert. Was möchten Sie nun tun?</string>
+<string name="savingSuccessful_new">neuen termin erstellen</string>
+    <string name="savingSuccessful_qrcode">QRCode anzeigen</string>
+
+    <string name="titleDialogUsername">Bitte vergeben Sie einen Benutzernamen :)</string>
+    <string name="save_text">speichern</string>
+    <string name="later_text">Später</string>
+    <string name="thanksForUsername">Benutzername wurde gespeichert! </string>
 </resources>

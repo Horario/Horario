@@ -55,19 +55,15 @@ public class QRGeneratorActivity extends Fragment {
         Date startDate = new Date();
         Date endDate = new Date();
 
-        mEvent = new Event();
-        mEvent.setDescription("Wir machen Experimente im Labor 3");
-        mEvent.setPlace("Labor 3");
-        mEvent.setStartTime(startDate);
-        mEvent.setEndTime(endDate);
-        EventController.addEvent(mEvent);
+mEvent = EventController.getEventById(getArguments().getLong("eventId"));
 
-        mEvent2 = new Event();
+
+       /* mEvent2 = new Event();
         mEvent.setDescription("Mathe mit Hr. Conradt");
         mEvent.setPlace("1/208");
         mEvent.setStartTime(startDate);
         mEvent.setEndTime(endDate);
-        EventController.addEvent(mEvent2);
+        EventController.saveEvent(mEvent2);*/
         return view;
     }
 
