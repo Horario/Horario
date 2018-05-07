@@ -15,11 +15,10 @@ public class NotificationReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         addNotification(context, intent);
-
     }
 
     private void addNotification(Context context, Intent intent) {
-        String msg = "Erinnerung an \"" + intent.getStringExtra("Event") + "\" am " + intent.getIntExtra("Day",0) + " um " + intent.getIntExtra("Hour",0) + ":" + intent.getIntExtra("Minute",0) + " Uhr";
+        String msg = "Erinnerung an \"" + intent.getStringExtra("Event") + "\" am " + intent.getIntExtra("Day", 0) + " um " + intent.getIntExtra("Hour", 0) + ":" + intent.getIntExtra("Minute", 0) + " Uhr";
 
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(context, "")
@@ -28,12 +27,12 @@ public class NotificationReceiver extends BroadcastReceiver {
                         .setContentText(msg);
 
         Intent notificationIntent = new Intent(context, TabActivity.class);
-        PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent,
+        PendingIntent contentIntent = PendingIntent.getActivity(context, intent.getIntExtra("ID", 0), notificationIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(contentIntent);
 
         // Add as notification
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        manager.notify(1, builder.build());
+        manager.notify(intent.getIntExtra("ID",0), builder.build());
     }
 }

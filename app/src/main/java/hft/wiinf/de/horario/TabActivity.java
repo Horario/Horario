@@ -194,8 +194,8 @@ public class TabActivity extends AppCompatActivity {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, 2018);
         cal.set(Calendar.MONTH, 4);
-        cal.set(Calendar.DAY_OF_MONTH, 3);
-        cal.set(Calendar.HOUR_OF_DAY, 22);
+        cal.set(Calendar.DAY_OF_MONTH, 8);
+        cal.set(Calendar.HOUR_OF_DAY, 21);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
@@ -203,7 +203,7 @@ public class TabActivity extends AppCompatActivity {
         Calendar cal1 = Calendar.getInstance();
         cal1.set(Calendar.YEAR, 2018);
         cal1.set(Calendar.MONTH, 4);
-        cal1.set(Calendar.DAY_OF_MONTH, 3);
+        cal1.set(Calendar.DAY_OF_MONTH, 8);
         cal1.set(Calendar.HOUR_OF_DAY, 21);
         cal1.set(Calendar.MINUTE, 45);
         cal1.set(Calendar.SECOND, 0);

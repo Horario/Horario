@@ -103,7 +103,9 @@ public class SettingsActivity extends Fragment {
                         alarmIntent.putExtra("Hour",cal.get(Calendar.HOUR));
                         alarmIntent.putExtra("Minute",cal.get(Calendar.MINUTE));
                         alarmIntent.putExtra("Day",cal.getTime().getDate());
-                        pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, alarmIntent, 0);
+                        alarmIntent.putExtra("ID", (int)System.currentTimeMillis());
+
+                        pendingIntent = PendingIntent.getBroadcast(getActivity(),(int)System.currentTimeMillis(), alarmIntent, 0);
 
                         AlarmManager manager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
                         manager.set(AlarmManager.RTC_WAKEUP, calcNotificationTime(cal.getTimeInMillis(), notificationPerson.getNotificationTime()), pendingIntent);
