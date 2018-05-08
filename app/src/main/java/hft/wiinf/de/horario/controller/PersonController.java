@@ -13,7 +13,12 @@ public class PersonController {
 
     public static void addPersonMe(Person person) {
         try {
-            person.save();
+            Person me = PersonController.getPersonWhoIam();
+            if (me == null)
+                person.save();
+            else
+            me.setName(person.getName());
+            me.save();
         } catch (Exception e) {
             Log.d("PersonController", "addPersonMe:" + e.getMessage());
         }

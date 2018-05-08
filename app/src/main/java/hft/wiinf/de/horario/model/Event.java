@@ -6,8 +6,10 @@ import android.support.annotation.NonNull;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
 
 import java.util.Date;
+import java.util.List;
 
 
 // Class for both standard and serial event
@@ -35,6 +37,7 @@ public class Event extends Model {
     private AcceptedState accepted;
     @Column
     private Event startEvent = null;
+    private long creatorEventId;
 
     public Event(Person creator) {
         this.creator = creator;
@@ -44,13 +47,7 @@ public class Event extends Model {
         super();
     }
 
-
-
 //getter-setter
-
-    public void setCreator(Person creator) {
-        this.creator = creator;
-    }
 
     public Person getCreator() {
         return creator;
@@ -84,7 +81,7 @@ public class Event extends Model {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(@NonNull Date startTime) {
         this.startTime = startTime;
     }
 
@@ -92,10 +89,9 @@ public class Event extends Model {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(@NonNull Date endTime) {
         this.endTime = endTime;
     }
-
 
     public Date getEndDate() {
         return endDate;
@@ -128,6 +124,14 @@ public class Event extends Model {
 
     public void setStartEvent(Event startEvent) {
         this.startEvent = startEvent;
+    }
+
+    public long getCreatorEventId() {
+        return creatorEventId;
+    }
+
+    public void setCreatorEventId(long creatorEventId) {
+        this.creatorEventId = creatorEventId;
     }
 }
 

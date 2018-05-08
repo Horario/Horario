@@ -67,10 +67,13 @@
 
     <Spinner
         android:id="@+id/settings_settings_spinner_minutes"
-        android:layout_width="64dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/settings_settings_textView_reminder"
-        android:layout_toEndOf="@+id/settings_settings_textView_username" />
+        android:layout_toEndOf="@+id/settings_settings_textView_username"
+        android:entries="@array/push_times"
+        android:visibility="visible"
+        android:prompt="@string/calendar"/>
 
     <TextView
         android:id="@+id/settings_settings_textView_reminder"

@@ -1,19 +1,281 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:windowBackground">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/newEvent_newFragment"
+        android:visibility="gone"></RelativeLayout>
 
-    <TextView
-        android:id="@+id/newEventTab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
-        android:text="@string/newEvent"
-        android:textSize="25sp" />
-        android:textSize="25sp" />
+    <RelativeLayout
+        android:id="@+id/newEvent_oldFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:scrollbarStyle="insideOverlay"
+        android:scrollbars="vertical">
 
+        <TextView
+            android:id="@+id/newEventTab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_alignParentEnd="true"
+
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="122dp"
+            android:text="@string/newEvent"
+            android:textSize="25sp" />
+
+
+        <EditText
+
+            android:id="@+id/newEvent_editText_description"
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="91dp"
+            android:ems="10"
+            android:inputType="textPersonName" />
+
+
+        <TextView
+
+            android:id="@+id/newEvent_textView_Description"
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+
+            android:layout_alignBaseline="@+id/newEvent_editText_description"
+            android:layout_alignParentStart="true"
+            android:text="@string/event_Description" />
+
+
+        <TextView
+
+            android:id="@+id/newEvent_textView_Date"
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+
+            android:layout_alignBaseline="@+id/newEvent_editText_Date"
+            android:layout_alignParentStart="true"
+            android:text="@string/event_date" />
+
+
+        <EditText
+
+            android:id="@+id/newEvent_editText_Date"
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="204dp"
+            android:ems="10" />
+
+
+        <TextView
+
+            android:id="@+id/newEvent_textView_startTime"
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+
+            android:layout_alignBaseline="@+id/newEvent_editText_startTime"
+            android:layout_alignParentStart="true"
+            android:text="@string/event_startTime" />
+
+
+        <EditText
+
+            android:id="@+id/newEvent_editText_startTime"
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:ems="10"
+            android:focusable="true" />
+
+
+        <TextView
+
+            android:id="@+id/newEvent_textView_endTime"
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+
+            android:layout_alignBaseline="@+id/newEvent_textEdit_endTime"
+            android:layout_alignParentStart="true"
+            android:text="@string/event_endtime" />
+
+
+        <EditText
+
+            android:id="@+id/newEvent_textEdit_endTime"
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="196dp"
+            android:ems="10"
+            android:focusable="true" />
+
+
+        <CheckBox
+
+            android:id="@+id/newEvent_checkBox_SerialEvent"
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/newEvent_textEdit_endTime"
+            android:layout_marginTop="-176dp"
+            android:checked="false"
+            android:text="@string/event_serialEvent" />
+
+
+        <Spinner
+
+            android:id="@+id/newEvent_spinner_repetition"
+
+            android:layout_width="204dp"
+
+            android:layout_height="wrap_content"
+
+            android:layout_alignBottom="@+id/newEvent_textView_repetition"
+            android:layout_alignParentEnd="true"
+            android:entries="@string/event_repetition"
+            android:visibility="gone" />
+
+
+        <TextView
+
+            android:id="@+id/newEvent_textView_repetition"
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="117dp"
+            android:text="@string/event_repetition"
+            android:visibility="gone" />
+
+
+        <TextView
+
+            android:id="@+id/newEvent_textView_endOfRepetiton"
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+
+            android:layout_alignBaseline="@+id/newEvent_textEdit_endOfRepetition"
+            android:layout_alignParentStart="true"
+            android:text="@string/event_endOfRepetition"
+            android:visibility="gone" />
+
+
+        <EditText
+
+            android:id="@+id/newEvent_textEdit_endOfRepetition"
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="36dp"
+            android:ems="10"
+            android:focusable="true"
+            android:visibility="gone" />
+
+
+        <Button
+
+            android:id="@+id/newEvent_button_save"
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+
+            android:layout_alignParentBottom="true"
+
+            android:layout_alignParentEnd="true"
+            android:text="@string/event_save" />
+
+
+        <TextView
+
+            android:id="@+id/newEvent_textView_room"
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+
+            android:layout_alignBaseline="@+id/newEvent_textEdit_room"
+            android:layout_alignParentStart="true"
+            android:text="@string/event_room" />
+
+
+        <EditText
+
+            android:id="@+id/newEvent_textEdit_room"
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="146dp"
+            android:ems="10"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/newEvent_textEdit_shortTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/newEventTab"
+            android:ems="10"
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/newEvent_textView_shortTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/newEvent_textEdit_shortTitle"
+            android:layout_alignParentStart="true"
+            android:text="@string/event_shortTitle" />
+
+
+    </RelativeLayout>
 </RelativeLayout>

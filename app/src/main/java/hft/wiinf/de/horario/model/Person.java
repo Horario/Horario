@@ -17,6 +17,10 @@ public class Person extends Model{
     private Event canceledEvent = null;
     @Column
     boolean isItMe = false;
+    @Column
+    boolean enablePush = false;
+    @Column
+    int pushMinutes=0;
 
     //Use this constructor for person that using this specific app (owner)
     public Person(boolean isItMe, String phoneNumber, String name) {
@@ -32,6 +36,12 @@ public class Person extends Model{
         this.isItMe = false;
         this.phoneNumber = phoneNumber;
         this.name = name;
+    }
+
+    public Person(String phoneNumber, int pushMinutes) {
+        super();
+        this.phoneNumber = phoneNumber;
+        this.pushMinutes = pushMinutes;
     }
 
     public Person() {
@@ -71,5 +81,20 @@ public class Person extends Model{
         this.acceptedEvent = acceptedEvent;
     }
 
+    public int getPushMinutes() {
+        return pushMinutes;
+    }
 
+    public void setPushMinutes(int pushMinutes) {
+        this.pushMinutes = pushMinutes;
+    }
+
+    public boolean isEnablePush() {
+        return enablePush;
+    }
+
+    public void setEnablePush(boolean enablePush) {
+        this.enablePush = enablePush;
+    }
 }
+

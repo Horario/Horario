@@ -12,10 +12,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
+
+import android.widget.Button;
+
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
@@ -27,6 +30,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import hft.wiinf.de.horario.R;
+
 
 //TODO Kommentieren und Java Doc Info Schreiben
 public class CalendarActivity extends Fragment {
