@@ -24,7 +24,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="17dp"
-            android:text="qrSharing_Headline" />
+            android:text="@string/headline" />
 
         <TextView
             android:id="@+id/qrSharing_textView_description"
@@ -34,7 +34,7 @@
             android:layout_alignParentStart="true"
             android:layout_marginBottom="13dp"
             android:layout_marginStart="55dp"
-            android:text="qrSharing_description" />
+            android:text="@string/event_Description" />
 
 
     </RelativeLayout>
@@ -63,7 +63,7 @@
             android:layout_alignParentEnd="true"
             android:layout_marginBottom="14dp"
             android:layout_marginEnd="89dp"
-            android:text="In Kalender anzeigen" />
+            android:text="@string/in_kalender_anzeigen" />
 
     </RelativeLayout>
 

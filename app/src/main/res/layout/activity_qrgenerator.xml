@@ -33,7 +33,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="78dp"
-            android:text="EventText" />
+            android:text="@string/event_Description" />
 
     </RelativeLayout>
 
@@ -62,7 +62,7 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_marginStart="71dp"
-            android:text="@string/r_ckmeldungen_anzeigen" />
+            android:text="@string/rueckmeldungen_anzeigen" />
 
     </RelativeLayout>
 </RelativeLayout>

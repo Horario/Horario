@@ -54,7 +54,6 @@ public class CalendarActivity extends Fragment {
         calendarTvDay = view.findViewById(R.id.calendarTvDay);
 
         //ToDo -> TestButtons löschen
-        Button scnbtn = view.findViewById(R.id.gotoscanner);
         Button genbtn = view.findViewById(R.id.gotogenerator);
 
         Date today = new Date();
@@ -78,28 +77,8 @@ public class CalendarActivity extends Fragment {
 
         });
 
-        //Change onClick the Fragment CalendarActivity with the QRScannerActivity
-        scnbtn.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onClick(View view) {
-                try {
-                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.newFragment, new QRScannerActivity());
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
-                    calendar_temp_relativeLayout_main.setVisibility(View.GONE);
-                    calendarLvList.setVisibility(View.GONE);
-                    calendarTvDay.setVisibility(View.GONE);
-                    calendarTvMonth.setVisibility(View.GONE);
-                    calendarCvCalendar.setVisibility(View.GONE);
-                    newFragment_relativLayout.setVisibility(View.VISIBLE);
-                } catch (NullPointerException e) {
-                    Log.d(TAG, "CalendarActivity:" + e.getMessage());
-                }
-            }
-        });
         //Change onClick the Fragment CalendarActivity with the QRGenerator
+        //ToDo Entfernen nach dem Testen
         genbtn.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("LongLogTag")
             @Override

@@ -123,7 +123,7 @@ public class QRGeneratorActivity extends Fragment {
             Log.d(TAG, "QRGeneratorFragmentActivity: " + e.getMessage());
         }
 
-        
+
         //Create a QR Code and Show it in the ImageView.
         mQRGenerator_button_start_qrSharingFragment.setOnClickListener(new View.OnClickListener() {
             @Override

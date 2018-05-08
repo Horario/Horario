@@ -21,17 +21,6 @@
         android:layout_width="match_parent"
         android:id="@+id/calendar_temp_relativeLayout_main">
 
-
-        <Button
-            android:id="@+id/gotoscanner"
-            android:layout_width="140dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginBottom="66dp"
-            android:layout_marginEnd="32dp"
-            android:text="Go To Scanner Temp" />
-
         <Button
             android:id="@+id/gotogenerator"
             android:layout_width="113dp"
