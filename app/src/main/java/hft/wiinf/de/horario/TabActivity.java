@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.view.CalendarActivity;
-import hft.wiinf.de.horario.view.NewEventActivity;
+import hft.wiinf.de.horario.view.EventOverviewActivity;
 import hft.wiinf.de.horario.view.SettingsActivity;
 
 public class TabActivity extends AppCompatActivity {
@@ -98,17 +98,21 @@ public class TabActivity extends AppCompatActivity {
                     } catch (NullPointerException e) {
                         Log.d(TAG, "TabActivity:" + e.getMessage());
                     }
-                }else if(tab.getPosition() == 1){
+                } else if (tab.getPosition() == 1) {
                     mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_relativeLayout_helper).setVisibility(View.GONE);
                     mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_constrainLayout_main).setVisibility(View.VISIBLE);
-                    mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.floatingActionButtonMenu).setVisibility(View.VISIBLE);
+                    mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_floatingActionButtonMenu).setVisibility(View.VISIBLE);
+                } else if (tab.getPosition() == 0) {
+                    mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_relativeLayout_helper).setVisibility(View.GONE);
+                    mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_Layout_main).setVisibility(View.VISIBLE);
+                    mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_floatingActionButtonMenu).setVisibility(View.VISIBLE);
                 }
             }
 
             //Do something if Tab is reselected. Parameters: selected Tab.--- Info: tab.getPosition() == x for check which Tab
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                if (tab.getPosition() == 2 ) {
+                if (tab.getPosition() == 2) {
                     //Set Visibility of mainLayout to Visible and the rest to Gone, to see only the overview
                     try {
                         mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_helper).setVisibility(View.GONE);
@@ -125,10 +129,14 @@ public class TabActivity extends AppCompatActivity {
                     } catch (NullPointerException e) {
                         Log.d(TAG, "TabActivity:" + e.getMessage());
                     }
-                } else if(tab.getPosition() == 1){
+                } else if (tab.getPosition() == 1) {
                     mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_relativeLayout_helper).setVisibility(View.GONE);
                     mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_constrainLayout_main).setVisibility(View.VISIBLE);
-                    mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.floatingActionButtonMenu).setVisibility(View.VISIBLE);
+                    mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_floatingActionButtonMenu).setVisibility(View.VISIBLE);
+                } else if (tab.getPosition() == 0) {
+                    mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_relativeLayout_helper).setVisibility(View.GONE);
+                    mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_Layout_main).setVisibility(View.VISIBLE);
+                    mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_floatingActionButtonMenu).setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -136,7 +144,7 @@ public class TabActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         SectionsPageAdapterActivity adapter = mSectionsPageAdapter;
-        adapter.addFragment(new NewEventActivity(), "");
+        adapter.addFragment(new EventOverviewActivity(), "");
         adapter.addFragment(new CalendarActivity(), "");
         adapter.addFragment(new SettingsActivity(), "");
         viewPager.setAdapter(adapter);

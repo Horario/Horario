@@ -8,10 +8,10 @@ import android.view.ViewGroup;
 
 import hft.wiinf.de.horario.R;
 
-public class CalendarNewEventFragment extends Fragment {
+public class QRScanFragment extends Fragment {
 
 
-    public CalendarNewEventFragment() {
+    public QRScanFragment() {
         // Required empty public constructor
     }
 
@@ -20,7 +20,7 @@ public class CalendarNewEventFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_calendar_newevent, container, false);
+        View view = inflater.inflate(R.layout.fragment_calendar_qrscan, container, false);
 
 
         return view;

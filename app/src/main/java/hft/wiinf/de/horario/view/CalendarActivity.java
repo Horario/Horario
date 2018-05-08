@@ -3,6 +3,7 @@ package hft.wiinf.de.horario.view;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -30,14 +31,15 @@ import hft.wiinf.de.horario.R;
 //TODO Kommentieren und Java Doc Info Schreiben
 public class CalendarActivity extends Fragment {
     private static final String TAG = "CalendarFragmentActivity";
+    public boolean isFloatingMenuOpen = false;
 
     public static CompactCalendarView calendarCvCalendar;
     ListView calendarLvList;
     TextView calendarTvMonth;
     TextView calendarTvDay;
     FloatingActionButton calendarFcMenu, calendarFcQrScan, calendarFcNewEvent;
-    public boolean isFloatingMenuOpen = false;
     RelativeLayout rLayout_calendar_helper;
+    ConstraintLayout cLayout_calendar_main;
 
     DateFormat monthFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
     DateFormat dayFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
@@ -51,10 +53,11 @@ public class CalendarActivity extends Fragment {
         View view = inflater.inflate(R.layout.activity_calendar, container, false);
 
         //FloatingButton
-        calendarFcMenu = (FloatingActionButton) view.findViewById(R.id.floatingActionButtonMenu);
-        calendarFcNewEvent = (FloatingActionButton) view.findViewById(R.id.floatingActionButtonNewEvent);
-        calendarFcQrScan = (FloatingActionButton) view.findViewById(R.id.floatingActionButtonScan);
+        calendarFcMenu = (FloatingActionButton) view.findViewById(R.id.calendar_floatingActionButtonMenu);
+        calendarFcNewEvent = (FloatingActionButton) view.findViewById(R.id.calendar_floatingActionButtonNewEvent);
+        calendarFcQrScan = (FloatingActionButton) view.findViewById(R.id.calender_floatingActionButtonScan);
         rLayout_calendar_helper = view.findViewById(R.id.calendar_relativeLayout_helper);
+        cLayout_calendar_main = view.findViewById(R.id.calendar_constrainLayout_main);
 
         calendarFcQrScan.hide();
         calendarFcNewEvent.hide();
@@ -74,8 +77,7 @@ public class CalendarActivity extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
-                //settings_relativeLayout_helper: in this Layout all other layouts will be uploaded
-                fr.replace(R.id.calendar_relativeLayout_helper, new CalendarNewEventFragment());
+                fr.replace(R.id.calendar_relativeLayout_helper, new NewEventFragment());
                 fr.addToBackStack(null);
                 fr.commit();
                 rLayout_calendar_helper.setVisibility(View.VISIBLE);
@@ -88,8 +90,7 @@ public class CalendarActivity extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
-                //settings_relativeLayout_helper: in this Layout all other layouts will be uploaded
-                fr.replace(R.id.calendar_relativeLayout_helper, new CalendarQRScanFragment());
+                fr.replace(R.id.calendar_relativeLayout_helper, new QRScanFragment());
                 fr.addToBackStack(null);
                 fr.commit();
                 rLayout_calendar_helper.setVisibility(View.VISIBLE);
@@ -98,9 +99,7 @@ public class CalendarActivity extends Fragment {
             }
         });
 
-
-
-        view.setOnClickListener(new View.OnClickListener() {
+        cLayout_calendar_main.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 closeFABMenu();
@@ -172,12 +171,13 @@ public class CalendarActivity extends Fragment {
         isFloatingMenuOpen = true;
         calendarFcQrScan.show();
         calendarFcNewEvent.show();
-
+        calendarFcMenu.setImageResource(R.drawable.ic_android_black_24dp);
     }
 
     public void closeFABMenu() {
         isFloatingMenuOpen = false;
         calendarFcQrScan.hide();
         calendarFcNewEvent.hide();
+        calendarFcMenu.setImageResource(R.drawable.ic_android_black2_24dp);
     }
 }

@@ -74,7 +74,7 @@
         app:layout_constraintVertical_bias="1.0" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingActionButtonMenu"
+        android:id="@+id/calendar_floatingActionButtonMenu"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_gravity="bottom|end"
@@ -92,7 +92,7 @@
         app:srcCompat="@android:drawable/ic_dialog_dialer" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingActionButtonNewEvent"
+        android:id="@+id/calendar_floatingActionButtonNewEvent"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="bottom|end"
@@ -104,7 +104,7 @@
         app:srcCompat="@android:drawable/ic_menu_today" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingActionButtonScan"
+        android:id="@+id/calender_floatingActionButtonScan"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="bottom|end"
