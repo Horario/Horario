@@ -101,6 +101,7 @@ public class TabActivity extends AppCompatActivity {
                 }else if(tab.getPosition() == 1){
                     mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_relativeLayout_helper).setVisibility(View.GONE);
                     mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_constrainLayout_main).setVisibility(View.VISIBLE);
+                    mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.floatingActionButtonMenu).setVisibility(View.VISIBLE);
                 }
             }
 
@@ -127,6 +128,7 @@ public class TabActivity extends AppCompatActivity {
                 } else if(tab.getPosition() == 1){
                     mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_relativeLayout_helper).setVisibility(View.GONE);
                     mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_constrainLayout_main).setVisibility(View.VISIBLE);
+                    mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.floatingActionButtonMenu).setVisibility(View.VISIBLE);
                 }
             }
         });
