@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.activeandroid.ActiveAndroid;
+import com.facebook.stetho.Stetho;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -44,6 +45,7 @@ public class TabActivity extends AppCompatActivity {
 
         //Start DB
         ActiveAndroid.initialize(this);
+        Stetho.initializeWithDefaults(this);
 
         mSectionsPageAdapter = new SectionsPageAdapterActivity(getSupportFragmentManager());
 
@@ -96,6 +98,9 @@ public class TabActivity extends AppCompatActivity {
                     } catch (NullPointerException e) {
                         Log.d(TAG, "TabActivity:" + e.getMessage());
                     }
+                }else if(tab.getPosition() == 1){
+                    mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_relativeLayout_helper).setVisibility(View.GONE);
+                    mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_constrainLayout_main).setVisibility(View.VISIBLE);
                 }
             }
 
@@ -119,6 +124,9 @@ public class TabActivity extends AppCompatActivity {
                     } catch (NullPointerException e) {
                         Log.d(TAG, "TabActivity:" + e.getMessage());
                     }
+                } else if(tab.getPosition() == 1){
+                    mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_relativeLayout_helper).setVisibility(View.GONE);
+                    mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_constrainLayout_main).setVisibility(View.VISIBLE);
                 }
             }
         });
