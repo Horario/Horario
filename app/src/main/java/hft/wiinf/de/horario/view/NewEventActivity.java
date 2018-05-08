@@ -63,6 +63,12 @@ public class NewEventActivity extends Fragment {
 
 
     public void onViewCreated(final View view, Bundle savedInstanceState) {
+        startTime.set(Calendar.SECOND,0);
+        startTime.set(Calendar.MILLISECOND,0);
+        endTime.set(Calendar.SECOND,0);
+        endTime.set(Calendar.MILLISECOND,0);
+        endOfRepetition.set(Calendar.SECOND,0);
+        endOfRepetition.set(Calendar.MILLISECOND,0);
         edittext_shortTitle = view.findViewById(R.id.newEvent_textEdit_shortTitle);
         editText_description = view.findViewById(R.id.newEvent_editText_description);
         edittext_room = view.findViewById(R.id.newEvent_textEdit_room);
@@ -357,6 +363,19 @@ public class NewEventActivity extends Fragment {
             Toast.makeText(getContext(), R.string.empty_fields, Toast.LENGTH_LONG).show();
             return false;
         }
+        if (edittext_shortTitle.getText().toString().matches("[\\S].*")){
+            Toast.makeText(getContext(), R.string.shortTitle_spaces, Toast.LENGTH_LONG).show();
+            return false;
+        }
+        if (editText_description.getText().toString().matches("[\\S].*")){
+            Toast.makeText(getContext(), R.string.description_spaces, Toast.LENGTH_LONG).show();
+            return false;
+        }
+        if (edittext_room.getText().toString().matches("[\\S].*")){
+            Toast.makeText(getContext(), R.string.place_spaces, Toast.LENGTH_LONG).show();
+            return false;
+        }
+
         if (editText_description.getText().length()>500){
             Toast.makeText(getContext(), R.string.description_too_long, Toast.LENGTH_LONG).show();
             return false;
@@ -365,6 +384,18 @@ public class NewEventActivity extends Fragment {
             Toast.makeText(getContext(), R.string.shortTitle_too_long, Toast.LENGTH_LONG).show();
             return false;
         }
+        if (edittext_room.getText().length()>100){
+            Toast.makeText(getContext(), R.string.room_too_long, Toast.LENGTH_LONG).show();
+            return false;
+        }
+        Calendar now = Calendar.getInstance();
+        now.set(Calendar.SECOND,0);
+        now.set(Calendar.MILLISECOND,0);
+        if (now.before(startTime)){
+            Toast.makeText(getContext(), R.string.startTime_past, Toast.LENGTH_LONG).show();
+            return false;
+        }
+
         if (endTime.before(startTime)) {
             Toast.makeText(getContext(), R.string.endTime_before_startTime, Toast.LENGTH_LONG).show();
             return false;
