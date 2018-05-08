@@ -110,8 +110,10 @@ public class CalendarActivity extends Fragment {
     public static void updateCompactCalendar(){
         List<hft.wiinf.de.horario.model.Event> acceptedEvents = EventController.findMyAcceptedEvents();
         for (int i = 0; i<acceptedEvents.size(); i++){
-            Event event = new Event(Color.BLUE, acceptedEvents.get(i).getStartTime().getTime());
-            calendarCvCalendar.addEvent(event, false);
+            if(calendarCvCalendar.getEvents(acceptedEvents.get(i).getStartTime().getTime()).size() == 0){
+                Event event = new Event(Color.BLUE, acceptedEvents.get(i).getStartTime().getTime());
+                calendarCvCalendar.addEvent(event, false);
+            }
         }
     }
 
