@@ -10,15 +10,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import hft.wiinf.de.horario.R;
 
 public class EventOverviewActivity extends Fragment {
 
     FloatingActionButton eventOverviewFcMenu, eventOverviewFcQrScan, eventOverviewFcNewEvent;
-    public boolean isFloatingMenuOpen = false;
     RelativeLayout rLayout_eventOverview_helper;
     ConstraintLayout cLayout_eventOverview_main;
+    TextView eventOverview_HiddenIsFloatingMenuOpen;
 
     @Nullable
     @Override
@@ -31,6 +32,7 @@ public class EventOverviewActivity extends Fragment {
         eventOverviewFcQrScan = view.findViewById(R.id.eventOverview_floatingActionButtonScan);
         rLayout_eventOverview_helper = view.findViewById(R.id.eventOverview_relativeLayout_helper);
         cLayout_eventOverview_main = view.findViewById(R.id.eventOverview_Layout_main);
+        eventOverview_HiddenIsFloatingMenuOpen = view.findViewById(R.id.eventOverviewFabClosed);
 
         eventOverviewFcQrScan.hide();
         eventOverviewFcNewEvent.hide();
@@ -38,14 +40,17 @@ public class EventOverviewActivity extends Fragment {
         eventOverviewFcMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!isFloatingMenuOpen) {
+                if (eventOverview_HiddenIsFloatingMenuOpen.getText().equals("false")) {
                     showFABMenu();
+                    eventOverview_HiddenIsFloatingMenuOpen.setText("true");
                 } else {
                     closeFABMenu();
+                    eventOverview_HiddenIsFloatingMenuOpen.setText("false");
                 }
             }
         });
 
+        //Open new Fragment "NewEvent"
         eventOverviewFcNewEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,6 +64,7 @@ public class EventOverviewActivity extends Fragment {
             }
         });
 
+        //Open new Fragment "QRCodeScan"
         eventOverviewFcQrScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,15 +88,17 @@ public class EventOverviewActivity extends Fragment {
         return view;
     }
 
+    //Show the menu Buttons
     public void showFABMenu() {
-        isFloatingMenuOpen = true;
+        eventOverview_HiddenIsFloatingMenuOpen.setText("true");
         eventOverviewFcQrScan.show();
         eventOverviewFcNewEvent.show();
         eventOverviewFcMenu.setImageResource(R.drawable.ic_android_black_24dp);
     }
 
+    //Hide the menu Buttons
     public void closeFABMenu() {
-        isFloatingMenuOpen = false;
+        eventOverview_HiddenIsFloatingMenuOpen.setText("false");
         eventOverviewFcQrScan.hide();
         eventOverviewFcNewEvent.hide();
         eventOverviewFcMenu.setImageResource(R.drawable.ic_android_black2_24dp);

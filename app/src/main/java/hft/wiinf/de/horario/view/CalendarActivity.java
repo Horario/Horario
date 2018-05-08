@@ -31,12 +31,12 @@ import hft.wiinf.de.horario.R;
 //TODO Kommentieren und Java Doc Info Schreiben
 public class CalendarActivity extends Fragment {
     private static final String TAG = "CalendarFragmentActivity";
-    public boolean isFloatingMenuOpen = false;
 
     public static CompactCalendarView calendarCvCalendar;
     ListView calendarLvList;
     TextView calendarTvMonth;
     TextView calendarTvDay;
+    TextView calendarIsFloatMenuOpen;
     FloatingActionButton calendarFcMenu, calendarFcQrScan, calendarFcNewEvent;
     RelativeLayout rLayout_calendar_helper;
     ConstraintLayout cLayout_calendar_main;
@@ -55,9 +55,10 @@ public class CalendarActivity extends Fragment {
         //FloatingButton
         calendarFcMenu = (FloatingActionButton) view.findViewById(R.id.calendar_floatingActionButtonMenu);
         calendarFcNewEvent = (FloatingActionButton) view.findViewById(R.id.calendar_floatingActionButtonNewEvent);
-        calendarFcQrScan = (FloatingActionButton) view.findViewById(R.id.calender_floatingActionButtonScan);
+        calendarFcQrScan = (FloatingActionButton) view.findViewById(R.id.calendar_floatingActionButtonScan);
         rLayout_calendar_helper = view.findViewById(R.id.calendar_relativeLayout_helper);
         cLayout_calendar_main = view.findViewById(R.id.calendar_constrainLayout_main);
+        calendarIsFloatMenuOpen = view.findViewById(R.id.calendar_hiddenField);
 
         calendarFcQrScan.hide();
         calendarFcNewEvent.hide();
@@ -65,10 +66,12 @@ public class CalendarActivity extends Fragment {
         calendarFcMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!isFloatingMenuOpen) {
+                if (calendarIsFloatMenuOpen.getText().equals("false")) {
                     showFABMenu();
+                    calendarIsFloatMenuOpen.setText("true");
                 } else {
                     closeFABMenu();
+                    calendarIsFloatMenuOpen.setText("false");
                 }
             }
         });
@@ -168,16 +171,21 @@ public class CalendarActivity extends Fragment {
     }
 
     public void showFABMenu() {
-        isFloatingMenuOpen = true;
+        calendarIsFloatMenuOpen.setText("true");
         calendarFcQrScan.show();
         calendarFcNewEvent.show();
         calendarFcMenu.setImageResource(R.drawable.ic_android_black_24dp);
+
     }
 
     public void closeFABMenu() {
-        isFloatingMenuOpen = false;
+        calendarIsFloatMenuOpen.setText("false");
         calendarFcQrScan.hide();
         calendarFcNewEvent.hide();
         calendarFcMenu.setImageResource(R.drawable.ic_android_black2_24dp);
+    }
+
+    public CalendarActivity() {
+        super();
     }
 }
