@@ -6,6 +6,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import hft.wiinf.de.horario.controller.EventController;
@@ -28,22 +31,27 @@ public class DeviceBootReceiver extends BroadcastReceiver {
     }
 
     public void startNotification(Context context, Intent intent, Person notificationPerson) {
-        List<Event> allEvents = EventController.findMyAcceptedEvents();
+        List<Event> allEvents = EventController.findMyAcceptedEventsInTheFuture();
         Intent alarmIntent = new Intent(context, NotificationReceiver.class);
 
         for (Event event : allEvents) {
+            Date date = event.getStartTime();
+            Calendar calendar = GregorianCalendar.getInstance();
+            calendar.setTime(date);
+
             alarmIntent.putExtra("Event", event.getDescription());
-            alarmIntent.putExtra("Hour", event.getStartTime().getHours());
-            alarmIntent.putExtra("Minute", event.getStartTime().getMinutes());
+            alarmIntent.putExtra("Hour", calendar.get(Calendar.HOUR_OF_DAY));
+            alarmIntent.putExtra("Minute", calendar.get(Calendar.MINUTE));
             alarmIntent.putExtra("ID", event.getId().intValue());
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, event.getId().intValue(), alarmIntent, 0);
 
             AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            manager.set(AlarmManager.RTC_WAKEUP, calcNotificationTime(event.getStartTime().getTime(), notificationPerson), pendingIntent);
+            manager.set(AlarmManager.RTC_WAKEUP, calcNotificationTime(calendar, notificationPerson), pendingIntent);
         }
     }
 
-    public long calcNotificationTime(long eventTimeInMillis, Person person) {
-        return eventTimeInMillis - (person.getNotificationTime() * 60000);
+    public long calcNotificationTime(Calendar cal, Person person) {
+        cal.add(Calendar.MINUTE, ((-1)*person.getNotificationTime()));
+        return cal.getTimeInMillis();
     }
 }

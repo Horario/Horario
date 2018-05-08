@@ -193,31 +193,37 @@ public class TabActivity extends AppCompatActivity {
 
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, 2018);
-        cal.set(Calendar.MONTH, 4);
+        cal.set(Calendar.MONTH, 5);
         cal.set(Calendar.DAY_OF_MONTH, 8);
-        cal.set(Calendar.HOUR_OF_DAY, 21);
-        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.HOUR_OF_DAY, 15);
+        cal.set(Calendar.MINUTE, 45);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
 
         Calendar cal1 = Calendar.getInstance();
         cal1.set(Calendar.YEAR, 2018);
-        cal1.set(Calendar.MONTH, 4);
+        cal1.set(Calendar.MONTH, 5);
         cal1.set(Calendar.DAY_OF_MONTH, 8);
-        cal1.set(Calendar.HOUR_OF_DAY, 21);
-        cal1.set(Calendar.MINUTE, 45);
+        cal1.set(Calendar.HOUR_OF_DAY, 16);
+        cal1.set(Calendar.MINUTE, 5);
         cal1.set(Calendar.SECOND, 0);
         cal1.set(Calendar.MILLISECOND, 0);
 
+        Calendar cal2 = Calendar.getInstance();
+        cal2.set(Calendar.YEAR, 2018);
+        cal2.set(Calendar.MONTH, 4);
+        cal2.set(Calendar.DAY_OF_MONTH, 7);
+        cal2.set(Calendar.HOUR_OF_DAY, 15);
+        cal2.set(Calendar.MINUTE, 30);
+        cal2.set(Calendar.SECOND, 0);
+        cal2.set(Calendar.MILLISECOND, 0);
+
         Event event1 = new Event(person,1,"Beispielevent1","HFT",cal.getTime(),cal.getTime(),true);
-        Event event2 = new Event(person,1,"Beispielevent2","HFT",cal1.getTime(),cal.getTime(),true);
+        Event event2 = new Event(person,1,"Beispielevent2","HFT",cal1.getTime(),cal1.getTime(),true);
+        Event event3 = new Event(person,1,"Beispielevent2","HFT",cal2.getTime(),cal2.getTime(),true);
 
         EventController.saveEvent(event1);
         EventController.saveEvent(event2);
-
-        List<Event> allEvents = EventController.findMyAcceptedEvents();
-        for (Event event : allEvents) {
-            Log.d("TABACHTIVIY",event.getDescription());
-        }
+        EventController.saveEvent(event3);
     }
 }

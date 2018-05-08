@@ -88,10 +88,10 @@ public class SettingsActivity extends Fragment {
             public void onClick(View v) {
                 Calendar cal = Calendar.getInstance();
                 cal.set(Calendar.YEAR, 2018);
-                cal.set(Calendar.MONTH, 4);
-                cal.set(Calendar.DAY_OF_MONTH, 5);
-                cal.set(Calendar.HOUR_OF_DAY, 13);
-                cal.set(Calendar.MINUTE, 35);
+                cal.set(Calendar.MONTH, 5);
+                cal.set(Calendar.DAY_OF_MONTH, 8);
+                cal.set(Calendar.HOUR_OF_DAY, 1);
+                cal.set(Calendar.MINUTE, 55);
                 cal.set(Calendar.SECOND, 0);
                 cal.set(Calendar.MILLISECOND, 0);
 
@@ -100,9 +100,8 @@ public class SettingsActivity extends Fragment {
                     if(notificationPerson.isAllowNotifications()) {
                         Intent alarmIntent = new Intent(getActivity(), NotificationReceiver.class);
                         alarmIntent.putExtra("Event","Beispielevent");
-                        alarmIntent.putExtra("Hour",cal.get(Calendar.HOUR));
+                        alarmIntent.putExtra("Hour",cal.get(Calendar.HOUR_OF_DAY));
                         alarmIntent.putExtra("Minute",cal.get(Calendar.MINUTE));
-                        alarmIntent.putExtra("Day",cal.getTime().getDate());
                         alarmIntent.putExtra("ID", (int)System.currentTimeMillis());
 
                         pendingIntent = PendingIntent.getBroadcast(getActivity(),(int)System.currentTimeMillis(), alarmIntent, 0);
