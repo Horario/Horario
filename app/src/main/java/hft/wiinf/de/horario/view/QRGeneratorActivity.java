@@ -25,8 +25,8 @@ import hft.wiinf.de.horario.model.Person;
 public class QRGeneratorActivity extends Fragment {
     private static final String TAG = "QRGeneratorFragmentActivity";
     private TextView mQRGenerator_textView_description, mQRGenerator_textView_headline;
-    private RelativeLayout mQRGenerator_RelativeLayout_show_qrSharingFragment;
-    private Button mQRGenerator_button_start_sharingFragment, mQRGenerator_button_start_eventFeedbackFragment;
+    private RelativeLayout mQRGenerator_relativeLayout_show_qrSharingFragment;
+    private Button mQRGenerator_button_start_qrSharingFragment, mQRGenerator_button_start_eventFeedbackFragment;
     private Person mPerson;
     private StringBuffer mQRGenerator_StringBuffer_headline, mQRGenerator_StringBuffer_description, mQRGenerator_StringBuffer_test;
     private Event mEvent, mEvent2, mEvent3;
@@ -40,16 +40,18 @@ public class QRGeneratorActivity extends Fragment {
         View view = inflater.inflate(R.layout.activity_qrgenerator, container, false);
 
         //Initial GUI
-        mQRGenerator_button_start_sharingFragment = view.findViewById(R.id.generator_button_start_qrShareingFragment);
+        mQRGenerator_button_start_qrSharingFragment = view.findViewById(R.id.generator_button_start_qrSharingFragment);
         mQRGenerator_button_start_eventFeedbackFragment = view.findViewById(R.id.generator_button_show_eventFeedbackFragment);
         mQRGenerator_textView_description = view.findViewById(R.id.generator_textView_description);
         mQRGenerator_textView_headline = view.findViewById(R.id.generator_textView_Headline);
-        mQRGenerator_RelativeLayout_show_qrSharingFragment = view.findViewById(R.id.generator_realtivLayout_show_qrSharingFragment);
+        mQRGenerator_relativeLayout_show_qrSharingFragment = view.findViewById(R.id.generator_relativeLayout_show_qrSharingFragment);
 
         //Erstellen von zwei Dummydaten
         //ToDo Dummydaten löschen
-        Date startDate = new Date();
-        Date endDate = new Date();
+        // EndDate Sollte der 20.04.18 14Uhr sein
+        // StartDate sollte der 05.04.18 11Uhr sein
+        Date startDate = new Date(152292600);
+        Date endDate = new Date(1524232800);
 
         mEvent = new Event();
         mEvent.setShortTitle("Biologie");
@@ -57,8 +59,9 @@ public class QRGeneratorActivity extends Fragment {
         mEvent.setPlace("Labor 3");
         mEvent.setStartTime(startDate);
         mEvent.setEndTime(endDate);
-        mEvent.setEndDate(endDate);
-        //mEvent.setStartEvent();
+        //
+        mEvent.setStartEvent(mEvent);
+        //mEvent.setRepetition(mEvent.WEEKLY);
         EventController.saveEvent(mEvent);
 
         mEvent2 = new Event();
@@ -67,8 +70,11 @@ public class QRGeneratorActivity extends Fragment {
         mEvent2.setPlace("1/208");
         mEvent2.setStartTime(startDate);
         mEvent2.setEndTime(endDate);
-        //mEvent2.setStartEvent();
+        mEvent2.setEndDate(endDate);
+        mEvent2.setStartEvent(mEvent);
         EventController.saveEvent(mEvent2);
+
+
 
         mPerson = PersonController.getPersonWhoIam();
 
@@ -117,9 +123,9 @@ public class QRGeneratorActivity extends Fragment {
             Log.d(TAG, "QRGeneratorFragmentActivity: " + e.getMessage());
         }
 
-
+        
         //Create a QR Code and Show it in the ImageView.
-        mQRGenerator_button_start_sharingFragment.setOnClickListener(new View.OnClickListener() {
+        mQRGenerator_button_start_qrSharingFragment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -131,17 +137,16 @@ public class QRGeneratorActivity extends Fragment {
                 qrSharingBundle.setArguments(bundle);
 
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.generator_realtivLayout_show_qrSharingFragment, qrSharingBundle);
+                fragmentTransaction.replace(R.id.generator_relativeLayout_show_qrSharingFragment, qrSharingBundle);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
                 mQRGenerator_textView_headline.setVisibility(View.GONE);
                 mQRGenerator_textView_description.setVisibility(View.GONE);
-                mQRGenerator_button_start_sharingFragment.setVisibility(View.GONE);
+                mQRGenerator_button_start_qrSharingFragment.setVisibility(View.GONE);
                 mQRGenerator_button_start_eventFeedbackFragment.setVisibility(View.GONE);
-                mQRGenerator_RelativeLayout_show_qrSharingFragment.setVisibility(View.VISIBLE);
+                mQRGenerator_relativeLayout_show_qrSharingFragment.setVisibility(View.VISIBLE);
 
             }
         });
     }
-
 }

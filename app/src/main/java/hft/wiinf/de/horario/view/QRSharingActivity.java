@@ -35,7 +35,7 @@ import hft.wiinf.de.horario.R;
  */
 public class QRSharingActivity extends Fragment {
     private static final String TAG = "QRSharingFragmentActivity";
-    private RelativeLayout mQRSharing_relativeLayout_buttonFrame, mQRSharing_reativeLayout_textViewFrame, mQRSharing_relativeLayout_calendarActivity;
+    private RelativeLayout mQRSharing_relativeLayout_buttonFrame, mQRSharing_relativeLayout_textViewFrame, mQRSharing_relativeLayout_calendarActivity;
     private TextView mQRSharing_textView_headline, mQRSharing_textView_description;
     private Button mQRSharing_button_shareWith, mQRSharing_button_showInCalendar;
     private ImageView mQRSharing_imageView_qrCode;
@@ -76,7 +76,7 @@ public class QRSharingActivity extends Fragment {
 
         //GUI initial
         mQRSharing_relativeLayout_buttonFrame = view.findViewById(R.id.qrSharing_relativeLayout_buttonFrame);
-        mQRSharing_reativeLayout_textViewFrame = view.findViewById(R.id.qrSharing_relativeLayout_textViewFrame);
+        mQRSharing_relativeLayout_textViewFrame = view.findViewById(R.id.qrSharing_relativeLayout_textViewFrame);
         mQRSharing_relativeLayout_calendarActivity = view.findViewById(R.id.qrSharing_relativeLayout_calendarActivity);
         mQRSharing_textView_headline = view.findViewById(R.id.qrSharing_textView_headline);
         mQRSharing_textView_description = view.findViewById(R.id.qrSharing_textView_description);
@@ -120,7 +120,7 @@ public class QRSharingActivity extends Fragment {
                 fragmentTransaction.commit();
                 mQRSharing_relativeLayout_buttonFrame.setVisibility(View.GONE);
                 mQRSharing_imageView_qrCode.setVisibility(View.GONE);
-                mQRSharing_reativeLayout_textViewFrame.setVisibility(View.GONE);
+                mQRSharing_relativeLayout_textViewFrame.setVisibility(View.GONE);
                 mQRSharing_relativeLayout_calendarActivity.setVisibility(View.VISIBLE);
             }
         });

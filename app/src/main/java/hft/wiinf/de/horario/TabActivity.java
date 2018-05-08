@@ -1,7 +1,6 @@
 package hft.wiinf.de.horario;
 
 import android.app.AlertDialog;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;

@@ -12,10 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
@@ -42,14 +42,6 @@ public class CalendarActivity extends Fragment {
 
     RelativeLayout newFragment_relativLayout, calendar_temp_relativeLayout_main;
     TextView calendarHeadline_textView;
-
-    //Temp Method to Change on Frame CaledarActivity with QRScannerActivity Fragments
-    //ToDo Diese Methode muss später auf den Floatingbutten gebunden werden dazu brauch es auch eine Anpassung der XML stattfinden. -> Es muss ein neuer Container erstellt werden in den dann die das Fragment geladen wird. Zielsetzung bis ende der Weoche sollte das gehen!
-    //TODO just a placeholder, maybe need a rework (1523318400000L)
-    public static void addEvent(Date date) {
-        Event event = new Event(Color.BLUE, date.getTime());
-        calendarCvCalendar.addEvent(event);
-    }
 
     @Nullable
     @Override

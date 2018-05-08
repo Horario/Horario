@@ -7,7 +7,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/generator_realtivLayout_show_qrSharingFragment">
+        android:id="@+id/generator_relativeLayout_show_qrSharingFragment">
 
     </RelativeLayout>
 
@@ -46,7 +46,7 @@
 
 
         <Button
-            android:id="@+id/generator_button_start_qrShareingFragment"
+            android:id="@+id/generator_button_start_qrSharingFragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
