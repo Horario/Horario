@@ -12,11 +12,11 @@ import java.util.List;
 import hft.wiinf.de.horario.model.AcceptedState;
 import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
+import hft.wiinf.de.horario.model.Repetition;
 
 public class EventController {
     //saves (update or create)an event
     public static void saveEvent(@NonNull Event event) {
-        event.setCreatorEventId(event.save());
         event.save();
     }
 
@@ -59,10 +59,10 @@ public class EventController {
     }
 
     // saves a serial event, firstEvent="StartEvent", repetition: repetition frequence (daily, ...), endOfRepetiton: last day of the repetition (including)
-    public static void saveSerialevent(Event firstEvent) {
+    public static void saveSerialevent(Event firstEvent, Repetition repetition, Calendar endOfRepetition) {
         int fieldNumber;
         //determine field number of calendar object that should be updated laer (day, month or year)
-        switch (firstEvent.getRepetition()) {
+        switch (repetition) {
             case DAILY:
                 fieldNumber = Calendar.DAY_OF_MONTH;
                 break;
@@ -76,29 +76,32 @@ public class EventController {
                 fieldNumber = Calendar.YEAR;
         }
 //save first event;
-        firstEvent.setStartEvent(firstEvent);
         saveEvent(firstEvent);
         for (int i = 1; ; i++) {
             //copy first event in new temporary event and update the needed field of start and end time
-            Event repetitionEvent = new Event(firstEvent.getCreator());
+            Event repetitionEvent = new Event();
             repetitionEvent.setPlace(firstEvent.getPlace());
             repetitionEvent.setDescription(firstEvent.getDescription());
             repetitionEvent.setAccepted(firstEvent.getAccepted());
+            repetitionEvent.setCreator(firstEvent.getCreator());
+            repetitionEvent.setStartTime(firstEvent.getStartTime());
+            repetitionEvent.setEndTime(firstEvent.getEndTime());
             repetitionEvent.setEndTime(firstEvent.getEndDate());
             repetitionEvent.setShortTitle(firstEvent.getShortTitle());
             repetitionEvent.setStartEvent(firstEvent);
             Calendar temporary = new GregorianCalendar();
-            temporary.setTime(firstEvent.getStartTime());
+            temporary.setTime(repetitionEvent.getStartTime());
             temporary.add(fieldNumber, i);
             repetitionEvent.setStartTime(temporary.getTime());
-            temporary.setTime(firstEvent.getEndTime());
+            temporary.setTime(repetitionEvent.getEndTime());
             temporary.add(fieldNumber, i);
             repetitionEvent.setEndTime(temporary.getTime());
             //if end of repetition is overruned, stop,p else save the new Event;
-            if (repetitionEvent.getStartTime().after(firstEvent.getEndDate()))
+            if (repetitionEvent.getStartTime().after(endOfRepetition.getTime()))
                 break;
             saveEvent(repetitionEvent);
         }
 
     }
 }
+

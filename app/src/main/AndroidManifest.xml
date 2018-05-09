@@ -10,6 +10,16 @@
         android:theme="@style/AppTheme"
         android:name="com.activeandroid.app.Application">
 
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="hft.wiinf.de.horario.fileprovider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
+
         <activity
             android:name=".TabActivity"
             android:label="@string/title_activity_tab"
@@ -44,6 +54,4 @@
             android:exported="false">
         </provider>
     </application>
-
-
 </manifest>
