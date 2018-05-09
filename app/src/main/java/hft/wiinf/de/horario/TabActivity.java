@@ -3,6 +3,7 @@ package hft.wiinf.de.horario;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.activeandroid.ActiveAndroid;
+import com.facebook.stetho.Stetho;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,7 +25,7 @@ import java.util.regex.Pattern;
 import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.view.CalendarActivity;
-import hft.wiinf.de.horario.view.NewEventActivity;
+import hft.wiinf.de.horario.view.EventOverviewActivity;
 import hft.wiinf.de.horario.view.SettingsActivity;
 
 public class TabActivity extends AppCompatActivity {
@@ -41,25 +43,25 @@ public class TabActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tab);
 
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-
         //Start DB
         ActiveAndroid.initialize(this);
+        Stetho.initializeWithDefaults(this);
 
         mSectionsPageAdapter = new SectionsPageAdapterActivity(getSupportFragmentManager());
 
         //Set up the ViewPager with the sections adapter.
-        mViewPager = findViewById(R.id.container);
+        mViewPager = (ViewPager) findViewById(R.id.container);
         setupViewPager(mViewPager);
 
-        tabLayout = findViewById(R.id.tabBarLayout);
+        tabLayout = (TabLayout) findViewById(R.id.tabBarLayout);
         tabLayout.setupWithViewPager(mViewPager);
 
         //TODO Change Picture (DesignTeam)
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_android_black_24dp);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_android_black2_24dp);
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_android_black3_24dp);
-personMe=PersonController.getPersonWhoIam();
-        if (personMe == null||personMe.getName().equals("")) {
+
+        if (PersonController.getPersonWhoIam() == null) {
             openDialogAskForUsername();
         }
     }
@@ -96,13 +98,42 @@ personMe=PersonController.getPersonWhoIam();
                     } catch (NullPointerException e) {
                         Log.d(TAG, "TabActivity:" + e.getMessage());
                     }
+                } else if (tab.getPosition() == 1) {
+                    mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_relativeLayout_helper).setVisibility(View.GONE);
+                    mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_constrainLayout_main).setVisibility(View.VISIBLE);
+                    mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_floatingActionButtonMenu).setVisibility(View.VISIBLE);
+
+                    FloatingActionButton floatNewEvent = mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_floatingActionButtonNewEvent);
+                    FloatingActionButton floatQRScan = mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_floatingActionButtonScan);
+                    FloatingActionButton floatMenu = mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_floatingActionButtonMenu);
+                    TextView isFloatingMenuOpen = mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_hiddenField);
+
+                    floatNewEvent.hide();
+                    floatQRScan.hide();
+                    floatMenu.setImageResource(R.drawable.ic_android_black2_24dp);
+                    isFloatingMenuOpen.setText("false");
+
+                } else if (tab.getPosition() == 0) {
+                    mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_relativeLayout_helper).setVisibility(View.GONE);
+                    mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_Layout_main).setVisibility(View.VISIBLE);
+                    mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_floatingActionButtonMenu).setVisibility(View.VISIBLE);
+
+                    FloatingActionButton floatNewEvent = mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_floatingActionButtonNewEvent);
+                    FloatingActionButton floatQRScan = mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_floatingActionButtonScan);
+                    FloatingActionButton floatMenu = mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_floatingActionButtonMenu);
+                    TextView isFloatingMenuOpen = mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverviewFabClosed);
+
+                    floatNewEvent.hide();
+                    floatQRScan.hide();
+                    floatMenu.setImageResource(R.drawable.ic_android_black2_24dp);
+                    isFloatingMenuOpen.setText("false");
                 }
             }
 
             //Do something if Tab is reselected. Parameters: selected Tab.--- Info: tab.getPosition() == x for check which Tab
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                if (tab.getPosition() == 2 ) {
+                if (tab.getPosition() == 2) {
                     //Set Visibility of mainLayout to Visible and the rest to Gone, to see only the overview
                     try {
                         mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_helper).setVisibility(View.GONE);
@@ -119,6 +150,36 @@ personMe=PersonController.getPersonWhoIam();
                     } catch (NullPointerException e) {
                         Log.d(TAG, "TabActivity:" + e.getMessage());
                     }
+                } else if (tab.getPosition() == 1) {
+                    mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_relativeLayout_helper).setVisibility(View.GONE);
+                    mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_constrainLayout_main).setVisibility(View.VISIBLE);
+                    mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_floatingActionButtonMenu).setVisibility(View.VISIBLE);
+
+                    FloatingActionButton floatNewEvent = mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_floatingActionButtonNewEvent);
+                    FloatingActionButton floatQRScan = mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_floatingActionButtonScan);
+                    FloatingActionButton floatMenu = mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_floatingActionButtonMenu);
+                    TextView isFloatingMenuOpen = mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_hiddenField);
+
+
+                    floatNewEvent.hide();
+                    floatQRScan.hide();
+                    floatMenu.setImageResource(R.drawable.ic_android_black2_24dp);
+                    isFloatingMenuOpen.setText("false");
+
+                } else if (tab.getPosition() == 0) {
+                    mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_relativeLayout_helper).setVisibility(View.GONE);
+                    mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_Layout_main).setVisibility(View.VISIBLE);
+                    mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_floatingActionButtonMenu).setVisibility(View.VISIBLE);
+
+                    FloatingActionButton floatNewEvent = mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_floatingActionButtonNewEvent);
+                    FloatingActionButton floatQRScan = mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_floatingActionButtonScan);
+                    FloatingActionButton floatMenu = mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_floatingActionButtonMenu);
+                    TextView isFloatingMenuOpen = mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverviewFabClosed);
+
+                    floatNewEvent.hide();
+                    floatQRScan.hide();
+                    floatMenu.setImageResource(R.drawable.ic_android_black2_24dp);
+                    isFloatingMenuOpen.setText("false");
                 }
             }
         });
@@ -126,7 +187,7 @@ personMe=PersonController.getPersonWhoIam();
 
     private void setupViewPager(ViewPager viewPager) {
         SectionsPageAdapterActivity adapter = mSectionsPageAdapter;
-        adapter.addFragment(new NewEventActivity(), "");
+        adapter.addFragment(new EventOverviewActivity(), "");
         adapter.addFragment(new CalendarActivity(), "");
         adapter.addFragment(new SettingsActivity(), "");
         viewPager.setAdapter(adapter);
@@ -156,7 +217,7 @@ personMe=PersonController.getPersonWhoIam();
 
                 if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches()) {
                     //ToDo: Flo - PhoneNumber
-                    personMe = new Person(true,"007", dialog_inputUsername);
+                    personMe = new Person(true, "007", dialog_inputUsername);
                     PersonController.addPersonMe(personMe);
 
                     Toast toast = Toast.makeText(v.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT);
@@ -171,6 +232,5 @@ personMe=PersonController.getPersonWhoIam();
                 }
             }
         });
-
     }
 }

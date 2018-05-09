@@ -57,6 +57,7 @@ public class SettingsSettingsFragment extends Fragment {
     @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        //if the user is in the db read the user from db, else create a new one
         try {
             person = PersonController.getPersonWhoIam();
             if (person==null)
@@ -69,6 +70,7 @@ public class SettingsSettingsFragment extends Fragment {
         textView_reminder = view.findViewById(R.id.settings_settings_textView_reminder);
         switch_enablePush = view.findViewById(R.id.settings_settings_Switch_allowPush);
         spinner_pushMinutes=view.findViewById(R.id.settings_settings_spinner_minutes);
+        //save a change of the switch in the db and change visibility of the minutes spinner and textview
         switch_enablePush.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -123,11 +125,13 @@ pushNotificationVisibility();
             }
         });
 
-
+// set the choice posibilities of the push minutes dropdown
         ArrayAdapter minutesAdapter = ArrayAdapter.createFromResource(getContext(), R.array.push_times, android.R.layout.simple_spinner_item);
         minutesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_pushMinutes.setAdapter(minutesAdapter);
+        //set the choice selection - if there is something in db saved
     spinner_pushMinutes.setSelection(getItemPosition());
+    //if something is selected of the spinner, update the person
       spinner_pushMinutes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -145,7 +149,7 @@ pushNotificationVisibility();
 
         });
     }
-
+//if the switch is not selected dont show the minutes textview and textedit
     private void pushNotificationVisibility() {
         if (person.isEnablePush()){
             textView_reminder.setVisibility(View.VISIBLE);
@@ -158,7 +162,7 @@ pushNotificationVisibility();
         }
     }
 
-
+//return the currect item position based of the saved pushminutes
     private int getItemPosition() {
         switch (person.getPushMinutes()){
             case 0: return 0;
