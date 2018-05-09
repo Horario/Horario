@@ -144,6 +144,8 @@ public class NewEventFragment extends Fragment {
         //set the appearence of one choice posibility
         repetitionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_repetition.setAdapter(repetitionAdapter);
+       //set weekly selected until the user selects something different or it is overwriten by the loaded event
+        spinner_repetition.setSelection(2);
         //don't open keyboard on focus,
         editText_endOfRepetition.setShowSoftInputOnFocus(false);
         // when it gets focus or the user clicks on the field: open date/time picker and save the date
