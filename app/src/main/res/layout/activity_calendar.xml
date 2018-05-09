@@ -21,15 +21,7 @@
         android:layout_width="match_parent"
         android:id="@+id/calendar_temp_relativeLayout_main">
 
-        <Button
-            android:id="@+id/gotogenerator"
-            android:layout_width="113dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="43dp"
-            android:text="Go to QR Generator" />
-    </RelativeLayout>
+        </RelativeLayout>
 
 
     <com.github.sundeepk.compactcalendarview.CompactCalendarView xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -83,12 +75,11 @@
         app:layout_constraintVertical_bias="1.0"
         tools:background="#ffe95451" />
 
-    <!-- ToDo magrinBottom nach dem Testen von 50 auf 8 stellen! -->
     <ListView
         android:id="@+id/calendarLvList"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"

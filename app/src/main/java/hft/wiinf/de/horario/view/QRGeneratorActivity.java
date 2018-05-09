@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +15,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
@@ -28,8 +28,8 @@ public class QRGeneratorActivity extends Fragment {
     private RelativeLayout mQRGenerator_relativeLayout_show_qrSharingFragment;
     private Button mQRGenerator_button_start_qrSharingFragment, mQRGenerator_button_start_eventFeedbackFragment;
     private Person mPerson;
-    private StringBuffer mQRGenerator_StringBuffer_headline, mQRGenerator_StringBuffer_description, mQRGenerator_StringBuffer_test;
-    private Event mEvent, mEvent2, mEvent3;
+    private StringBuffer mQRGenerator_StringBuffer_description;
+    private Event mEvent;
 
     public QRGeneratorActivity() {
         // Required empty public constructor
@@ -46,41 +46,26 @@ public class QRGeneratorActivity extends Fragment {
         mQRGenerator_textView_headline = view.findViewById(R.id.generator_textView_Headline);
         mQRGenerator_relativeLayout_show_qrSharingFragment = view.findViewById(R.id.generator_relativeLayout_show_qrSharingFragment);
 
-        //Erstellen von zwei Dummydaten
-        //ToDo Dummydaten löschen
-        // EndDate Sollte der 20.04.18 14Uhr sein
-        // StartDate sollte der 05.04.18 11Uhr sein
-        Date startDate = new Date(152292600);
-        Date endDate = new Date(1524232800);
+        //Modify GUI
+        //Make Description TextView Scrollable and Show the Scrollbar permanently
+        mQRGenerator_textView_description.setMovementMethod(new ScrollingMovementMethod());
+        mQRGenerator_textView_description.setScrollbarFadingEnabled(false);
 
-        mEvent = new Event();
-        mEvent.setShortTitle("Biologie");
-        mEvent.setDescription("Wir machen Experimente im Labor 3");
-        mEvent.setPlace("Labor 3");
-        mEvent.setStartTime(startDate);
-        mEvent.setEndTime(endDate);
-        //
-        mEvent.setStartEvent(mEvent);
-        //mEvent.setRepetition(mEvent.WEEKLY);
-        EventController.saveEvent(mEvent);
-
-        mEvent2 = new Event();
-        mEvent2.setShortTitle("Mathe");
-        mEvent2.setDescription("Mathe mit Hr. Conradt");
-        mEvent2.setPlace("1/208");
-        mEvent2.setStartTime(startDate);
-        mEvent2.setEndTime(endDate);
-        mEvent2.setEndDate(endDate);
-        mEvent2.setStartEvent(mEvent);
-        EventController.saveEvent(mEvent2);
-
-
-
+        // Add to the Even the EventId to use it later for Generate the StringBuffer
+        mEvent = EventController.getEventById(eventLongID());
         mPerson = PersonController.getPersonWhoIam();
 
         return view;
     }
 
+    // Get the EventID (LONG) from the NewEventActivityFragment
+    public Long eventLongID() {
+        Bundle eventID = getArguments();
+        Long eventLongIdNew = eventID.getLong("eventId");
+        return eventLongIdNew;
+    }
+
+    //Generate a StringBuffer with the Event Information
     public StringBuffer stringBufferGenerator() {
         //Modify the Dateformat form den DB to get a more readable Form for Date and Time disjunct
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
@@ -90,11 +75,16 @@ public class QRGeneratorActivity extends Fragment {
         String stringSplitSymbol = " | "; //
 
         // Merge the Data Base Information to one Single StringBuffer with the Format:
-        // Creator, StartDate, EndDate, StartTime, EndTime, Place, Description
+        // CreatorEventId(NOT EVENTID!!!), StartDate, EndDate, StartTime, EndTime, Repetition,
+        // ShortTitle, Place, Description, EventCreatorName
         mQRGenerator_StringBuffer_description = new StringBuffer();
+        mQRGenerator_StringBuffer_description.append(mEvent.getCreatorEventId()+stringSplitSymbol);
         mQRGenerator_StringBuffer_description.append(simpleDateFormat.format(mEvent.getStartTime()) + stringSplitSymbol);
+        mQRGenerator_StringBuffer_description.append(simpleDateFormat.format(mEvent.getEndDate())+stringSplitSymbol);
         mQRGenerator_StringBuffer_description.append(simpleTimeFormat.format(mEvent.getStartTime()) + stringSplitSymbol);
         mQRGenerator_StringBuffer_description.append(simpleTimeFormat.format(mEvent.getEndTime()) + stringSplitSymbol);
+        mQRGenerator_StringBuffer_description.append(mEvent.getRepetition()+stringSplitSymbol);
+        mQRGenerator_StringBuffer_description.append(mEvent.getShortTitle()+stringSplitSymbol);
         mQRGenerator_StringBuffer_description.append(mEvent.getPlace() + stringSplitSymbol);
         mQRGenerator_StringBuffer_description.append(mEvent.getDescription() + stringSplitSymbol);
         mQRGenerator_StringBuffer_description.append(mPerson.getName());
@@ -102,23 +92,60 @@ public class QRGeneratorActivity extends Fragment {
         return mQRGenerator_StringBuffer_description;
 
     }
-
     @SuppressLint("LongLogTag")
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         try {
-            //Put StringBufffer in an Array an split the Values to new String Variables
-            //Index: 0 = StartDate; 1 = StartTime; 2= EndTime; 3=Descriptoin; 4=Location; 5=EventCreator
+            //Put StringBufffer in an Array and split the Values to new String Variables
+            //Index: 0 = CreatorID; 1 = StartDate; 2 = EndDate; 3 = StartTime; 4 = EndTime;
+            //       5 = Repetition; 6 = ShortTitle; 7 = Place; 8 = Descriptoin;  9 = EventCreatorName
             String[] eventStringBufferArray = String.valueOf(stringBufferGenerator()).split("\\|");
-            String startDate = eventStringBufferArray[0];
-            String startTime = eventStringBufferArray[1];
-            String endTime = eventStringBufferArray[2];
-            String description = eventStringBufferArray[4];
-            String location = eventStringBufferArray[3];
-            String eventCreator = eventStringBufferArray[5];
+            String creatorId = eventStringBufferArray[0].trim();
+            String startDate = eventStringBufferArray[1].trim();
+            String endDate = eventStringBufferArray[2].trim();
+            String startTime = eventStringBufferArray[3].trim();
+            String endTime = eventStringBufferArray[4].trim();
+            String repetition = eventStringBufferArray[5].trim();
+            String shortTitle = eventStringBufferArray[6].trim();
+            String place = eventStringBufferArray[7].trim();
+            String description = eventStringBufferArray[8].trim();
+            String eventCreatorName = eventStringBufferArray[9].trim();
 
-            mQRGenerator_textView_headline.setText("Dein Termin" + "\n" + description + ", " + startDate);
-            mQRGenerator_textView_description.setText(stringBufferGenerator());
+            // Change the DataBase Repetition Information in a German String for the Repetition Element
+            // like "Daily" into "täglich" and so on
+            switch (repetition) {
+                case "YEARLY":
+                    repetition = "jährlich";
+                    break;
+                case "MONTHLY":
+                repetition = "monatlich";
+                    break;
+                case "WEEKLY":
+                    repetition = "wöchentlich";
+                    break;
+                case "DAILY":
+                    repetition = "täglich";
+                    break;
+                case "NONE":
+                    repetition = "";
+                    break;
+                default:
+                    repetition = "ohne Wiederholung";
+            }
+
+            // Event shortTitel in Headline with StartDate
+            mQRGenerator_textView_headline.setText("Dein Termin" + "\n" + shortTitle+ ", " + startDate);
+
+            // Check for a Repetition Event and Change the Description Output with and without
+            // Repetition Element inside.
+            if(repetition.equals("")){
+                mQRGenerator_textView_description.setText("Am "+startDate+" findet von "+startTime+" Uhr "
+                +endTime+" Uhr in Raum "+place+" "+shortTitle+" statt."+"\n\n"+"Details sind: "+description+"\n\n"+"Organisator: "+eventCreatorName );
+            }else{
+                mQRGenerator_textView_description.setText("Vom "+startDate+" bis "+endDate+ " findet "+repetition+" von "+startTime+" bis "
+                        +endTime+" Uhr in Raum "+place+" "+shortTitle+" statt."+"\n\n"+"Details sind: "+description+"\n\n"+"Organisator: "+eventCreatorName );
+                }
+
         } catch (NullPointerException e) {
             Log.d(TAG, "QRGeneratorFragmentActivity: " + e.getMessage());
         }

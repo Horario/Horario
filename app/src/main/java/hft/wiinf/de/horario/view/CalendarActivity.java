@@ -1,24 +1,17 @@
 package hft.wiinf.de.horario.view;
 
-import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
-import android.widget.Button;
-
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
@@ -57,9 +50,6 @@ public class CalendarActivity extends Fragment {
         calendarLvList = view.findViewById(R.id.calendarLvList);
         calendarTvDay = view.findViewById(R.id.calendarTvDay);
 
-        //ToDo -> TestButtons löschen
-        Button genbtn = view.findViewById(R.id.gotogenerator);
-
         Date today = new Date();
         calendarTvMonth.setText(monthFormat.format(today)); //initialize month field
         calendarTvDay.setText(dayFormat.format(today));
@@ -80,30 +70,6 @@ public class CalendarActivity extends Fragment {
             }
 
         });
-
-        //Change onClick the Fragment CalendarActivity with the QRGenerator
-        //ToDo Entfernen nach dem Testen
-        genbtn.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onClick(View view) {
-                try {
-                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.newFragment, new QRGeneratorActivity());
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
-                    calendar_temp_relativeLayout_main.setVisibility(View.GONE);
-                    calendarLvList.setVisibility(View.GONE);
-                    calendarTvDay.setVisibility(View.GONE);
-                    calendarTvMonth.setVisibility(View.GONE);
-                    calendarCvCalendar.setVisibility(View.GONE);
-                    newFragment_relativLayout.setVisibility(View.VISIBLE);
-                } catch (NullPointerException e) {
-                    Log.d(TAG, "CalendarActivity:" + e.getMessage());
-                }
-            }
-        });
-
         return view;
     }
 

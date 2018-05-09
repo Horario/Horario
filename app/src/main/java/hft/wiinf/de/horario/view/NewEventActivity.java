@@ -28,8 +28,6 @@ import android.widget.Toast;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -69,6 +67,7 @@ public class NewEventActivity extends Fragment {
         endTime.set(Calendar.MILLISECOND,0);
         endOfRepetition.set(Calendar.SECOND,0);
         endOfRepetition.set(Calendar.MILLISECOND,0);
+
         edittext_shortTitle = view.findViewById(R.id.newEvent_textEdit_shortTitle);
         editText_description = view.findViewById(R.id.newEvent_editText_description);
         edittext_room = view.findViewById(R.id.newEvent_textEdit_room);
@@ -81,6 +80,8 @@ public class NewEventActivity extends Fragment {
         textView_endofRepetiton = view.findViewById(R.id.newEvent_textView_endOfRepetiton);
         textView_repetition = view.findViewById(R.id.newEvent_textView_repetition);
         button_save = view.findViewById(R.id.newEvent_button_save);
+
+
         edittext_date.setShowSoftInputOnFocus(false);
         edittext_date.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -95,6 +96,7 @@ public class NewEventActivity extends Fragment {
                 getDate();
             }
         });
+
         edittext_startTime.setShowSoftInputOnFocus(false);
         edittext_startTime.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -110,6 +112,7 @@ public class NewEventActivity extends Fragment {
             }
         });
         editText_endTime.setShowSoftInputOnFocus(false);
+
         editText_endTime.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -123,12 +126,14 @@ public class NewEventActivity extends Fragment {
                 getEndTime();
             }
         });
+
         checkBox_serialEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 checkSerialEvent();
             }
         });
+
         ArrayAdapter repetitionAdapter = ArrayAdapter.createFromResource(getContext(), R.array.event_repetitions, android.R.layout.simple_spinner_item);
         repetitionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_repetition.setAdapter(repetitionAdapter);
@@ -237,13 +242,13 @@ public class NewEventActivity extends Fragment {
 
 
     public void onButtonClickSave() {
-        if (checkValidity()) {
-            Person me = PersonController.getPersonWhoIam();
-            if (me == null || me.getName().equals(""))
-                askforUserName();
-            else
+        //if (checkValidity()) {
+         //   Person me = PersonController.getPersonWhoIam();
+          //  if (me == null || me.getName().equals(""))
+          //      askforUserName();
+          //  else
                 saveEvent();
-        }
+       // }
     }
 
     public void saveEvent() {
@@ -357,7 +362,7 @@ public class NewEventActivity extends Fragment {
         });
     }
 
-
+/*
     private boolean checkValidity() {
         if (editText_description.getText().toString().equals("") || edittext_shortTitle.getText().toString().equals("") || edittext_date.getText().toString().equals("") || edittext_startTime.getText().toString().equals("") || editText_endTime.getText().toString().equals("") || edittext_room.getText().toString().equals("")) {
             Toast.makeText(getContext(), R.string.empty_fields, Toast.LENGTH_LONG).show();
@@ -407,6 +412,7 @@ public class NewEventActivity extends Fragment {
         return true;
     }
 
+*/
     private Repetition getRepetition() {
         if (!checkBox_serialEvent.isChecked()) {
             return Repetition.NONE;

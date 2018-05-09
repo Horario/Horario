@@ -87,18 +87,56 @@ public class QRSharingActivity extends Fragment {
         //Start the QR Code GeneratorMethod and Show all Even Informations
         qrBitMapGenerator();
 
-        //Put StringBufffer in an Array an split the Values to new String Variables
-        //Index: 0 = StartDate; 1 = StartTime; 2= EndTime; 3=Descriptoin; 4=Location; 5=EventCreator
+
+
+
         try {
-            String[] eventStringBufferResultAsArray = eventStringResultDescription().split("\\| ");
-            String startDate = eventStringBufferResultAsArray[0];
-            String startTime = eventStringBufferResultAsArray[1];
-            String endTime = eventStringBufferResultAsArray[2];
-            String description = eventStringBufferResultAsArray[4];
-            String location = eventStringBufferResultAsArray[3];
-            String eventCreator = eventStringBufferResultAsArray[5];
-            mQRSharing_textView_description.setText(startDate + "\n" + location + "\n" + eventCreator);
-            mQRSharing_textView_headline.setText(description);
+            //Put StringBufffer in an Array and split the Values to new String Variables
+            //Index: 0 = CreatorID; 1 = StartDate; 2 = EndDate; 3 = StartTime; 4 = EndTime;
+            //       5 = Repetition; 6 = ShortTitle; 7 = Place; 8 = Descriptoin;  9 = EventCreatorName
+            String[] eventStringBufferArray = String.valueOf(eventStringResultDescription()).split("\\|");
+            String startDate = eventStringBufferArray[1].trim();
+            String endDate = eventStringBufferArray[2].trim();
+            String startTime = eventStringBufferArray[3].trim();
+            String endTime = eventStringBufferArray[4].trim();
+            String repetition = eventStringBufferArray[5].toUpperCase().trim();
+            String shortTitle = eventStringBufferArray[6].trim();
+            String place = eventStringBufferArray[7].trim();
+            String eventCreatorName = eventStringBufferArray[9].trim();
+
+            // Change the DataBase Repetition Information in a German String for the Repetition Element
+            // like "Daily" into "täglich" and so on
+            switch (repetition) {
+                case "YEARLY":
+                    repetition = "jährlich";
+                    break;
+                case "MONTHLY":
+                    repetition = "monatlich";
+                    break;
+                case "WEEKLY":
+                    repetition = "wöchentlich";
+                    break;
+                case "DAILY":
+                    repetition = "täglisch";
+                    break;
+                case "NONE":
+                    repetition = "";
+                    break;
+                default:
+                    repetition = "ohne Wiederholung";
+            }
+
+            // Event shortTitel in Headline with StartDate
+            mQRSharing_textView_headline.setText(shortTitle);
+            // Check for a Repetition Event and Change the Description Output with and without
+            // Repetition Element inside.
+            if(repetition.equals("")){
+                mQRSharing_textView_description.setText(startDate + "\n" + place + "\n" + eventCreatorName);
+            }else{
+                mQRSharing_textView_description.setText(startDate +"-"+endDate+ "\n"+repetition+"\n"+startTime+" Uhr - "
+                        +endTime+" Uhr \n"+"Raum "+place+"\n"+"Organisator: "+eventCreatorName );
+            }
+
         } catch (NullPointerException e) {
             Log.d(TAG, "QRSharingFragmentActivity:" + e.getMessage());
 
@@ -106,6 +144,7 @@ public class QRSharingActivity extends Fragment {
 
         return view;
     }
+
 
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
@@ -154,5 +193,6 @@ public class QRSharingActivity extends Fragment {
                 }
             }
         });
+
     }
 }
