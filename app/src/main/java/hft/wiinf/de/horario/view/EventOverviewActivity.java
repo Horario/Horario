@@ -55,7 +55,7 @@ public class EventOverviewActivity extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
-                fr.replace(R.id.eventOverview_relativeLayout_helper, new NewEventFragment());
+                fr.replace(R.id.eventOverview_relativeLayout_helper, new NewEventActivity());
                 fr.addToBackStack(null);
                 fr.commit();
                 rLayout_eventOverview_helper.setVisibility(View.VISIBLE);
