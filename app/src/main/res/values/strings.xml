@@ -67,6 +67,9 @@
     <string name="description_spaces">Die beschreibung darf nicht mit Leerzeichen beginnen</string>
     <string name="place_spaces">Der Raum darf nicht mit Leerzeichen beginnen</string>
     <string name="room_too_long">Der Raum darf nicht länger als 100 Zeichen sein</string>
+    <string name="shortTitle_peek">Der Kurztitel darf nicht das Zeichen | enthalten</string>
+    <string name="description_peek">Die Beschreibung darf nicht das Zeichen | enthalten.</string>
+    <string name="room_peek">Das Feld Raum darf nicht das Zeichen | enthalten.</string>
 
     <string-array name="push_times">
         <item name="push_time_0">0</item>
