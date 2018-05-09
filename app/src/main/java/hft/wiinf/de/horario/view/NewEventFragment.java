@@ -380,7 +380,7 @@ public class NewEventFragment extends Fragment {
         Calendar now = Calendar.getInstance();
         now.set(Calendar.SECOND,0);
         now.set(Calendar.MILLISECOND,0);
-        if (now.before(startTime)){
+        if (startTime.before(now)){
             Toast.makeText(getContext(), R.string.startTime_past, Toast.LENGTH_LONG).show();
             return false;
         }
