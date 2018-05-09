@@ -24,13 +24,13 @@
     <string name="allowpush_text">Push Nachrichten erlauben :</string>
     <string name="reminder_text">Erinnerungen :</string>
     <string name="minutesBefore_text">Minuten vorher</string>
-    <string name="noValidUsername">Benutzername darf nicht mit Leerzeichen anfangen!</string>
-    <string name="event_Description">Terminbeschreibung</string>
-    <string name="event_date">Datum</string>
-    <string name="event_startTime">Startzeit</string>
-    <string name="event_endtime">Endzeit</string>
+    <string name="noValidUsername">Benutzername darf nicht mit Leerzeichen anfangen.</string>
+    <string name="event_Description">Terminbeschreibung :</string>
+    <string name="event_date">Datum:</string>
+    <string name="event_startTime">Startzeit :</string>
+    <string name="event_endtime">Endzeit :</string>
     <string name="event_serialEvent">Serientermin</string>
-    <string name="event_endOfRepetition">wiederholen bis</string>
+    <string name="event_endOfRepetition">wiederholen bis :</string>
     <string name="event_save">Termin speichern</string>
     <string name="event_room">Raum</string>
     <string name="event_shortTitle">Kurztitel</string>
@@ -44,11 +44,11 @@
         <item name="event_repetition_weekly">wöchentlich</item>
         <item name="event_repetition_daily">täglich</item>
     </string-array>
-    <string name="empty_fields">Bitte füllen Sie alle Pflichtfelder aus</string>
+    <string name="empty_fields">Bitte füllen Sie alle Pflichtfelder aus.</string>
 
     <string name="endTime_before_startTime">Die Endzeit darf nicht vor der Startzeit liegen.</string>
 
-    <string name="endOfRepetition_before_endTime">Das Enddatum der Wiederholung darf nicht vor der Endzeit liegen</string>
+    <string name="endOfRepetition_before_endTime">Das Enddatum der Wiederholung darf nicht vor der Endzeit liegen.</string>
     <string name="event_saving_successful">Der termin wurde erfolgreich gespeichert. Was möchten Sie nun tun?</string>
 <string name="savingSuccessful_new">neuen Termin erstellen</string>
     <string name="savingSuccessful_qrcode">QRCode anzeigen</string>
