@@ -351,12 +351,24 @@ public class NewEventFragment extends Fragment {
             Toast.makeText(getContext(), R.string.shortTitle_spaces, Toast.LENGTH_LONG).show();
             return false;
         }
+        if (edittext_shortTitle.getText().toString().contains("|")){
+            Toast.makeText(getContext(), R.string.shortTitle_peek, Toast.LENGTH_LONG).show();
+            return false;
+        }
         if (editText_description.getText().toString().matches(" +.*")){
             Toast.makeText(getContext(), R.string.description_spaces, Toast.LENGTH_LONG).show();
             return false;
         }
+        if (editText_description.getText().toString().contains("|")){
+            Toast.makeText(getContext(), R.string.description_peek, Toast.LENGTH_LONG).show();
+            return false;
+        }
         if (edittext_room.getText().toString().matches(" +.*")){
             Toast.makeText(getContext(), R.string.place_spaces, Toast.LENGTH_LONG).show();
+            return false;
+        }
+        if (edittext_room.getText().toString().contains("|")){
+            Toast.makeText(getContext(), R.string.room_peek, Toast.LENGTH_LONG).show();
             return false;
         }
         if (edittext_userName.getText().toString().matches(" +.*")){

@@ -60,31 +60,14 @@ public class SettingsSettingsFragment extends Fragment {
         //if the user is in the db read the user from db, else create a new one
         try {
             person = PersonController.getPersonWhoIam();
-            if (person==null)
-                person=new Person(true,"007","");
+            if (person == null)
+                person = new Person(true, "007", "");
         } catch (NullPointerException e) {
             Log.d(TAG, "SettingsActivity:" + e.getMessage());
         }
         editTextUsername = view.findViewById(R.id.settings_settings_editText_username);
-        textView_minutesBefore=view.findViewById(R.id.settings_settings_textView_minutesBefore);
-        textView_reminder = view.findViewById(R.id.settings_settings_textView_reminder);
-        switch_enablePush = view.findViewById(R.id.settings_settings_Switch_allowPush);
-        spinner_pushMinutes=view.findViewById(R.id.settings_settings_spinner_minutes);
-        //save a change of the switch in the db and change visibility of the minutes spinner and textview
-        switch_enablePush.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                person.setEnablePush(isChecked);
-pushNotificationVisibility();
-PersonController.savePerson(person);
-            }
-        });
-        switch_enablePush.setChecked(person.isEnablePush());
-        spinner_pushMinutes.setSelection(getItemPosition());
-
-
 // set the user name of the person (empty string if no person set)
-            editTextUsername.setText(person.getName());
+        editTextUsername.setText(person.getName());
 
         //Make EditText-Field editable
         editTextUsername.setOnTouchListener(new View.OnTouchListener() {
@@ -95,8 +78,6 @@ PersonController.savePerson(person);
                 return false;
             }
         });
-        switch_enablePush.setChecked(person.isEnablePush());
-pushNotificationVisibility();
         //Everything that needs to happen after Username was written in the EditText-Field
         editTextUsername.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -110,7 +91,7 @@ pushNotificationVisibility();
                 if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches()) {
                     //ToDo: get correct phoneNumber
                     person.setName(inputText);
-                        PersonController.addPersonMe(person);
+                    PersonController.addPersonMe(person);
                     Toast toast = Toast.makeText(view.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT);
                     toast.show();
                     editTextUsername.setFocusable(false);
@@ -118,63 +99,13 @@ pushNotificationVisibility();
                 } else {
                     Toast toast = Toast.makeText(view.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
                     toast.show();
-                        editTextUsername.setText(person.getName());
+                    editTextUsername.setText(person.getName());
                     return true;
                 }
                 return false;
             }
         });
 
-// set the choice posibilities of the push minutes dropdown
-        ArrayAdapter minutesAdapter = ArrayAdapter.createFromResource(getContext(), R.array.push_times, android.R.layout.simple_spinner_item);
-        minutesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_pushMinutes.setAdapter(minutesAdapter);
-        //set the choice selection - if there is something in db saved
-    spinner_pushMinutes.setSelection(getItemPosition());
-    //if something is selected of the spinner, update the person
-      spinner_pushMinutes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String s= (String) parent.getItemAtPosition(position);
-                int minutes = Integer.parseInt(s);
-                    person.setPushMinutes(minutes);
-                    PersonController.savePerson(person);
-
-            }
-
-                @Override
-                public void onNothingSelected (AdapterView < ? > parent){
-
-                }
-
-        });
-    }
-//if the switch is not selected dont show the minutes textview and textedit
-    private void pushNotificationVisibility() {
-        if (person.isEnablePush()){
-            textView_reminder.setVisibility(View.VISIBLE);
-            textView_minutesBefore.setVisibility(View.VISIBLE);
-            spinner_pushMinutes.setVisibility(View.VISIBLE);
-        } else{
-            textView_reminder.setVisibility(View.GONE);
-            textView_minutesBefore.setVisibility(View.GONE);
-            spinner_pushMinutes.setVisibility(View.GONE);
-        }
-    }
-
-//return the currect item position based of the saved pushminutes
-    private int getItemPosition() {
-        switch (person.getPushMinutes()){
-            case 0: return 0;
-            case 5: return 1;
-            case 15: return 2;
-            case 30: return 3;
-            case 60: return 4;
-            case 90: return 5;
-            case 120: return 6;
-            default: return 0;
-
-        }
 
     }
 }
