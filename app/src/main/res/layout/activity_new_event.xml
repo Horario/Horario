@@ -18,18 +18,16 @@
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:scrollbarStyle="insideOverlay"
-        android:scrollbars="vertical">
+        android:focusable="false"
+        android:focusableInTouchMode="true">
 
         <TextView
             android:id="@+id/newEventTab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:layout_alignParentEnd="true"
-
+            android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginEnd="122dp"
             android:text="@string/newEvent"
             android:textSize="25sp" />
 
@@ -44,6 +42,7 @@
 
             android:layout_alignParentEnd="true"
             android:layout_below="@+id/newEvent_textEdit_shortTitle"
+            android:layout_marginBottom="10dp"
             android:ems="10"
             android:inputType="textPersonName" />
 
@@ -56,8 +55,8 @@
 
             android:layout_height="wrap_content"
 
+            android:layout_alignBaseline="@+id/newEvent_editText_description"
             android:layout_alignParentStart="true"
-            android:layout_alignTop="@+id/newEvent_editText_description"
             android:text="@string/event_Description" />
 
 
@@ -69,7 +68,7 @@
 
             android:layout_height="wrap_content"
 
-            android:layout_alignBaseline="@+id/newEvent_editText_Date"
+            android:layout_alignBottom="@+id/newEvent_editText_Date"
             android:layout_alignParentStart="true"
             android:text="@string/event_date" />
 
@@ -82,9 +81,8 @@
 
             android:layout_height="wrap_content"
 
+            android:layout_above="@+id/newEvent_editText_startTime"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="178dp"
             android:ems="10" />
 
 
@@ -96,7 +94,7 @@
 
             android:layout_height="wrap_content"
 
-            android:layout_alignBaseline="@+id/newEvent_editText_startTime"
+            android:layout_alignBottom="@+id/newEvent_editText_startTime"
             android:layout_alignParentStart="true"
             android:text="@string/event_startTime" />
 
@@ -109,9 +107,8 @@
 
             android:layout_height="wrap_content"
 
+            android:layout_above="@+id/newEvent_textEdit_endTime"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="232dp"
             android:ems="10"
             android:focusable="true" />
 
@@ -126,6 +123,8 @@
 
             android:layout_alignBaseline="@+id/newEvent_textEdit_endTime"
             android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="189dp"
             android:text="@string/event_endtime" />
 
 
@@ -136,9 +135,8 @@
             android:layout_width="wrap_content"
 
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_above="@+id/unewEvent_textEdit_userName"
             android:layout_alignParentEnd="true"
-            android:layout_marginBottom="235dp"
             android:ems="10"
             android:focusable="true" />
 
@@ -153,7 +151,7 @@
 
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
-            android:layout_marginBottom="133dp"
+            android:layout_marginBottom="151dp"
             android:checked="false"
             android:text="@string/event_serialEvent" />
 
@@ -253,7 +251,8 @@
             android:layout_height="wrap_content"
 
             android:layout_alignParentEnd="true"
-            android:layout_below="@+id/newEvent_editText_description"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="108dp"
             android:ems="10"
             android:imeOptions="actionDone"
             android:inputType="text" />
@@ -265,6 +264,7 @@
 
             android:layout_alignParentEnd="true"
             android:layout_below="@+id/newEventTab"
+            android:layout_marginTop="-12dp"
             android:ems="10"
             android:inputType="text" />
 
@@ -280,19 +280,18 @@
             android:id="@+id/newEvent_textVire_userName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_alignBottom="@+id/unewEvent_textEdit_userName"
             android:layout_alignParentStart="true"
-            android:layout_marginBottom="191dp"
             android:text="@string/username_text" />
 
         <EditText
             android:id="@+id/unewEvent_textEdit_userName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/newEvent_textVire_userName"
+            android:layout_above="@+id/newEvent_checkBox_SerialEvent"
             android:layout_alignParentEnd="true"
             android:ems="10"
-            android:inputType="textPersonName" />
+            android:inputType="text" />
 
 
     </RelativeLayout>
