@@ -11,9 +11,11 @@
         android:theme="@style/AppTheme"
         android:name="com.activeandroid.app.Application">
 
+
         <activity
             android:name=".TabActivity"
             android:label="Horario"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
