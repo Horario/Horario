@@ -71,6 +71,8 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
+    //github lib for SMS reading and more
+    compile 'me.everything:providers-android:1.0.1'
 
     implementation 'com.github.sundeepk:compact-calendar-view:2.0.3-beta'
 

@@ -16,7 +16,7 @@ import hft.wiinf.de.horario.R;
 
 public class EventOverviewActivity extends Fragment {
 
-    FloatingActionButton eventOverviewFcMenu, eventOverviewFcQrScan, eventOverviewFcNewEvent;
+    FloatingActionButton eventOverviewFcMenu, eventOverviewFcQrScan, eventOverviewFcNewEvent, eventOverviewFcTemporaryGetParticipants;//TODO: delete last button as soon as detailed view of event exists
     RelativeLayout rLayout_eventOverview_helper;
     ConstraintLayout cLayout_eventOverview_main;
     TextView eventOverview_HiddenIsFloatingMenuOpen;
@@ -30,12 +30,14 @@ public class EventOverviewActivity extends Fragment {
         eventOverviewFcMenu = view.findViewById(R.id.eventOverview_floatingActionButtonMenu);
         eventOverviewFcNewEvent = view.findViewById(R.id.eventOverview_floatingActionButtonNewEvent);
         eventOverviewFcQrScan = view.findViewById(R.id.eventOverview_floatingActionButtonScan);
+        eventOverviewFcTemporaryGetParticipants = view.findViewById(R.id.eventOverview_floatingActionButtonTemporaryGetParticipants);//TODO: delete as soon as detailed view of event exists
         rLayout_eventOverview_helper = view.findViewById(R.id.eventOverview_relativeLayout_helper);
         cLayout_eventOverview_main = view.findViewById(R.id.eventOverview_Layout_main);
         eventOverview_HiddenIsFloatingMenuOpen = view.findViewById(R.id.eventOverviewFabClosed);
 
         eventOverviewFcQrScan.hide();
         eventOverviewFcNewEvent.hide();
+        eventOverviewFcTemporaryGetParticipants.hide();
 
         eventOverviewFcMenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,6 +79,20 @@ public class EventOverviewActivity extends Fragment {
                 eventOverviewFcMenu.setVisibility(View.GONE);
             }
         });
+        //TODO: delete Listener as soon as detailed view of event exists
+        //Open new Fragment "ParticipantsList"
+        eventOverviewFcTemporaryGetParticipants.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction fr = getFragmentManager().beginTransaction();
+                fr.replace(R.id.eventOverview_relativeLayout_helper, new ParticipantsListFragment());
+                fr.addToBackStack(null);
+                fr.commit();
+                rLayout_eventOverview_helper.setVisibility(View.VISIBLE);
+                closeFABMenu();
+                eventOverviewFcMenu.setVisibility(View.GONE);
+            }
+        });
 
         cLayout_eventOverview_main.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,6 +109,7 @@ public class EventOverviewActivity extends Fragment {
         eventOverview_HiddenIsFloatingMenuOpen.setText("true");
         eventOverviewFcQrScan.show();
         eventOverviewFcNewEvent.show();
+        eventOverviewFcTemporaryGetParticipants.show();//TODO: delete as soon as detailed view of event exists
         eventOverviewFcMenu.setImageResource(R.drawable.ic_android_black_24dp);
     }
 
@@ -101,6 +118,7 @@ public class EventOverviewActivity extends Fragment {
         eventOverview_HiddenIsFloatingMenuOpen.setText("false");
         eventOverviewFcQrScan.hide();
         eventOverviewFcNewEvent.hide();
+        eventOverviewFcTemporaryGetParticipants.hide();//TODO: delete as soon as detailed view of event exists
         eventOverviewFcMenu.setImageResource(R.drawable.ic_android_black2_24dp);
     }
 }

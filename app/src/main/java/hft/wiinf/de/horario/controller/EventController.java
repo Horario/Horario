@@ -36,6 +36,12 @@ public class EventController {
         return Event.load(Event.class, id);
     }
 
+    public static Event getEventByCreatorEventId(@NonNull Long creatorEventId) {
+        List<Event> resultSet = new Select().from(Event.class).where("creatorEventId=? AND creator.isItMe=?", creatorEventId, true).execute();
+        return resultSet.get(0);
+    }
+
+
     //find the list of events that start in the given period (enddate is ecluded!)
     public static List<Event> findEventsByTimePeriod(Date startDate, Date endDate) {
         return new Select().from(Event.class).where("starttime between ? AND ?", startDate.getTime(), endDate.getTime() - 1).execute();
