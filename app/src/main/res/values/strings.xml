@@ -66,6 +66,9 @@
     <string name="shortTitle_peek">Der Kurztitel darf nicht das Zeichen | enthalten.</string>
     <string name="description_peek">Die Beschreibung darf nicht das Zeichen | enthalten.</string>
     <string name="room_peek">Das Feld Raum darf nicht das Zeichen | enthalten.</string>
+    <string name="termin_zusagen">termin_zusagen</string>
+    <string name="termin_ohne_zusage_speichern">termin_ohne_zusage_speichern</string>
+    <string name="termin_ablehnen">termin_ablehnen</string>
 
     <string-array name="push_times">
         <item name="push_time_0">0</item>

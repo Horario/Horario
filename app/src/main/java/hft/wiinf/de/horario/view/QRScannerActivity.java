@@ -22,7 +22,7 @@ import com.activeandroid.util.Log;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import hft.wiinf.de.horario.CaptureActivityPortrait;
+//import hft.wiinf.de.horario.CaptureActivityPortrait;
 import hft.wiinf.de.horario.R;
 
 
@@ -77,7 +77,7 @@ public class QRScannerActivity extends Fragment implements ActivityCompat.OnRequ
     public void startScanner() {
         IntentIntegrator integrator = IntentIntegrator.forSupportFragment(this);
         integrator.setOrientationLocked(false);
-        integrator.setCaptureActivity(CaptureActivityPortrait.class); //Necessary to use the intern Sensor for Orientation
+       // integrator.setCaptureActivity(CaptureActivityPortrait.class); //Necessary to use the intern Sensor for Orientation
         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
         integrator.setPrompt("Termincode scannen\n" +
                 "Halte dein Smartphone vor den QR-Code und \n" +
