@@ -270,7 +270,6 @@ public class QRScannerActivity extends Fragment implements ActivityCompat.OnRequ
                     mScannerResult_Button_rejectEvent.setVisibility(View.GONE);
                     mScannerResult_TextureView_Headline.setVisibility(View.GONE);
 
-
                     Snackbar.make(getActivity().findViewById(R.id.scanner_result_relativeLayout_buttonFrame),
                             "Ups! Fehler Aufgetreten!",
                             Snackbar.LENGTH_INDEFINITE).setAction("Zum Kalender", new View.OnClickListener() {
@@ -311,8 +310,6 @@ public class QRScannerActivity extends Fragment implements ActivityCompat.OnRequ
                     }).show();
                 }
             }
-            //mScannerResult_TextureView_Description.setText("Das ist der Inhalt vom QR Code: "+"\n"+qrResult+
-            //        "\n"+"Das können wir leider nicht als Termin speichern!");
             qrResult = null;
         }
     }
