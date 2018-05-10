@@ -89,6 +89,19 @@ public class NewEventFragment extends Fragment {
         textView_endofRepetiton = view.findViewById(R.id.newEvent_textView_endOfRepetiton);
         textView_repetition = view.findViewById(R.id.newEvent_textView_repetition);
         button_save = view.findViewById(R.id.newEvent_button_save);
+       // when the keyboard is closed after the text edit room, there should be no focus
+        edittext_room.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE){
+                    ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+                    edittext_room.clearFocus();
+                    return true;
+
+                }
+                return false;
+            }
+        });
         //for each fields with a date: 1. don't open keyboard on focus, when it gets focus or the user clicks on the field: open date/time picker and save the date
         edittext_date.setShowSoftInputOnFocus(false);
         edittext_date.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -132,6 +145,18 @@ public class NewEventFragment extends Fragment {
                 getEndTime();
             }
         });
+        edittext_userName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE){
+                    ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+                    edittext_userName.clearFocus();
+                    return true;
+
+                }
+                return false;
+            }
+        });
         // on click on serial event checkbox change visibility of the rpetiton and repetiton end field,
         checkBox_serialEvent.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,6 +185,19 @@ public class NewEventFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 getEndOfRepetition();
+            }
+        });
+        // when the keyboard is closed after the text edit room, there should be no focus
+        editText_endOfRepetition.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE){
+                    ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+                    editText_endOfRepetition.clearFocus();
+                    return true;
+
+                }
+                return false;
             }
         });
         button_save.setOnClickListener(new View.OnClickListener() {
@@ -191,7 +229,6 @@ public class NewEventFragment extends Fragment {
             textView_repetition.setVisibility(View.GONE);
         }
     }
-//
     public void getDate() {
         //close keyboard if it's open
         ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
@@ -292,8 +329,9 @@ public class NewEventFragment extends Fragment {
         // if me (the user) is not created (aka null) a new user with typed in the user name is created
         if (me==null)
             //TODO: read the phone number of the user
-            me = new Person(true,"007",edittext_userName.getText().toString());
+            me = new Person(true,"007","");
         //update or save a new person (me)
+        me.setName(edittext_userName.getText().toString());
         PersonController.savePerson(me);
         openSavedSuccessfulDialog(event.getId());
     }
@@ -346,6 +384,10 @@ public class NewEventFragment extends Fragment {
 //checks if the entrys are valid and opens a toast if not return value: coolean if everything is ok
     private boolean checkValidity() {
         if (editText_description.getText().toString().equals("") || edittext_shortTitle.getText().toString().equals("") || edittext_date.getText().toString().equals("") || edittext_startTime.getText().toString().equals("") || editText_endTime.getText().toString().equals("") || edittext_userName.getText().toString().equals("")||edittext_room.getText().toString().equals("")) {
+            Toast.makeText(getContext(), R.string.empty_fields, Toast.LENGTH_LONG).show();
+            return false;
+        }
+        if (getRepetition()!=Repetition.NONE&&editText_endOfRepetition.getText().toString().equals("")) {
             Toast.makeText(getContext(), R.string.empty_fields, Toast.LENGTH_LONG).show();
             return false;
         }
