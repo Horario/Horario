@@ -1,11 +1,9 @@
 package hft.wiinf.de.horario.view;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -28,10 +26,6 @@ import android.widget.Toast;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
@@ -215,7 +209,7 @@ public class NewEventFragment extends Fragment {
         if (me!=null)
             edittext_userName.setText(me.getName());
     }
-//if the checkbox serial event is checked, repetiiton posibilities and the endOfrepetition is shown, else not
+    //if the checkbox serial event is checked, repetiiton posibilities and the endOfrepetition is shown, else not
     private void checkSerialEvent() {
         if (checkBox_serialEvent.isChecked()) {
             textView_endofRepetiton.setVisibility(View.VISIBLE);
@@ -256,7 +250,7 @@ public class NewEventFragment extends Fragment {
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 startTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 startTime.set(Calendar.MINUTE, minute);
-//format the choosen time as HH:mm and write it into the start time text field
+                //format the choosen time as HH:mm and write it into the start time text field
                 DateFormat format = new SimpleDateFormat("HH:mm");
                 edittext_startTime.setText(format.format(startTime.getTime()));
             }
@@ -304,13 +298,13 @@ public class NewEventFragment extends Fragment {
         dialog.show();
     }
 
-//if the save button is clicked check the entrys and save the event if everything is ok
+    //if the save button is clicked check the entrys and save the event if everything is ok
     public void onButtonClickSave() {
         if (checkValidity()) {
                 saveEvent();
         }
     }
-//read the needed parameters / textfield and save the event
+    //read the needed parameters / textfield and save the event
     public void saveEvent() {
         Event event = new Event(PersonController.getPersonWhoIam());
         event.setAccepted(AcceptedState.ACCEPTED);
@@ -320,7 +314,7 @@ public class NewEventFragment extends Fragment {
         event.setShortTitle(edittext_shortTitle.getText().toString());
         event.setRepetition(getRepetition());
         event.setPlace(edittext_room.getText().toString());
-// only save the end of repetition if the repetition is not none, if it's an serial event (repetition not none) save it as an serial event, else as an "normal" event
+        // only save the end of repetition if the repetition is not none, if it's an serial event (repetition not none) save it as an serial event, else as an "normal" event
         if (event.getRepetition() != Repetition.NONE) {
             event.setEndDate(endOfRepetition.getTime());
             EventController.saveSerialevent(event);
@@ -335,7 +329,7 @@ public class NewEventFragment extends Fragment {
         PersonController.savePerson(me);
         openSavedSuccessfulDialog(event.getId());
     }
-//clear all entrys and open a dialog where the user can choose what to do next
+    //clear all entrys and open a dialog where the user can choose what to do next
     private void openSavedSuccessfulDialog(final long eventId) {
         clearEntrys();
         final Dialog dialogSavingSuccessful = new Dialog(getContext());
@@ -367,7 +361,7 @@ public class NewEventFragment extends Fragment {
             }
         });
     }
-//clear all entrys of the text edits and uncheck the serial event
+    //clear all entrys of the text edits and uncheck the serial event
     private void clearEntrys() {
         edittext_shortTitle.setText("");
         editText_description.setText("");
@@ -381,7 +375,7 @@ public class NewEventFragment extends Fragment {
         checkSerialEvent();
     }
 
-//checks if the entrys are valid and opens a toast if not return value: coolean if everything is ok
+    //checks if the entrys are valid and opens a toast if not return value: coolean if everything is ok
     private boolean checkValidity() {
         if (editText_description.getText().toString().equals("") || edittext_shortTitle.getText().toString().equals("") || edittext_date.getText().toString().equals("") || edittext_startTime.getText().toString().equals("") || editText_endTime.getText().toString().equals("") || edittext_userName.getText().toString().equals("")||edittext_room.getText().toString().equals("")) {
             Toast.makeText(getContext(), R.string.empty_fields, Toast.LENGTH_LONG).show();
@@ -452,7 +446,7 @@ public class NewEventFragment extends Fragment {
         }
         return true;
     }
-//get the right repetiton
+    //get the right repetiton
     private Repetition getRepetition() {
         //if the check box isnt checked return none
         if (!checkBox_serialEvent.isChecked()) {
@@ -470,7 +464,7 @@ public class NewEventFragment extends Fragment {
 
         }
     }
-//read the event of the given eventId and set the correct texts of the edit texts
+    //read the event of the given eventId and set the correct texts of the edit texts
     public void readGivenEvent(long eventId) {
         Event event = EventController.getEventById(eventId);
         if (event != null) {

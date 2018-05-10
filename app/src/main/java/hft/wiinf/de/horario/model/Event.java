@@ -39,7 +39,7 @@ public class Event extends Model {
     private Event startEvent = null;
     // the id of the event in the db of the creator
     private long creatorEventId;
-//create a new event with a creator
+    //create a new event with a creator
     public Event(Person creator) {
         this.creator = creator;
     }
@@ -48,7 +48,7 @@ public class Event extends Model {
         super();
     }
 
-//getter-setter
+    //getter-setter
 
     public Person getCreator() {
         return creator;
