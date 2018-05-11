@@ -195,7 +195,7 @@ public class QRGeneratorActivity extends Fragment {
                     mQRGenerator_textView_description.setVisibility(View.GONE);
                     mQRGenerator_relativeLayout_buttonFrame.setVisibility(View.GONE);
                     mQRGenerator_relativeLayout_show_newFragment.setVisibility(View.VISIBLE);
-                    
+
                 }
             }).show();
         }
