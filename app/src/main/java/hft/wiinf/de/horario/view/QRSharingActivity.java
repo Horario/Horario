@@ -129,7 +129,7 @@ public class QRSharingActivity extends Fragment {
             }
 
             // Event shortTitel in Headline with StartDate
-            mQRSharing_textView_headline.setText(startDate);
+            mQRSharing_textView_headline.setText(shortTitle);
 
             // Check for a Repetition Event and Change the Description Output with and without
             // Repetition Element inside.
@@ -140,13 +140,6 @@ public class QRSharingActivity extends Fragment {
                 mQRSharing_textView_description.setText(startDate+ " - " +endDate+"\n"
                         +repetition+ "\n" + place +"\n"+"Organisator: "+ eventCreatorName);
             }
-
-
-
-
-
-
-
 
         } catch (NullPointerException e) {
             Log.d(TAG, "QRSharingFragmentActivity:" + e.getMessage());
