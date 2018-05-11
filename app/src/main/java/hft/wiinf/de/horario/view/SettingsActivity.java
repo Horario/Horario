@@ -26,9 +26,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import hft.wiinf.de.horario.R;
-import hft.wiinf.de.horario.service.NotificationReceiver;
 import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.Person;
+import hft.wiinf.de.horario.service.NotificationReceiver;
 
 public class SettingsActivity extends Fragment {
 
@@ -87,27 +87,23 @@ public class SettingsActivity extends Fragment {
             @Override
             public void onClick(View v) {
                 Calendar cal = Calendar.getInstance();
-                cal.set(Calendar.YEAR, 2018);
-                cal.set(Calendar.MONTH, 5);
-                cal.set(Calendar.DAY_OF_MONTH, 8);
-                cal.set(Calendar.HOUR_OF_DAY, 1);
-                cal.set(Calendar.MINUTE, 55);
-                cal.set(Calendar.SECOND, 0);
-                cal.set(Calendar.MILLISECOND, 0);
+                cal.setTimeInMillis(System.currentTimeMillis());
+                cal.set(Calendar.HOUR_OF_DAY, 10);
+                cal.set(Calendar.MINUTE, 20);
 
-                if(PersonController.getPersonWhoIam() != null){
+                if (PersonController.getPersonWhoIam() != null) {
                     Person notificationPerson = PersonController.getPersonWhoIam();
-                    if(notificationPerson.isAllowNotifications()) {
+                    if (notificationPerson.isAllowNotifications()) {
                         Intent alarmIntent = new Intent(getActivity(), NotificationReceiver.class);
-                        alarmIntent.putExtra("Event","Beispielevent");
-                        alarmIntent.putExtra("Hour",cal.get(Calendar.HOUR_OF_DAY));
-                        alarmIntent.putExtra("Minute",cal.get(Calendar.MINUTE));
-                        alarmIntent.putExtra("ID", (int)System.currentTimeMillis());
+                        alarmIntent.putExtra("Event", "Beispielevent");
+                        alarmIntent.putExtra("Hour", cal.get(Calendar.HOUR_OF_DAY));
+                        alarmIntent.putExtra("Minute", cal.get(Calendar.MINUTE));
+                        alarmIntent.putExtra("ID", (int) System.currentTimeMillis());
 
-                        pendingIntent = PendingIntent.getBroadcast(getActivity(),(int)System.currentTimeMillis(), alarmIntent, 0);
+                        pendingIntent = PendingIntent.getBroadcast(getActivity(), alarmIntent.getIntExtra("ID", 0), alarmIntent, 0);
 
                         AlarmManager manager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-                        manager.set(AlarmManager.RTC_WAKEUP, calcNotificationTime(cal.getTimeInMillis(), notificationPerson.getNotificationTime()), pendingIntent);
+                        manager.set(AlarmManager.RTC_WAKEUP, calcNotificationTime(cal, notificationPerson), pendingIntent);
                     }
                 }
 
@@ -204,7 +200,9 @@ public class SettingsActivity extends Fragment {
         });
     }
 
-    public long calcNotificationTime(long eventTimeInMillis, int notificationTime){
-        return eventTimeInMillis - (notificationTime * 60000);
+    public long calcNotificationTime(Calendar cal, Person person) {
+        cal.add(Calendar.MINUTE, ((-1) * person.getNotificationTime()));
+        Log.d(TAG, "SettingsActivity:" + cal.get(Calendar.DAY_OF_MONTH) + cal.get(Calendar.MINUTE) + cal.get(Calendar.HOUR_OF_DAY));
+        return cal.getTimeInMillis();
     }
 }

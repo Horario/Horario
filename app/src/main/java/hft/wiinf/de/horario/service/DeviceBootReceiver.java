@@ -51,7 +51,7 @@ public class DeviceBootReceiver extends BroadcastReceiver {
     }
 
     public long calcNotificationTime(Calendar cal, Person person) {
-        cal.add(Calendar.MINUTE, ((-1)*person.getNotificationTime()));
+        cal.add(Calendar.MINUTE, ((-1) * person.getNotificationTime()));
         return cal.getTimeInMillis();
     }
 }

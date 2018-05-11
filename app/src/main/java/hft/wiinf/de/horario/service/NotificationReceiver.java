@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.TabActivity;
@@ -14,6 +15,7 @@ public class NotificationReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        Log.d("DEED", "SettingsActivity:" + "dedede");
         addNotification(context, intent);
     }
 
@@ -33,6 +35,6 @@ public class NotificationReceiver extends BroadcastReceiver {
 
         // Add as notification
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        manager.notify(intent.getIntExtra("ID",0), builder.build());
+        manager.notify(intent.getIntExtra("ID", 0), builder.build());
     }
 }
