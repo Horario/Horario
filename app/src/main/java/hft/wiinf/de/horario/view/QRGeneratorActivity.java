@@ -159,7 +159,7 @@ public class QRGeneratorActivity extends Fragment {
             mQRGenerator_button_start_eventFeedbackFragment.setVisibility(View.GONE);
             mQRGenerator_button_start_sharingFragment.setVisibility(View.GONE);
 
-            Snackbar.make(getActivity().findViewById(R.id.scanner_result_relativeLayout_buttonFrame),
+            Snackbar.make(getActivity().findViewById(R.id.generator_button_frame),
                     "Ups! Fehler Aufgetreten!",
                     Snackbar.LENGTH_INDEFINITE).setAction("Zum Kalender", new View.OnClickListener() {
                 @Override
@@ -182,19 +182,20 @@ public class QRGeneratorActivity extends Fragment {
             mQRGenerator_textView_description.setText("Das ist der Inhalt vom QR Code: "+"\n"+mQRGenerator_StringBuffer_Result+
                     "\n"+"Das können wir leider nicht als Termin speichern!");
 
-            Snackbar.make(getActivity().findViewById(R.id.scanner_result_relativeLayout_buttonFrame),
+            Snackbar.make(getActivity().findViewById(R.id.generator_button_frame),
                     "Ups! Falscher QR-Code!",
                     Snackbar.LENGTH_INDEFINITE).setAction("Zum Kalender", new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.scanner_result_realtiveLayout_CalendarFragment, new CalendarActivity());
+                    fragmentTransaction.replace(R.id.generator_realtivLayout_show_qrSharingFragment, new CalendarActivity());
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
                     mQRGenerator_textView_headline.setVisibility(View.GONE);
                     mQRGenerator_textView_description.setVisibility(View.GONE);
                     mQRGenerator_relativeLayout_buttonFrame.setVisibility(View.GONE);
                     mQRGenerator_relativeLayout_show_newFragment.setVisibility(View.VISIBLE);
+                    
                 }
             }).show();
         }
