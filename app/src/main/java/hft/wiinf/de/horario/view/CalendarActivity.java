@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -139,8 +138,10 @@ public class CalendarActivity extends Fragment {
         test.setStartTime(new Date(1525465935000L)); //20.04.18 1524261326000L
         test.setEndTime(new Date(1525419135000L));
         test.setDescription("Termin 1");
+        test.setAccepted(true);
         test.save();
-        addEvent(test.getStartTime());
+
+        updateCompactCalendar();
 
         calendarCvCalendar.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
@@ -180,11 +181,17 @@ public class CalendarActivity extends Fragment {
         return view;
     }
 
-    //TODO just a placeholder, maybe need a rework (1523318400000L)
+
+
     //is marking the day in the calendar for the parameter date
-    public static void addEvent(Date date){
-        Event event = new Event(Color.BLUE, date.getTime());
-        calendarCvCalendar.addEvent(event);
+    public static void updateCompactCalendar(){
+        List<hft.wiinf.de.horario.model.Event> acceptedEvents = EventController.findMyAcceptedEvents();
+        for (int i = 0; i<acceptedEvents.size(); i++){
+            if(calendarCvCalendar.getEvents(acceptedEvents.get(i).getStartTime().getTime()).size() == 0){
+                Event event = new Event(Color.BLUE, acceptedEvents.get(i).getStartTime().getTime());
+                calendarCvCalendar.addEvent(event, false);
+            }
+        }
     }
 
     /** TODO need a description */
@@ -202,7 +209,7 @@ public class CalendarActivity extends Fragment {
         return adapter;
     }
 
-    //TODO neue Methode die alle DB Einträge bei Programmstart lädt und mit addEvent die markierung im Calendar durchführt
+    //TODO neue Methode die alle DB Einträge bei Programmstart lädt und mit updateCompactCalendar die markierung im Calendar durchführt
 
 
 
