@@ -29,7 +29,7 @@
             android:value="horario.db" />
         <meta-data
             android:name="AA_DB_VERSION"
-            android:value="15" />
+            android:value="16" />
         <meta-data
             android:name="AA_MODELS"
             android:value="hft.wiinf.de.horario.model.Event, hft.wiinf.de.horario.model.Person" />
