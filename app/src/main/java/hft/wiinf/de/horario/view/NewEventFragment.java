@@ -348,7 +348,7 @@ public class NewEventFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 dialogSavingSuccessful.dismiss();
-               /* QRGeneratorActivity qrFrag= new QRGeneratorActivity();
+               QRGeneratorActivity qrFrag= new QRGeneratorActivity();
                 Bundle bundle = new Bundle();
                 bundle.putLong("eventId",eventId);
                 qrFrag.setArguments(bundle);
@@ -357,7 +357,7 @@ public class NewEventFragment extends Fragment {
                         .addToBackStack(null)
                         .commit();
                 getView().findViewById(R.id.newEvent_oldFragment).setVisibility(View.INVISIBLE);
-                getView().findViewById(R.id.newEvent_newFragment).setVisibility(View.VISIBLE);*/
+                getView().findViewById(R.id.newEvent_newFragment).setVisibility(View.VISIBLE);
             }
         });
     }

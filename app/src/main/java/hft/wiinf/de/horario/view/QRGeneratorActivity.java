@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,21 +55,11 @@ public class QRGeneratorActivity extends Fragment {
         mQRGenerator_relativeLayout_show_newFragment = view.findViewById(R.id.generator_realtivLayout_show_qrSharingFragment);
         mQRGenerator_relativeLayout_buttonFrame = view.findViewById(R.id.generator_button_frame);
 
+        // Show always Scrollbar on Description TextView
+        mQRGenerator_textView_description.setMovementMethod(new ScrollingMovementMethod());
+
         //Create Event form the DB with the EventId (eventIdResultBundle) to put it in a StringBuffer
         mEvent = EventController.getEventById(eventIdDescription());
-        /*
-        //Erstellen von drei Dummydaten
-        //ToDo Dummydaten löschen
-        Date startDate = new Date();
-        Date endDate = new Date();
-
-        mEvent = new Event();
-        mEvent.setDescription("Wir machen Experimente im Labor 3");
-        mEvent.setPlace("Labor 3");
-        mEvent.setStartTime(startDate);
-        mEvent.setEndTime(endDate);
-        EventController.saveEvent(mEvent);
-        */
 
         mPerson = PersonController.getPersonWhoIam();
 
@@ -89,7 +80,7 @@ public class QRGeneratorActivity extends Fragment {
         mQRGenerator_StringBuffer_Result = new StringBuffer();
         mQRGenerator_StringBuffer_Result.append(mEvent.getCreatorEventId() + stringSplitSymbol);
         mQRGenerator_StringBuffer_Result.append(simpleDateFormat.format(mEvent.getStartTime()) + stringSplitSymbol);
-        mQRGenerator_StringBuffer_Result.append(simpleDateFormat.format(mEvent.getEndTime()) + stringSplitSymbol);
+        mQRGenerator_StringBuffer_Result.append(simpleDateFormat.format(mEvent.getEndDate()) + stringSplitSymbol);
         mQRGenerator_StringBuffer_Result.append(simpleTimeFormat.format(mEvent.getStartTime()) + stringSplitSymbol);
         mQRGenerator_StringBuffer_Result.append(simpleTimeFormat.format(mEvent.getEndTime()) + stringSplitSymbol);
         mQRGenerator_StringBuffer_Result.append(mEvent.getRepetition()+stringSplitSymbol);
@@ -134,7 +125,7 @@ public class QRGeneratorActivity extends Fragment {
                     repetition = "wöchentlich";
                     break;
                 case "DAILY":
-                    repetition = "täglisch";
+                    repetition = "täglich";
                     break;
                 case "NONE":
                     repetition = "";
@@ -144,14 +135,16 @@ public class QRGeneratorActivity extends Fragment {
             }
 
             // Event shortTitel in Headline with StartDate
-            mQRGenerator_textView_headline.setText(shortTitle);
+            mQRGenerator_textView_headline.setText("Dein Termin"+"\n"+shortTitle+", "+startDate);
             // Check for a Repetition Event and Change the Description Output with and without
             // Repetition Element inside.
             if (repetition.equals("")) {
-                mQRGenerator_textView_description.setText(startDate + "\n" + place + "\n" + eventCreatorName);
+                mQRGenerator_textView_description.setText("Am "+ startDate + " findet um "+startTime+
+                        " Uhr in Raum " + place +shortTitle+" statt." +"\n\n"+"Organisator: "+ eventCreatorName);
             } else {
-                mQRGenerator_textView_description.setText(startDate + "-" + endDate + "\n" + repetition + "\n" + startTime + " Uhr - "
-                        + endTime + " Uhr \n" + "Raum " + place + "\n" + "Organisator: " + eventCreatorName);
+                mQRGenerator_textView_description.setText(  "Vom "+ startDate + " bis "+endDate+
+                        " findet "+repetition+" um "+startTime+" Uhr in Raum " + place +" "+
+                        shortTitle+" statt." +"\n\n"+"Organisator: "+ eventCreatorName);
             }
             // In the CatchBlock the User see a Snackbar Information and was pushed to CalendarActivity
         } catch (NullPointerException e) {
@@ -174,6 +167,8 @@ public class QRGeneratorActivity extends Fragment {
             }).show();
 
         } catch (ArrayIndexOutOfBoundsException z){
+           //If there an Exeption the Views are Invisible and Snackbar tell that's anything wrong
+           // and Push him back to the CalendarActivity
             Log.d(TAG, "QRGeneratorFragmentActivity:" + z.getMessage());
             mQRGenerator_textView_headline.setVisibility(View.GONE);
             mQRGenerator_textView_description.setVisibility(View.GONE);
