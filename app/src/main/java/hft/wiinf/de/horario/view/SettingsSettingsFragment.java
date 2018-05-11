@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +32,9 @@ public class SettingsSettingsFragment extends Fragment {
     private static final String TAG = "SettingFragmentActivity";
     EditText editTextUsername;
     Person person;
+    Spinner spinner_pushMinutes;
+    Switch switch_enablePush;
+    TextView textView_minutesBefore, textView_reminder;
 
     public SettingsSettingsFragment() {
         // Required empty public constructor
@@ -49,24 +54,17 @@ public class SettingsSettingsFragment extends Fragment {
     @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        editTextUsername = (EditText) view.findViewById(R.id.settings_settings_editText_username);
-
-        //If username is already saved -> pull it from db an set Text equal to it
-        if (person != null) {
-            editTextUsername.setText(person.getName());
+        //if the user is in the db read the user from db, else create a new one
+        try {
+            person = PersonController.getPersonWhoIam();
+            if (person == null)
+                person = new Person(true, "007", "");
+        } catch (NullPointerException e) {
+            Log.d(TAG, "SettingsActivity:" + e.getMessage());
         }
-
-        if (person == null) {
-            try {
-                person = PersonController.getPersonWhoIam();
-            } catch (NullPointerException e) {
-                Log.d(TAG, "SettingsActivity:" + e.getMessage());
-            }
-        }
-        if (person != null) {
-            editTextUsername.setText(person.getName());
-        }
+        editTextUsername = view.findViewById(R.id.settings_settings_editText_username);
+        // set the user name of the person (empty string if no person set)
+        editTextUsername.setText(person.getName());
 
         //Make EditText-Field editable
         editTextUsername.setOnTouchListener(new View.OnTouchListener() {
@@ -77,7 +75,6 @@ public class SettingsSettingsFragment extends Fragment {
                 return false;
             }
         });
-
         //Everything that needs to happen after Username was written in the EditText-Field
         editTextUsername.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -89,14 +86,9 @@ public class SettingsSettingsFragment extends Fragment {
                 Matcher matcher_username = pattern_username.matcher(inputText);
 
                 if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches()) {
-                    if (person != null) {
-                        person.setName(inputText);
-                        PersonController.addPersonMe(person);
-                    } else {
-                        //ToDo: get correct phoneNumber
-                        person = new Person(true, "007", inputText);
-                        PersonController.addPersonMe(person);
-                    }
+                    //ToDo: get correct phoneNumber
+                    person.setName(inputText);
+                    PersonController.addPersonMe(person);
                     Toast toast = Toast.makeText(view.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT);
                     toast.show();
                     editTextUsername.setFocusable(false);
@@ -104,14 +96,13 @@ public class SettingsSettingsFragment extends Fragment {
                 } else {
                     Toast toast = Toast.makeText(view.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
                     toast.show();
-                    if (person != null) {
-                        editTextUsername.setText(person.getName());
-                    }
+                    editTextUsername.setText(person.getName());
                     return true;
                 }
                 return false;
             }
         });
+
 
     }
 }

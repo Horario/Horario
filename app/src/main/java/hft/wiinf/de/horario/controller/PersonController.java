@@ -12,8 +12,8 @@ import hft.wiinf.de.horario.model.Person;
 public class PersonController {
 
     public static void addPersonMe(Person person) {
-        try {
-            person.save();
+        try{
+       PersonController.savePerson(person);
         } catch (Exception e) {
             Log.d("PersonController", "addPersonMe:" + e.getMessage());
         }

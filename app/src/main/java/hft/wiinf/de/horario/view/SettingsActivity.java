@@ -55,6 +55,7 @@ public class SettingsActivity extends Fragment {
         rLayout_settings_helper = view.findViewById(R.id.settings_relativeLayout_helper);
         rLayout_settings_button = view.findViewById(R.id.settings_relativeLayout_button);
 
+
         //onCLickListener for every button in settings fragment
         button_settings.setOnClickListener(new View.OnClickListener() {
             @Override

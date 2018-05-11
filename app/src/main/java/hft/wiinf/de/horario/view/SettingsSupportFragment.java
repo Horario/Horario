@@ -6,15 +6,17 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Spinner;
 
 import hft.wiinf.de.horario.R;
 
 /**
  * A simple {@link Fragment} subclass.
  */
+
 public class SettingsSupportFragment extends Fragment {
 
-
+    Spinner spinner_pushMinutes;
     public SettingsSupportFragment() {
         // Required empty public constructor
     }
