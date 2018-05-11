@@ -38,10 +38,10 @@ public class Person extends Model{
         this.name = name;
     }
 
-    public Person(String phoneNumber, int pushMinutes) {
+    public Person(String phoneNumber, int notificationTime) {
         super();
         this.phoneNumber = phoneNumber;
-        this.notificationTime = pushMinutes;
+        this.notificationTime = notificationTime;
     }
 
     public Person() {
