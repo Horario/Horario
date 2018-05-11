@@ -523,6 +523,7 @@ public class NewEventFragment extends Fragment {
         return cal.getTimeInMillis();
     }
 
+    //Method is goign to set the alarm x minutes before the event
     public void setAlarmForNotification(Event event) {
         if (PersonController.getPersonWhoIam() != null) {
             Person notificationPerson = PersonController.getPersonWhoIam();
