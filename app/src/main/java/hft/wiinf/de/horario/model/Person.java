@@ -81,14 +81,13 @@ public class Person extends Model{
         this.acceptedEvent = acceptedEvent;
     }
 
-    public int getPushMinutes() {
+    public int getNotificationTime() {
         return notificationTime;
     }
 
-    public void setPushMinutes(int pushMinutes) {
-        this.notificationTime = pushMinutes;
+    public void setNotificationTime(int notificationTime) {
+        this.notificationTime = notificationTime;
     }
-
     public boolean isEnablePush() {
         return enablePush;
     }
