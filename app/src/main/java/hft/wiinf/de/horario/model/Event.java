@@ -15,10 +15,11 @@ import java.util.Date;
 
 @Table(name = "events")
 public class Event extends Model {
+    //the columns of an event
     @Column
     private Person creator;
     @Column
-    private int creatorEventId;
+    private String shortTitle = "";
     @Column
     private String description = "";
     @Column
@@ -28,7 +29,17 @@ public class Event extends Model {
     @Column
     private Date endTime = new Date();
     @Column
-    private boolean accepted;
+    private Repetition repetition = Repetition.NONE;
+    @Column
+    private Date endDate = new Date();
+    @Column
+    private AcceptedState accepted;
+    @Column
+    //the first event of an repeating / serial event
+    private Event startEvent = null;
+    // the id of the event in the db of the creator
+    private long creatorEventId;
+    //create a new event with a creator
     public Event(Person creator) {
         this.creator = creator;
     }
@@ -37,16 +48,18 @@ public class Event extends Model {
         super();
     }
 
-
-
-//getter-setter
-
-    public void setCreator(Person creator) {
-        this.creator = creator;
-    }
+    //getter-setter
 
     public Person getCreator() {
         return creator;
+    }
+
+    public String getShortTitle() {
+        return shortTitle;
+    }
+
+    public void setShortTitle(String shortTitle) {
+        this.shortTitle = shortTitle;
     }
 
     public String getDescription() {
@@ -69,7 +82,7 @@ public class Event extends Model {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(@NonNull Date startTime) {
         this.startTime = startTime;
     }
 
@@ -77,29 +90,51 @@ public class Event extends Model {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(@NonNull Date endTime) {
         this.endTime = endTime;
     }
 
-    public boolean isAccepted() {
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public Repetition getRepetition() {
+        return repetition;
+    }
+
+    public void setRepetition(Repetition repetition) {
+        this.repetition = repetition;
+    }
+
+
+    public AcceptedState getAccepted() {
         return accepted;
     }
 
-    public void setAccepted(boolean accepted) {
+    public void setAccepted(AcceptedState accepted) {
         this.accepted = accepted;
     }
 
-    public int getCreatorEventId() {
+    public Event getStartEvent() {
+        return startEvent;
+    }
+
+    public void setStartEvent(Event startEvent) {
+        this.startEvent = startEvent;
+    }
+
+    public long getCreatorEventId() {
         return creatorEventId;
     }
 
-    public void setCreatorEventId(int creatorEventId) {
+    public void setCreatorEventId(long creatorEventId) {
         this.creatorEventId = creatorEventId;
     }
-
-
 }
-
 
 
 

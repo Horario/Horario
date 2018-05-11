@@ -4,43 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.CalendarActivity">
-
-
-    <RelativeLayout
-        android:id="@+id/newFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:visibility="invisible">
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:id="@+id/calendar_temp_relativeLayout_main">
-
-
-        <Button
-            android:id="@+id/gotoscanner"
-            android:layout_width="140dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginBottom="66dp"
-            android:layout_marginEnd="32dp"
-            android:text="Go To Scanner Temp" />
-
-        <Button
-            android:id="@+id/gotogenerator"
-            android:layout_width="113dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="43dp"
-            android:text="Go to QR Generator" />
-    </RelativeLayout>
-
+    android:background="?android:windowBackground"
+    tools:context=".view.CalendarActivity"
+    android:id="@+id/calendar_constrainLayout_main">
 
     <com.github.sundeepk.compactcalendarview.CompactCalendarView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/calendarCvCalendar"
@@ -83,7 +49,6 @@
         android:backgroundTint="#ffe95451"
         android:backgroundTintMode="src_atop"
         android:clickable="true"
-        android:focusable="true"
         android:text="TextView"
         app:layout_constraintBottom_toTopOf="@+id/calendarCvCalendar"
         app:layout_constraintEnd_toEndOf="parent"
@@ -93,18 +58,80 @@
         app:layout_constraintVertical_bias="1.0"
         tools:background="#ffe95451" />
 
-    <!-- ToDo magrinBottom nach dem Testen von 50 auf 8 stellen! -->
     <ListView
         android:id="@+id/calendarLvList"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/calendarTvDay" />
+        app:layout_constraintTop_toBottomOf="@+id/calendarTvDay"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/calendar_floatingActionButtonMenu"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:layout_marginBottom="28dp"
+        android:layout_marginEnd="312dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.997"
+        app:srcCompat="@drawable/ic_android_black2_24dp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/calendar_floatingActionButtonNewEvent"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="392dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_today" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/calendar_floatingActionButtonScan"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="64dp"
+        android:layout_marginTop="412dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_camera" />
+
+    <RelativeLayout
+        android:id="@+id/calendar_relativeLayout_helper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/calendar_hiddenField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="false"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
