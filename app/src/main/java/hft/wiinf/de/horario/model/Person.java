@@ -16,11 +16,11 @@ public class Person extends Model{
     @Column(name = "event_canceled")
     private Event canceledEvent = null;
     @Column
-    boolean isItMe = false;
+    private boolean isItMe = false;
     @Column
-    boolean enablePush = false;
+    private boolean enablePush = false;
     @Column
-    int pushMinutes=0;
+    private int notificationTime;
 
     //Use this constructor for person that using this specific app (owner)
     public Person(boolean isItMe, String phoneNumber, String name) {
@@ -41,7 +41,7 @@ public class Person extends Model{
     public Person(String phoneNumber, int pushMinutes) {
         super();
         this.phoneNumber = phoneNumber;
-        this.pushMinutes = pushMinutes;
+        this.notificationTime = pushMinutes;
     }
 
     public Person() {
@@ -82,11 +82,11 @@ public class Person extends Model{
     }
 
     public int getPushMinutes() {
-        return pushMinutes;
+        return notificationTime;
     }
 
     public void setPushMinutes(int pushMinutes) {
-        this.pushMinutes = pushMinutes;
+        this.notificationTime = pushMinutes;
     }
 
     public boolean isEnablePush() {
