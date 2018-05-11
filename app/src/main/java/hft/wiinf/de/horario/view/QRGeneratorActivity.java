@@ -230,4 +230,5 @@ public class QRGeneratorActivity extends Fragment {
 
 */
 
+
 }
