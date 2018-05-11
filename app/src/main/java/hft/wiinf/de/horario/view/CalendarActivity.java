@@ -97,14 +97,13 @@ public class CalendarActivity extends Fragment {
                 fr.replace(R.id.calendar_relativeLayout_helper, new QRScanFragment());
                 fr.addToBackStack(null);
                 fr.commit();
+                closeFABMenu();
                 calendarTvMonth.setVisibility(View.GONE);
                 calendarCvCalendar.setVisibility(View.GONE);
                 calendarLvList.setVisibility(View.GONE);
                 calendarTvDay.setVisibility(View.GONE);
-
-                rLayout_calendar_helper.setVisibility(View.VISIBLE);
-                closeFABMenu();
                 calendarFcMenu.setVisibility(View.GONE);
+                rLayout_calendar_helper.setVisibility(View.VISIBLE);
             }
         });
 

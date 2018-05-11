@@ -38,12 +38,11 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
     private Button mScannerResult_Button_addEvent, mScannerResult_Button_saveWithoutassent, mScannerResult_Button_rejectEvent;
     private int counter = 0;
 
-    /*
+
     @Override
     public void onActivityCreated(Bundle savednstanceState) {
         super.onActivityCreated(savednstanceState);
     }
-    */
 
     //The Scanner start with the Call form CalendarActivity directly
     //ToDo Versuchen die Ansicht immernoch zu verbessern ..
@@ -52,7 +51,6 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
                              @Nullable Bundle saveInstanceState) {
         View view = inflater.inflate(R.layout.fragment_calendar_qrscan, container, false);
         return view;
-
     }
 
     @SuppressLint("ResourceType")
@@ -71,12 +69,32 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
         //Make the Element at first Unvisible
         mScannerResult_TextureView_Description.setVisibility(View.GONE);
         mScannerResult_TextureView_Headline.setVisibility(View.GONE);
-        mScannerResult_Button_addEvent.setVisibility(View.GONE);
+        //mScannerResult_Button_addEvent.setVisibility(View.GONE);
         mScannerResult_Button_saveWithoutassent.setVisibility(View.GONE);
         mScannerResult_Button_rejectEvent.setVisibility(View.GONE);
 
+        mScannerResult_TextureView_Description.setText("ICH LIEBE ES!!");
+        //ToDo Start TempButton
+        mScannerResult_Button_addEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startScanner();
+            }
+        });
+        //Ende TempButton
+        //Eigentlich startet es mit der Camerazugriffsberechtigung
+        // showCameraPreview();
+    }
 
-        showCameraPreview();
+    //ToDo Temp Klickbutten um den Scanner irgendwie manuell zu starten
+    public void onClick (View view){
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.scanner_result_realtiveLayout_CalendarFragment, new CalendarActivity());
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+        mScannerResult_RelativeLayout_ButtonFrame.setVisibility(View.GONE);
+        mScannerResult_RelativeLayout_Main.setVisibility(View.GONE);
+        mScannerResult_RelativeLayout_goTo_CalendarFragment.setVisibility(View.VISIBLE);
     }
 
     public void startScanner() {
@@ -94,18 +112,14 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
         integrator.initiateScan();
     }
 
-    /**
-     * Requests the {@link android.Manifest.permission#CAMERA} permission.
-     * If an additional rationale should be displayed, the user has to launch the request from
-     * a SnackBar that includes additional information.
-     */
+
+
     public void showCameraPreview() {
         //Check if User has permission to start to scan
         if (!isCameraPermissionGranted()) {
             requestCameraPermission();
         } else {
            //ToDo Nach dem Scannen zeigt er das Ergebnis nicht an wenn ich die Views wieder sichbar mache und nur den Text ausführe zeigt er diesen auch an.
-            //showCameraPreview();
             startScanner();
            mScannerResult_TextureView_Description.setText("Hallo Du da!");
         }
@@ -120,7 +134,6 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
         //For Activity: ActivityCompat.requestPermissions(this,permissionsList,REQUEST_CODE);
         requestPermissions(new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
@@ -192,8 +205,6 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
             }
         }
     }
-
-
     //Check the Scanner Result
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -203,6 +214,7 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
                 qrResult = "Canceled";
             } else {
                 qrResult = result.getContents();
+
             }
             displayQRResult();
 
@@ -224,7 +236,6 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
                     mScannerResult_Button_addEvent.setVisibility(View.VISIBLE);
                     mScannerResult_Button_saveWithoutassent.setVisibility(View.VISIBLE);
                     mScannerResult_Button_rejectEvent.setVisibility(View.VISIBLE);
-
 
                     //Put StringBufffer in an Array and split the Values to new String Variables
                     //Index: 0 = CreatorID; 1 = StartDate; 2 = EndDate; 3 = StartTime; 4 = EndTime;
@@ -261,7 +272,7 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
                             repetition = "ohne Wiederholung";
                     }
 
-                    // Event shortTitel in Headline with StartDate
+                    // Event shortTitle in Headline with StartDate
                     mScannerResult_TextureView_Headline.setText(shortTitle);
                     // Check for a Repetition Event and Change the Description Output with and without
                     // Repetition Element inside.
@@ -295,7 +306,7 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
                     }).show();
 
                 } catch (ArrayIndexOutOfBoundsException z){
-                    Log.d(TAG, "QRSharingFragmentActivity:" + z.getMessage());
+                    Log.d(TAG, "QRScanFragmentActivity:" + z.getMessage());
                     mScannerResult_Button_addEvent.setVisibility(View.GONE);
                     mScannerResult_Button_saveWithoutassent.setVisibility(View.GONE);
                     mScannerResult_Button_rejectEvent.setVisibility(View.GONE);
@@ -322,12 +333,5 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
             qrResult = null;
         }
     }
-
-    // Put the Scanned Result to the Database
-    //ToDo Speichern in die DB muss noch ausgearbeitet werden Daniels US.
-    /*
-    private void qrResultToDatabase() {
-
-    */
 }
 
