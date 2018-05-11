@@ -4,7 +4,10 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +41,10 @@ public class CalendarActivity extends Fragment {
     ListView calendarLvList;
     TextView calendarTvMonth;
     TextView calendarTvDay;
+    TextView calendarIsFloatMenuOpen;
+    FloatingActionButton calendarFcMenu, calendarFcQrScan, calendarFcNewEvent;
+    RelativeLayout rLayout_calendar_helper;
+    ConstraintLayout cLayout_calendar_main;
 
     DateFormat monthFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
     DateFormat dayFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
@@ -49,10 +57,75 @@ public class CalendarActivity extends Fragment {
 
         //initialize variables
         View view = inflater.inflate(R.layout.activity_calendar, container, false);
+
+        //FloatingButton
+        calendarFcMenu = (FloatingActionButton) view.findViewById(R.id.calendar_floatingActionButtonMenu);
+        calendarFcNewEvent = (FloatingActionButton) view.findViewById(R.id.calendar_floatingActionButtonNewEvent);
+        calendarFcQrScan = (FloatingActionButton) view.findViewById(R.id.calendar_floatingActionButtonScan);
+        rLayout_calendar_helper = view.findViewById(R.id.calendar_relativeLayout_helper);
+        cLayout_calendar_main = view.findViewById(R.id.calendar_constrainLayout_main);
+        calendarIsFloatMenuOpen = view.findViewById(R.id.calendar_hiddenField);
+
+        calendarFcQrScan.hide();
+        calendarFcNewEvent.hide();
+
+        calendarFcMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (calendarIsFloatMenuOpen.getText().equals("false")) {
+                    showFABMenu();
+                    calendarIsFloatMenuOpen.setText("true");
+                } else {
+                    closeFABMenu();
+                    calendarIsFloatMenuOpen.setText("false");
+                }
+            }
+        });
+
+        calendarFcNewEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction fr = getFragmentManager().beginTransaction();
+                fr.replace(R.id.calendar_relativeLayout_helper, new NewEventFragment());
+                fr.addToBackStack(null);
+                fr.commit();
+                rLayout_calendar_helper.setVisibility(View.VISIBLE);
+                closeFABMenu();
+                calendarFcMenu.setVisibility(View.GONE);
+            }
+        });
+
+        calendarFcQrScan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction fr = getFragmentManager().beginTransaction();
+                fr.replace(R.id.calendar_relativeLayout_helper, new QRScanFragment());
+                fr.addToBackStack(null);
+                fr.commit();
+                rLayout_calendar_helper.setVisibility(View.VISIBLE);
+                closeFABMenu();
+                calendarFcMenu.setVisibility(View.GONE);
+            }
+        });
+
+        cLayout_calendar_main.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeFABMenu();
+            }
+        });
+
         calendarCvCalendar = view.findViewById(R.id.calendarCvCalendar);
         calendarTvMonth = view.findViewById(R.id.calendarTvMonth);
         calendarLvList = view.findViewById(R.id.calendarLvList);
         calendarTvDay = view.findViewById(R.id.calendarTvDay);
+
+        calendarLvList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                closeFABMenu();
+            }
+        });
 
         Date today = new Date();
         today.setHours(0);
@@ -75,6 +148,7 @@ public class CalendarActivity extends Fragment {
             public void onDayClick(Date dateClicked) {
                 calendarTvDay.setText(dayFormat.format(dateClicked));
                 calendarLvList.setAdapter(getAdapter(dateClicked));
+                closeFABMenu();
             }
 
             @Override
@@ -106,8 +180,6 @@ public class CalendarActivity extends Fragment {
         return view;
     }
 
-
-
     //TODO just a placeholder, maybe need a rework (1523318400000L)
     //is marking the day in the calendar for the parameter date
     public static void addEvent(Date date){
@@ -134,4 +206,23 @@ public class CalendarActivity extends Fragment {
 
 
 
+
+    public void showFABMenu() {
+        calendarIsFloatMenuOpen.setText("true");
+        calendarFcQrScan.show();
+        calendarFcNewEvent.show();
+        calendarFcMenu.setImageResource(R.drawable.ic_android_black_24dp);
+
+    }
+
+    public void closeFABMenu() {
+        calendarIsFloatMenuOpen.setText("false");
+        calendarFcQrScan.hide();
+        calendarFcNewEvent.hide();
+        calendarFcMenu.setImageResource(R.drawable.ic_android_black2_24dp);
+    }
+
+    public CalendarActivity() {
+        super();
+    }
 }
