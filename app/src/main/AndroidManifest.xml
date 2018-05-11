@@ -14,30 +14,25 @@
         <activity
             android:name=".TabActivity"
             android:label="@string/title_activity_tab"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustNothing">
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
 
         <meta-data
             android:name="AA_DB_NAME"
             android:value="horario.db" />
         <meta-data
             android:name="AA_DB_VERSION"
-            android:value="15" />
+            android:value="12" />
         <meta-data
             android:name="AA_MODELS"
-            android:value="hft.wiinf.de.horario.model.Event, hft.wiinf.de.horario.model.Person" />
-        <provider
-            android:name="com.activeandroid.content.ContentProvider"
-            android:authorities="${applicationId}"
-            android:enabled="true"
-            android:exported="false">
-        </provider>
+            android:value="hft.wiinf.de.horario.model.Event, hft.wiinf.de.horario.model.Person, hft.wiinf.de.horario.model.Repetitiondate" />
+
+        <activity android:name=".view.EventOverviewActivity"></activity>
     </application>
+
 </manifest>

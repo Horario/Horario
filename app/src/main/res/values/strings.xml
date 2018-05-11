@@ -1,5 +1,11 @@
 <resources>
     <string name="app_name">Horario</string>
+    <string name="CreateAppointment_Dropdown_repetition_yearly">jährlich</string>
+    <string name="CreateAppointment_Dropdown_repetition_monthly">monatlich</string>
+    <string name="CreateAppointment_Dropdown_repetition_weekly">wöchentlich</string>
+    <string name="CreateAppointment_Dropdown_repetition_daily">täglich</string>
+    <string name="event_repetition">Wiederholungshäufigkeit</string>
+
     <string name="Test">Test</string>
     <string name="title_activity_test">Test</string>
     <string name="title_activity_tab">TabActivity</string>
@@ -56,6 +62,9 @@
     <string name="titleDialogUsername">Bitte vergeben Sie einen Benutzernamen :)</string>
     <string name="save_text">speichern</string>
     <string name="later_text">Später</string>
+    <string name="thanksForUsername">Benutzername wurde gespeichert! </string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
     <string name="thanksForUsername">Benutzername wurde gespeichert. </string>
 
     <!-- TODO: Remove or change this placeholder text -->

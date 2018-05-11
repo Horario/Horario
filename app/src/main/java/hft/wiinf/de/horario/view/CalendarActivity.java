@@ -1,11 +1,13 @@
 package hft.wiinf.de.horario.view;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -44,9 +46,12 @@ public class CalendarActivity extends Fragment {
     FloatingActionButton calendarFcMenu, calendarFcQrScan, calendarFcNewEvent;
     RelativeLayout rLayout_calendar_helper;
     ConstraintLayout cLayout_calendar_main;
+    ConstraintLayout layoutCalendar;
+    ConstraintLayout layoutHelper;
 
-    DateFormat monthFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
-    DateFormat dayFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
+    static DateFormat monthFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
+    static DateFormat dayFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
+    public static Date selectedMonth;
 
 
     @Nullable
@@ -118,6 +123,8 @@ public class CalendarActivity extends Fragment {
         calendarTvMonth = view.findViewById(R.id.calendarTvMonth);
         calendarLvList = view.findViewById(R.id.calendarLvList);
         calendarTvDay = view.findViewById(R.id.calendarTvDay);
+        layoutCalendar = view.findViewById(R.id.layoutCalendar);
+        layoutHelper = view.findViewById(R.id.layoutHelper);
 
         calendarLvList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -129,6 +136,7 @@ public class CalendarActivity extends Fragment {
         Date today = new Date();
         today.setHours(0);
         today.setMinutes(0);
+        selectedMonth = today;
         calendarTvMonth.setText(monthFormat.format(today)); //initialize month field
         calendarTvDay.setText(dayFormat.format(today));
         calendarLvList.setAdapter(getAdapter(today));
@@ -158,6 +166,7 @@ public class CalendarActivity extends Fragment {
                 calendarTvMonth.setText(monthFormat.format(firstDayOfNewMonth));
                 calendarTvDay.setText(dayFormat.format(firstDayOfNewMonth));
                 calendarLvList.setAdapter(getAdapter(firstDayOfNewMonth));
+                selectedMonth = firstDayOfNewMonth;
             }
         });
 
@@ -165,7 +174,12 @@ public class CalendarActivity extends Fragment {
         calendarTvMonth.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "test", Toast.LENGTH_SHORT).show(); //TODO just for testing, delete
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.layoutHelper, new EventOverviewActivity());
+                ft.addToBackStack(null);
+                ft.commit();
+                layoutCalendar.setVisibility(View.GONE);
+                layoutHelper.setVisibility(View.VISIBLE);
             }
         });
 
