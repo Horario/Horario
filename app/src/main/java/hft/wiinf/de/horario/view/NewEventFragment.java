@@ -536,9 +536,9 @@ public class NewEventFragment extends Fragment {
                 alarmIntent.putExtra("Event", event.getDescription());
                 alarmIntent.putExtra("Hour", calendar.get(Calendar.HOUR_OF_DAY));
                 if (calendar.get(Calendar.MINUTE) <= 10) {
-                    alarmIntent.putExtra("Minute", "0" + calendar.get(Calendar.MINUTE));
+                    alarmIntent.putExtra("Minute", "0" + String.valueOf(calendar.get(Calendar.MINUTE)));
                 } else {
-                    alarmIntent.putExtra("Minute", calendar.get(Calendar.MINUTE));
+                    alarmIntent.putExtra("Minute", String.valueOf(calendar.get(Calendar.MINUTE)));
                 }
                 alarmIntent.putExtra("ID", event.getId().intValue());
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), event.getId().intValue(), alarmIntent, 0);
