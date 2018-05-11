@@ -109,7 +109,7 @@ public class TabActivity extends AppCompatActivity {
 
                     floatNewEvent.hide();
                     floatQRScan.hide();
-                    floatMenu.setImageResource(R.drawable.ic_android_black2_24dp);
+                    floatMenu.setImageResource(R.drawable.ic_add_circle_outline_black_24dp);
                     isFloatingMenuOpen.setText("false");
 
                 } else if (tab.getPosition() == 0) {
@@ -124,7 +124,7 @@ public class TabActivity extends AppCompatActivity {
 
                     floatNewEvent.hide();
                     floatQRScan.hide();
-                    floatMenu.setImageResource(R.drawable.ic_android_black2_24dp);
+                    floatMenu.setImageResource(R.drawable.ic_add_circle_outline_black_24dp);
                     isFloatingMenuOpen.setText("false");
                 }
             }
@@ -162,7 +162,7 @@ public class TabActivity extends AppCompatActivity {
 
                     floatNewEvent.hide();
                     floatQRScan.hide();
-                    floatMenu.setImageResource(R.drawable.ic_android_black2_24dp);
+                    floatMenu.setImageResource(R.drawable.ic_add_circle_outline_black_24dp);
                     isFloatingMenuOpen.setText("false");
 
                 } else if (tab.getPosition() == 0) {
@@ -177,7 +177,7 @@ public class TabActivity extends AppCompatActivity {
 
                     floatNewEvent.hide();
                     floatQRScan.hide();
-                    floatMenu.setImageResource(R.drawable.ic_android_black2_24dp);
+                    floatMenu.setImageResource(R.drawable.ic_add_circle_outline_black_24dp);
                     isFloatingMenuOpen.setText("false");
                 }
             }

@@ -1,11 +1,14 @@
 package hft.wiinf.de.horario.view;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.res.ResourcesCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +16,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import hft.wiinf.de.horario.R;
+
+import static hft.wiinf.de.horario.R.color.foreground_material_dark;
+import static hft.wiinf.de.horario.R.color.zentea_lightgreen;
 
 public class EventOverviewActivity extends Fragment {
 
@@ -93,7 +99,9 @@ public class EventOverviewActivity extends Fragment {
         eventOverview_HiddenIsFloatingMenuOpen.setText("true");
         eventOverviewFcQrScan.show();
         eventOverviewFcNewEvent.show();
-        eventOverviewFcMenu.setImageResource(R.drawable.ic_android_black_24dp);
+        eventOverviewFcMenu.setImageResource(R.drawable.ic_remove_circle_outline_black_24dp);
+        //Tried to change color of Main Floating Button on press
+        //eventOverviewFcMenu.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.zentea_lightgreen, null));
     }
 
     //Hide the menu Buttons
@@ -101,6 +109,6 @@ public class EventOverviewActivity extends Fragment {
         eventOverview_HiddenIsFloatingMenuOpen.setText("false");
         eventOverviewFcQrScan.hide();
         eventOverviewFcNewEvent.hide();
-        eventOverviewFcMenu.setImageResource(R.drawable.ic_android_black2_24dp);
+        eventOverviewFcMenu.setImageResource(R.drawable.ic_add_circle_outline_black_24dp);
     }
 }
