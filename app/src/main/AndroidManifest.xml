@@ -2,20 +2,22 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="hft.wiinf.de.horario">
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <application
+        android:name="com.activeandroid.app.Application"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name="com.activeandroid.app.Application">
+        android:theme="@style/AppTheme">
 
         <activity
             android:name=".TabActivity"
             android:label="@string/title_activity_tab"
-            android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,11 +35,23 @@
         <meta-data
             android:name="AA_MODELS"
             android:value="hft.wiinf.de.horario.model.Event, hft.wiinf.de.horario.model.Person" />
+
         <provider
             android:name="com.activeandroid.content.ContentProvider"
             android:authorities="${applicationId}"
             android:enabled="true"
-            android:exported="false">
-        </provider>
+            android:exported="false"></provider>
+
+        <receiver android:name=".service.NotificationReceiver">
+        </receiver>
+        <receiver
+            android:name=".service.DeviceBootReceiver"
+            android:enabled="true"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>
