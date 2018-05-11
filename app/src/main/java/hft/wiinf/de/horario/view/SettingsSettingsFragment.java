@@ -12,9 +12,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -66,7 +63,7 @@ public class SettingsSettingsFragment extends Fragment {
             Log.d(TAG, "SettingsActivity:" + e.getMessage());
         }
         editTextUsername = view.findViewById(R.id.settings_settings_editText_username);
-// set the user name of the person (empty string if no person set)
+        // set the user name of the person (empty string if no person set)
         editTextUsername.setText(person.getName());
 
         //Make EditText-Field editable

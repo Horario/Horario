@@ -2,19 +2,13 @@ package hft.wiinf.de.horario.view;
 
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import hft.wiinf.de.horario.R;
-import hft.wiinf.de.horario.controller.PersonController;
-import hft.wiinf.de.horario.model.Person;
 
 /**
  * A simple {@link Fragment} subclass.
