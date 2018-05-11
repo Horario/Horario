@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -22,6 +23,8 @@ import com.activeandroid.util.Log;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.util.Calendar;
+
 import hft.wiinf.de.horario.CaptureActivityPortrait;
 import hft.wiinf.de.horario.R;
 
@@ -35,16 +38,18 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
     private Button mScannerResult_Button_addEvent, mScannerResult_Button_saveWithoutassent, mScannerResult_Button_rejectEvent;
     private int counter = 0;
 
+    /*
     @Override
     public void onActivityCreated(Bundle savednstanceState) {
         super.onActivityCreated(savednstanceState);
     }
+    */
 
     //The Scanner start with the Call form CalendarActivity directly
     //ToDo Versuchen die Ansicht immernoch zu verbessern ..
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle saveInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle saveInstanceState) {
         View view = inflater.inflate(R.layout.fragment_calendar_qrscan, container, false);
         return view;
 
@@ -69,6 +74,7 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
         mScannerResult_Button_addEvent.setVisibility(View.GONE);
         mScannerResult_Button_saveWithoutassent.setVisibility(View.GONE);
         mScannerResult_Button_rejectEvent.setVisibility(View.GONE);
+
 
         showCameraPreview();
     }
@@ -98,8 +104,10 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
         if (!isCameraPermissionGranted()) {
             requestCameraPermission();
         } else {
+           //ToDo Nach dem Scannen zeigt er das Ergebnis nicht an wenn ich die Views wieder sichbar mache und nur den Text ausführe zeigt er diesen auch an.
+            //showCameraPreview();
             startScanner();
-
+           mScannerResult_TextureView_Description.setText("Hallo Du da!");
         }
     }
 
@@ -124,7 +132,9 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
                     Snackbar.make((getActivity().findViewById(R.id.scanner_result_relativeLayout_buttonFrame)),
                             "Danke für die Zugriffsrechte auf die Kamera!",
                             Snackbar.LENGTH_LONG).show();
+
                     startScanner();
+
                 } else {
                     //If the User deny the access to the Camera he get two Chance to accept the Request
                     //The Counter count from 0 to 2. If the Counter 2 user is pushed to CalendarActivity
@@ -201,7 +211,7 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
 
     @SuppressLint({"SetTextI18n", "LongLogTag"})
     private void displayQRResult() {
-        if (getActivity() != null && qrResult != null) {
+       if (getActivity() != null && qrResult != null) {
             mScannerResult_TextureView_Description.setVisibility(View.VISIBLE);
 
             if (qrResult.equals("Canceled")) {
