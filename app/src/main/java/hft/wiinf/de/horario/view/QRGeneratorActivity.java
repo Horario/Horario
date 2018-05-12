@@ -42,10 +42,8 @@ public class QRGeneratorActivity extends Fragment {
     @SuppressLint("LongLogTag")
     public Long eventIdDescription() {
         Bundle qrEventIdBundle = getArguments();
-
-
-            Long qrEventIdLongResult = qrEventIdBundle.getLong("eventId");
-            return qrEventIdLongResult;
+        Long qrEventIdLongResult = qrEventIdBundle.getLong("eventId");
+        return qrEventIdLongResult;
     }
 
     @Override
@@ -88,8 +86,8 @@ public class QRGeneratorActivity extends Fragment {
         mQRGenerator_StringBuffer_Result.append(simpleDateFormat.format(mEvent.getEndDate()) + stringSplitSymbol);
         mQRGenerator_StringBuffer_Result.append(simpleTimeFormat.format(mEvent.getStartTime()) + stringSplitSymbol);
         mQRGenerator_StringBuffer_Result.append(simpleTimeFormat.format(mEvent.getEndTime()) + stringSplitSymbol);
-        mQRGenerator_StringBuffer_Result.append(mEvent.getRepetition()+stringSplitSymbol);
-        mQRGenerator_StringBuffer_Result.append(mEvent.getShortTitle()+stringSplitSymbol);
+        mQRGenerator_StringBuffer_Result.append(mEvent.getRepetition() + stringSplitSymbol);
+        mQRGenerator_StringBuffer_Result.append(mEvent.getShortTitle() + stringSplitSymbol);
         mQRGenerator_StringBuffer_Result.append(mEvent.getPlace() + stringSplitSymbol);
         mQRGenerator_StringBuffer_Result.append(mEvent.getDescription() + stringSplitSymbol);
         mQRGenerator_StringBuffer_Result.append(mPerson.getName());
@@ -141,25 +139,24 @@ public class QRGeneratorActivity extends Fragment {
             }
 
 
-
             // Check the EventCreatorName and is it itself Change the eventCreaterName to "Your Self"
-            if(eventCreatorName.equals(mPerson.getName())) {
-               eventCreatorName = "Du selber";
+            if (eventCreatorName.equals(mPerson.getName())) {
+                eventCreatorName = "Du selber";
             }
 
             // Event shortTitel in Headline with StartDate
-            mQRGenerator_textView_headline.setText("Dein Termin"+"\n"+shortTitle+", "+startDate);
+            mQRGenerator_textView_headline.setText("Dein Termin" + "\n" + shortTitle + ", " + startDate);
             // Check for a Repetition Event and Change the Description Output with and without
             // Repetition Element inside.
             if (repetition.equals("")) {
-                mQRGenerator_textView_description.setText("Am "+startDate+ " findet von "+startTime+" bis "
-                        +endTime+" Uhr in Raum " +place+" "+shortTitle+" statt."+"\n"+"Termindetails sind: "
-                        +description+"\n"+"\n"+"Organisator: "+ eventCreatorName);
+                mQRGenerator_textView_description.setText("Am " + startDate + " findet von " + startTime + " bis "
+                        + endTime + " Uhr in Raum " + place + " " + shortTitle + " statt." + "\n" + "Termindetails sind: "
+                        + description + "\n" + "\n" + "Organisator: " + eventCreatorName);
             } else {
-                mQRGenerator_textView_description.setText(  "Vom "+startDate+ " bis "+endDate+
-                        " findet "+repetition+" um "+startTime+"Uhr bis "+endTime+"Uhr in Raum "
-                        +place+" "+shortTitle+" statt." +"\n"+"Termindetails sind: "+description+
-                        "\n"+"\n"+"Organisator: "+ eventCreatorName);
+                mQRGenerator_textView_description.setText("Vom " + startDate + " bis " + endDate +
+                        " findet " + repetition + " um " + startTime + "Uhr bis " + endTime + "Uhr in Raum "
+                        + place + " " + shortTitle + " statt." + "\n" + "Termindetails sind: " + description +
+                        "\n" + "\n" + "Organisator: " + eventCreatorName);
             }
             // In the CatchBlock the User see a Snackbar Information and was pushed to CalendarActivity
         } catch (NullPointerException e) {
@@ -181,16 +178,16 @@ public class QRGeneratorActivity extends Fragment {
                 }
             }).show();
 
-        } catch (ArrayIndexOutOfBoundsException z){
-           //If there an Exeption the Views are Invisible and Snackbar tell that's anything wrong
-           // and Push him back to the CalendarActivity
+        } catch (ArrayIndexOutOfBoundsException z) {
+            //If there an Exeption the Views are Invisible and Snackbar tell that's anything wrong
+            // and Push him back to the CalendarActivity
             Log.d(TAG, "QRGeneratorFragmentActivity:" + z.getMessage());
             mQRGenerator_textView_headline.setVisibility(View.GONE);
             mQRGenerator_textView_description.setVisibility(View.GONE);
             mQRGenerator_relativeLayout_buttonFrame.setVisibility(View.GONE);
             mQRGenerator_relativeLayout_show_newFragment.setVisibility(View.VISIBLE);
-            mQRGenerator_textView_description.setText("Das ist der Inhalt vom QR Code: "+"\n"+mQRGenerator_StringBuffer_Result+
-                    "\n"+"Das können wir leider nicht als Termin speichern!");
+            mQRGenerator_textView_description.setText("Das ist der Inhalt vom QR Code: " + "\n" + mQRGenerator_StringBuffer_Result +
+                    "\n" + "Das können wir leider nicht als Termin speichern!");
 
             Snackbar.make(getActivity().findViewById(R.id.generator_button_frame),
                     "Ups! Falscher QR-Code!",
