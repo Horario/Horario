@@ -31,7 +31,7 @@ public class QRGeneratorActivity extends Fragment {
     private RelativeLayout mQRGenerator_relativeLayout_show_newFragment, mQRGenerator_relativeLayout_buttonFrame;
     private Button mQRGenerator_button_start_sharingFragment, mQRGenerator_button_start_eventFeedbackFragment;
     private Person mPerson;
-    private StringBuffer mQRGenerator_StringBuffer_headline, mQRGenerator_StringBuffer_Result;
+    private StringBuffer mQRGenerator_StringBuffer_Result;
     private Event mEvent;
 
     public QRGeneratorActivity() {

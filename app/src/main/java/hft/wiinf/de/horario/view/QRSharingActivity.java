@@ -99,8 +99,6 @@ public class QRSharingActivity extends Fragment {
             //       5 = Repetition; 6 = ShortTitle; 7 = Place; 8 = Descriptoin;  9 = EventCreatorName
             String startDate = eventStringBufferResultAsArray[1].trim();
             String endDate = eventStringBufferResultAsArray[2].trim();
-            String startTime = eventStringBufferResultAsArray[3].trim();
-            String endTime = eventStringBufferResultAsArray[4].trim();
             String repetition = eventStringBufferResultAsArray[5].toUpperCase().trim();
             String shortTitle = eventStringBufferResultAsArray[6].trim();
             String place = eventStringBufferResultAsArray[7].trim();
