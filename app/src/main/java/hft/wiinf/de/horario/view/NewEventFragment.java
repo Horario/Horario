@@ -83,7 +83,7 @@ public class NewEventFragment extends Fragment {
         textView_endofRepetiton = view.findViewById(R.id.newEvent_textView_endOfRepetiton);
         textView_repetition = view.findViewById(R.id.newEvent_textView_repetition);
         button_save = view.findViewById(R.id.newEvent_button_save);
-       // when the keyboard is closed after the text edit room, there should be no focus
+        // when the keyboard is closed after the text edit room, there should be no focus
         edittext_room.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -163,7 +163,7 @@ public class NewEventFragment extends Fragment {
         //set the appearence of one choice posibility
         repetitionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_repetition.setAdapter(repetitionAdapter);
-       //set weekly selected until the user selects something different or it is overwriten by the loaded event
+        //set weekly selected until the user selects something different or it is overwriten by the loaded event
         spinner_repetition.setSelection(2);
         //don't open keyboard on focus,
         editText_endOfRepetition.setShowSoftInputOnFocus(false);
@@ -202,7 +202,7 @@ public class NewEventFragment extends Fragment {
         });
         if (getArguments()!=null){
             Long eventId = getArguments().getLong("eventId");
-                readGivenEvent(eventId);
+            readGivenEvent(eventId);
         }
         //get the user, if it is saved in the db, the user name is read
         me = PersonController.getPersonWhoIam();
@@ -245,7 +245,7 @@ me=new Person(true,"007","");
     public void getStartTime() {
         //close keyboard if it's open
         ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
-       // create a listener for the time picker dialog: update the start time with the selected values
+        // create a listener for the time picker dialog: update the start time with the selected values
         TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -302,7 +302,7 @@ me=new Person(true,"007","");
     //if the save button is clicked check the entrys and save the event if everything is ok
     public void onButtonClickSave() {
         if (checkValidity()) {
-                saveEvent();
+            saveEvent();
         }
     }
     //read the needed parameters / textfield and save the event
