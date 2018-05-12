@@ -46,7 +46,6 @@ public class QRGeneratorActivity extends Fragment {
 
             Long qrEventIdLongResult = qrEventIdBundle.getLong("eventId");
             return qrEventIdLongResult;
-
     }
 
     @Override
