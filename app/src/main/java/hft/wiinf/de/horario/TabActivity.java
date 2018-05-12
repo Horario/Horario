@@ -133,7 +133,7 @@ public class TabActivity extends AppCompatActivity {
             //Do something if Tab is reselected. Parameters: selected Tab.--- Info: tab.getPosition() == x for check which Tab
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                if (tab.getPosition() == 2) {
+                if (tab.getPosition() == 2 ) {
                     //Set Visibility of mainLayout to Visible and the rest to Gone, to see only the overview
                     try {
                         mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_helper).setVisibility(View.GONE);
