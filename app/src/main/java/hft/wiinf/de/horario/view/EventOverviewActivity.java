@@ -31,7 +31,8 @@ public class EventOverviewActivity extends Fragment {
     TextView overviewTvMonth;
     Button overviewBtNext;
     Button overviewBtPrevious;
-    Date selectedMonth = new Date(CalendarActivity.selectedMonth.getTime());
+    //Date selectedMonth = new Date(CalendarActivity.selectedMonth.getTime());
+    Date selectedMonth = new Date();
     FloatingActionButton eventOverviewFcMenu, eventOverviewFcQrScan, eventOverviewFcNewEvent;
     RelativeLayout rLayout_eventOverview_helper;
     ConstraintLayout cLayout_eventOverview_main;
@@ -58,7 +59,7 @@ public class EventOverviewActivity extends Fragment {
         eventOverviewFcNewEvent = view.findViewById(R.id.eventOverview_floatingActionButtonNewEvent);
         eventOverviewFcQrScan = view.findViewById(R.id.eventOverview_floatingActionButtonScan);
         rLayout_eventOverview_helper = view.findViewById(R.id.eventOverview_relativeLayout_helper);
-        cLayout_eventOverview_main = view.findViewById(R.id.eventOverview_Layout_main);
+        //cLayout_eventOverview_main = view.findViewById(R.id.eventOverview_Layout_main); TODO
         eventOverview_HiddenIsFloatingMenuOpen = view.findViewById(R.id.eventOverviewFabClosed);
         eventOverviewFcQrScan.hide();
         eventOverviewFcNewEvent.hide();
@@ -122,12 +123,12 @@ public class EventOverviewActivity extends Fragment {
             }
         });
 
-        cLayout_eventOverview_main.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                closeFABMenu();
-            }
-        });
+//        cLayout_eventOverview_main.setOnClickListener(new View.OnClickListener() {
+  //          @Override
+    //        public void onClick(View v) {
+      //          closeFABMenu();
+        //    }
+//        });
     }
 
     public void update(){

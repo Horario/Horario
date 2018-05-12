@@ -115,7 +115,7 @@ public class TabActivity extends AppCompatActivity {
 
                 } else if (tab.getPosition() == 0) {
                     mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_relativeLayout_helper).setVisibility(View.GONE);
-                    mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_Layout_main).setVisibility(View.VISIBLE);
+                    //mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_Layout_main).setVisibility(View.VISIBLE); TODO
                     mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_floatingActionButtonMenu).setVisibility(View.VISIBLE);
 
                     FloatingActionButton floatNewEvent = mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_floatingActionButtonNewEvent);
@@ -168,7 +168,7 @@ public class TabActivity extends AppCompatActivity {
 
                 } else if (tab.getPosition() == 0) {
                     mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_relativeLayout_helper).setVisibility(View.GONE);
-                    mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_Layout_main).setVisibility(View.VISIBLE);
+                    //mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_Layout_main).setVisibility(View.VISIBLE); TODO
                     mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_floatingActionButtonMenu).setVisibility(View.VISIBLE);
 
                     FloatingActionButton floatNewEvent = mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_floatingActionButtonNewEvent);

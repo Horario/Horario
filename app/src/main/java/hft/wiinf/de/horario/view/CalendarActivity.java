@@ -34,6 +34,7 @@ import java.util.Locale;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
+import hft.wiinf.de.horario.model.AcceptedState;
 
 //TODO Kommentieren und Java Doc Info Schreiben
 public class CalendarActivity extends Fragment {
@@ -91,7 +92,7 @@ public class CalendarActivity extends Fragment {
         test.setStartTime(new Date(1524261326000L)); //20.04.18
         test.setEndTime(new Date(1524261326000L));
         test.setDescription("Termin 1");
-        test.setAccepted(true);
+        test.setAccepted(AcceptedState.ACCEPTED);
         test.save();
 
         updateCompactCalendar();
