@@ -31,7 +31,7 @@ public class Event extends Model {
     @Column
     private Repetition repetition = Repetition.NONE;
     @Column
-    private Date endDate = null;
+    private Date endDate = new Date();
     @Column
     private AcceptedState accepted;
     @Column
