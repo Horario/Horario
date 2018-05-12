@@ -206,7 +206,8 @@ public class NewEventFragment extends Fragment {
         }
         //get the user, if it is saved in the db, the user name is read
         me = PersonController.getPersonWhoIam();
-        if (me!=null)
+        if (me==null)
+me=new Person(true,"007","");
             edittext_userName.setText(me.getName());
     }
     //if the checkbox serial event is checked, repetiiton posibilities and the endOfrepetition is shown, else not
@@ -250,7 +251,7 @@ public class NewEventFragment extends Fragment {
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 startTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 startTime.set(Calendar.MINUTE, minute);
-//format the choosen time as HH:mm and write it into the start time text field
+                //format the choosen time as HH:mm and write it into the start time text field
                 DateFormat format = new SimpleDateFormat("HH:mm");
                 edittext_startTime.setText(format.format(startTime.getTime()));
             }
@@ -306,7 +307,8 @@ public class NewEventFragment extends Fragment {
     }
     //read the needed parameters / textfield and save the event
     public void saveEvent() {
-        Event event = new Event(PersonController.getPersonWhoIam());
+        PersonController.savePerson(me);
+        Event event = new Event(me);
         event.setAccepted(AcceptedState.ACCEPTED);
         event.setDescription(editText_description.getText().toString());
         event.setStartTime(startTime.getTime());
@@ -314,7 +316,7 @@ public class NewEventFragment extends Fragment {
         event.setShortTitle(edittext_shortTitle.getText().toString());
         event.setRepetition(getRepetition());
         event.setPlace(edittext_room.getText().toString());
-// only save the end of repetition if the repetition is not none, if it's an serial event (repetition not none) save it as an serial event, else as an "normal" event
+        // only save the end of repetition if the repetition is not none, if it's an serial event (repetition not none) save it as an serial event, else as an "normal" event
         if (event.getRepetition() != Repetition.NONE) {
             event.setEndDate(endOfRepetition.getTime());
             EventController.saveSerialevent(event);

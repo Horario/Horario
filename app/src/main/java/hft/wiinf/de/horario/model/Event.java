@@ -31,15 +31,16 @@ public class Event extends Model {
     @Column
     private Repetition repetition = Repetition.NONE;
     @Column
-    private Date endDate = new Date();
+    private Date endDate = null;
     @Column
     private AcceptedState accepted;
     @Column
     //the first event of an repeating / serial event
     private Event startEvent = null;
     // the id of the event in the db of the creator
+    @Column
     private long creatorEventId;
-//create a new event with a creator
+    //create a new event with a creator
     public Event(Person creator) {
         this.creator = creator;
     }
@@ -48,7 +49,7 @@ public class Event extends Model {
         super();
     }
 
-//getter-setter
+    //getter-setter
 
     public Person getCreator() {
         return creator;

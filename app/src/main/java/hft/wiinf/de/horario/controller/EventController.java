@@ -52,7 +52,7 @@ public class EventController {
     public static List<Event> findMyAcceptedEvents() {
         return new Select().from(Event.class).where("accepted=?", true).execute();
     }
-//find all events that point to the given event as an start event
+    //find all events that point to the given event as an start event
     public static List<Event> findRepeatingEvents(@NonNull Long eventId) {
         return new Select().from(Event.class).where("startevent=?", eventId).execute();
     }
@@ -74,7 +74,7 @@ public class EventController {
             default:
                 fieldNumber = Calendar.YEAR;
         }
-//save first event;
+        //save first event;
         firstEvent.setStartEvent(firstEvent);
         saveEvent(firstEvent);
         for (int i = 1; ; i++) {
