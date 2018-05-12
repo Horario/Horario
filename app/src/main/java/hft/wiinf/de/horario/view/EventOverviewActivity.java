@@ -2,7 +2,10 @@ package hft.wiinf.de.horario.view;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -28,6 +32,10 @@ public class EventOverviewActivity extends Fragment {
     Button overviewBtNext;
     Button overviewBtPrevious;
     Date selectedMonth = new Date(CalendarActivity.selectedMonth.getTime());
+    FloatingActionButton eventOverviewFcMenu, eventOverviewFcQrScan, eventOverviewFcNewEvent;
+    RelativeLayout rLayout_eventOverview_helper;
+    ConstraintLayout cLayout_eventOverview_main;
+    TextView eventOverview_HiddenIsFloatingMenuOpen;
 
     @Nullable
     @Override
@@ -45,6 +53,15 @@ public class EventOverviewActivity extends Fragment {
         overviewTvMonth = view.findViewById(R.id.overviewTvMonth);
         overviewBtNext = view.findViewById(R.id.overviewBtNext);
         overviewBtPrevious = view.findViewById(R.id.overviewBtPrevious);
+        //Floating Button
+        eventOverviewFcMenu = view.findViewById(R.id.eventOverview_floatingActionButtonMenu);
+        eventOverviewFcNewEvent = view.findViewById(R.id.eventOverview_floatingActionButtonNewEvent);
+        eventOverviewFcQrScan = view.findViewById(R.id.eventOverview_floatingActionButtonScan);
+        rLayout_eventOverview_helper = view.findViewById(R.id.eventOverview_relativeLayout_helper);
+        cLayout_eventOverview_main = view.findViewById(R.id.eventOverview_Layout_main);
+        eventOverview_HiddenIsFloatingMenuOpen = view.findViewById(R.id.eventOverviewFabClosed);
+        eventOverviewFcQrScan.hide();
+        eventOverviewFcNewEvent.hide();
 
         update();
 
@@ -61,6 +78,54 @@ public class EventOverviewActivity extends Fragment {
             public void onClick(View v) {
                 selectedMonth.setMonth(selectedMonth.getMonth()-1);
                 update();
+            }
+        });
+
+        eventOverviewFcMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (eventOverview_HiddenIsFloatingMenuOpen.getText().equals("false")) {
+                    showFABMenu();
+                    eventOverview_HiddenIsFloatingMenuOpen.setText("true");
+                } else {
+                    closeFABMenu();
+                    eventOverview_HiddenIsFloatingMenuOpen.setText("false");
+                }
+            }
+        });
+
+        //Open new Fragment "NewEvent"
+        eventOverviewFcNewEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction fr = getFragmentManager().beginTransaction();
+                fr.replace(R.id.eventOverview_relativeLayout_helper, new NewEventFragment());
+                fr.addToBackStack(null);
+                fr.commit();
+                rLayout_eventOverview_helper.setVisibility(View.VISIBLE);
+                closeFABMenu();
+                eventOverviewFcMenu.setVisibility(View.GONE);
+            }
+        });
+
+        //Open new Fragment "QRCodeScan"
+        eventOverviewFcQrScan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction fr = getFragmentManager().beginTransaction();
+                fr.replace(R.id.eventOverview_relativeLayout_helper, new QRScanFragment());
+                fr.addToBackStack(null);
+                fr.commit();
+                rLayout_eventOverview_helper.setVisibility(View.VISIBLE);
+                closeFABMenu();
+                eventOverviewFcMenu.setVisibility(View.GONE);
+            }
+        });
+
+        cLayout_eventOverview_main.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeFABMenu();
             }
         });
     }
@@ -94,5 +159,21 @@ public class EventOverviewActivity extends Fragment {
         }
         ArrayAdapter adapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, eventArray);
         return adapter;
+    }
+
+    //Show the menu Buttons
+    public void showFABMenu() {
+        eventOverview_HiddenIsFloatingMenuOpen.setText("true");
+        eventOverviewFcQrScan.show();
+        eventOverviewFcNewEvent.show();
+        eventOverviewFcMenu.setImageResource(R.drawable.ic_android_black_24dp);
+    }
+
+    //Hide the menu Buttons
+    public void closeFABMenu() {
+        eventOverview_HiddenIsFloatingMenuOpen.setText("false");
+        eventOverviewFcQrScan.hide();
+        eventOverviewFcNewEvent.hide();
+        eventOverviewFcMenu.setImageResource(R.drawable.ic_android_black2_24dp);
     }
 }

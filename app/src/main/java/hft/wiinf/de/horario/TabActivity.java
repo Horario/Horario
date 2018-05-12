@@ -3,6 +3,7 @@ package hft.wiinf.de.horario;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.activeandroid.ActiveAndroid;
+import com.facebook.stetho.Stetho;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,7 +25,7 @@ import java.util.regex.Pattern;
 import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.view.CalendarActivity;
-import hft.wiinf.de.horario.view.NewEventActivity;
+import hft.wiinf.de.horario.view.EventOverviewActivity;
 import hft.wiinf.de.horario.view.SettingsActivity;
 
 public class TabActivity extends AppCompatActivity {
@@ -40,8 +42,10 @@ public class TabActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab);
 
+        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         //Start DB
         ActiveAndroid.initialize(this);
+        Stetho.initializeWithDefaults(this);
 
         mSectionsPageAdapter = new SectionsPageAdapterActivity(getSupportFragmentManager());
 
@@ -81,11 +85,8 @@ public class TabActivity extends AppCompatActivity {
                 if (tab.getPosition() == 2) {
                     //Set Visibility of mainLayout to Visible and the rest to Gone, to see only the overview
                     try {
-                        mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_settings).setVisibility(View.GONE);
-                        mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_support).setVisibility(View.GONE);
-                        mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_feedback).setVisibility(View.GONE);
-                        mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_copyright).setVisibility(View.GONE);
-                        mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_main).setVisibility(View.VISIBLE);
+                        mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_helper).setVisibility(View.GONE);
+                        mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_button).setVisibility(View.VISIBLE);
 
                         //Leave edit mode from EditText in Settings (username)
                         mSectionsPageAdapter.getItem(2).getActivity().findViewById(R.id.settings_settings_editText_username).setFocusableInTouchMode(false);
@@ -97,6 +98,35 @@ public class TabActivity extends AppCompatActivity {
                     } catch (NullPointerException e) {
                         Log.d(TAG, "TabActivity:" + e.getMessage());
                     }
+                } else if (tab.getPosition() == 1) {
+                    mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_relativeLayout_helper).setVisibility(View.GONE);
+                    mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_constrainLayout_main).setVisibility(View.VISIBLE);
+                    mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_floatingActionButtonMenu).setVisibility(View.VISIBLE);
+
+                    FloatingActionButton floatNewEvent = mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_floatingActionButtonNewEvent);
+                    FloatingActionButton floatQRScan = mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_floatingActionButtonScan);
+                    FloatingActionButton floatMenu = mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_floatingActionButtonMenu);
+                    TextView isFloatingMenuOpen = mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_hiddenField);
+
+                    floatNewEvent.hide();
+                    floatQRScan.hide();
+                    floatMenu.setImageResource(R.drawable.ic_android_black2_24dp);
+                    isFloatingMenuOpen.setText("false");
+
+                } else if (tab.getPosition() == 0) {
+                    mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_relativeLayout_helper).setVisibility(View.GONE);
+                    mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_Layout_main).setVisibility(View.VISIBLE);
+                    mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_floatingActionButtonMenu).setVisibility(View.VISIBLE);
+
+                    FloatingActionButton floatNewEvent = mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_floatingActionButtonNewEvent);
+                    FloatingActionButton floatQRScan = mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_floatingActionButtonScan);
+                    FloatingActionButton floatMenu = mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_floatingActionButtonMenu);
+                    TextView isFloatingMenuOpen = mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverviewFabClosed);
+
+                    floatNewEvent.hide();
+                    floatQRScan.hide();
+                    floatMenu.setImageResource(R.drawable.ic_android_black2_24dp);
+                    isFloatingMenuOpen.setText("false");
                 }
             }
 
@@ -106,11 +136,8 @@ public class TabActivity extends AppCompatActivity {
                 if (tab.getPosition() == 2) {
                     //Set Visibility of mainLayout to Visible and the rest to Gone, to see only the overview
                     try {
-                        mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_settings).setVisibility(View.GONE);
-                        mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_support).setVisibility(View.GONE);
-                        mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_feedback).setVisibility(View.GONE);
-                        mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_copyright).setVisibility(View.GONE);
-                        mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_main).setVisibility(View.VISIBLE);
+                        mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_helper).setVisibility(View.GONE);
+                        mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_button).setVisibility(View.VISIBLE);
 
                         //Leave edit mode from EditText in Settings (username)
                         mSectionsPageAdapter.getItem(2).getActivity().findViewById(R.id.settings_settings_editText_username).setFocusableInTouchMode(false);
@@ -123,6 +150,36 @@ public class TabActivity extends AppCompatActivity {
                     } catch (NullPointerException e) {
                         Log.d(TAG, "TabActivity:" + e.getMessage());
                     }
+                } else if (tab.getPosition() == 1) {
+                    mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_relativeLayout_helper).setVisibility(View.GONE);
+                    mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_constrainLayout_main).setVisibility(View.VISIBLE);
+                    mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_floatingActionButtonMenu).setVisibility(View.VISIBLE);
+
+                    FloatingActionButton floatNewEvent = mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_floatingActionButtonNewEvent);
+                    FloatingActionButton floatQRScan = mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_floatingActionButtonScan);
+                    FloatingActionButton floatMenu = mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_floatingActionButtonMenu);
+                    TextView isFloatingMenuOpen = mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_hiddenField);
+
+
+                    floatNewEvent.hide();
+                    floatQRScan.hide();
+                    floatMenu.setImageResource(R.drawable.ic_android_black2_24dp);
+                    isFloatingMenuOpen.setText("false");
+
+                } else if (tab.getPosition() == 0) {
+                    mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_relativeLayout_helper).setVisibility(View.GONE);
+                    mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_Layout_main).setVisibility(View.VISIBLE);
+                    mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_floatingActionButtonMenu).setVisibility(View.VISIBLE);
+
+                    FloatingActionButton floatNewEvent = mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_floatingActionButtonNewEvent);
+                    FloatingActionButton floatQRScan = mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_floatingActionButtonScan);
+                    FloatingActionButton floatMenu = mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_floatingActionButtonMenu);
+                    TextView isFloatingMenuOpen = mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverviewFabClosed);
+
+                    floatNewEvent.hide();
+                    floatQRScan.hide();
+                    floatMenu.setImageResource(R.drawable.ic_android_black2_24dp);
+                    isFloatingMenuOpen.setText("false");
                 }
             }
         });
@@ -130,7 +187,7 @@ public class TabActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         SectionsPageAdapterActivity adapter = mSectionsPageAdapter;
-        adapter.addFragment(new NewEventActivity(), "");
+        adapter.addFragment(new EventOverviewActivity(), "");
         adapter.addFragment(new CalendarActivity(), "");
         adapter.addFragment(new SettingsActivity(), "");
         viewPager.setAdapter(adapter);
