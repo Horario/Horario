@@ -174,7 +174,7 @@ public class CalendarActivity extends Fragment {
         calendarIsFloatMenuOpen.setText("true");
         calendarFcQrScan.show();
         calendarFcNewEvent.show();
-        calendarFcMenu.setImageResource(R.drawable.ic_remove_circle_outline_black_24dp);
+        calendarFcMenu.setImageResource(R.drawable.ic_minusmenu);
 
     }
 
@@ -182,7 +182,7 @@ public class CalendarActivity extends Fragment {
         calendarIsFloatMenuOpen.setText("false");
         calendarFcQrScan.hide();
         calendarFcNewEvent.hide();
-        calendarFcMenu.setImageResource(R.drawable.ic_add_circle_outline_black_24dp);
+        calendarFcMenu.setImageResource(R.drawable.ic_plusmenu);
     }
 
     public CalendarActivity() {

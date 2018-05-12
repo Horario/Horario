@@ -99,7 +99,7 @@ public class EventOverviewActivity extends Fragment {
         eventOverview_HiddenIsFloatingMenuOpen.setText("true");
         eventOverviewFcQrScan.show();
         eventOverviewFcNewEvent.show();
-        eventOverviewFcMenu.setImageResource(R.drawable.ic_remove_circle_outline_black_24dp);
+        eventOverviewFcMenu.setImageResource(R.drawable.ic_minusmenu);
         //Tried to change color of Main Floating Button on press
         //eventOverviewFcMenu.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.zentea_lightgreen, null));
     }
@@ -109,6 +109,6 @@ public class EventOverviewActivity extends Fragment {
         eventOverview_HiddenIsFloatingMenuOpen.setText("false");
         eventOverviewFcQrScan.hide();
         eventOverviewFcNewEvent.hide();
-        eventOverviewFcMenu.setImageResource(R.drawable.ic_add_circle_outline_black_24dp);
+        eventOverviewFcMenu.setImageResource(R.drawable.ic_plusmenu);
     }
 }
