@@ -1,6 +1,7 @@
 package hft.wiinf.de.horario.view;
 
 import android.annotation.SuppressLint;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -16,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
+import java.util.jar.Attributes;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
@@ -37,10 +39,14 @@ public class QRGeneratorActivity extends Fragment {
     }
 
     // Get the EventIdResultBundle (Long) from the newEventActivity to Start later a DB Request
+    @SuppressLint("LongLogTag")
     public Long eventIdDescription() {
         Bundle qrEventIdBundle = getArguments();
-        Long qrEventIdLongResult = qrEventIdBundle.getLong("eventId");
-        return qrEventIdLongResult;
+
+
+            Long qrEventIdLongResult = qrEventIdBundle.getLong("eventId");
+            return qrEventIdLongResult;
+
     }
 
     @Override
@@ -95,7 +101,7 @@ public class QRGeneratorActivity extends Fragment {
 
     @SuppressLint("LongLogTag")
     @Override
-    public void onViewCreated(final View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull final View view, Bundle savedInstanceState) {
         try {
             stringBufferGenerator();
 
@@ -110,6 +116,7 @@ public class QRGeneratorActivity extends Fragment {
             String repetition = eventStringBufferArray[5].toUpperCase().trim();
             String shortTitle = eventStringBufferArray[6].trim();
             String place = eventStringBufferArray[7].trim();
+            String description = eventStringBufferArray[8].trim();
             String eventCreatorName = eventStringBufferArray[9].trim();
 
             // Change the DataBase Repetition Information in a German String for the Repetition Element
@@ -134,17 +141,26 @@ public class QRGeneratorActivity extends Fragment {
                     repetition = "ohne Wiederholung";
             }
 
+
+
+            // Check the EventCreatorName and is it itself Change the eventCreaterName to "Your Self"
+            if(eventCreatorName.equals(mPerson.getName())) {
+               eventCreatorName = "Du selber";
+            }
+
             // Event shortTitel in Headline with StartDate
             mQRGenerator_textView_headline.setText("Dein Termin"+"\n"+shortTitle+", "+startDate);
             // Check for a Repetition Event and Change the Description Output with and without
             // Repetition Element inside.
             if (repetition.equals("")) {
-                mQRGenerator_textView_description.setText("Am "+ startDate + " findet um "+startTime+
-                        " Uhr in Raum " + place +shortTitle+" statt." +"\n\n"+"Organisator: "+ eventCreatorName);
+                mQRGenerator_textView_description.setText("Am "+startDate+ " findet von "+startTime+" bis "
+                        +endTime+" Uhr in Raum " +place+" "+shortTitle+" statt."+"\n"+"Termindetails sind: "
+                        +description+"\n"+"\n"+"Organisator: "+ eventCreatorName);
             } else {
-                mQRGenerator_textView_description.setText(  "Vom "+ startDate + " bis "+endDate+
-                        " findet "+repetition+" um "+startTime+" Uhr in Raum " + place +" "+
-                        shortTitle+" statt." +"\n\n"+"Organisator: "+ eventCreatorName);
+                mQRGenerator_textView_description.setText(  "Vom "+startDate+ " bis "+endDate+
+                        " findet "+repetition+" um "+startTime+"Uhr bis "+endTime+"Uhr in Raum "
+                        +place+" "+shortTitle+" statt." +"\n"+"Termindetails sind: "+description+
+                        "\n"+"\n"+"Organisator: "+ eventCreatorName);
             }
             // In the CatchBlock the User see a Snackbar Information and was pushed to CalendarActivity
         } catch (NullPointerException e) {

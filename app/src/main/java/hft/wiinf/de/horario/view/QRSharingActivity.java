@@ -30,6 +30,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import hft.wiinf.de.horario.R;
+import hft.wiinf.de.horario.model.Person;
+import hft.wiinf.de.horario.controller.PersonController;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -42,6 +44,7 @@ public class QRSharingActivity extends Fragment {
     private ImageView mQRSharing_imageView_qrCode;
     private BitMatrix mBitmatrix;
     private Bitmap mBitmapOfQRCode;
+    private Person mPerson;
 
     public QRSharingActivity() {
         // Required empty public constructor
@@ -126,6 +129,14 @@ public class QRSharingActivity extends Fragment {
                     break;
                 default:
                     repetition = "ohne Wiederholung";
+            }
+
+            // Check the EventCreatorName and is it itself Change the eventCreaterName to "Your Self"
+            mPerson = PersonController.getPersonWhoIam();
+            if(eventCreatorName.equals(mPerson.getName())) {
+                eventCreatorName = "Du selber";
+            }else{
+
             }
 
             // Event shortTitel in Headline with StartDate
