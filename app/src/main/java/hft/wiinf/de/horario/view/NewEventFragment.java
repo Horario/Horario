@@ -212,8 +212,9 @@ public class NewEventFragment extends Fragment {
         }
         //get the user, if it is saved in the db, the user name is read
         me = PersonController.getPersonWhoIam();
-        if (me != null)
-            edittext_userName.setText(me.getName());
+        if (me == null)
+            me = new Person(true, "007", "");
+        edittext_userName.setText(me.getName());
     }
 
     //if the checkbox serial event is checked, repetiiton posibilities and the endOfrepetition is shown, else not
@@ -315,7 +316,8 @@ public class NewEventFragment extends Fragment {
 
     //read the needed parameters / textfield and save the event
     public void saveEvent() {
-        Event event = new Event(PersonController.getPersonWhoIam());
+        PersonController.savePerson(me);
+        Event event = new Event(me);
         event.setAccepted(AcceptedState.ACCEPTED);
         event.setDescription(editText_description.getText().toString());
         event.setStartTime(startTime.getTime());
@@ -359,16 +361,16 @@ public class NewEventFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 dialogSavingSuccessful.dismiss();
-               /* QRGeneratorActivity qrFrag= new QRGeneratorActivity();
+                QRGeneratorActivity qrFrag = new QRGeneratorActivity();
                 Bundle bundle = new Bundle();
-                bundle.putLong("eventId",eventId);
+                bundle.putLong("eventId", eventId);
                 qrFrag.setArguments(bundle);
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.newEvent_newFragment, qrFrag)
                         .addToBackStack(null)
                         .commit();
                 getView().findViewById(R.id.newEvent_oldFragment).setVisibility(View.INVISIBLE);
-                getView().findViewById(R.id.newEvent_newFragment).setVisibility(View.VISIBLE);*/
+                getView().findViewById(R.id.newEvent_newFragment).setVisibility(View.VISIBLE);
             }
         });
     }
