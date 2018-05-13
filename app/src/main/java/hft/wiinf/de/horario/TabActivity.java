@@ -1,10 +1,13 @@
 package hft.wiinf.de.horario;
 
 import android.app.AlertDialog;
+import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -24,11 +27,13 @@ import java.util.regex.Pattern;
 
 import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.Person;
+import hft.wiinf.de.horario.controller.*;
 import hft.wiinf.de.horario.view.CalendarActivity;
 import hft.wiinf.de.horario.view.EventOverviewActivity;
+import hft.wiinf.de.horario.view.QRScanResultFragment;
 import hft.wiinf.de.horario.view.SettingsActivity;
 
-public class TabActivity extends AppCompatActivity {
+public class TabActivity extends AppCompatActivity implements ScanResultReceiverController{
 
     //TODO Kommentieren und Java Doc Info Schreiben
     private static final String TAG = "TabActivity";
@@ -64,6 +69,25 @@ public class TabActivity extends AppCompatActivity {
         if (PersonController.getPersonWhoIam() == null) {
             openDialogAskForUsername();
         }
+    }
+
+
+    public void scanResultData(String codeFormat, String codeContent){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        QRScanResultFragment scanFragment = new QRScanResultFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("scanResult", codeContent);
+        scanFragment.setArguments(bundle);
+        fragmentTransaction.add(R.id.fragment_container,scanFragment);
+        fragmentTransaction.commit();
+
+    }
+
+    @Override
+    public void scanResultData(NoScanResultExceptionController noScanData) {
+        Toast toast = Toast.makeText(this,noScanData.getMessage(), Toast.LENGTH_SHORT);
+        toast.show();
     }
 
     //Method will be called after UI-Elements are created
@@ -185,6 +209,8 @@ public class TabActivity extends AppCompatActivity {
         });
     }
 
+
+
     private void setupViewPager(ViewPager viewPager) {
         SectionsPageAdapterActivity adapter = mSectionsPageAdapter;
         adapter.addFragment(new EventOverviewActivity(), "");
@@ -193,6 +219,11 @@ public class TabActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
     }
 
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
     //Method calls a Dialog when the User has not added a username
     public void openDialogAskForUsername() {
         final AlertDialog.Builder dialogAskForUsername = new AlertDialog.Builder(this);

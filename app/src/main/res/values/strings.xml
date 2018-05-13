@@ -46,7 +46,7 @@
 
     <string name="endOfRepetition_before_endTime">Das Enddatum der Wiederholung darf nicht vor der Endzeit liegen.</string>
     <string name="event_saving_successful">Der Termin wurde erfolgreich gespeichert. Was möchten Sie nun tun?</string>
-<string name="savingSuccessful_new">neuen Termin erstellen</string>
+    <string name="savingSuccessful_new">neuen Termin erstellen</string>
     <string name="savingSuccessful_qrcode">QRCode anzeigen</string>
 
     <string name="titleDialogUsername">Bitte vergeben Sie einen Benutzernamen :)</string>

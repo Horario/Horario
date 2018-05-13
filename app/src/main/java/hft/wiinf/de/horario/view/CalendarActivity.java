@@ -1,5 +1,6 @@
 package hft.wiinf.de.horario.view;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -156,6 +157,11 @@ public class CalendarActivity extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
     }
 
     //TODO just a placeholder, maybe need a rework (1523318400000L)
