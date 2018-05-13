@@ -27,7 +27,6 @@ public class SettingsFeedbackFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_settings_feedback, container, false);
 
 
-
         return view;
     }
 

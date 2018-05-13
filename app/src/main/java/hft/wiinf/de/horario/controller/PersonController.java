@@ -13,7 +13,7 @@ public class PersonController {
 
     public static void addPersonMe(Person person) {
         try {
-            person.save();
+            PersonController.savePerson(person);
         } catch (Exception e) {
             Log.d("PersonController", "addPersonMe:" + e.getMessage());
         }
