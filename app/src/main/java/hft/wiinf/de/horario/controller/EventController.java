@@ -37,7 +37,8 @@ public class EventController {
     }
 
     public static Event getEventByCreatorEventId(@NonNull Long creatorEventId) {
-        List<Event> resultSet = new Select().from(Event.class).where("creatorEventId=? AND creator.isItMe=?", creatorEventId, true).execute();
+        Person myself = PersonController.getPersonWhoIam();
+        List<Event> resultSet = new Select().from(Event.class).where("creatorEventId=? AND creator=?", creatorEventId, myself).execute();
         return resultSet.get(0);
     }
 

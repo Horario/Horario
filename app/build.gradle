@@ -90,6 +90,4 @@ dependencies {
     //If you want to add a network helper
     implementation 'com.facebook.stetho:stetho-okhttp:1.5.0'
 
-    //github lib for SMS reading and more
-    compile 'me.everything:providers-android:1.0.1'
 }

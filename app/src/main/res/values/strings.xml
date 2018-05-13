@@ -46,9 +46,9 @@
     <string name="thanksForUsername">Benutzername wurde gespeichert! </string>
     <string name="titleParticipantsEvent">Rückmeldungen</string>
     <string name="notificationParticipantsBeingFetched">SMS werden ausgelesen...</string>
-    <string name="noNewTextMessages">Keine (neuen) Nachrichten gefunden</string>
-    <string name="newTextMessagesPt1">Es wurde(n) </string>
-    <string name="newTextMessagesPt2"> neue Nachricht(en) gefunden</string>
+    <string name="textMessagesUpdated">Teilnehmerlisten wurden aktualisiert</string>
+    <string name="noNewTextMessages">Keine neuen Nachrichten gefunden</string>
+    <string name="noTextMessagesAvailable">Keine Nachricht gefunden</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
