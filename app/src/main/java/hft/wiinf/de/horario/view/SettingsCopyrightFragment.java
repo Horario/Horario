@@ -27,7 +27,6 @@ public class SettingsCopyrightFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_settings_copyright, container, false);
 
 
-
         return view;
     }
 

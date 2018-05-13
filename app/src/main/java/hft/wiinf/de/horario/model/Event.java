@@ -40,6 +40,7 @@ public class Event extends Model {
     // the id of the event in the db of the creator
     @Column
     private long creatorEventId;
+
     //create a new event with a creator
     public Event(Person creator) {
         this.creator = creator;

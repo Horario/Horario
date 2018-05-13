@@ -131,9 +131,9 @@ public class QRSharingActivity extends Fragment {
 
             // Check the EventCreatorName and is it itself Change the eventCreaterName to "Your Self"
             mPerson = PersonController.getPersonWhoIam();
-            if(eventCreatorName.equals(mPerson.getName())) {
+            if (eventCreatorName.equals(mPerson.getName())) {
                 eventCreatorName = "Du selber";
-            }else{
+            } else {
 
             }
 
@@ -143,11 +143,11 @@ public class QRSharingActivity extends Fragment {
             // Check for a Repetition Event and Change the Description Output with and without
             // Repetition Element inside.
             if (repetition.equals("")) {
-                mQRSharing_textView_description.setText(startDate+ "\n" + "Raum: "+place + "\n"
-                        +"Organisator: " +eventCreatorName);
+                mQRSharing_textView_description.setText(startDate + "\n" + "Raum: " + place + "\n"
+                        + "Organisator: " + eventCreatorName);
             } else {
-                mQRSharing_textView_description.setText(startDate+ " - " +endDate+"\n"
-                        +repetition+ "\n" + place +"\n"+"Organisator: "+ eventCreatorName);
+                mQRSharing_textView_description.setText(startDate + " - " + endDate + "\n"
+                        + repetition + "\n" + place + "\n" + "Organisator: " + eventCreatorName);
             }
 
         } catch (NullPointerException e) {
@@ -172,7 +172,7 @@ public class QRSharingActivity extends Fragment {
                 }
             }).show();
 
-        } catch (ArrayIndexOutOfBoundsException z){
+        } catch (ArrayIndexOutOfBoundsException z) {
             //If there an Exeption the Views are Invisible and Snackbar tell that's anything wrong
             // and Push him back to the CalendarActivity
             Log.d(TAG, "QRGeneratorFragmentActivity:" + z.getMessage());
@@ -181,8 +181,8 @@ public class QRSharingActivity extends Fragment {
             mQRSharing_textView_headline.setVisibility(View.GONE);
             mQRSharing_textView_description.setVisibility(View.GONE);
             mQRSharing_imageView_qrCode.setVisibility(View.GONE);
-            mQRSharing_textView_description.setText("Das ist der Inhalt vom QR Code: "+"\n"+eventStringResultDescription()+
-                    "\n"+"Das können wir leider nicht als Termin speichern!");
+            mQRSharing_textView_description.setText("Das ist der Inhalt vom QR Code: " + "\n" + eventStringResultDescription() +
+                    "\n" + "Das können wir leider nicht als Termin speichern!");
 
             Snackbar.make(getActivity().findViewById(R.id.generator_button_frame),
                     "Ups! Falscher QR-Code!",
@@ -244,8 +244,7 @@ public class QRSharingActivity extends Fragment {
                         shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
                         startActivity(Intent.createChooser(shareIntent, "Teilen via ... "));
                     }
-                }
-                catch (IOException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }

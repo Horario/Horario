@@ -42,7 +42,6 @@ public class TabActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab);
 
-        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         //Start DB
         ActiveAndroid.initialize(this);
         Stetho.initializeWithDefaults(this);
@@ -133,7 +132,7 @@ public class TabActivity extends AppCompatActivity {
             //Do something if Tab is reselected. Parameters: selected Tab.--- Info: tab.getPosition() == x for check which Tab
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                if (tab.getPosition() == 2 ) {
+                if (tab.getPosition() == 2) {
                     //Set Visibility of mainLayout to Visible and the rest to Gone, to see only the overview
                     try {
                         mSectionsPageAdapter.getItem(2).getView().findViewById(R.id.settings_relativeLayout_helper).setVisibility(View.GONE);

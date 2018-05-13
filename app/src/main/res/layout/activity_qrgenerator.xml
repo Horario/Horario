@@ -5,9 +5,9 @@
     android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/generator_realtivLayout_show_qrSharingFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/generator_realtivLayout_show_qrSharingFragment">
+        android:layout_height="match_parent">
 
     </RelativeLayout>
 

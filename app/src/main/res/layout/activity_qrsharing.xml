@@ -6,9 +6,9 @@
     tools:context=".view.QRSharingActivity">
 
     <RelativeLayout
+        android:id="@+id/qrSharing_relativeLayout_calendarActivity"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/qrSharing_relativeLayout_calendarActivity">
+        android:layout_height="match_parent">
 
     </RelativeLayout>
 
