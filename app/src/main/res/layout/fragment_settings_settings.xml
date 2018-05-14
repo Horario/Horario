@@ -77,7 +77,10 @@
         android:layout_width="64dp"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/settings_settings_textView_reminder"
-        android:layout_toEndOf="@+id/settings_settings_textView_username" />
+        android:layout_toEndOf="@+id/settings_settings_textView_username"
+        android:entries="@array/push_times"
+        android:prompt="@string/calendar"
+        android:visibility="visible"/>
 
     <TextView
         android:id="@+id/settings_settings_textView_reminder"
