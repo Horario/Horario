@@ -38,8 +38,6 @@ public class SettingsSettingsFragment extends Fragment {
     Spinner spinner_pushMinutes;
     Switch switch_enablePush;
     TextView textView_minutesBefore, textView_reminder;
-    //variable to distunguish between user and pc selection
-    boolean userinteract = false;
 
     public SettingsSettingsFragment() {
         // Required empty public constructor
@@ -78,21 +76,21 @@ public class SettingsSettingsFragment extends Fragment {
         switch_enablePush.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                switch_enablePush.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        person.setEnablePush(isChecked);
+                        pushNotificationVisibility();
+                        PersonController.savePerson(person);
+                        if (!isChecked)
+                            Toast.makeText(getContext(), R.string.pushDisabled, Toast.LENGTH_SHORT).show();
+                    }
+
+                });
                 return false;
             }
         });
-        switch_enablePush.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                person.setEnablePush(isChecked);
-                pushNotificationVisibility();
-                if (userinteract) {
-                    PersonController.savePerson(person);
-                    if (!isChecked)
-                        Toast.makeText(getContext(), R.string.pushDisabled, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+
 
         spinner_pushMinutes.setSelection(getItemPosition());
 
@@ -146,25 +144,28 @@ public class SettingsSettingsFragment extends Fragment {
         //set the choice selection - if there is something in db saved
         spinner_pushMinutes.setSelection(getItemPosition());
         //if something is selected of the spinner, update the person
-        spinner_pushMinutes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinner_pushMinutes.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (userinteract) {
-                    String s = (String) parent.getItemAtPosition(position);
-                    int minutes = Integer.parseInt(s);
-                    person.setNotificationTime(minutes);
-                    PersonController.savePerson(person);
-                    Toast.makeText(getContext(), getString(R.string.pushMinutesSet, minutes), Toast.LENGTH_SHORT).show();
-                }
+            public boolean onTouch(View v, MotionEvent event) {
+                spinner_pushMinutes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        String s = (String) parent.getItemAtPosition(position);
+                        int minutes = Integer.parseInt(s);
+                        person.setNotificationTime(minutes);
+                        PersonController.savePerson(person);
+                        Toast.makeText(getContext(), getString(R.string.pushMinutesSet, minutes), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+
+                });
+                return false;
             }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-
         });
-        userinteract = true;
     }
 
     //if the switch is not selected dont show the minutes textview and textedit
