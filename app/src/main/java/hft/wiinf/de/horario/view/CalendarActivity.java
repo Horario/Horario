@@ -65,13 +65,6 @@ public class CalendarActivity extends Fragment {
         cLayout_calendar_main = view.findViewById(R.id.calendar_constrainLayout_main);
         calendarIsFloatMenuOpen = view.findViewById(R.id.calendar_hiddenField);
 
-        /* Lucas'
-        fabOpenClose = (FloatingActionButton) view.findViewById(R.id.floatingActionButtonOpenClose);
-        fabGoToScanner = (FloatingActionButton) view.findViewById(R.id.floatingActionButtonGoToScanner);
-        fabCreateEvent = (FloatingActionButton) view.findViewById(R.id.floatingActionButtonCreateEvent);*/
-
-
-
 
         ActionButtonOpen = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonopen);
         ActionButtonClose = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonclose);
@@ -79,11 +72,7 @@ public class CalendarActivity extends Fragment {
         ActionButtonRotateLeft = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonrotateleft);
 
 
-        //calendarFcQrScan.hide();
-        //calendarFcNewEvent.hide();
-
         calendarFcMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
             public void onClick(View view) {
                 if (calendarIsFloatMenuOpen.getText().equals("false")) {
                     showFABMenu();
@@ -169,7 +158,6 @@ public class CalendarActivity extends Fragment {
                 Toast.makeText(getActivity(), "test", Toast.LENGTH_SHORT).show(); //TODO just for testing, delete
             }
         });
-
         return view;
     }
 
@@ -194,14 +182,12 @@ public class CalendarActivity extends Fragment {
         calendarFcQrScan.startAnimation(ActionButtonOpen);
         calendarFcNewEvent.startAnimation(ActionButtonOpen);
         calendarFcMenu.startAnimation(ActionButtonRotateRight);
-
-        //calendarFcQrScan.setClickable(true);
-        //calendarFcNewEvent.setClickable(true);
+        calendarFcQrScan.setClickable(true);
+        calendarFcNewEvent.setClickable(true);
         calendarIsFloatMenuOpen.setText("true");
         calendarFcQrScan.show();
         calendarFcNewEvent.show();
         calendarFcMenu.setImageResource(R.drawable.ic_plusmenu);
-
     }
 
     public void closeFABMenu() {
@@ -210,13 +196,15 @@ public class CalendarActivity extends Fragment {
         calendarFcMenu.startAnimation(ActionButtonRotateLeft);
         //calendarFcNewEvent.setVisibility(View.VISIBLE);
         //calendarFcQrScan.setVisibility(View.VISIBLE);
-        //calendarFcQrScan.setClickable(false);
-        //calendarFcNewEvent.setClickable(false);
+        calendarFcQrScan.setClickable(false);
+        calendarFcNewEvent.setClickable(false);
         calendarIsFloatMenuOpen.setText("false");
         calendarFcQrScan.hide();
         calendarFcNewEvent.hide();
         calendarFcMenu.setImageResource(R.drawable.ic_plusmenu);
     }
+
+
 
     public CalendarActivity() {
         super();

@@ -25,7 +25,6 @@ import static hft.wiinf.de.horario.R.color.zentea_lightgreen;
 public class EventOverviewActivity extends Fragment {
 
     FloatingActionButton eventOverviewFcMenu, eventOverviewFcQrScan, eventOverviewFcNewEvent;
-    //FloatingActionButton fabOpenClose, fabGoToScanner, fabCreateEvent;
     RelativeLayout rLayout_eventOverview_helper;
     ConstraintLayout cLayout_eventOverview_main;
     TextView eventOverview_HiddenIsFloatingMenuOpen;
@@ -37,6 +36,7 @@ public class EventOverviewActivity extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_event_overview, container, false);
+
 
         eventOverviewFcMenu = view.findViewById(R.id.eventOverview_floatingActionButtonMenu);
         eventOverviewFcNewEvent = view.findViewById(R.id.eventOverview_floatingActionButtonNewEvent);

@@ -81,8 +81,8 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/calendar_floatingActionButtonMenu"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:layout_marginBottom="28dp"
@@ -102,8 +102,8 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/calendar_floatingActionButtonNewEvent"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_gravity="top|right"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="22dp"
@@ -123,8 +123,8 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/calendar_floatingActionButtonScan"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_gravity="bottom|end"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="22dp"
