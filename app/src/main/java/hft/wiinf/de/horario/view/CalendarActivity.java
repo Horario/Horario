@@ -116,19 +116,6 @@ public class CalendarActivity extends Fragment {
             }
         });
 
-        /** TODO maybe get deleted */
-        calendarTvMonth.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.layoutHelper, new EventOverviewActivity());
-                ft.addToBackStack(null);
-                ft.commit();
-                layoutCalendar.setVisibility(View.GONE);
-                layoutHelper.setVisibility(View.VISIBLE);
-            }
-        });
-
         //handle actions after a event entry get clicked
         calendarLvList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -160,6 +147,8 @@ public class CalendarActivity extends Fragment {
                 fr.addToBackStack(null);
                 fr.commit();
                 rLayout_calendar_helper.setVisibility(View.VISIBLE);
+                layoutHelper.setVisibility(View.VISIBLE);
+                layoutCalendar.setVisibility(View.GONE);
                 closeFABMenu();
                 calendarFcMenu.setVisibility(View.GONE);
             }
@@ -173,6 +162,8 @@ public class CalendarActivity extends Fragment {
                 fr.addToBackStack(null);
                 fr.commit();
                 rLayout_calendar_helper.setVisibility(View.VISIBLE);
+                layoutHelper.setVisibility(View.VISIBLE);
+                layoutCalendar.setVisibility(View.GONE);
                 closeFABMenu();
                 calendarFcMenu.setVisibility(View.GONE);
             }

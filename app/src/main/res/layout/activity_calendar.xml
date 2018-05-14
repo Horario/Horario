@@ -14,6 +14,11 @@
         android:layout_height="match_parent"
         android:visibility="gone">
 
+        <RelativeLayout
+            android:id="@+id/calendar_relativeLayout_helper"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
     </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.ConstraintLayout
@@ -41,18 +46,6 @@
             tools:background="#ffe95451" />
 
         <ListView
-            android:id="@+id/calendarLvList"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/calendarTvDay" />
-    <ListView
         android:id="@+id/calendarLvList"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -109,13 +102,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_menu_camera" />
 
-    <RelativeLayout
-        android:id="@+id/calendar_relativeLayout_helper"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone" />
-
-    <TextView
+        <TextView
         android:id="@+id/calendar_hiddenField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
