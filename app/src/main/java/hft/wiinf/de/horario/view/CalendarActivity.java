@@ -126,7 +126,6 @@ public class CalendarActivity extends Fragment {
                 String selectedItem = (String) parent.getItemAtPosition(position); //Get the clicked item as String
                 Toast.makeText(getActivity(), selectedItem, Toast.LENGTH_SHORT).show(); //TODO just for testing, delete
                 closeFABMenu();
-                calendarLvList.getAdapter().getView(0, view, container).setBackgroundColor(Color.BLUE);
             }
         });
 
@@ -218,7 +217,7 @@ public class CalendarActivity extends Fragment {
                 }else if(eventList.get(position).getAccepted().equals(AcceptedState.WAITING)){
                     textView.setBackgroundColor(Color.RED);
                 }else{
-
+                    textView.setBackgroundColor(Color.WHITE);
                 }
                 return textView;
             }

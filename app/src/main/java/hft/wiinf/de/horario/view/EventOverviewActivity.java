@@ -1,5 +1,6 @@
 package hft.wiinf.de.horario.view;
 
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
@@ -24,6 +25,7 @@ import java.util.List;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
+import hft.wiinf.de.horario.model.AcceptedState;
 
 public class EventOverviewActivity extends Fragment {
 
@@ -37,6 +39,8 @@ public class EventOverviewActivity extends Fragment {
     RelativeLayout rLayout_eventOverview_helper;
     ConstraintLayout cLayout_eventOverview_main;
     TextView eventOverview_HiddenIsFloatingMenuOpen;
+    ConstraintLayout layoutOverview;
+    ConstraintLayout layoutHelper;
 
     @Nullable
     @Override
@@ -54,6 +58,9 @@ public class EventOverviewActivity extends Fragment {
         overviewTvMonth = view.findViewById(R.id.overviewTvMonth);
         overviewBtNext = view.findViewById(R.id.overviewBtNext);
         overviewBtPrevious = view.findViewById(R.id.overviewBtPrevious);
+        layoutOverview = view.findViewById(R.id.layoutOverview);
+        layoutHelper = view.findViewById(R.id.layoutHelper);
+
         //Floating Button
         eventOverviewFcMenu = view.findViewById(R.id.eventOverview_floatingActionButtonMenu);
         eventOverviewFcNewEvent = view.findViewById(R.id.eventOverview_floatingActionButtonNewEvent);
@@ -104,6 +111,8 @@ public class EventOverviewActivity extends Fragment {
                 fr.addToBackStack(null);
                 fr.commit();
                 rLayout_eventOverview_helper.setVisibility(View.VISIBLE);
+                layoutHelper.setVisibility(View.VISIBLE);
+                layoutOverview.setVisibility(View.GONE);
                 closeFABMenu();
                 eventOverviewFcMenu.setVisibility(View.GONE);
             }
@@ -118,6 +127,8 @@ public class EventOverviewActivity extends Fragment {
                 fr.addToBackStack(null);
                 fr.commit();
                 rLayout_eventOverview_helper.setVisibility(View.VISIBLE);
+                layoutHelper.setVisibility(View.VISIBLE);
+                layoutOverview.setVisibility(View.GONE);
                 closeFABMenu();
                 eventOverviewFcMenu.setVisibility(View.GONE);
             }
@@ -138,7 +149,7 @@ public class EventOverviewActivity extends Fragment {
 
     //get all events for the selected month and save them in a adapter
     public ArrayAdapter iterateOverMonth(Date date){ //TODO create own Adapter
-        ArrayList<String> eventArray = new ArrayList<>();
+        final ArrayList<Appointment> eventArray = new ArrayList<>();
         Date day = new Date(date.getTime());
         int endDate = date.getMonth();
         while (day.getMonth() <= endDate){
@@ -147,17 +158,37 @@ public class EventOverviewActivity extends Fragment {
             endOfDay.add(Calendar.DAY_OF_MONTH, 1);
             List<hft.wiinf.de.horario.model.Event> eventList = EventController.findEventsByTimePeriod(day, endOfDay.getTime());
             if (eventList.size()>0){
-                eventArray.add(CalendarActivity.dayFormat.format(day));
+                eventArray.add(new Appointment(CalendarActivity.dayFormat.format(day), 0));
             }
             for (int i = 0; i<eventList.size(); i++){
-                eventArray.add(eventList.get(i).getDescription());
+                if(eventList.get(i).getAccepted().equals(AcceptedState.ACCEPTED)){
+                    eventArray.add(new Appointment(eventList.get(i).getDescription(), 1));
+                }else{
+                    eventArray.add(new Appointment(eventList.get(i).getDescription(), 2));
+                }
             }
             day.setTime(endOfDay.getTimeInMillis());
         }
         if(eventArray.size() < 1){ //when no events this month do stuff
-            eventArray.add("Du hast keine Termine diesen Monat");
+            eventArray.add(new Appointment("Du hast keine Termine diesen Monat", 0));
         }
-        ArrayAdapter adapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, eventArray);
+        final ArrayAdapter adapter = new ArrayAdapter(this.getActivity(), android.R.layout.simple_list_item_1, eventArray){
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                TextView textView = (TextView) super.getView(position, convertView, parent);
+                if (eventArray.get(position).getType() == 1){
+                    textView.setBackgroundColor(Color.GREEN);
+                }else if(eventArray.get(position).getType() == 2){
+                    textView.setBackgroundColor(Color.RED);
+                }else if(eventArray.get(position).getType() == 0){
+                    textView.setBackgroundColor(Color.WHITE);
+                    textView.setFocusable(false);
+                }
+                textView.setText(eventArray.get(position).getDescription());
+                return textView;
+            }
+        };
         return adapter;
     }
 
@@ -175,5 +206,32 @@ public class EventOverviewActivity extends Fragment {
         eventOverviewFcQrScan.hide();
         eventOverviewFcNewEvent.hide();
         eventOverviewFcMenu.setImageResource(R.drawable.ic_android_black2_24dp);
+    }
+}
+
+class Appointment{
+    private String description;
+    private int type;
+
+    Appointment(String description, int type){
+        this.description = description;
+        this.type = type;
+    }
+
+    /** 0 = date, 1 = accepted, 2 = rejected */
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }
