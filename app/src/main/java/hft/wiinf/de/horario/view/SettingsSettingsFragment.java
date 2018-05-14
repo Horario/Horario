@@ -84,6 +84,8 @@ public class SettingsSettingsFragment extends Fragment {
                         PersonController.savePerson(person);
                         if (!isChecked)
                             Toast.makeText(getContext(), R.string.pushDisabled, Toast.LENGTH_SHORT).show();
+                        else
+                            Toast.makeText(getContext(), getString(R.string.pushMinutesSet, person.getNotificationTime()), Toast.LENGTH_SHORT).show();
                     }
 
                 });
