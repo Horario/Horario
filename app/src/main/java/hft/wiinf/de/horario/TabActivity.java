@@ -47,7 +47,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab);
 
-        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         //Start DB
         ActiveAndroid.initialize(this);
         Stetho.initializeWithDefaults(this);

@@ -60,15 +60,14 @@ public class NewEventFragment extends Fragment {
     }
 
 
-
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         // set the second and millisecond of the calendar objects to 0 as (dates and) times are only compared by hour and minute, seconds dont matter
-        startTime.set(Calendar.SECOND,0);
-        startTime.set(Calendar.MILLISECOND,0);
-        endTime.set(Calendar.SECOND,0);
-        endTime.set(Calendar.MILLISECOND,0);
-        endOfRepetition.set(Calendar.SECOND,0);
-        endOfRepetition.set(Calendar.MILLISECOND,0);
+        startTime.set(Calendar.SECOND, 0);
+        startTime.set(Calendar.MILLISECOND, 0);
+        endTime.set(Calendar.SECOND, 0);
+        endTime.set(Calendar.MILLISECOND, 0);
+        endOfRepetition.set(Calendar.SECOND, 0);
+        endOfRepetition.set(Calendar.MILLISECOND, 0);
         // get / initialize  the needed gui objects as fields of the class
         edittext_shortTitle = view.findViewById(R.id.newEvent_textEdit_shortTitle);
         editText_description = view.findViewById(R.id.newEvent_editText_description);
@@ -76,18 +75,18 @@ public class NewEventFragment extends Fragment {
         edittext_date = view.findViewById(R.id.newEvent_editText_Date);
         edittext_startTime = view.findViewById(R.id.newEvent_editText_startTime);
         editText_endTime = view.findViewById(R.id.newEvent_textEdit_endTime);
-        edittext_userName=view.findViewById(R.id.unewEvent_textEdit_userName);
+        edittext_userName = view.findViewById(R.id.unewEvent_textEdit_userName);
         checkBox_serialEvent = view.findViewById(R.id.newEvent_checkBox_SerialEvent);
         spinner_repetition = view.findViewById(R.id.newEvent_spinner_repetition);
         editText_endOfRepetition = view.findViewById(R.id.newEvent_textEdit_endOfRepetition);
         textView_endofRepetiton = view.findViewById(R.id.newEvent_textView_endOfRepetiton);
         textView_repetition = view.findViewById(R.id.newEvent_textView_repetition);
         button_save = view.findViewById(R.id.newEvent_button_save);
-       // when the keyboard is closed after the text edit room, there should be no focus
+        // when the keyboard is closed after the text edit room, there should be no focus
         edittext_room.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE){
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
                     ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
                     edittext_room.clearFocus();
                     return true;
@@ -142,7 +141,7 @@ public class NewEventFragment extends Fragment {
         edittext_userName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE){
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
                     ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
                     edittext_userName.clearFocus();
                     return true;
@@ -163,7 +162,7 @@ public class NewEventFragment extends Fragment {
         //set the appearence of one choice posibility
         repetitionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_repetition.setAdapter(repetitionAdapter);
-       //set weekly selected until the user selects something different or it is overwriten by the loaded event
+        //set weekly selected until the user selects something different or it is overwriten by the loaded event
         spinner_repetition.setSelection(2);
         //don't open keyboard on focus,
         editText_endOfRepetition.setShowSoftInputOnFocus(false);
@@ -185,7 +184,7 @@ public class NewEventFragment extends Fragment {
         editText_endOfRepetition.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE){
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
                     ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
                     editText_endOfRepetition.clearFocus();
                     return true;
@@ -200,16 +199,17 @@ public class NewEventFragment extends Fragment {
                 onButtonClickSave();
             }
         });
-        if (getArguments()!=null){
+        if (getArguments() != null) {
             Long eventId = getArguments().getLong("eventId");
-                readGivenEvent(eventId);
+            readGivenEvent(eventId);
         }
         //get the user, if it is saved in the db, the user name is read
         me = PersonController.getPersonWhoIam();
-        if (me==null)
-me=new Person(true,"007","");
-            edittext_userName.setText(me.getName());
+        if (me == null)
+            me = new Person(true, "007", "");
+        edittext_userName.setText(me.getName());
     }
+
     //if the checkbox serial event is checked, repetiiton posibilities and the endOfrepetition is shown, else not
     private void checkSerialEvent() {
         if (checkBox_serialEvent.isChecked()) {
@@ -224,6 +224,7 @@ me=new Person(true,"007","");
             textView_repetition.setVisibility(View.GONE);
         }
     }
+
     public void getDate() {
         //close keyboard if it's open
         ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
@@ -245,7 +246,7 @@ me=new Person(true,"007","");
     public void getStartTime() {
         //close keyboard if it's open
         ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
-       // create a listener for the time picker dialog: update the start time with the selected values
+        // create a listener for the time picker dialog: update the start time with the selected values
         TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -302,9 +303,10 @@ me=new Person(true,"007","");
     //if the save button is clicked check the entrys and save the event if everything is ok
     public void onButtonClickSave() {
         if (checkValidity()) {
-                saveEvent();
+            saveEvent();
         }
     }
+
     //read the needed parameters / textfield and save the event
     public void saveEvent() {
         PersonController.savePerson(me);
@@ -323,14 +325,15 @@ me=new Person(true,"007","");
         } else
             EventController.saveEvent(event);
         // if me (the user) is not created (aka null) a new user with typed in the user name is created
-        if (me==null)
+        if (me == null)
             //TODO: read the phone number of the user
-            me = new Person(true,"007","");
+            me = new Person(true, "007", "");
         //update or save a new person (me)
         me.setName(edittext_userName.getText().toString());
         PersonController.savePerson(me);
         openSavedSuccessfulDialog(event.getId());
     }
+
     //clear all entrys and open a dialog where the user can choose what to do next
     private void openSavedSuccessfulDialog(final long eventId) {
         clearEntrys();
@@ -350,19 +353,20 @@ me=new Person(true,"007","");
             @Override
             public void onClick(View v) {
                 dialogSavingSuccessful.dismiss();
-               /* QRGeneratorActivity qrFrag= new QRGeneratorActivity();
+                QRGeneratorActivity qrFrag = new QRGeneratorActivity();
                 Bundle bundle = new Bundle();
-                bundle.putLong("eventId",eventId);
+                bundle.putLong("eventId", eventId);
                 qrFrag.setArguments(bundle);
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.newEvent_newFragment, qrFrag)
                         .addToBackStack(null)
                         .commit();
                 getView().findViewById(R.id.newEvent_oldFragment).setVisibility(View.INVISIBLE);
-                getView().findViewById(R.id.newEvent_newFragment).setVisibility(View.VISIBLE);*/
+                getView().findViewById(R.id.newEvent_newFragment).setVisibility(View.VISIBLE);
             }
         });
     }
+
     //clear all entrys of the text edits and uncheck the serial event
     private void clearEntrys() {
         edittext_shortTitle.setText("");
@@ -379,60 +383,60 @@ me=new Person(true,"007","");
 
     //checks if the entrys are valid and opens a toast if not return value: coolean if everything is ok
     private boolean checkValidity() {
-        if (editText_description.getText().toString().equals("") || edittext_shortTitle.getText().toString().equals("") || edittext_date.getText().toString().equals("") || edittext_startTime.getText().toString().equals("") || editText_endTime.getText().toString().equals("") || edittext_userName.getText().toString().equals("")||edittext_room.getText().toString().equals("")) {
+        if (editText_description.getText().toString().equals("") || edittext_shortTitle.getText().toString().equals("") || edittext_date.getText().toString().equals("") || edittext_startTime.getText().toString().equals("") || editText_endTime.getText().toString().equals("") || edittext_userName.getText().toString().equals("") || edittext_room.getText().toString().equals("")) {
             Toast.makeText(getContext(), R.string.empty_fields, Toast.LENGTH_LONG).show();
             return false;
         }
-        if (getRepetition()!=Repetition.NONE&&editText_endOfRepetition.getText().toString().equals("")) {
+        if (getRepetition() != Repetition.NONE && editText_endOfRepetition.getText().toString().equals("")) {
             Toast.makeText(getContext(), R.string.empty_fields, Toast.LENGTH_LONG).show();
             return false;
         }
-        if (edittext_shortTitle.getText().toString().matches(" +.*")){
+        if (edittext_shortTitle.getText().toString().matches(" +.*")) {
             Toast.makeText(getContext(), R.string.shortTitle_spaces, Toast.LENGTH_LONG).show();
             return false;
         }
-        if (edittext_shortTitle.getText().toString().contains("|")){
+        if (edittext_shortTitle.getText().toString().contains("|")) {
             Toast.makeText(getContext(), R.string.shortTitle_peek, Toast.LENGTH_LONG).show();
             return false;
         }
-        if (editText_description.getText().toString().matches(" +.*")){
+        if (editText_description.getText().toString().matches(" +.*")) {
             Toast.makeText(getContext(), R.string.description_spaces, Toast.LENGTH_LONG).show();
             return false;
         }
-        if (editText_description.getText().toString().contains("|")){
+        if (editText_description.getText().toString().contains("|")) {
             Toast.makeText(getContext(), R.string.description_peek, Toast.LENGTH_LONG).show();
             return false;
         }
-        if (edittext_room.getText().toString().matches(" +.*")){
+        if (edittext_room.getText().toString().matches(" +.*")) {
             Toast.makeText(getContext(), R.string.place_spaces, Toast.LENGTH_LONG).show();
             return false;
         }
-        if (edittext_room.getText().toString().contains("|")){
+        if (edittext_room.getText().toString().contains("|")) {
             Toast.makeText(getContext(), R.string.room_peek, Toast.LENGTH_LONG).show();
             return false;
         }
-        if (edittext_userName.getText().toString().matches(" +.*")){
+        if (edittext_userName.getText().toString().matches(" +.*")) {
             Toast.makeText(getContext(), R.string.noValidUsername, Toast.LENGTH_LONG).show();
             return false;
         }
 
-        if (editText_description.getText().length()>500){
+        if (editText_description.getText().length() > 500) {
             Toast.makeText(getContext(), R.string.description_too_long, Toast.LENGTH_LONG).show();
             return false;
         }
-        if (edittext_shortTitle.getText().length()>100){
+        if (edittext_shortTitle.getText().length() > 100) {
             Toast.makeText(getContext(), R.string.shortTitle_too_long, Toast.LENGTH_LONG).show();
             return false;
         }
-        if (edittext_room.getText().length()>100){
+        if (edittext_room.getText().length() > 100) {
             Toast.makeText(getContext(), R.string.room_too_long, Toast.LENGTH_LONG).show();
             return false;
         }
         //read the current date and time to compare if the start time is in the past, set seconds and milliseconds to 0 to ensure a ight compare (seonds and milliseconds doesn't matter)
         Calendar now = Calendar.getInstance();
-        now.set(Calendar.SECOND,0);
-        now.set(Calendar.MILLISECOND,0);
-        if (startTime.before(now)){
+        now.set(Calendar.SECOND, 0);
+        now.set(Calendar.MILLISECOND, 0);
+        if (startTime.before(now)) {
             Toast.makeText(getContext(), R.string.startTime_past, Toast.LENGTH_LONG).show();
             return false;
         }
@@ -448,6 +452,7 @@ me=new Person(true,"007","");
         }
         return true;
     }
+
     //get the right repetiton
     private Repetition getRepetition() {
         //if the check box isnt checked return none
@@ -466,6 +471,7 @@ me=new Person(true,"007","");
 
         }
     }
+
     //read the event of the given eventId and set the correct texts of the edit texts
     public void readGivenEvent(long eventId) {
         Event event = EventController.getEventById(eventId);

@@ -32,9 +32,6 @@ public class SettingsSettingsFragment extends Fragment {
     private static final String TAG = "SettingFragmentActivity";
     EditText editTextUsername;
     Person person;
-    Spinner spinner_pushMinutes;
-    Switch switch_enablePush;
-    TextView textView_minutesBefore, textView_reminder;
 
     public SettingsSettingsFragment() {
         // Required empty public constructor

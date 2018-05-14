@@ -12,4 +12,5 @@ US042 pushed to Quality. Quality tested and pushed to master on 04.05.2018.
 US007 and US040 pushed to Quality. Quality tested and pushed to master on 08.05.2018.  
 US006 pushed to Quality. Quality tested and pushed to master on 10.05.2018.  
 US041 bug fixed. Quality tested and pushed to master on 11.05.2018.  
-
+US041 bug fixed. Quality tested and pushed to master on 12.05.2018.  
+US008 and US009 pushed to Quality. Quality tested and pushed to master on 13.05.2018.  
