@@ -139,7 +139,7 @@ public class SettingsSettingsFragment extends Fragment {
             }
         });
 
-// set the choice posibilities of the push minutes dropdown
+        // set the choice posibilities of the push minutes dropdown
         ArrayAdapter minutesAdapter = ArrayAdapter.createFromResource(getContext(), R.array.push_times, android.R.layout.simple_spinner_item);
         minutesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_pushMinutes.setAdapter(minutesAdapter);
