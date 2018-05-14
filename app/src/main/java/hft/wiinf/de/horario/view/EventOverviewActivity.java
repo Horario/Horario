@@ -45,8 +45,6 @@ public class EventOverviewActivity extends Fragment {
         cLayout_eventOverview_main = view.findViewById(R.id.eventOverview_Layout_main);
         eventOverview_HiddenIsFloatingMenuOpen = view.findViewById(R.id.eventOverviewFabClosed);
 
-        eventOverviewFcQrScan.hide();
-        eventOverviewFcNewEvent.hide();
 
         ActionButtonOpen = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonopen);
         ActionButtonClose = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonclose);
@@ -66,26 +64,6 @@ public class EventOverviewActivity extends Fragment {
             }
         });
 
-        eventOverviewFcMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (eventOverviewFcNewEvent.isClickable()) {
-                    eventOverviewFcQrScan.startAnimation(ActionButtonClose);
-                    eventOverviewFcNewEvent.startAnimation(ActionButtonClose);
-                    eventOverviewFcMenu.startAnimation(ActionButtonRotateLeft);
-                    eventOverviewFcQrScan.setClickable(false);
-                    eventOverviewFcNewEvent.setClickable(false);
-                } else {
-                    eventOverviewFcQrScan.startAnimation(ActionButtonOpen);
-                    eventOverviewFcNewEvent.startAnimation(ActionButtonOpen);
-                    eventOverviewFcMenu.startAnimation(ActionButtonRotateRight);
-                    eventOverviewFcQrScan.setClickable(true);
-                    eventOverviewFcNewEvent.setClickable(true);
-                }
-
-
-            }
-        });
 
         //Open new Fragment "NewEvent"
         eventOverviewFcNewEvent.setOnClickListener(new View.OnClickListener() {
@@ -130,7 +108,12 @@ public class EventOverviewActivity extends Fragment {
         eventOverview_HiddenIsFloatingMenuOpen.setText("true");
         eventOverviewFcQrScan.show();
         eventOverviewFcNewEvent.show();
-        eventOverviewFcMenu.setImageResource(R.drawable.ic_minusmenu);
+        eventOverviewFcQrScan.startAnimation(ActionButtonOpen);
+        eventOverviewFcNewEvent.startAnimation(ActionButtonOpen);
+        eventOverviewFcMenu.startAnimation(ActionButtonRotateRight);
+        eventOverviewFcQrScan.setClickable(true);
+        eventOverviewFcNewEvent.setClickable(true);
+        eventOverviewFcMenu.setImageResource(R.drawable.ic_plusmenu);
         //Tried to change color of Main Floating Button on press
         //eventOverviewFcMenu.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.zentea_lightgreen, null));
     }
@@ -140,6 +123,12 @@ public class EventOverviewActivity extends Fragment {
         eventOverview_HiddenIsFloatingMenuOpen.setText("false");
         eventOverviewFcQrScan.hide();
         eventOverviewFcNewEvent.hide();
+        if (eventOverviewFcNewEvent.isClickable()) {
+            eventOverviewFcQrScan.startAnimation(ActionButtonClose);
+            eventOverviewFcNewEvent.startAnimation(ActionButtonClose);
+            eventOverviewFcMenu.startAnimation(ActionButtonRotateLeft);
+            eventOverviewFcQrScan.setClickable(false);
+            eventOverviewFcNewEvent.setClickable(false);
         eventOverviewFcMenu.setImageResource(R.drawable.ic_plusmenu);
     }
-}
+}};

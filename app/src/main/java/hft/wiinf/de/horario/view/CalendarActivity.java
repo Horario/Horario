@@ -78,30 +78,9 @@ public class CalendarActivity extends Fragment {
         ActionButtonRotateRight = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonrotateright);
         ActionButtonRotateLeft = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonrotateleft);
 
-        calendarFcMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (calendarFcNewEvent.isClickable()) {
-                    calendarFcQrScan.startAnimation(ActionButtonClose);
-                    calendarFcNewEvent.startAnimation(ActionButtonClose);
-                    calendarFcMenu.startAnimation(ActionButtonRotateLeft);
-                    calendarFcQrScan.setClickable(false);
-                    calendarFcNewEvent.setClickable(false);
-                } else {
-                    calendarFcQrScan.startAnimation(ActionButtonOpen);
-                    calendarFcNewEvent.startAnimation(ActionButtonOpen);
-                    calendarFcMenu.startAnimation(ActionButtonRotateRight);
-                    calendarFcQrScan.setClickable(true);
-                    calendarFcNewEvent.setClickable(true);
-                }
 
-
-            }
-        });
-
-
-        calendarFcQrScan.hide();
-        calendarFcNewEvent.hide();
+        //calendarFcQrScan.hide();
+        //calendarFcNewEvent.hide();
 
         calendarFcMenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,28 +92,6 @@ public class CalendarActivity extends Fragment {
                     closeFABMenu();
                     calendarIsFloatMenuOpen.setText("false");
                 }
-            }
-        });
-
-
-        calendarFcMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (calendarFcNewEvent.isClickable()) {
-                    calendarFcQrScan.startAnimation(ActionButtonClose);
-                    calendarFcNewEvent.startAnimation(ActionButtonClose);
-                    calendarFcMenu.startAnimation(ActionButtonRotateLeft);
-                    calendarFcQrScan.setClickable(false);
-                    calendarFcNewEvent.setClickable(false);
-                } else {
-                    calendarFcQrScan.startAnimation(ActionButtonOpen);
-                    calendarFcNewEvent.startAnimation(ActionButtonOpen);
-                    calendarFcMenu.startAnimation(ActionButtonRotateRight);
-                    calendarFcQrScan.setClickable(true);
-                    calendarFcNewEvent.setClickable(true);
-                }
-
-
             }
         });
 
@@ -234,14 +191,27 @@ public class CalendarActivity extends Fragment {
     }
 
     public void showFABMenu() {
+        calendarFcQrScan.startAnimation(ActionButtonOpen);
+        calendarFcNewEvent.startAnimation(ActionButtonOpen);
+        calendarFcMenu.startAnimation(ActionButtonRotateRight);
+
+        //calendarFcQrScan.setClickable(true);
+        //calendarFcNewEvent.setClickable(true);
         calendarIsFloatMenuOpen.setText("true");
         calendarFcQrScan.show();
         calendarFcNewEvent.show();
-        calendarFcMenu.setImageResource(R.drawable.ic_minusmenu);
+        calendarFcMenu.setImageResource(R.drawable.ic_plusmenu);
 
     }
 
     public void closeFABMenu() {
+        calendarFcQrScan.startAnimation(ActionButtonClose);
+        calendarFcNewEvent.startAnimation(ActionButtonClose);
+        calendarFcMenu.startAnimation(ActionButtonRotateLeft);
+        //calendarFcNewEvent.setVisibility(View.VISIBLE);
+        //calendarFcQrScan.setVisibility(View.VISIBLE);
+        //calendarFcQrScan.setClickable(false);
+        //calendarFcNewEvent.setClickable(false);
         calendarIsFloatMenuOpen.setText("false");
         calendarFcQrScan.hide();
         calendarFcNewEvent.hide();

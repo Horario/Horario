@@ -3,10 +3,10 @@
     android:fillAfter="true">
 <scale
     android:duration="300"
-    android:fromXScale="0.0dp"
-    android:fromYScale="0.0dp"
-    android:toXScale="0.8dp"
-    android:toYScale="0.8dp"
+    android:fromXScale="0dp"
+    android:fromYScale="0dp"
+    android:toXScale="45dp"
+    android:toYScale="45dp"
     android:interpolator="@android:anim/linear_interpolator"
     android:pivotX="50%"
     android:pivotY="50%"
@@ -14,7 +14,7 @@
     <alpha
         android:duration="300"
         android:fromAlpha="0.0"
-        android:toAlpha="1.0"
+        android:toAlpha="10"
         android:interpolator="@android:anim/accelerate_interpolator"
         />
 </set>
