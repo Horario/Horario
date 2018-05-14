@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/settings_relativeLayout_settings"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,28 +13,29 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/settings_settings_textView_settings"
-        android:layout_marginTop="99dp"
+        android:layout_marginTop="190dp"
         android:text="@string/username_text" />
 
     <TextView
         android:id="@+id/settings_settings_textView_allowPush"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/settings_settings_textView_settings"
-        android:layout_marginTop="169dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/settings_settings_textView_username"
+        android:layout_marginBottom="229dp"
         android:text="@string/allowpush_text" />
 
     <TextView
         android:id="@+id/settings_settings_textView_settings"
-        android:layout_width="wrap_content"
+        android:layout_width="346dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="88dp"
         android:text="@string/settings_text"
-        android:textSize="30sp" />
+        android:textColor="#95ab63"
+        android:textSize="30sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/settings_settings_textView_minutesBefore"
@@ -59,29 +61,31 @@
 
     <Switch
         android:id="@+id/settings_settings_Switch_allowPush"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/settings_settings_textView_allowPush"
+        android:layout_width="59dp"
+        android:layout_height="39dp"
+        android:layout_alignBaseline="@+id/settings_settings_textView_allowPush"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="62dp" />
+        android:layout_marginEnd="50dp"
+        android:switchTextAppearance="@style/TextAppearance.AppCompat"
+        android:textColorLink="#96ab63"
+        android:thumbTint="#95ab63"
+        android:trackTint="@android:color/darker_gray"
+        tools:checked="true" />
 
     <Spinner
         android:id="@+id/settings_settings_spinner_minutes"
-        android:layout_width="wrap_content"
+        android:layout_width="64dp"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/settings_settings_textView_reminder"
-        android:layout_toEndOf="@+id/settings_settings_textView_username"
-        android:entries="@array/push_times"
-        android:prompt="@string/calendar"
-        android:visibility="visible" />
+        android:layout_toEndOf="@+id/settings_settings_textView_username" />
 
     <TextView
         android:id="@+id/settings_settings_textView_reminder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/settings_settings_textView_settings"
-        android:layout_marginTop="234dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/settings_settings_textView_username"
+        android:layout_marginBottom="194dp"
         android:text="@string/reminder_text" />
 
 </RelativeLayout>
