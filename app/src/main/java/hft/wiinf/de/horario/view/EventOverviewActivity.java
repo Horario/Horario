@@ -152,7 +152,6 @@ public class EventOverviewActivity extends Fragment {
             for (int i = 0; i<eventList.size(); i++){
                 eventArray.add(eventList.get(i).getDescription());
             }
-            //TODO was wenn keine Termine in diesem Monat sind, irgendeine Message anzeigen? Abhandeln über eventArray size
             day.setTime(endOfDay.getTimeInMillis());
         }
         if(eventArray.size() < 1){ //when no events this month do stuff

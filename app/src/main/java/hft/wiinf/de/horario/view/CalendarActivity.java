@@ -3,6 +3,7 @@ package hft.wiinf.de.horario.view;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
@@ -31,6 +32,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.zip.Inflater;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
@@ -54,15 +56,16 @@ public class CalendarActivity extends Fragment {
     static DateFormat monthFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
     static DateFormat dayFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
     public static Date selectedMonth;
+    private int simple_list_item_1;
 
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
         //initialize variables
-        View view = inflater.inflate(R.layout.activity_calendar, container, false);
+        final View view = inflater.inflate(R.layout.activity_calendar, container, false);
         calendarCvCalendar = view.findViewById(R.id.calendarCvCalendar);
         calendarTvMonth = view.findViewById(R.id.calendarTvMonth);
         calendarLvList = view.findViewById(R.id.calendarLvList);
@@ -85,7 +88,7 @@ public class CalendarActivity extends Fragment {
         selectedMonth = today;
         calendarTvMonth.setText(monthFormat.format(today)); //initialize month field
         calendarTvDay.setText(dayFormat.format(today));
-        calendarLvList.setAdapter(getAdapter(today));
+        calendarLvList.setAdapter(getAdapter(today, view));
 
         //TODO just for testing (add entry to database), delete
         hft.wiinf.de.horario.model.Event test = new hft.wiinf.de.horario.model.Event();
@@ -102,7 +105,7 @@ public class CalendarActivity extends Fragment {
             //when a day get clicked, the date field will be updated and the events for the day displayed in the ListView
             public void onDayClick(Date dateClicked) {
                 calendarTvDay.setText(dayFormat.format(dateClicked));
-                calendarLvList.setAdapter(getAdapter(dateClicked));
+                calendarLvList.setAdapter(getAdapter(dateClicked, view));
                 closeFABMenu();
             }
 
@@ -111,7 +114,7 @@ public class CalendarActivity extends Fragment {
             public void onMonthScroll(Date firstDayOfNewMonth) {
                 calendarTvMonth.setText(monthFormat.format(firstDayOfNewMonth));
                 calendarTvDay.setText(dayFormat.format(firstDayOfNewMonth));
-                calendarLvList.setAdapter(getAdapter(firstDayOfNewMonth));
+                calendarLvList.setAdapter(getAdapter(firstDayOfNewMonth, view));
                 selectedMonth = firstDayOfNewMonth;
             }
         });
@@ -123,6 +126,7 @@ public class CalendarActivity extends Fragment {
                 String selectedItem = (String) parent.getItemAtPosition(position); //Get the clicked item as String
                 Toast.makeText(getActivity(), selectedItem, Toast.LENGTH_SHORT).show(); //TODO just for testing, delete
                 closeFABMenu();
+                calendarLvList.getAdapter().getView(0, view, container).setBackgroundColor(Color.BLUE);
             }
         });
 
@@ -183,7 +187,7 @@ public class CalendarActivity extends Fragment {
 
     //is marking the day in the calendar for the parameter date
     public static void updateCompactCalendar(){
-        List<hft.wiinf.de.horario.model.Event> acceptedEvents = EventController.findMyAcceptedEvents();
+        List<hft.wiinf.de.horario.model.Event> acceptedEvents = EventController.findMyEvents();
         for (int i = 0; i<acceptedEvents.size(); i++){
             if(calendarCvCalendar.getEvents(acceptedEvents.get(i).getStartTime().getTime()).size() == 0){
                 Event event = new Event(Color.BLUE, acceptedEvents.get(i).getStartTime().getTime());
@@ -193,21 +197,34 @@ public class CalendarActivity extends Fragment {
     }
 
     /** TODO need a description */
-    public ArrayAdapter getAdapter(Date date){
+    public ArrayAdapter getAdapter(Date date, View view){
         //TODO Testing
         ArrayList<String> eventsAsString = new ArrayList<>();
         Calendar endOfDay = Calendar.getInstance();
         endOfDay.setTime(date);
         endOfDay.add(Calendar.DAY_OF_MONTH, 1);
-        List<hft.wiinf.de.horario.model.Event> eventList = EventController.findEventsByTimePeriod(date, endOfDay.getTime());
+        final List<hft.wiinf.de.horario.model.Event> eventList = EventController.findEventsByTimePeriod(date, endOfDay.getTime());
         for (int i = 0; i<eventList.size(); i++){
             eventsAsString.add(eventList.get(i).getDescription());
         }
-        ArrayAdapter adapter = new ArrayAdapter(this.getActivity(), android.R.layout.simple_list_item_1, eventsAsString);
+        final int a = 0;
+        final ArrayAdapter adapter = new ArrayAdapter(this.getActivity(), android.R.layout.simple_list_item_1, eventsAsString){
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                TextView textView = (TextView) super.getView(position, convertView, parent);
+                if (eventList.get(position).getAccepted().equals(AcceptedState.ACCEPTED)){
+                    textView.setBackgroundColor(Color.GREEN);
+                }else if(eventList.get(position).getAccepted().equals(AcceptedState.WAITING)){
+                    textView.setBackgroundColor(Color.RED);
+                }else{
+
+                }
+                return textView;
+            }
+        };
         return adapter;
     }
-
-    //TODO neue Methode die alle DB Einträge bei Programmstart lädt und mit updateCompactCalendar die markierung im Calendar durchführt
 
 
 
