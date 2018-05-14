@@ -10,6 +10,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -38,11 +40,14 @@ public class CalendarActivity extends Fragment {
     TextView calendarTvDay;
     TextView calendarIsFloatMenuOpen;
     FloatingActionButton calendarFcMenu, calendarFcQrScan, calendarFcNewEvent;
+    //FloatingActionButton fabOpenClose, fabGoToScanner, fabCreateEvent;
     RelativeLayout rLayout_calendar_helper;
     ConstraintLayout cLayout_calendar_main;
 
     DateFormat monthFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
     DateFormat dayFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
+
+    Animation ActionButtonOpen, ActionButtonClose, ActionButtonRotateRight, ActionButtonRotateLeft;
 
 
     @Nullable
@@ -60,6 +65,41 @@ public class CalendarActivity extends Fragment {
         cLayout_calendar_main = view.findViewById(R.id.calendar_constrainLayout_main);
         calendarIsFloatMenuOpen = view.findViewById(R.id.calendar_hiddenField);
 
+        /* Lucas'
+        fabOpenClose = (FloatingActionButton) view.findViewById(R.id.floatingActionButtonOpenClose);
+        fabGoToScanner = (FloatingActionButton) view.findViewById(R.id.floatingActionButtonGoToScanner);
+        fabCreateEvent = (FloatingActionButton) view.findViewById(R.id.floatingActionButtonCreateEvent);*/
+
+
+
+
+        ActionButtonOpen = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonopen);
+        ActionButtonClose = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonclose);
+        ActionButtonRotateRight = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonrotateright);
+        ActionButtonRotateLeft = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonrotateleft);
+
+        calendarFcMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (calendarFcNewEvent.isClickable()) {
+                    calendarFcQrScan.startAnimation(ActionButtonClose);
+                    calendarFcNewEvent.startAnimation(ActionButtonClose);
+                    calendarFcMenu.startAnimation(ActionButtonRotateLeft);
+                    calendarFcQrScan.setClickable(false);
+                    calendarFcNewEvent.setClickable(false);
+                } else {
+                    calendarFcQrScan.startAnimation(ActionButtonOpen);
+                    calendarFcNewEvent.startAnimation(ActionButtonOpen);
+                    calendarFcMenu.startAnimation(ActionButtonRotateRight);
+                    calendarFcQrScan.setClickable(true);
+                    calendarFcNewEvent.setClickable(true);
+                }
+
+
+            }
+        });
+
+
         calendarFcQrScan.hide();
         calendarFcNewEvent.hide();
 
@@ -75,6 +115,29 @@ public class CalendarActivity extends Fragment {
                 }
             }
         });
+
+
+        calendarFcMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (calendarFcNewEvent.isClickable()) {
+                    calendarFcQrScan.startAnimation(ActionButtonClose);
+                    calendarFcNewEvent.startAnimation(ActionButtonClose);
+                    calendarFcMenu.startAnimation(ActionButtonRotateLeft);
+                    calendarFcQrScan.setClickable(false);
+                    calendarFcNewEvent.setClickable(false);
+                } else {
+                    calendarFcQrScan.startAnimation(ActionButtonOpen);
+                    calendarFcNewEvent.startAnimation(ActionButtonOpen);
+                    calendarFcMenu.startAnimation(ActionButtonRotateRight);
+                    calendarFcQrScan.setClickable(true);
+                    calendarFcNewEvent.setClickable(true);
+                }
+
+
+            }
+        });
+
 
         calendarFcNewEvent.setOnClickListener(new View.OnClickListener() {
             @Override

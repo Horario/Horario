@@ -12,6 +12,8 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -23,9 +25,12 @@ import static hft.wiinf.de.horario.R.color.zentea_lightgreen;
 public class EventOverviewActivity extends Fragment {
 
     FloatingActionButton eventOverviewFcMenu, eventOverviewFcQrScan, eventOverviewFcNewEvent;
+    //FloatingActionButton fabOpenClose, fabGoToScanner, fabCreateEvent;
     RelativeLayout rLayout_eventOverview_helper;
     ConstraintLayout cLayout_eventOverview_main;
     TextView eventOverview_HiddenIsFloatingMenuOpen;
+
+    Animation ActionButtonOpen, ActionButtonClose, ActionButtonRotateRight, ActionButtonRotateLeft;
 
     @Nullable
     @Override
@@ -43,6 +48,11 @@ public class EventOverviewActivity extends Fragment {
         eventOverviewFcQrScan.hide();
         eventOverviewFcNewEvent.hide();
 
+        ActionButtonOpen = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonopen);
+        ActionButtonClose = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonclose);
+        ActionButtonRotateRight = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonrotateright);
+        ActionButtonRotateLeft = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonrotateleft);
+
         eventOverviewFcMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -53,6 +63,27 @@ public class EventOverviewActivity extends Fragment {
                     closeFABMenu();
                     eventOverview_HiddenIsFloatingMenuOpen.setText("false");
                 }
+            }
+        });
+
+        eventOverviewFcMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (eventOverviewFcNewEvent.isClickable()) {
+                    eventOverviewFcQrScan.startAnimation(ActionButtonClose);
+                    eventOverviewFcNewEvent.startAnimation(ActionButtonClose);
+                    eventOverviewFcMenu.startAnimation(ActionButtonRotateLeft);
+                    eventOverviewFcQrScan.setClickable(false);
+                    eventOverviewFcNewEvent.setClickable(false);
+                } else {
+                    eventOverviewFcQrScan.startAnimation(ActionButtonOpen);
+                    eventOverviewFcNewEvent.startAnimation(ActionButtonOpen);
+                    eventOverviewFcMenu.startAnimation(ActionButtonRotateRight);
+                    eventOverviewFcQrScan.setClickable(true);
+                    eventOverviewFcNewEvent.setClickable(true);
+                }
+
+
             }
         });
 
