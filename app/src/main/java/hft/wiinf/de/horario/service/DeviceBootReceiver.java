@@ -55,7 +55,7 @@ public class DeviceBootReceiver extends BroadcastReceiver {
             alarmIntent.putExtra("ID", event.getId().intValue());
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, event.getId().intValue(), alarmIntent, 0);
 
-            //Set AlarmManager --> NotificaionReceiver will be called
+            //Set AlarmManager --> NotificationReceiver will be called
             AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             manager.set(AlarmManager.RTC_WAKEUP, calcNotificationTime(calendar, notificationPerson), pendingIntent);
         }
