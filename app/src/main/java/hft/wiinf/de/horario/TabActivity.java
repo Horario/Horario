@@ -60,7 +60,7 @@ public class TabActivity extends AppCompatActivity {
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_android_black2_24dp);
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_android_black3_24dp);
 
-        if (PersonController.getPersonWhoIam() == null) {
+        if (PersonController.getPersonWhoIam().getName() == null) {
             openDialogAskForUsername();
         }
     }
