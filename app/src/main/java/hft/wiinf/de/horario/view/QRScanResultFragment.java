@@ -15,8 +15,10 @@ import android.widget.TextView;
 import com.activeandroid.util.Log;
 
 import hft.wiinf.de.horario.R;
-
-import static android.support.constraint.Constraints.TAG;
+import hft.wiinf.de.horario.controller.PersonController;
+import hft.wiinf.de.horario.model.Event;
+import hft.wiinf.de.horario.model.Person;
+import hft.wiinf.de.horario.model.Repetition;
 
 public class QRScanResultFragment extends Fragment {
     private static final String TAG = "QRScanResultFragment";
@@ -25,7 +27,10 @@ public class QRScanResultFragment extends Fragment {
     private TextView mScannerResult_TextureView_Headline, mScannerResult_TextureView_Description;
     private Button mScannerResult_Button_addEvent, mScannerResult_Button_saveWithoutassent,
             mScannerResult_Button_rejectEvent;
-
+    Person person;
+    //Index: 0 = CreatorID; 1 = StartDate; 2 = EndDate; 3 = StartTime; 4 = EndTime;
+    //       5 = Repetition; 6 = ShortTitle; 7 = Place; 8 = Descriptoin;  9 = EventCreatorName
+    private String creatorID, startDate, endDate, startTime, endTime, repetition, shortTitle, place, description, eventCreatorName;
 
     public QRScanResultFragment() {
         // Required empty public constructor
@@ -51,7 +56,7 @@ public class QRScanResultFragment extends Fragment {
         mScannerResult_Button_rejectEvent = view.findViewById(R.id.scanner_result_button_reject_event);
         mScannerResult_Button_addEvent = view.findViewById(R.id.scanner_result_button_addEvent);
 
-        //Make the Element at first Unvisible
+        //Make the Element at first unvisible
         mScannerResult_TextureView_Description.setVisibility(View.GONE);
         mScannerResult_TextureView_Headline.setVisibility(View.GONE);
         mScannerResult_Button_addEvent.setVisibility(View.GONE);
@@ -60,7 +65,25 @@ public class QRScanResultFragment extends Fragment {
 
         displayQRResult();
 
-
+        //Index: 0 = CreatorID; 1 = StartDate; 2 = EndDate; 3 = StartTime; 4 = EndTime;
+        //       5 = Repetition; 6 = ShortTitle; 7 = Place; 8 = Description;  9 = EventCreatorName
+        mScannerResult_Button_addEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                person = PersonController.getPersonWhoIam();
+                Event event = new Event(person);
+//                event.getAccepted(AcceptedState.ACCEPTED);
+                event.setCreatorEventId(Long.parseLong(creatorID.toString()));
+//              event.setStartDate(startDate);
+//                event.setEndDate(endDate);
+//                event.setStartTime(startTime);
+//                event.setEndTime(endTime);
+                event.setRepetition(getRepetition());
+                event.setShortTitle(shortTitle);
+                event.setPlace(place);
+                event.setDescription(description);
+            }
+        });
     }
 
 
@@ -87,14 +110,16 @@ public class QRScanResultFragment extends Fragment {
             //Index: 0 = CreatorID; 1 = StartDate; 2 = EndDate; 3 = StartTime; 4 = EndTime;
             //       5 = Repetition; 6 = ShortTitle; 7 = Place; 8 = Descriptoin;  9 = EventCreatorName
             String[] eventStringBufferArray = qrScanResultBundle().split("\\|");
-            String startDate = eventStringBufferArray[1].trim();
-            String endDate = eventStringBufferArray[2].trim();
-            String startTime = eventStringBufferArray[3].trim();
-            String endTime = eventStringBufferArray[4].trim();
-            String repetition = eventStringBufferArray[5].toUpperCase().trim();
-            String shortTitle = eventStringBufferArray[6].trim();
-            String place = eventStringBufferArray[7].trim();
-            String eventCreatorName = eventStringBufferArray[9].trim();
+            creatorID = eventStringBufferArray[0].trim();
+            startDate = eventStringBufferArray[1].trim();
+            endDate = eventStringBufferArray[2].trim();
+            startTime = eventStringBufferArray[3].trim();
+            endTime = eventStringBufferArray[4].trim();
+            repetition = eventStringBufferArray[5].toUpperCase().trim();
+            shortTitle = eventStringBufferArray[6].trim();
+            place = eventStringBufferArray[7].trim();
+            description = eventStringBufferArray[8].trim();
+            eventCreatorName = eventStringBufferArray[9].trim();
 
             // Change the DataBase Repetition Information in a German String for the Repetition Element
             // like "Daily" into "täglich" and so on
@@ -179,4 +204,19 @@ public class QRScanResultFragment extends Fragment {
         }
     }
 
+    private Repetition getRepetition(){
+        switch(repetition) {
+            case "jährlich":
+                return Repetition.YEARLY;
+            case "monatlich":
+                return Repetition.MONTHLY;
+            case "wöchentlich":
+                return Repetition.WEEKLY;
+            case "täglich":
+                return Repetition.DAILY;
+            default:
+                return Repetition.NONE;
+        }
+    }
 }
+
