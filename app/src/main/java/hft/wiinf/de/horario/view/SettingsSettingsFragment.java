@@ -170,6 +170,7 @@ public class SettingsSettingsFragment extends Fragment {
                         int minutes = Integer.parseInt(s);
                         person.setNotificationTime(minutes);
                         PersonController.savePerson(person);
+                        startAlarmForAllEvents();
                         Toast.makeText(getContext(), getString(R.string.pushMinutesSet, minutes), Toast.LENGTH_SHORT).show();
                     }
 
