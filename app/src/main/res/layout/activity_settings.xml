@@ -32,8 +32,7 @@
             android:shape="rectangle"
             android:text="@string/feedback_zur_app_text"
             android:textAlignment="textStart"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/settings_button_support"
@@ -47,8 +46,7 @@
             android:shape="rectangle"
             android:text="@string/support_text"
             android:textAlignment="viewStart"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/settings_button_copyright"
@@ -62,8 +60,7 @@
             android:shape="rectangle"
             android:text="@string/copyright_text"
             android:textAlignment="textStart"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/settings_button_settings"
@@ -77,7 +74,6 @@
             android:drawableLeft="@mipmap/ic_settings_black"
             android:text="@string/settings_text"
             android:textAlignment="textStart"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textSize="18sp" />
     </RelativeLayout>
 </RelativeLayout>
