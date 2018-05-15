@@ -22,34 +22,35 @@
             android:id="@+id/settings_button_feedback"
             android:layout_width="228dp"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_alignStart="@+id/settings_button_copyright"
+            android:layout_below="@+id/settings_button_copyright"
+            android:layout_marginTop="138dp"
             android:text="@string/feedback_zur_app_text" />
 
         <Button
             android:id="@+id/settings_button_support"
             android:layout_width="228dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
+            android:layout_alignBottom="@+id/settings_button_copyright"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="86dp"
+            android:layout_marginBottom="56dp"
             android:text="@string/support_text" />
 
         <Button
             android:id="@+id/settings_button_copyright"
             android:layout_width="228dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="155dp"
+            android:layout_alignStart="@+id/settings_button_support"
+            android:layout_centerVertical="true"
             android:text="@string/copyright_text" />
 
         <Button
             android:id="@+id/settings_button_settings"
             android:layout_width="228dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
+            android:layout_alignBottom="@+id/settings_button_support"
+            android:layout_alignStart="@+id/settings_button_support"
+            android:layout_marginBottom="58dp"
             android:text="@string/settings_text" />
     </RelativeLayout>
 </RelativeLayout>

@@ -76,6 +76,7 @@ public class EventOverviewActivity extends Fragment {
                 rLayout_eventOverview_helper.setVisibility(View.VISIBLE);
                 closeFABMenu();
                 eventOverviewFcMenu.setVisibility(View.GONE);
+                eventOverviewFcMenu.startAnimation(ActionButtonClose);
             }
         });
 
@@ -90,6 +91,7 @@ public class EventOverviewActivity extends Fragment {
                 rLayout_eventOverview_helper.setVisibility(View.VISIBLE);
                 closeFABMenu();
                 eventOverviewFcMenu.setVisibility(View.GONE);
+                eventOverviewFcMenu.startAnimation(ActionButtonClose);
             }
         });
 

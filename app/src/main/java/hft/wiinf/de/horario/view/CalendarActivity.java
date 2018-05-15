@@ -95,6 +95,8 @@ public class CalendarActivity extends Fragment {
                 rLayout_calendar_helper.setVisibility(View.VISIBLE);
                 closeFABMenu();
                 calendarFcMenu.setVisibility(View.GONE);
+                calendarFcMenu.hide();
+                calendarFcMenu.startAnimation(ActionButtonClose);
             }
         });
 
@@ -108,6 +110,8 @@ public class CalendarActivity extends Fragment {
                 rLayout_calendar_helper.setVisibility(View.VISIBLE);
                 closeFABMenu();
                 calendarFcMenu.setVisibility(View.GONE);
+                calendarFcMenu.hide();
+                calendarFcMenu.startAnimation(ActionButtonClose);
             }
         });
 

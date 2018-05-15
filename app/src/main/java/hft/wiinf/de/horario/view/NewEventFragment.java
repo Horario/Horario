@@ -10,11 +10,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
@@ -102,6 +104,7 @@ public class NewEventFragment extends Fragment {
                 return false;
             }
         });
+
         //for each fields with a date: 1. don't open keyboard on focus, when it gets focus or the user clicks on the field: open date/time picker and save the date
         edittext_date.setShowSoftInputOnFocus(false);
         edittext_date.setOnFocusChangeListener(new View.OnFocusChangeListener() {

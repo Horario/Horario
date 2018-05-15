@@ -10,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -111,6 +113,7 @@ public class TabActivity extends AppCompatActivity {
 
                     floatNewEvent.hide();
                     floatQRScan.hide();
+                    floatMenu.startAnimation(AnimationUtils.loadAnimation(mSectionsPageAdapter.getItem(1).getContext(), R.anim.actionbuttonrotateleft));
                     floatMenu.setImageResource(R.drawable.ic_plusmenu);
                     isFloatingMenuOpen.setText("false");
 
@@ -126,6 +129,7 @@ public class TabActivity extends AppCompatActivity {
 
                     floatNewEvent.hide();
                     floatQRScan.hide();
+                    floatMenu.startAnimation(AnimationUtils.loadAnimation(mSectionsPageAdapter.getItem(1).getContext(), R.anim.actionbuttonrotateleft));
                     floatMenu.setImageResource(R.drawable.ic_plusmenu);
                     isFloatingMenuOpen.setText("false");
                 }
@@ -164,6 +168,7 @@ public class TabActivity extends AppCompatActivity {
 
                     floatNewEvent.hide();
                     floatQRScan.hide();
+                    floatMenu.startAnimation(AnimationUtils.loadAnimation(mSectionsPageAdapter.getItem(1).getContext(), R.anim.actionbuttonrotateleft));
                     floatMenu.setImageResource(R.drawable.ic_plusmenu);
                     isFloatingMenuOpen.setText("false");
 
@@ -179,6 +184,7 @@ public class TabActivity extends AppCompatActivity {
 
                     floatNewEvent.hide();
                     floatQRScan.hide();
+                    floatMenu.startAnimation(AnimationUtils.loadAnimation(mSectionsPageAdapter.getItem(1).getContext(), R.anim.actionbuttonrotateleft));
                     floatMenu.setImageResource(R.drawable.ic_plusmenu);
                     isFloatingMenuOpen.setText("false");
                 }
@@ -226,7 +232,7 @@ public class TabActivity extends AppCompatActivity {
                         toast.show();
 
                         alertDialogAskForUsername.cancel();
-                    } else{
+                    } else {
                         personMe = PersonController.getPersonWhoIam();
                         personMe.setName(dialog_inputUsername);
                         PersonController.savePerson(personMe);
