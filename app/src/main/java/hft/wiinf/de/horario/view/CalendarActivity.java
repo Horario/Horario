@@ -143,7 +143,6 @@ public class CalendarActivity extends Fragment {
             public void onDayClick(Date dateClicked) {
                 calendarTvDay.setText(dayFormat.format(dateClicked));
                 calendarLvList.setAdapter(getAdapter(dateClicked));
-                closeFABMenu();
             }
 
             @Override
@@ -195,17 +194,19 @@ public class CalendarActivity extends Fragment {
     }
 
     public void closeFABMenu() {
-        calendarFcQrScan.startAnimation(ActionButtonClose);
-        calendarFcNewEvent.startAnimation(ActionButtonClose);
-        calendarFcMenu.startAnimation(ActionButtonRotateLeft);
-        //calendarFcNewEvent.setVisibility(View.VISIBLE);
-        //calendarFcQrScan.setVisibility(View.VISIBLE);
-        calendarFcQrScan.setClickable(false);
-        calendarFcNewEvent.setClickable(false);
-        calendarIsFloatMenuOpen.setText("false");
-        calendarFcQrScan.hide();
-        calendarFcNewEvent.hide();
-        calendarFcMenu.setImageResource(R.drawable.ic_plusmenu);
+        if(calendarIsFloatMenuOpen.getText().equals("true")) {
+            calendarFcQrScan.startAnimation(ActionButtonClose);
+            calendarFcNewEvent.startAnimation(ActionButtonClose);
+            calendarFcMenu.startAnimation(ActionButtonRotateLeft);
+            //calendarFcNewEvent.setVisibility(View.VISIBLE);
+            //calendarFcQrScan.setVisibility(View.VISIBLE);
+            calendarFcQrScan.setClickable(false);
+            calendarFcNewEvent.setClickable(false);
+            calendarIsFloatMenuOpen.setText("false");
+            calendarFcQrScan.hide();
+            calendarFcNewEvent.hide();
+            calendarFcMenu.setImageResource(R.drawable.ic_plusmenu);
+        }
     }
 
 
