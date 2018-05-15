@@ -43,8 +43,7 @@
             android:layout_height="wrap_content"
 
             android:layout_alignParentEnd="true"
-            android:layout_below="@+id/newEvent_textEdit_shortTitle"
-            android:layout_marginTop="20dp"
+            android:layout_below="@+id/newEvent_textView_shortTitle"
             android:ems="10"
             android:inputType="textPersonName" />
 
@@ -57,8 +56,8 @@
 
             android:layout_height="wrap_content"
 
+            android:layout_alignBaseline="@+id/newEvent_editText_description"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/newEvent_textEdit_room"
             android:text="@string/event_Description" />
 
 
@@ -70,7 +69,7 @@
 
             android:layout_height="wrap_content"
 
-            android:layout_alignBottom="@+id/newEvent_editText_Date"
+            android:layout_alignBaseline="@+id/newEvent_editText_Date"
             android:layout_alignParentStart="true"
             android:text="@string/event_date" />
 
@@ -83,8 +82,8 @@
 
             android:layout_height="wrap_content"
 
+            android:layout_above="@+id/newEvent_editText_startTime"
             android:layout_alignParentEnd="true"
-            android:layout_below="@+id/newEvent_editText_description"
             android:ems="10" />
 
 
@@ -109,8 +108,8 @@
 
             android:layout_height="wrap_content"
 
+            android:layout_above="@+id/newEvent_textEdit_endTime"
             android:layout_alignParentEnd="true"
-            android:layout_below="@+id/newEvent_editText_Date"
             android:ems="10"
             android:focusable="true" />
 
@@ -137,8 +136,8 @@
             android:layout_width="wrap_content"
 
             android:layout_height="wrap_content"
+            android:layout_above="@+id/unewEvent_textEdit_userName"
             android:layout_alignParentEnd="true"
-            android:layout_below="@+id/newEvent_editText_startTime"
             android:ems="10"
             android:focusable="true" />
 
@@ -253,8 +252,7 @@
             android:layout_height="wrap_content"
 
             android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="108dp"
+            android:layout_below="@+id/newEvent_textView_Description"
             android:ems="10"
             android:imeOptions="actionDone"
             android:inputType="text" />
@@ -290,8 +288,9 @@
             android:id="@+id/unewEvent_textEdit_userName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:layout_below="@+id/newEvent_textEdit_endTime"
+            android:layout_marginBottom="192dp"
             android:ems="10"
             android:inputType="text" />
 
