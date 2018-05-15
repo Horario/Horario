@@ -17,6 +17,7 @@ import hft.wiinf.de.horario.R;
 public class SettingsSupportFragment extends Fragment {
 
     Spinner spinner_pushMinutes;
+
     public SettingsSupportFragment() {
         // Required empty public constructor
     }
@@ -27,7 +28,6 @@ public class SettingsSupportFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_settings_support, container, false);
-
 
 
         return view;

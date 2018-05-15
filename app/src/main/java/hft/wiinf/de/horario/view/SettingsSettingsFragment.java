@@ -12,6 +12,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -58,12 +61,43 @@ public class SettingsSettingsFragment extends Fragment {
         try {
             person = PersonController.getPersonWhoIam();
             if (person == null)
+                //TODO: read real phone number
                 person = new Person(true, "007", "");
         } catch (NullPointerException e) {
             Log.d(TAG, "SettingsActivity:" + e.getMessage());
         }
         editTextUsername = view.findViewById(R.id.settings_settings_editText_username);
-        // set the user name of the person (empty string if no person set)
+        textView_minutesBefore = view.findViewById(R.id.settings_settings_textView_minutesBefore);
+        textView_reminder = view.findViewById(R.id.settings_settings_textView_reminder);
+        switch_enablePush = view.findViewById(R.id.settings_settings_Switch_allowPush);
+        spinner_pushMinutes = view.findViewById(R.id.settings_settings_spinner_minutes);
+        switch_enablePush.setChecked(person.isEnablePush());
+        //save a change of the switch in the db and change visibility of the minutes spinner and textview
+        switch_enablePush.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch_enablePush.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        person.setEnablePush(isChecked);
+                        pushNotificationVisibility();
+                        PersonController.savePerson(person);
+                        if (!isChecked)
+                            Toast.makeText(getContext(), R.string.pushDisabled, Toast.LENGTH_SHORT).show();
+                        else
+                            Toast.makeText(getContext(), getString(R.string.pushMinutesSet, person.getNotificationTime()), Toast.LENGTH_SHORT).show();
+                    }
+
+                });
+                return false;
+            }
+        });
+
+
+        spinner_pushMinutes.setSelection(getItemPosition());
+
+
+// set the user name of the person (empty string if no person set)
         editTextUsername.setText(person.getName());
 
         //Make EditText-Field editable
@@ -75,6 +109,8 @@ public class SettingsSettingsFragment extends Fragment {
                 return false;
             }
         });
+        switch_enablePush.setChecked(person.isEnablePush());
+        pushNotificationVisibility();
         //Everything that needs to happen after Username was written in the EditText-Field
         editTextUsername.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -103,6 +139,71 @@ public class SettingsSettingsFragment extends Fragment {
             }
         });
 
+// set the choice posibilities of the push minutes dropdown
+        ArrayAdapter minutesAdapter = ArrayAdapter.createFromResource(getContext(), R.array.push_times, android.R.layout.simple_spinner_item);
+        minutesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_pushMinutes.setAdapter(minutesAdapter);
+        //set the choice selection - if there is something in db saved
+        spinner_pushMinutes.setSelection(getItemPosition());
+        //if something is selected of the spinner, update the person
+        spinner_pushMinutes.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                spinner_pushMinutes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        String s = (String) parent.getItemAtPosition(position);
+                        int minutes = Integer.parseInt(s);
+                        person.setNotificationTime(minutes);
+                        PersonController.savePerson(person);
+                        Toast.makeText(getContext(), getString(R.string.pushMinutesSet, minutes), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+
+                });
+                return false;
+            }
+        });
+    }
+
+    //if the switch is not selected dont show the minutes textview and textedit
+    private void pushNotificationVisibility() {
+        if (person.isEnablePush()) {
+            textView_reminder.setVisibility(View.VISIBLE);
+            textView_minutesBefore.setVisibility(View.VISIBLE);
+            spinner_pushMinutes.setVisibility(View.VISIBLE);
+        } else {
+            textView_reminder.setVisibility(View.GONE);
+            textView_minutesBefore.setVisibility(View.GONE);
+            spinner_pushMinutes.setVisibility(View.GONE);
+        }
+    }
+
+    //return the correct item position based of the saved pushminutes
+    private int getItemPosition() {
+        switch (person.getNotificationTime()) {
+            case 0:
+                return 0;
+            case 5:
+                return 1;
+            case 15:
+                return 2;
+            case 30:
+                return 3;
+            case 60:
+                return 4;
+            case 90:
+                return 5;
+            case 120:
+                return 6;
+            default:
+                return 0;
+
+        }
 
     }
 }
