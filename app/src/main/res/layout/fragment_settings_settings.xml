@@ -10,28 +10,27 @@
         android:id="@+id/settings_settings_textView_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/settings_settings_Switch_allowPush"
+        android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/settings_settings_textView_settings"
-        android:layout_marginBottom="44dp"
+        android:layout_marginTop="99dp"
         android:text="@string/username_text" />
 
     <TextView
         android:id="@+id/settings_settings_textView_allowPush"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/settings_settings_textView_minutesBefore"
-        android:layout_alignStart="@+id/settings_settings_textView_username"
-        android:layout_marginBottom="41dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/settings_settings_textView_settings"
+        android:layout_marginTop="169dp"
         android:text="@string/allowpush_text" />
 
     <TextView
         android:id="@+id/settings_settings_textView_settings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="25dp"
         android:layout_marginTop="55dp"
+        android:layout_toStartOf="@+id/settings_settings_editText_username"
         android:text="@string/settings_text"
         android:textColor="@color/zentea_darkgreen"
         android:textSize="30sp" />
@@ -80,8 +79,9 @@
         android:id="@+id/settings_settings_textView_reminder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/settings_settings_textView_allowPush"
-        android:layout_centerVertical="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/settings_settings_textView_settings"
+        android:layout_marginTop="234dp"
         android:text="@string/reminder_text" />
 
 </RelativeLayout>
