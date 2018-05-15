@@ -23,7 +23,7 @@
         <Button
             android:id="@+id/settings_button_feedback"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="50dp"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/settings_button_copyright"
             android:background="@drawable/button_border"
@@ -38,7 +38,7 @@
         <Button
             android:id="@+id/settings_button_support"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="50dp"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/settings_button_settings"
             android:background="@drawable/button_border"
@@ -53,7 +53,7 @@
         <Button
             android:id="@+id/settings_button_copyright"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="50dp"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/settings_button_support"
             android:background="@drawable/button_border"
@@ -68,7 +68,7 @@
         <Button
             android:id="@+id/settings_button_settings"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="50dp"
 
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
