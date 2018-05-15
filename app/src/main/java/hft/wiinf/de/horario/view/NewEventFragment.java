@@ -461,7 +461,7 @@ public class NewEventFragment extends Fragment {
         return true;
     }
 
-    //get the right repetiton
+    //get the right repetition
     private Repetition getRepetition() {
         //if the check box isnt checked return none
         if (!checkBox_serialEvent.isChecked()) {
