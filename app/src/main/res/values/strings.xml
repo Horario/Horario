@@ -70,6 +70,29 @@
     <string name="description_peek">Die Beschreibung darf nicht das Zeichen | enthalten.</string>
     <string name="room_peek">Das Feld Raum darf nicht das Zeichen | enthalten.</string>
 
+    <!-- QR Generator & QRSharing elements -->
+    <string name="am">Am </string>
+    <string name="findet_von"> findet von </string>
+    <string name="findet"> findet </string>
+    <string name="uhr_in_raum"> Uhr in Raum </string>
+    <string name="orga">Organisator: </string>
+    <string name="termindetails">Termindetails sind: </string>
+    <string name="um"> um </string>
+    <string name="statt"> statt.</string>
+    <string name="vom">Vom </string>
+    <string name="bis"> bis </string>
+    <string name="uhr_bis"> Uhr bis </string>
+    <string name="dein_termin">Dein Termin</string>
+    <string name="raum">Raum:</string>
+    <string name="du_selbst">Du selber</string>
+    <string name="jaehrlich">jährlich</string>
+    <string name="monatlich">monatlich</string>
+    <string name="woechentlich">wöchentlich</string>
+    <string name="taeglich">täglich</string>
+    <string name="ohne_wiederholung">ohne Wiederholung</string>
+    <string name="fehler">Ups! Fehler Aufgetreten!</string>
+    <string name="zumKalender">Zum Kalender</string>
+
     <string-array name="push_times">
         <item name="push_time_0">0</item>
         <item name="push_time_5">5</item>
