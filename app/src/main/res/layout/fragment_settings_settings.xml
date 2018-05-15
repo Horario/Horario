@@ -68,14 +68,7 @@
         android:layout_alignBottom="@+id/settings_settings_textView_allowPush"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="62dp"
-        android:background="@color/ic_launcher_background"
-        android:backgroundTint="@color/ic_launcher_background"
-        android:checked="false"
-        android:textColorHighlight="#96ab63"
-        android:textColorLink="#96ab63"
-        android:trackTint="#96ab63"
-        tools:checked="false"
-        tools:targetApi="#96ab63" />
+        android:backgroundTint="@color/ic_launcher_background" />
 
     <Spinner
         android:id="@+id/settings_settings_spinner_minutes"
