@@ -3,5 +3,17 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#96ab63</color>
+    <color name="grey1">#a1201b1b</color>
+    <color name="green1">#7fa87f</color>
+    <color name="darkgrey1">#cc131313</color>
+    <color name="grey2">#53201b1b</color>
+    <color name="grey3">#6a201b1b</color>
+    <color name="dove">#908dafce</color>
+    <color name="zentea_darkgreen">#95ab63</color>
+    <color name="zentea_darkgreyblue">#10222b</color>
+    <color name="zentea_lightestgreen">#f6ffe0</color>
+    <color name="zentea_green1">#bdd684</color>
+    <color name="zentea_lightgreen">#e2f0d6</color>
+    <color name="zentea_white">#ffffff</color>
 
 </resources>
