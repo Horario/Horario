@@ -226,7 +226,7 @@ public class TabActivity extends AppCompatActivity {
                         toast.show();
 
                         alertDialogAskForUsername.cancel();
-                    } else{
+                    } else {
                         personMe = PersonController.getPersonWhoIam();
                         personMe.setName(dialog_inputUsername);
                         PersonController.savePerson(personMe);

@@ -14,8 +14,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/settings_settings_textView_settings"
         android:layout_marginTop="99dp"
-        android:text="@string/username_text"
-        />
+        android:text="@string/username_text" />
 
     <TextView
         android:id="@+id/settings_settings_textView_allowPush"
