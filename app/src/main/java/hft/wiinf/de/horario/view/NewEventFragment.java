@@ -1,9 +1,13 @@
 package hft.wiinf.de.horario.view;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -26,6 +30,8 @@ import android.widget.Toast;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
@@ -34,6 +40,7 @@ import hft.wiinf.de.horario.model.AcceptedState;
 import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.model.Repetition;
+import hft.wiinf.de.horario.service.NotificationReceiver;
 
 //TODO Kommentieren und Java Doc Info Schreiben
 public class NewEventFragment extends Fragment {
@@ -332,6 +339,7 @@ public class NewEventFragment extends Fragment {
         me.setName(edittext_userName.getText().toString());
         PersonController.savePerson(me);
         openSavedSuccessfulDialog(event.getId());
+        setAlarmForNotification(event);
     }
 
     //clear all entrys and open a dialog where the user can choose what to do next
@@ -453,7 +461,7 @@ public class NewEventFragment extends Fragment {
         return true;
     }
 
-    //get the right repetiton
+    //get the right repetition
     private Repetition getRepetition() {
         //if the check box isnt checked return none
         if (!checkBox_serialEvent.isChecked()) {
@@ -508,6 +516,37 @@ public class NewEventFragment extends Fragment {
             if (endOfRepetition != null) {
                 format = new SimpleDateFormat("dd.MM.YYYY");
                 editText_endOfRepetition.setText(format.format(endOfRepetition));
+            }
+        }
+    }
+
+    public long calcNotificationTime(Calendar cal, Person person) {
+        cal.add(Calendar.MINUTE, ((-1) * person.getNotificationTime()));
+        return cal.getTimeInMillis();
+    }
+
+    //Method is going to set the alarm x minutes before the event
+    public void setAlarmForNotification(Event event) {
+        if (PersonController.getPersonWhoIam() != null) {
+            Person notificationPerson = PersonController.getPersonWhoIam();
+            if (notificationPerson.isEnablePush()) {
+                Intent alarmIntent = new Intent(getContext(), NotificationReceiver.class);
+                Date date = event.getStartTime();
+                Calendar calendar = GregorianCalendar.getInstance();
+                calendar.setTime(date);
+
+                alarmIntent.putExtra("Event", event.getDescription());
+                alarmIntent.putExtra("Hour", calendar.get(Calendar.HOUR_OF_DAY));
+                if (calendar.get(Calendar.MINUTE) <= 10) {
+                    alarmIntent.putExtra("Minute", "0" + String.valueOf(calendar.get(Calendar.MINUTE)));
+                } else {
+                    alarmIntent.putExtra("Minute", String.valueOf(calendar.get(Calendar.MINUTE)));
+                }
+                alarmIntent.putExtra("ID", event.getId().intValue());
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), event.getId().intValue(), alarmIntent, 0);
+
+                AlarmManager manager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+                manager.set(AlarmManager.RTC_WAKEUP, calcNotificationTime(calendar, notificationPerson), pendingIntent);
             }
         }
     }
