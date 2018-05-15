@@ -28,7 +28,9 @@
 
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
+            android:layout_marginTop="55dp"
             android:text="@string/newEvent"
+            android:textColor="@color/zentea_darkgreen"
             android:textSize="25sp" />
 
 
@@ -42,7 +44,7 @@
 
             android:layout_alignParentEnd="true"
             android:layout_below="@+id/newEvent_textEdit_shortTitle"
-            android:layout_marginBottom="10dp"
+            android:layout_marginTop="20dp"
             android:ems="10"
             android:inputType="textPersonName" />
 
@@ -55,8 +57,8 @@
 
             android:layout_height="wrap_content"
 
-            android:layout_alignBaseline="@+id/newEvent_editText_description"
             android:layout_alignParentStart="true"
+            android:layout_below="@+id/newEvent_textEdit_room"
             android:text="@string/event_Description" />
 
 
@@ -81,8 +83,8 @@
 
             android:layout_height="wrap_content"
 
-            android:layout_above="@+id/newEvent_editText_startTime"
             android:layout_alignParentEnd="true"
+            android:layout_below="@+id/newEvent_editText_description"
             android:ems="10" />
 
 
@@ -107,8 +109,8 @@
 
             android:layout_height="wrap_content"
 
-            android:layout_above="@+id/newEvent_textEdit_endTime"
             android:layout_alignParentEnd="true"
+            android:layout_below="@+id/newEvent_editText_Date"
             android:ems="10"
             android:focusable="true" />
 
@@ -135,8 +137,8 @@
             android:layout_width="wrap_content"
 
             android:layout_height="wrap_content"
-            android:layout_above="@+id/unewEvent_textEdit_userName"
             android:layout_alignParentEnd="true"
+            android:layout_below="@+id/newEvent_editText_startTime"
             android:ems="10"
             android:focusable="true" />
 
@@ -288,8 +290,8 @@
             android:id="@+id/unewEvent_textEdit_userName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/newEvent_checkBox_SerialEvent"
             android:layout_alignParentEnd="true"
+            android:layout_below="@+id/newEvent_textEdit_endTime"
             android:ems="10"
             android:inputType="text" />
 
