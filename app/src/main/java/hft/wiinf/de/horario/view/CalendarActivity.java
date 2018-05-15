@@ -56,8 +56,6 @@ public class CalendarActivity extends Fragment {
     static DateFormat monthFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
     static DateFormat dayFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
     public static Date selectedMonth;
-    private int simple_list_item_1;
-
 
     @Nullable
     @Override
@@ -95,7 +93,7 @@ public class CalendarActivity extends Fragment {
         test.setStartTime(new Date(1524261326000L)); //20.04.18
         test.setEndTime(new Date(1524261326000L));
         test.setDescription("Termin 1");
-        test.setAccepted(AcceptedState.ACCEPTED);
+        test.setAccepted(AcceptedState.WAITING);
         test.save();
 
         updateCompactCalendar();
