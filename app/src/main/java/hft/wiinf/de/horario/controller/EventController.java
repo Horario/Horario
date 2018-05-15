@@ -53,6 +53,10 @@ public class EventController {
         return new Select().from(Event.class).where("accepted=?", true).execute();
     }
 
+    public static List<Event> findMyAcceptedEventsInTheFuture() {
+        return new Select().from(Event.class).where("accepted=? AND startTime>=?", AcceptedState.ACCEPTED, System.currentTimeMillis()).execute();
+    }
+
     //find all events that point to the given event as an start event
     public static List<Event> findRepeatingEvents(@NonNull Long eventId) {
         return new Select().from(Event.class).where("startevent=?", eventId).execute();

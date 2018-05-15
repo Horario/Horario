@@ -69,6 +69,9 @@
     <string name="shortTitle_peek">Der Kurztitel darf nicht das Zeichen | enthalten.</string>
     <string name="description_peek">Die Beschreibung darf nicht das Zeichen | enthalten.</string>
     <string name="room_peek">Das Feld Raum darf nicht das Zeichen | enthalten.</string>
+    <string name="pushEnabled">Die Push-Nachrichten wurden eingeschaltet.</string>
+    <string name="pushDisabled">Die Push-Nachrichten wurden ausgeschaltet.</string>
+    <string formatted="true" name="pushMinutesSet">Die Push-Nachrichten erscheinen nun %1$d Minuten vor Ihrem Termin.</string>
 
     <!-- QR Generator & QRSharing elements -->
     <string name="am">Am </string>
