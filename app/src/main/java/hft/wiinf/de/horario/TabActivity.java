@@ -67,6 +67,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
         if (PersonController.getPersonWhoIam() == null) {
             openDialogAskForUsername();
+        } else if (PersonController.getPersonWhoIam().getName().isEmpty()) {
+            openDialogAskForUsername();
         }
     }
 
@@ -246,14 +248,25 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 Matcher matcher_username = pattern_username.matcher(dialog_inputUsername);
 
                 if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches()) {
-                    //ToDo: Flo - PhoneNumber
-                    personMe = new Person(true, "007", dialog_inputUsername);
-                    PersonController.addPersonMe(personMe);
+                    if (PersonController.getPersonWhoIam() == null) {
+                        //ToDo: Flo - PhoneNumber
+                        personMe = new Person(true, "007", dialog_inputUsername);
+                        PersonController.addPersonMe(personMe);
 
-                    Toast toast = Toast.makeText(v.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT);
-                    toast.show();
+                        Toast toast = Toast.makeText(v.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT);
+                        toast.show();
 
-                    alertDialogAskForUsername.cancel();
+                        alertDialogAskForUsername.cancel();
+                    } else {
+                        personMe = PersonController.getPersonWhoIam();
+                        personMe.setName(dialog_inputUsername);
+                        PersonController.savePerson(personMe);
+
+                        Toast toast = Toast.makeText(v.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT);
+                        toast.show();
+
+                        alertDialogAskForUsername.cancel();
+                    }
                     return false;
                 } else {
                     Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
