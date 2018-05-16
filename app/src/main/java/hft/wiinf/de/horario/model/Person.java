@@ -18,9 +18,9 @@ public class Person extends Model {
     @Column
     private boolean isItMe = false;
     @Column
-    private boolean enablePush = false;
+    private boolean enablePush = true;
     @Column
-    private int notificationTime;
+    private int notificationTime = 15;
 
     //Use this constructor for person that using this specific app (owner)
     public Person(boolean isItMe, String phoneNumber, String name) {
