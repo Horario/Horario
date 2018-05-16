@@ -392,52 +392,52 @@ public class NewEventFragment extends Fragment {
     //checks if the entrys are valid and opens a toast if not return value: coolean if everything is ok
     private boolean checkValidity() {
         if (editText_description.getText().toString().equals("") || edittext_shortTitle.getText().toString().equals("") || edittext_date.getText().toString().equals("") || edittext_startTime.getText().toString().equals("") || editText_endTime.getText().toString().equals("") || edittext_userName.getText().toString().equals("") || edittext_room.getText().toString().equals("")) {
-            Toast.makeText(getContext(), R.string.empty_fields, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.empty_fields, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (getRepetition() != Repetition.NONE && editText_endOfRepetition.getText().toString().equals("")) {
-            Toast.makeText(getContext(), R.string.empty_fields, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.empty_fields, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (edittext_shortTitle.getText().toString().matches(" +.*")) {
-            Toast.makeText(getContext(), R.string.shortTitle_spaces, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.shortTitle_spaces, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (edittext_shortTitle.getText().toString().contains("|")) {
-            Toast.makeText(getContext(), R.string.shortTitle_peek, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.shortTitle_peek, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (editText_description.getText().toString().matches(" +.*")) {
-            Toast.makeText(getContext(), R.string.description_spaces, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.description_spaces, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (editText_description.getText().toString().contains("|")) {
-            Toast.makeText(getContext(), R.string.description_peek, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.description_peek, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (edittext_room.getText().toString().matches(" +.*")) {
-            Toast.makeText(getContext(), R.string.place_spaces, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.place_spaces, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (edittext_room.getText().toString().contains("|")) {
-            Toast.makeText(getContext(), R.string.room_peek, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.room_peek, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (edittext_userName.getText().toString().matches(" +.*")) {
-            Toast.makeText(getContext(), R.string.noValidUsername, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if (editText_description.getText().length() > 500) {
-            Toast.makeText(getContext(), R.string.description_too_long, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.description_too_long, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (edittext_shortTitle.getText().length() > 100) {
-            Toast.makeText(getContext(), R.string.shortTitle_too_long, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.shortTitle_too_long, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (edittext_room.getText().length() > 100) {
-            Toast.makeText(getContext(), R.string.room_too_long, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.room_too_long, Toast.LENGTH_SHORT).show();
             return false;
         }
         //read the current date and time to compare if the start time is in the past, set seconds and milliseconds to 0 to ensure a ight compare (seonds and milliseconds doesn't matter)
@@ -445,17 +445,17 @@ public class NewEventFragment extends Fragment {
         now.set(Calendar.SECOND, 0);
         now.set(Calendar.MILLISECOND, 0);
         if (startTime.before(now)) {
-            Toast.makeText(getContext(), R.string.startTime_past, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.startTime_past, Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if (endTime.before(startTime)) {
-            Toast.makeText(getContext(), R.string.endTime_before_startTime, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.endTime_before_startTime, Toast.LENGTH_SHORT).show();
             return false;
         }
         //if it is and repetaing event and the end of the repetiton is beofre the end time of the first event
         if (getRepetition() != Repetition.NONE && endOfRepetition.before(endTime)) {
-            Toast.makeText(getContext(), R.string.endOfRepetition_before_endTime, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.endOfRepetition_before_endTime, Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
