@@ -37,7 +37,6 @@ class SectionsPageAdapterActivity extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         return mFragmentList.get(position);
     }
-
     /**
      * Return the number of views available.
      */

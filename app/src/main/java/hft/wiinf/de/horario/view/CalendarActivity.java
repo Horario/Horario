@@ -81,7 +81,7 @@ public class CalendarActivity extends Fragment {
             public void onClick(View v) {
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
                 fr.replace(R.id.calendar_relativeLayout_helper, new NewEventFragment());
-                fr.addToBackStack(null);
+                fr.addToBackStack("newEvent");
                 fr.commit();
                 rLayout_calendar_helper.setVisibility(View.VISIBLE);
                 closeFABMenu();
@@ -94,7 +94,7 @@ public class CalendarActivity extends Fragment {
             public void onClick(View v) {
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
                 fr.replace(R.id.calendar_relativeLayout_helper, new QRScanFragment());
-                fr.addToBackStack(null);
+                fr.addToBackStack("Scan");
                 fr.commit();
                 rLayout_calendar_helper.setVisibility(View.VISIBLE);
                 closeFABMenu();

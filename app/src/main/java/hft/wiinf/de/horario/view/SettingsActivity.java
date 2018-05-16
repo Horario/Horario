@@ -63,7 +63,7 @@ public class SettingsActivity extends Fragment {
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
                 //settings_relativeLayout_helper: in this Layout all other layouts will be uploaded
                 fr.replace(R.id.settings_relativeLayout_helper, new SettingsSettingsFragment());
-                fr.addToBackStack(null);
+                fr.addToBackStack("tag");
                 fr.commit();
                 //set settings-buttons invisible and new Layout_helper visible
                 rLayout_settings_button.setVisibility(View.GONE);

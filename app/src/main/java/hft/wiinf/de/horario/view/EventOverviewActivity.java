@@ -70,7 +70,7 @@ public class EventOverviewActivity extends Fragment {
             public void onClick(View v) {
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
                 fr.replace(R.id.eventOverview_relativeLayout_helper, new QRScanFragment());
-                fr.addToBackStack(null);
+                fr.addToBackStack("TAG");
                 fr.commit();
                 rLayout_eventOverview_helper.setVisibility(View.VISIBLE);
                 closeFABMenu();
