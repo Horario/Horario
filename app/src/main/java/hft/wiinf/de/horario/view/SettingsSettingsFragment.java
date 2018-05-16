@@ -96,8 +96,7 @@ public class SettingsSettingsFragment extends Fragment {
                         if (!isChecked) {
                             Toast.makeText(getContext(), R.string.pushDisabled, Toast.LENGTH_SHORT).show();
                             deleteAllAlarms();
-                        }
-                        else {
+                        } else {
                             Toast.makeText(getContext(), getString(R.string.pushMinutesSet, person.getNotificationTime()), Toast.LENGTH_SHORT).show();
                             startAlarmForAllEvents();
                         }
@@ -111,7 +110,7 @@ public class SettingsSettingsFragment extends Fragment {
         spinner_pushMinutes.setSelection(getItemPosition());
 
 
-// set the user name of the person (empty string if no person set)
+        // set the user name of the person (empty string if no person set)
         editTextUsername.setText(person.getName());
 
         //Make EditText-Field editable
@@ -153,7 +152,7 @@ public class SettingsSettingsFragment extends Fragment {
             }
         });
 
-        // set the choice posibilities of the push minutes dropdown
+        // set the choice possibilities of the push minutes dropdown
         ArrayAdapter minutesAdapter = ArrayAdapter.createFromResource(getContext(), R.array.push_times, android.R.layout.simple_spinner_item);
         minutesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_pushMinutes.setAdapter(minutesAdapter);
@@ -221,7 +220,7 @@ public class SettingsSettingsFragment extends Fragment {
         }
     }
 
-    public void deleteAllAlarms(){
+    public void deleteAllAlarms() {
         //Get all events that are in the future to set the alarm
         List<Event> allEvents = EventController.findMyAcceptedEventsInTheFuture();
         for (Event event : allEvents) {
@@ -236,7 +235,7 @@ public class SettingsSettingsFragment extends Fragment {
         }
     }
 
-    public void startAlarmForAllEvents(){
+    public void startAlarmForAllEvents() {
         //Get all events that are in the future to set the alarm
         List<Event> allEvents = EventController.findMyAcceptedEventsInTheFuture();
         for (Event event : allEvents) {
@@ -258,7 +257,7 @@ public class SettingsSettingsFragment extends Fragment {
             alarmIntent.putExtra("ID", event.getId().intValue());
             PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), event.getId().intValue(), alarmIntent, 0);
 
-            //Set AlarmManager --> NotificaionReceiver will be called
+            //Set AlarmManager --> NotificationReceiver will be called
             AlarmManager manager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
             manager.set(AlarmManager.RTC_WAKEUP, calcNotificationTime(calendar, person), pendingIntent);
         }
