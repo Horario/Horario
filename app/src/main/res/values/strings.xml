@@ -40,6 +40,8 @@
     <string name="later_text">Später</string>
     <string name="thanksForUsername">Benutzername wurde gespeichert. </string>
     <!-- TODO: Remove or change this placeholder text -->
+    <string name="r_ckmeldungen_anzeigen">Rückmeldungen anzeigen</string>
+    <string name="qr_code_anzeigen">QR Code anzeigen</string>
     <string name="description_too_long">Die Beschreibung darf nicht länger als 500 Zeichen sein.</string>
     <string name="shortTitle_too_long">Der Kurztitel darf nicht länger als 100 Zeichen sein.</string>
     <string name="startTime_past">Der Termin darf nicht in der Vergangenheit beginnen.</string>
@@ -72,10 +74,6 @@
         <item name="push_time_120">120</item>
     </string-array>
 
-    <!-- QR Scanner & Scanner PopUp -->
-    <string name="eventSave">Termin zusagen</string>
-    <string name="eventSaveWithoutAssign">Termin ohne Zusage speichern</string>
-    <string name="eventReject">Termin ablehnen</string>
 
     <!-- QR Generator & QRSharing elements -->
     <string name="share_with">Teilen via...</string>
@@ -102,10 +100,14 @@
     <string name="toCalender">\u0020Zum Kalender\u0020</string>
     <string name="qrCode_content">Das ist der Inhalt vom QR Code:\u0020</string>
     <string name="cannot_be_saved_as_event">Das können wir leider nicht als Termin speichern!</string>
+    <string name="show_QRCode">QR Code anzeigen</string>
     <string name="wrongQRCodeResult">Das ist der Inhalt vom QR Code:</string>
     <string name="notAsEventSaveable">Das können wir leider nicht als Termin speichern!</string>
-    <string name="show_QRCode">QR Code anzeigen</string>
-    <string name="r_ckmeldungen_anzeigen">Rückmeldungen anzeigen</string>
+
+    <!-- QR Scanner & Scanner PopUp -->
+    <string name="eventSave">Termin zusagen</string>
+    <string name="eventSaveWithoutAssign">Termin ohne Zusage speichern</string>
+    <string name="eventReject">Termin ablehnen</string>
     <string name="teilen_via">Teilen via...</string>
 
 </resources>

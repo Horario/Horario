@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -66,14 +67,15 @@ public class QRSharingActivity extends Fragment {
 
     // Get the EventDescriptionResult (StringBuffer) from the QRGeneratorActivityFragment
     public String eventStringResultDescription() {
+
         Bundle qrDescription = getArguments();
         String qrStringBufferResult = qrDescription.getString("qrStringBufferDescription");
         return qrStringBufferResult;
     }
 
-    @SuppressLint("LongLogTag")
+    @SuppressLint({"LongLogTag", "SetTextI18n"})
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.activity_qrsharing, container, false);
@@ -96,7 +98,7 @@ public class QRSharingActivity extends Fragment {
         try {
             String[] eventStringBufferResultAsArray = eventStringResultDescription().split("\\| ");
             //Index: 0 = CreatorID; 1 = StartDate; 2 = EndDate; 3 = StartTime; 4 = EndTime;
-            //       5 = Repetition; 6 = ShortTitle; 7 = Place; 8 = Descriptoin;  9 = EventCreatorName
+            //       5 = Repetition; 6 = ShortTitle; 7 = Place; 8 = Descriptoin;  9 = EventCreatorName 10 = PhoneNumber
             String startDate = eventStringBufferResultAsArray[1].trim();
             String endDate = eventStringBufferResultAsArray[2].trim();
             String repetition = eventStringBufferResultAsArray[5].toUpperCase().trim();
@@ -104,37 +106,34 @@ public class QRSharingActivity extends Fragment {
             String place = eventStringBufferResultAsArray[7].trim();
             String eventCreatorName = eventStringBufferResultAsArray[9].trim();
 
-
             mQRSharing_textView_description.setText(startDate + "\n" + place + "\n" + eventCreatorName);
 
             // Change the DataBase Repetition Information in a German String for the Repetition Element
             // like "Daily" into "täglich" and so on
             switch (repetition) {
                 case "YEARLY":
-                    repetition = "jährlich";
+                    repetition = getString(R.string.yearly);
                     break;
                 case "MONTHLY":
-                    repetition = "monatlich";
+                    repetition = getString(R.string.monthly);
                     break;
                 case "WEEKLY":
-                    repetition = "wöchentlich";
+                    repetition = getString(R.string.weekly);
                     break;
                 case "DAILY":
-                    repetition = "täglich";
+                    repetition = getString(R.string.daylie);
                     break;
                 case "NONE":
                     repetition = "";
                     break;
                 default:
-                    repetition = "ohne Wiederholung";
+                    repetition = getString(R.string.without_repetition);
             }
 
             // Check the EventCreatorName and is it itself Change the eventCreaterName to "Your Self"
             mPerson = PersonController.getPersonWhoIam();
             if (eventCreatorName.equals(mPerson.getName())) {
-                eventCreatorName = "Du selber";
-            } else {
-
+                eventCreatorName = getString(R.string.yourself);
             }
 
             // Event shortTitel in Headline with StartDate
@@ -143,11 +142,12 @@ public class QRSharingActivity extends Fragment {
             // Check for a Repetition Event and Change the Description Output with and without
             // Repetition Element inside.
             if (repetition.equals("")) {
-                mQRSharing_textView_description.setText(startDate + "\n" + "Raum: " + place + "\n"
-                        + "Organisator: " + eventCreatorName);
+                mQRSharing_textView_description.setText(startDate + "\n" + getString(R.string.room) + place + "\n"
+                        + getString(R.string.organisator) + eventCreatorName
+                );
             } else {
-                mQRSharing_textView_description.setText(startDate + " - " + endDate + "\n"
-                        + repetition + "\n" + place + "\n" + "Organisator: " + eventCreatorName);
+                mQRSharing_textView_description.setText(startDate + getString(R.string.until) + endDate + "\n"
+                        + repetition + "\n" + place + "\n" + getString(R.string.organisator) + eventCreatorName);
             }
 
         } catch (NullPointerException e) {
@@ -159,8 +159,8 @@ public class QRSharingActivity extends Fragment {
             mQRSharing_imageView_qrCode.setVisibility(View.GONE);
 
             Snackbar.make(getActivity().findViewById(R.id.generator_button_frame),
-                    "Ups! Fehler Aufgetreten!",
-                    Snackbar.LENGTH_INDEFINITE).setAction("Zum Kalender", new View.OnClickListener() {
+                    getString(R.string.ups_an_error),
+                    Snackbar.LENGTH_INDEFINITE).setAction(getString(R.string.toCalender), new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -181,12 +181,12 @@ public class QRSharingActivity extends Fragment {
             mQRSharing_textView_headline.setVisibility(View.GONE);
             mQRSharing_textView_description.setVisibility(View.GONE);
             mQRSharing_imageView_qrCode.setVisibility(View.GONE);
-            mQRSharing_textView_description.setText("Das ist der Inhalt vom QR Code: " + "\n" + eventStringResultDescription() +
-                    "\n" + "Das können wir leider nicht als Termin speichern!");
+            mQRSharing_textView_description.setText(getString(R.string.qrCode_content) + "\n" + eventStringResultDescription() +
+                    "\n" + getString(R.string.cannot_be_saved_as_event));
 
             Snackbar.make(getActivity().findViewById(R.id.generator_button_frame),
-                    "Ups! Falscher QR-Code!",
-                    Snackbar.LENGTH_INDEFINITE).setAction("Zum Kalender", new View.OnClickListener() {
+                    getString(R.string.ups_an_error),
+                    Snackbar.LENGTH_INDEFINITE).setAction(getString(R.string.toCalender), new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -204,12 +204,15 @@ public class QRSharingActivity extends Fragment {
     }
 
     @Override
-    public void onViewCreated(final View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull final View view, Bundle savedInstanceState) {
+
 
         //Button to Move to the Calendar View
         mQRSharing_button_showInCalendar.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("LongLogTag")
             @Override
             public void onClick(View v) {
+              try{
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.qrSharing_relativeLayout_calendarActivity, new CalendarActivity());
                 fragmentTransaction.addToBackStack(null);
@@ -218,11 +221,15 @@ public class QRSharingActivity extends Fragment {
                 mQRSharing_imageView_qrCode.setVisibility(View.GONE);
                 mQRSharing_reativeLayout_textViewFrame.setVisibility(View.GONE);
                 mQRSharing_relativeLayout_calendarActivity.setVisibility(View.VISIBLE);
+            }catch(NullPointerException mNullPointerException){
+                  Log.d(TAG, "QRGeneratorFragmentActivity:" + mNullPointerException.getMessage());
+            }
             }
         });
 
         //Open a Chooser to Share the QR-Code over one of the User Apps
         mQRSharing_button_shareWith.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("LongLogTag")
             @Override
             public void onClick(View v) {
                 try {
@@ -242,10 +249,10 @@ public class QRSharingActivity extends Fragment {
                         shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // temp permission for receiving app to read this file
                         shareIntent.setDataAndType(contentUri, getContext().getContentResolver().getType(contentUri));
                         shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
-                        startActivity(Intent.createChooser(shareIntent, "Teilen via ... "));
+                        startActivity(Intent.createChooser(shareIntent, getString(R.string.share_with)));
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Log.d(TAG, "QRGeneratorFragmentActivity:" + e.getMessage());
                 }
             }
         });
