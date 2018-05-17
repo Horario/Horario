@@ -10,11 +10,10 @@
 
     <RelativeLayout
         android:id="@+id/dialog_qrScanner_relativeLayout_TextFrame"
-        android:layout_width="match_parent"
-        android:layout_height="242dp"
+        android:layout_width="382dp"
+        android:layout_height="290dp"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="45dp">
+        android:layout_alignParentTop="true">
 
         <TextView
             android:id="@+id/dialog_qrScanner_textView_headline"
@@ -26,64 +25,74 @@
         <TextView
             android:id="@+id/dialog_qrScanner_textView_description"
             android:layout_width="match_parent"
-            android:layout_height="169dp"
+            android:layout_height="216dp"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="78dp" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/dialog_qrScanner_relativLayout_buttonFrame"
         android:layout_width="match_parent"
-        android:layout_height="252dp"
+        android:layout_height="240dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="18dp">
+        tools:layout_editor_absoluteX="37dp"
+        tools:layout_editor_absoluteY="301dp">
 
         <Button
             android:id="@+id/dialog_qrScanner_button_eventRecject"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginBottom="191dp"
-            android:layout_marginEnd="95dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="70dp"
             android:text="@string/eventReject"
-            android:visibility="visible" />
+            android:visibility="visible"
+            tools:layout_editor_absoluteX="83dp"
+            tools:layout_editor_absoluteY="119dp" />
 
         <Button
             android:id="@+id/dialog_qrScanner_button_eventSave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/dialog_qrScanner_button_eventRecject"
-            android:layout_marginTop="168dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="17dp"
             android:text="@string/eventSave"
-            android:visibility="visible" />
+            android:visibility="visible"
+            tools:layout_editor_absoluteX="83dp"
+            tools:layout_editor_absoluteY="7dp" />
 
         <Button
             android:id="@+id/dialog_qrScanner_button_eventSaveOnly"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:text="@string/eventSaveWithoutAssign" />
+            android:layout_below="@+id/dialog_qrScanner_button_eventSave"
+            android:layout_centerHorizontal="true"
+            android:text="@string/eventSaveWithoutAssign"
+            tools:layout_editor_absoluteX="28dp"
+            tools:layout_editor_absoluteY="63dp" />
 
         <Button
-            android:id="@+id/dialog_qrScanner_button_cancle"
+            android:id="@+id/dialog_qrScanner_button_about"
             android:layout_width="308dp"
             android:layout_height="141dp"
-            android:layout_above="@+id/dialog_qrScanner_button_eventSaveOnly"
-            android:layout_marginBottom="-93dp"
-            android:layout_marginEnd="-220dp"
-            android:layout_toStartOf="@+id/dialog_qrScanner_button_eventRecject"
-            android:text="ABBRUCH" />
+            android:layout_alignTop="@+id/dialog_qrScanner_button_eventSave"
+            android:layout_centerHorizontal="true"
+            android:text="@string/abort"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="16dp" />
 
         <Button
             android:id="@+id/dialog_qrScanner_button_toCalender"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Zum Kalender" />
+            android:text="@string/toCalender"
+            tools:layout_editor_absoluteX="91dp"
+            tools:layout_editor_absoluteY="63dp" />
     </RelativeLayout>
 
 
