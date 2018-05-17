@@ -53,6 +53,9 @@
     <string name="save_text">speichern</string>
     <string name="later_text">Später</string>
     <string name="thanksForUsername">Benutzername wurde gespeichert. </string>
+    <string name="acceptEvent">Das Event wurde dem Kalender hinzugefügt</string>
+    <string name="rejectEvent">Das Event wurde abgelehnt</string>
+    <string name="saveEvent">Das Event wurde in deinem Kalender ohne Zu-/Absage gespeichert</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="description_too_long">Die Beschreibung darf nicht länger als 500 Zeichen sein.</string>
