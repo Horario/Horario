@@ -47,10 +47,10 @@ public class SettingsActivity extends Fragment {
         }
 
         //Initialize all Gui-Elements
-        button_settings = (Button) view.findViewById(R.id.settings_button_settings);
-        button_support = (Button) view.findViewById(R.id.settings_button_support);
-        button_copyright = (Button) view.findViewById(R.id.settings_button_copyright);
-        button_feedback = (Button) view.findViewById(R.id.settings_button_feedback);
+        button_settings = view.findViewById(R.id.settings_button_settings);
+        button_support = view.findViewById(R.id.settings_button_support);
+        button_copyright = view.findViewById(R.id.settings_button_copyright);
+        button_feedback = view.findViewById(R.id.settings_button_feedback);
 
         rLayout_settings_helper = view.findViewById(R.id.settings_relativeLayout_helper);
         rLayout_settings_button = view.findViewById(R.id.settings_relativeLayout_button);

@@ -42,7 +42,6 @@ public class TabActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab);
 
-        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         //Start DB
         ActiveAndroid.initialize(this);
         Stetho.initializeWithDefaults(this);
@@ -62,6 +61,8 @@ public class TabActivity extends AppCompatActivity {
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_android_black3_24dp);
 
         if (PersonController.getPersonWhoIam() == null) {
+            openDialogAskForUsername();
+        } else if (PersonController.getPersonWhoIam().getName().isEmpty()) {
             openDialogAskForUsername();
         }
     }
@@ -106,7 +107,7 @@ public class TabActivity extends AppCompatActivity {
                         Log.d(TAG, "TabActivity:" + e.getMessage());
                     }
                 } else if (tab.getPosition() == 1) {
-                    mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_relativeLayout_helper).setVisibility(View.GONE);
+                    mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.layoutHelper).setVisibility(View.GONE);
                     mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_constrainLayout_main).setVisibility(View.VISIBLE);
                     mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_floatingActionButtonMenu).setVisibility(View.VISIBLE);
 
@@ -158,8 +159,8 @@ public class TabActivity extends AppCompatActivity {
                         Log.d(TAG, "TabActivity:" + e.getMessage());
                     }
                 } else if (tab.getPosition() == 1) {
-                    mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_relativeLayout_helper).setVisibility(View.GONE);
-                    mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_constrainLayout_main).setVisibility(View.VISIBLE);
+                    mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.layoutHelper).setVisibility(View.GONE);
+                    mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.layoutCalendar).setVisibility(View.VISIBLE);
                     mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_floatingActionButtonMenu).setVisibility(View.VISIBLE);
 
                     FloatingActionButton floatNewEvent = mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_floatingActionButtonNewEvent);
@@ -174,8 +175,8 @@ public class TabActivity extends AppCompatActivity {
                     isFloatingMenuOpen.setText("false");
 
                 } else if (tab.getPosition() == 0) {
-                    mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_relativeLayout_helper).setVisibility(View.GONE);
-                    //mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_Layout_main).setVisibility(View.VISIBLE); TODO
+                    mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.layoutHelper).setVisibility(View.GONE);
+                    mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.layoutOverview).setVisibility(View.VISIBLE);
                     mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_floatingActionButtonMenu).setVisibility(View.VISIBLE);
 
                     FloatingActionButton floatNewEvent = mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_floatingActionButtonNewEvent);
@@ -223,14 +224,25 @@ public class TabActivity extends AppCompatActivity {
                 Matcher matcher_username = pattern_username.matcher(dialog_inputUsername);
 
                 if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches()) {
-                    //ToDo: Flo - PhoneNumber
-                    personMe = new Person(true, "007", dialog_inputUsername);
-                    PersonController.addPersonMe(personMe);
+                    if (PersonController.getPersonWhoIam() == null) {
+                        //ToDo: Flo - PhoneNumber
+                        personMe = new Person(true, "007", dialog_inputUsername);
+                        PersonController.addPersonMe(personMe);
 
-                    Toast toast = Toast.makeText(v.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT);
-                    toast.show();
+                        Toast toast = Toast.makeText(v.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT);
+                        toast.show();
 
-                    alertDialogAskForUsername.cancel();
+                        alertDialogAskForUsername.cancel();
+                    } else{
+                        personMe = PersonController.getPersonWhoIam();
+                        personMe.setName(dialog_inputUsername);
+                        PersonController.savePerson(personMe);
+
+                        Toast toast = Toast.makeText(v.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT);
+                        toast.show();
+
+                        alertDialogAskForUsername.cancel();
+                    }
                     return false;
                 } else {
                     Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
