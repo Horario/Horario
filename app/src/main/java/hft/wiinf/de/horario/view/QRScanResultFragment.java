@@ -16,8 +16,6 @@ import com.activeandroid.util.Log;
 
 import hft.wiinf.de.horario.R;
 
-import static android.support.constraint.Constraints.TAG;
-
 public class QRScanResultFragment extends Fragment {
     private static final String TAG = "QRScanResultFragment";
     private RelativeLayout mScannerResult_RelativeLayout_Main, mScannerResult_RelativeLayout_ButtonFrame,
@@ -31,6 +29,8 @@ public class QRScanResultFragment extends Fragment {
         // Required empty public constructor
     }
 
+
+
     public String qrScanResultBundle() {
         Bundle qrScanBundle = getArguments();
         String qrScanBundleResult = qrScanBundle.getString("scanResult");
@@ -41,9 +41,11 @@ public class QRScanResultFragment extends Fragment {
     @SuppressLint("ResourceType")
     public void onViewCreated(final View view, Bundle savedInstanceState) {
 
+
+
         //GUI initial
-        mScannerResult_RelativeLayout_Main = view.findViewById(R.id.scanner_result_relativeLayout_main);
-        mScannerResult_RelativeLayout_ButtonFrame = view.findViewById(R.id.scanner_result_relativeLayout_buttonFrame);
+        mScannerResult_RelativeLayout_Main = view.findViewById(R.id.scanner_result_constraintLayout_main);
+        mScannerResult_RelativeLayout_ButtonFrame = view.findViewById(R.id.scanner_result_constraintLayout_buttonFrame);
         mScannerResult_RelativeLayout_goTo_CalendarFragment = view.findViewById(R.id.scanner_result_realtiveLayout_CalendarFragment);
         mScannerResult_TextureView_Description = view.findViewById(R.id.scanner_result_textview_eventText);
         mScannerResult_TextureView_Headline = view.findViewById(R.id.scanner_result_textView_headline);
@@ -58,10 +60,12 @@ public class QRScanResultFragment extends Fragment {
         mScannerResult_Button_saveWithoutassent.setVisibility(View.GONE);
         mScannerResult_Button_rejectEvent.setVisibility(View.GONE);
 
+
         displayQRResult();
 
 
     }
+
 
 
     @Override
@@ -138,7 +142,7 @@ public class QRScanResultFragment extends Fragment {
             mScannerResult_Button_rejectEvent.setVisibility(View.GONE);
             mScannerResult_TextureView_Headline.setVisibility(View.GONE);
 
-            Snackbar.make(getActivity().findViewById(R.id.scanner_result_relativeLayout_buttonFrame),
+            Snackbar.make(getActivity().findViewById(R.id.scanner_result_constraintLayout_buttonFrame),
                     "Ups! Fehler Aufgetreten!",
                     Snackbar.LENGTH_INDEFINITE).setAction("Zum Kalender", new View.OnClickListener() {
                 @Override
@@ -162,7 +166,7 @@ public class QRScanResultFragment extends Fragment {
             mScannerResult_TextureView_Description.setText("Das ist der Inhalt vom QR Code: " + "\n" +
                     "\n" + "Das können wir leider nicht als Termin speichern!");
 
-            Snackbar.make(getActivity().findViewById(R.id.scanner_result_relativeLayout_buttonFrame),
+            Snackbar.make(getActivity().findViewById(R.id.scanner_result_constraintLayout_buttonFrame),
                     "Ups! Falscher QR-Code!",
                     Snackbar.LENGTH_INDEFINITE).setAction("Zum Kalender", new View.OnClickListener() {
                 @Override

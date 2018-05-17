@@ -28,6 +28,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import hft.wiinf.de.horario.R;
+import hft.wiinf.de.horario.*;
 
 //TODO Kommentieren und Java Doc Info Schreiben
 public class CalendarActivity extends Fragment {
@@ -94,8 +95,12 @@ public class CalendarActivity extends Fragment {
         calendarFcQrScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(getContext(), QRScannerActivity.class);
+                startActivity(intent);
+
+                /*
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
-                fr.replace(R.id.calendar_relativeLayout_helper, new QRScanFragment());
+                fr.replace(R.id.calendar_relativeLayout_helper, new RScanFragment());
                 fr.addToBackStack(null);
                 fr.commit();
                 closeFABMenu();
@@ -103,8 +108,9 @@ public class CalendarActivity extends Fragment {
                 calendarCvCalendar.setVisibility(View.GONE);
                 calendarLvList.setVisibility(View.GONE);
                 calendarTvDay.setVisibility(View.GONE);
-                calendarFcMenu.setVisibility(View.GONE);
+                calendarFcMenu.hide();
                 rLayout_calendar_helper.setVisibility(View.VISIBLE);
+                */
             }
         });
 

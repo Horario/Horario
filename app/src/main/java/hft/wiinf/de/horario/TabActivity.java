@@ -72,6 +72,12 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
 
     public void scanResultData(String codeFormat, String codeContent){
+        /*
+        Intent intent = new Intent(this, QRScannerActivity.class);
+        startActivity(intent);
+
+
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         QRScanResultFragment scanFragment = new QRScanResultFragment();
@@ -80,6 +86,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         scanFragment.setArguments(bundle);
         fragmentTransaction.add(R.id.fragment_container,scanFragment);
         fragmentTransaction.commit();
+*/
 
     }
 
