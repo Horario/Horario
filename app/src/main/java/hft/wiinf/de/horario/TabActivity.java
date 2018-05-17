@@ -16,6 +16,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,10 +28,10 @@ import com.facebook.stetho.Stetho;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.controller.*;
 import hft.wiinf.de.horario.view.*;
+import hft.wiinf.de.horario.R;
 
 
 public class TabActivity extends AppCompatActivity implements ScanResultReceiverController {
@@ -74,8 +75,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
     //clear all entrys and open a dialog where the user can choose what to do next
     @SuppressLint("ResourceType")
-    private void openActionDialogAfterScanning(String qrScannContentResult) {
-        try {
+    private void openActionDialogAfterScanning(final String qrScannContentResult) {
+
             final Dialog afterScanningDialogAction = new Dialog(this);
             afterScanningDialogAction.setContentView(R.layout.dialog_afterscanning);
             afterScanningDialogAction.setCancelable(true);
@@ -83,7 +84,13 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
             TextView qrScanner_result_descriptoin = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_textView_description);
             TextView qrScanner_result_headline = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_textView_headline);
+            Button qrScanner_reject = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_eventRecject);
+            Button qrScanner_result_eventSave = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_eventSave);
+            Button qrScanner_result_cancle = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_cancle);
+            Button qrScanner_result_eventSave_without_assign = afterScanningDialogAction.findViewById((R.id.dialog_qrScanner_button_eventSaveOnly));
 
+            qrScanner_result_cancle.setVisibility(View.GONE);
+            try {
             //create a new event: only close the dialog
             afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_eventSave).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -121,7 +128,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                     startActivity(intent);
                 }
             });
-
 
             //Put StringBufffer in an Array and split the Values to new String Variables
             //Index: 0 = CreatorID; 1 = StartDate; 2 = EndDate; 3 = StartTime; 4 = EndTime;
@@ -166,12 +172,15 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 qrScanner_result_descriptoin.setText(startDate + "\n" + place +
                         "\n" + eventCreatorName);
             } else {
+                
+
                 qrScanner_result_descriptoin.setText(startDate + "-" + endDate
                         + "\n" + repetition + "\n" + startTime + " Uhr - "
                         + endTime + " Uhr \n" + "Raum " + place + "\n" + "Organisator: " + eventCreatorName);
+
             }
-            // In the CatchBlock the User see a Snackbar Information and was pushed to CalendarActivity
-        }catch (NullPointerException e) {
+            // In the CatchBlock the User see a Snackbar Information and was pushed to Restart the TabActivity
+        } catch (NullPointerException e) {
             com.activeandroid.util.Log.d(TAG, "TabActivity" + e.getMessage());
             Snackbar.make(this.findViewById(R.id.tabActivity_relativeLayout_snackbarContainer),
                     "Ups! Fehler Aufgetreten!",
@@ -184,17 +193,24 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 }
             }).show();
         } catch (ArrayIndexOutOfBoundsException z) {
-            com.activeandroid.util.Log.d(TAG, "QRScanResultFragment" + z.getMessage());
-            Snackbar.make(this.findViewById(R.id.tabActivity_relativeLayout_snackbarContainer),
-                    "Ups! Falscher QR-Code!",
-                    Snackbar.LENGTH_INDEFINITE).setAction("Zum Kalender", new View.OnClickListener() {
+            com.activeandroid.util.Log.d(TAG, "TabActivity" + z.getMessage());
+            qrScanner_reject.setVisibility(View.GONE);
+            qrScanner_result_eventSave_without_assign.setVisibility(View.GONE);
+            qrScanner_result_eventSave.setVisibility(View.GONE);
+            qrScanner_result_cancle.setVisibility(View.VISIBLE);
+            qrScanner_result_descriptoin.setText(getString(R.string.wrongQRCodeResult)+ "\n"+"\n"
+                        +qrScannContentResult+"\n"+"\n"+getString(R.string.notAsEventSaveable));
+
+            qrScanner_result_cancle.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
+                public void onClick(View v) {
                     Intent intent = getIntent();
                     finish();
                     startActivity(intent);
                 }
-            }).show();
+            });
+
+
         }
 
 

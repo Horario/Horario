@@ -71,6 +71,8 @@
     <string name="pushEnabled">Die Push-Nachrichten wurden eingeschaltet.</string>
     <string name="pushDisabled">Die Push-Nachrichten wurden ausgeschaltet.</string>
     <string formatted="true" name="pushMinutesSet">Die Push-Nachrichten erscheinen nun %1$d Minuten vor Ihrem Termin.</string>
+    <string name="wrongQRCodeResult">Das ist der Inhalt vom QR Code:</string>
+    <string name="notAsEventSaveable">Das können wir leider nicht als Termin speichern!</string>
 
     <string-array name="push_times">
         <item name="push_time_0">0</item>

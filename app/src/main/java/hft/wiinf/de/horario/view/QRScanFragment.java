@@ -3,9 +3,11 @@ package hft.wiinf.de.horario.view;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.TabActivity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -55,16 +57,7 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
 
     @SuppressLint("ResourceType")
     public void onViewCreated(final View view, Bundle savedInstanceState) {
-/*
-        //GUI initial
-        mScannerResult_RelativeLayout_Main = view.findViewById(R.id.scanner_result_relativeLayout_main);
-        mScannerResult_RelativeLayout_ButtonFrame = view.findViewById(R.id.scanner_result_relativeLayout_buttonFrame);
-        mScannerResult_RelativeLayout_goTo_CalendarFragment = view.findViewById(R.id.scanner_result_realtiveLayout_CalendarFragment);
-        mScannerResult_TextureView_Description = view.findViewById(R.id.scanner_result_textview_eventText);
 
-        //Make the Element at first Unvisible
-        mScannerResult_TextureView_Description.setVisibility(View.GONE);
-  */
         //Eigentlich startet es mit der Camerazugriffsberechtigung
         showCameraPreview();
     }
@@ -150,24 +143,26 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
                                     Snackbar.LENGTH_INDEFINITE).setAction("Zum Kalender", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                                    fragmentTransaction.replace(R.id.scanner_result_realtiveLayout_CalendarFragment, new CalendarActivity());
-                                    fragmentTransaction.addToBackStack(null);
-                                    fragmentTransaction.commit();
-                                    mScannerResult_RelativeLayout_ButtonFrame.setVisibility(View.GONE);
-                                    mScannerResult_RelativeLayout_Main.setVisibility(View.GONE);
-                                    mScannerResult_RelativeLayout_goTo_CalendarFragment.setVisibility(View.VISIBLE);
+                                    Intent intent = getActivity().getIntent();
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK
+                                            | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    getActivity().overridePendingTransition(0, 0);
+                                    getActivity().finish();
+
+                                    getActivity().overridePendingTransition(0, 0);
+                                    startActivity(intent);
                                 }
                             }).show();
                             break;
                         default:
-                            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                            fragmentTransaction.replace(R.id.scanner_result_realtiveLayout_CalendarFragment, new CalendarActivity());
-                            fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                            mScannerResult_RelativeLayout_ButtonFrame.setVisibility(View.GONE);
-                            mScannerResult_RelativeLayout_Main.setVisibility(View.GONE);
-                            mScannerResult_RelativeLayout_goTo_CalendarFragment.setVisibility(View.VISIBLE);
+                            Intent intent = getActivity().getIntent();
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK
+                                    | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            getActivity().overridePendingTransition(0, 0);
+                            getActivity().finish();
+
+                            getActivity().overridePendingTransition(0, 0);
+                            startActivity(intent);
                     }
                 }
             }

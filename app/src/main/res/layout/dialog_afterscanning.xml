@@ -33,7 +33,7 @@
 
     <RelativeLayout
         android:id="@+id/dialog_qrScanner_relativLayout_buttonFrame"
-        android:layout_width="369dp"
+        android:layout_width="match_parent"
         android:layout_height="252dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
@@ -67,6 +67,16 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:text="Termin @string/termin_ohne_zusage_speichern" />
+
+        <Button
+            android:id="@+id/dialog_qrScanner_button_cancle"
+            android:layout_width="308dp"
+            android:layout_height="141dp"
+            android:layout_above="@+id/dialog_qrScanner_button_eventSaveOnly"
+            android:layout_marginBottom="-93dp"
+            android:layout_marginEnd="-220dp"
+            android:layout_toStartOf="@+id/dialog_qrScanner_button_eventRecject"
+            android:text="ABBRUCH" />
     </RelativeLayout>
 
 
