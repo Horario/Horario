@@ -31,7 +31,6 @@ import hft.wiinf.de.horario.controller.*;
 import hft.wiinf.de.horario.view.*;
 import hft.wiinf.de.horario.R;
 
-
 public class TabActivity extends AppCompatActivity implements ScanResultReceiverController {
 
     //TODO Kommentieren und Java Doc Info Schreiben
