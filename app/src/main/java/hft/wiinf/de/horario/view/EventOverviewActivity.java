@@ -1,5 +1,6 @@
 package hft.wiinf.de.horario.view;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -7,6 +8,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,6 +20,8 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -27,20 +31,21 @@ import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
 import hft.wiinf.de.horario.model.AcceptedState;
 
-public class EventOverviewActivity extends Fragment {
+public class EventOverviewActivity extends Fragment{
 
-    ListView overviewLvList;
-    TextView overviewTvMonth;
+    static ListView overviewLvList;
+    static TextView overviewTvMonth;
     Button overviewBtNext;
     Button overviewBtPrevious;
-    //Date selectedMonth = new Date(CalendarActivity.selectedMonth.getTime());
-    Date selectedMonth = new Date();
+    public static Date selectedMonth = new Date();
     FloatingActionButton eventOverviewFcMenu, eventOverviewFcQrScan, eventOverviewFcNewEvent;
     RelativeLayout rLayout_eventOverview_helper;
-    ConstraintLayout cLayout_eventOverview_main;
+    ConstraintLayout layout_eventOverview_main;
     TextView eventOverview_HiddenIsFloatingMenuOpen;
     ConstraintLayout layoutOverview;
     ConstraintLayout layoutHelper;
+    static Context context = null;
+    static DateFormat timeFormat = new SimpleDateFormat("hh:mm");
 
     @Nullable
     @Override
@@ -60,17 +65,18 @@ public class EventOverviewActivity extends Fragment {
         overviewBtPrevious = view.findViewById(R.id.overviewBtPrevious);
         layoutOverview = view.findViewById(R.id.layoutOverview);
         layoutHelper = view.findViewById(R.id.layoutHelper);
+        context = this.getActivity();
 
         //Floating Button
         eventOverviewFcMenu = view.findViewById(R.id.eventOverview_floatingActionButtonMenu);
         eventOverviewFcNewEvent = view.findViewById(R.id.eventOverview_floatingActionButtonNewEvent);
         eventOverviewFcQrScan = view.findViewById(R.id.eventOverview_floatingActionButtonScan);
         rLayout_eventOverview_helper = view.findViewById(R.id.eventOverview_relativeLayout_helper);
-        //cLayout_eventOverview_main = view.findViewById(R.id.eventOverview_Layout_main); TODO
+        layout_eventOverview_main = view.findViewById(R.id.overview_main);
         eventOverview_HiddenIsFloatingMenuOpen = view.findViewById(R.id.eventOverviewFabClosed);
         eventOverviewFcQrScan.hide();
         eventOverviewFcNewEvent.hide();
-
+        selectedMonth = CalendarActivity.selectedMonth;
         update();
 
         overviewBtNext.setOnClickListener(new View.OnClickListener() {
@@ -134,21 +140,21 @@ public class EventOverviewActivity extends Fragment {
             }
         });
 
-//        cLayout_eventOverview_main.setOnClickListener(new View.OnClickListener() {
-  //          @Override
-    //        public void onClick(View v) {
-      //          closeFABMenu();
-        //    }
-//        });
+        layout_eventOverview_main.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeFABMenu();
+            }
+        });
     }
 
-    public void update(){
+    public static void update(){
         overviewTvMonth.setText(CalendarActivity.monthFormat.format(selectedMonth));
         overviewLvList.setAdapter(iterateOverMonth(selectedMonth));
     }
 
     //get all events for the selected month and save them in a adapter
-    public ArrayAdapter iterateOverMonth(Date date){ //TODO create own Adapter
+    public static ArrayAdapter iterateOverMonth(Date date){ //TODO create own Adapter
         final ArrayList<Appointment> eventArray = new ArrayList<>();
         Date day = new Date(date.getTime());
         int endDate = date.getMonth();
@@ -162,9 +168,9 @@ public class EventOverviewActivity extends Fragment {
             }
             for (int i = 0; i<eventList.size(); i++){
                 if(eventList.get(i).getAccepted().equals(AcceptedState.ACCEPTED)){
-                    eventArray.add(new Appointment(eventList.get(i).getDescription(), 1));
+                    eventArray.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 1));
                 }else{
-                    eventArray.add(new Appointment(eventList.get(i).getDescription(), 2));
+                    eventArray.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 2));
                 }
             }
             day.setTime(endOfDay.getTimeInMillis());
@@ -172,7 +178,7 @@ public class EventOverviewActivity extends Fragment {
         if(eventArray.size() < 1){ //when no events this month do stuff
             eventArray.add(new Appointment("Du hast keine Termine diesen Monat", 0));
         }
-        final ArrayAdapter adapter = new ArrayAdapter(this.getActivity(), android.R.layout.simple_list_item_1, eventArray){
+        final ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1, eventArray){
             @NonNull
             @Override
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -207,6 +213,8 @@ public class EventOverviewActivity extends Fragment {
         eventOverviewFcNewEvent.hide();
         eventOverviewFcMenu.setImageResource(R.drawable.ic_android_black2_24dp);
     }
+
+
 }
 
 class Appointment{
@@ -234,4 +242,6 @@ class Appointment{
     public void setType(int type) {
         this.type = type;
     }
+
+
 }

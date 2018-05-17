@@ -1,12 +1,10 @@
 package hft.wiinf.de.horario.view;
 
-import android.content.Intent;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.Snackbar;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -16,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -32,38 +29,34 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.zip.Inflater;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
 import hft.wiinf.de.horario.model.AcceptedState;
 
-//TODO Kommentieren und Java Doc Info Schreiben
 public class CalendarActivity extends Fragment {
     private static final String TAG = "CalendarFragmentActivity";
 
     public static CompactCalendarView calendarCvCalendar;
-    ListView calendarLvList;
-    TextView calendarTvMonth;
-    TextView calendarTvDay;
+    static ListView calendarLvList;
+    static TextView calendarTvMonth;
+    static TextView calendarTvDay;
     TextView calendarIsFloatMenuOpen;
     FloatingActionButton calendarFcMenu, calendarFcQrScan, calendarFcNewEvent;
     RelativeLayout rLayout_calendar_helper;
     ConstraintLayout cLayout_calendar_main;
     ConstraintLayout layoutCalendar;
     ConstraintLayout layoutHelper;
+    static Context context = null;
 
     static DateFormat monthFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
     static DateFormat dayFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
+    static DateFormat timeFormat = new SimpleDateFormat("hh:mm");
     public static Date selectedMonth;
-    private int simple_list_item_1;
 
-
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-
         //initialize variables
         final View view = inflater.inflate(R.layout.activity_calendar, container, false);
         calendarCvCalendar = view.findViewById(R.id.calendarCvCalendar);
@@ -72,49 +65,46 @@ public class CalendarActivity extends Fragment {
         calendarTvDay = view.findViewById(R.id.calendarTvDay);
         layoutCalendar = view.findViewById(R.id.layoutCalendar);
         layoutHelper = view.findViewById(R.id.layoutHelper);
+        context = this.getActivity();
         //FloatingButton
-        calendarFcMenu = (FloatingActionButton) view.findViewById(R.id.calendar_floatingActionButtonMenu);
-        calendarFcNewEvent = (FloatingActionButton) view.findViewById(R.id.calendar_floatingActionButtonNewEvent);
-        calendarFcQrScan = (FloatingActionButton) view.findViewById(R.id.calendar_floatingActionButtonScan);
+        calendarFcMenu = view.findViewById(R.id.calendar_floatingActionButtonMenu);
+        calendarFcNewEvent = view.findViewById(R.id.calendar_floatingActionButtonNewEvent);
+        calendarFcQrScan = view.findViewById(R.id.calendar_floatingActionButtonScan);
         rLayout_calendar_helper = view.findViewById(R.id.calendar_relativeLayout_helper);
         cLayout_calendar_main = view.findViewById(R.id.calendar_constrainLayout_main);
         calendarIsFloatMenuOpen = view.findViewById(R.id.calendar_hiddenField);
         calendarFcQrScan.hide();
         calendarFcNewEvent.hide();
 
-        Date today = new Date();
-        today.setHours(0);
-        today.setMinutes(0);
-        selectedMonth = today;
-        calendarTvMonth.setText(monthFormat.format(today)); //initialize month field
-        calendarTvDay.setText(dayFormat.format(today));
-        calendarLvList.setAdapter(getAdapter(today, view));
+        //Date today = new Date();
+        Calendar today = Calendar.getInstance();
+        today.set(Calendar.HOUR_OF_DAY, 0);
+        today.set(Calendar.MINUTE, 0);
+        selectedMonth = today.getTime();
+        calendarTvMonth.setText(monthFormat.format(today.getTime())); //initialize month field
+        update(today.getTime());
 
         //TODO just for testing (add entry to database), delete
         hft.wiinf.de.horario.model.Event test = new hft.wiinf.de.horario.model.Event();
         test.setStartTime(new Date(1524261326000L)); //20.04.18
         test.setEndTime(new Date(1524261326000L));
-        test.setDescription("Termin 1");
+        test.setShortTitle("Termin 1");
+        test.setDescription("Das ist ein Testtermin");
         test.setAccepted(AcceptedState.ACCEPTED);
         test.save();
-
-        updateCompactCalendar();
 
         calendarCvCalendar.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
             //when a day get clicked, the date field will be updated and the events for the day displayed in the ListView
             public void onDayClick(Date dateClicked) {
-                calendarTvDay.setText(dayFormat.format(dateClicked));
-                calendarLvList.setAdapter(getAdapter(dateClicked, view));
+                update(dateClicked);
                 closeFABMenu();
             }
 
             @Override
             //handle everything when the user swipe the month
             public void onMonthScroll(Date firstDayOfNewMonth) {
-                calendarTvMonth.setText(monthFormat.format(firstDayOfNewMonth));
-                calendarTvDay.setText(dayFormat.format(firstDayOfNewMonth));
-                calendarLvList.setAdapter(getAdapter(firstDayOfNewMonth, view));
+                update(firstDayOfNewMonth);
                 selectedMonth = firstDayOfNewMonth;
             }
         });
@@ -182,6 +172,12 @@ public class CalendarActivity extends Fragment {
         return view;
     }
 
+    public static void update(Date date){
+        calendarTvDay.setText(dayFormat.format(date));
+        calendarLvList.setAdapter(getAdapter(date));
+        calendarTvMonth.setText(monthFormat.format(date));
+        updateCompactCalendar();
+    }
 
 
     //is marking the day in the calendar for the parameter date
@@ -196,7 +192,7 @@ public class CalendarActivity extends Fragment {
     }
 
     /** TODO need a description */
-    public ArrayAdapter getAdapter(Date date, View view){
+    public static ArrayAdapter getAdapter(Date date){
         //TODO Testing
         ArrayList<String> eventsAsString = new ArrayList<>();
         Calendar endOfDay = Calendar.getInstance();
@@ -204,10 +200,9 @@ public class CalendarActivity extends Fragment {
         endOfDay.add(Calendar.DAY_OF_MONTH, 1);
         final List<hft.wiinf.de.horario.model.Event> eventList = EventController.findEventsByTimePeriod(date, endOfDay.getTime());
         for (int i = 0; i<eventList.size(); i++){
-            eventsAsString.add(eventList.get(i).getDescription());
+            eventsAsString.add(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle());
         }
-        final int a = 0;
-        final ArrayAdapter adapter = new ArrayAdapter(this.getActivity(), android.R.layout.simple_list_item_1, eventsAsString){
+        final ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1, eventsAsString){
             @NonNull
             @Override
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -224,9 +219,6 @@ public class CalendarActivity extends Fragment {
         };
         return adapter;
     }
-
-
-
 
     public void showFABMenu() {
         calendarIsFloatMenuOpen.setText("true");

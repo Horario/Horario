@@ -31,7 +31,6 @@
             android:id="@+id/calendarTvMonth"
             android:layout_width="0dp"
             android:layout_height="25dp"
-            android:autoText="false"
             android:background="#ffe95451"
             android:backgroundTint="#ffe95451"
             android:backgroundTintMode="src_atop"
