@@ -68,6 +68,9 @@
     <string name="termin_zusagen">termin_zusagen</string>
     <string name="termin_ohne_zusage_speichern">termin_ohne_zusage_speichern</string>
     <string name="termin_ablehnen">termin_ablehnen</string>
+    <string name="pushEnabled">Die Push-Nachrichten wurden eingeschaltet.</string>
+    <string name="pushDisabled">Die Push-Nachrichten wurden ausgeschaltet.</string>
+    <string formatted="true" name="pushMinutesSet">Die Push-Nachrichten erscheinen nun %1$d Minuten vor Ihrem Termin.</string>
 
     <string-array name="push_times">
         <item name="push_time_0">0</item>

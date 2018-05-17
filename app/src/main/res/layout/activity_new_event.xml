@@ -211,7 +211,8 @@
             android:layout_alignParentEnd="true"
             android:layout_marginBottom="36dp"
             android:ems="10"
-            android:focusable="true"
+            android:focusable="false"
+            android:focusableInTouchMode="true"
             android:visibility="gone" />
 
 
