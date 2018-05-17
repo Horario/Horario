@@ -53,7 +53,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="26dp"
-            android:text="@string/teilen_via" />
+            android:text="@string/share_with" />
 
         <Button
             android:id="@+id/qrSharing_button_showInCalendar"
