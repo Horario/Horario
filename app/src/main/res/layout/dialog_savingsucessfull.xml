@@ -37,7 +37,7 @@
     <TableRow>
 
         <Button
-            android:id="@+id/savingSuccessful_button_qrcode"
+            android:id="+id/savingSuccessful_button_qrcode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 

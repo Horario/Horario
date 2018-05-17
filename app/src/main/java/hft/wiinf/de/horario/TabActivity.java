@@ -1,16 +1,17 @@
 package hft.wiinf.de.horario;
 
-import android.app.AlertDialog;
+import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.activeandroid.ActiveAndroid;
+import com.activeandroid.util.Log;
 import com.facebook.stetho.Stetho;
 
 import java.util.regex.Matcher;
@@ -28,12 +30,10 @@ import java.util.regex.Pattern;
 import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.controller.*;
-import hft.wiinf.de.horario.view.CalendarActivity;
-import hft.wiinf.de.horario.view.EventOverviewActivity;
-import hft.wiinf.de.horario.view.QRScanResultFragment;
-import hft.wiinf.de.horario.view.SettingsActivity;
+import hft.wiinf.de.horario.view.*;
 
-public class TabActivity extends AppCompatActivity implements ScanResultReceiverController{
+
+public class TabActivity extends AppCompatActivity implements ScanResultReceiverController {
 
     //TODO Kommentieren und Java Doc Info Schreiben
     private static final String TAG = "TabActivity";
@@ -72,22 +72,144 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         }
     }
 
+    //clear all entrys and open a dialog where the user can choose what to do next
+    @SuppressLint("ResourceType")
+    private void openActionDialogAfterScanning(String qrScannContentResult) {
+        try {
+            final Dialog afterScanningDialogAction = new Dialog(this);
+            afterScanningDialogAction.setContentView(R.layout.dialog_afterscanning);
+            afterScanningDialogAction.setCancelable(true);
+            afterScanningDialogAction.show();
 
-    public void scanResultData(String codeFormat, String codeContent){
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        QRScanResultFragment scanFragment = new QRScanResultFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("scanResult", codeContent);
-        scanFragment.setArguments(bundle);
-        fragmentTransaction.add(R.id.fragment_container,scanFragment);
-        fragmentTransaction.commit();
+            TextView qrScanner_result_descriptoin = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_textView_description);
+            TextView qrScanner_result_headline = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_textView_headline);
+
+            //create a new event: only close the dialog
+            afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_eventSave).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //ToDo Dennis hier kommt dein Code rein.
+
+
+                    //Restart the TabActivity an Reload all Views
+                    Intent intent = getIntent();
+                    finish();
+                    startActivity(intent);
+                }
+            });
+
+            afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_eventSaveOnly).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //ToDo Dennis hier kommt dein Code rein.
+
+
+                    //Restart the TabActivity an Reload all Views
+                    Intent intent = getIntent();
+                    finish();
+                    startActivity(intent);
+                }
+            });
+
+            afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_eventRecject).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //ToDo Dennis hier kommt dein Code rein.
+                    //Restart the TabActivity an Reload all Views
+                    Intent intent = getIntent();
+                    finish();
+                    startActivity(intent);
+                }
+            });
+
+
+            //Put StringBufffer in an Array and split the Values to new String Variables
+            //Index: 0 = CreatorID; 1 = StartDate; 2 = EndDate; 3 = StartTime; 4 = EndTime;
+            //       5 = Repetition; 6 = ShortTitle; 7 = Place; 8 = Descriptoin;  9 = EventCreatorName
+            String[] eventStringBufferArray = qrScannContentResult.split("\\|");
+            String startDate = eventStringBufferArray[1].trim();
+            String endDate = eventStringBufferArray[2].trim();
+            String startTime = eventStringBufferArray[3].trim();
+            String endTime = eventStringBufferArray[4].trim();
+            String repetition = eventStringBufferArray[5].toUpperCase().trim();
+            String shortTitle = eventStringBufferArray[6].trim();
+            String place = eventStringBufferArray[7].trim();
+            String eventCreatorName = eventStringBufferArray[9].trim();
+
+            // Change the DataBase Repetition Information in a German String for the Repetition Element
+            // like "Daily" into "täglich" and so on
+            switch (repetition) {
+                case "YEARLY":
+                    repetition = "jährlich";
+                    break;
+                case "MONTHLY":
+                    repetition = "monatlich";
+                    break;
+                case "WEEKLY":
+                    repetition = "wöchentlich";
+                    break;
+                case "DAILY":
+                    repetition = "täglisch";
+                    break;
+                case "NONE":
+                    repetition = "";
+                    break;
+                default:
+                    repetition = "ohne Wiederholung";
+            }
+
+            // Event shortTitle in Headline with StartDate
+            qrScanner_result_headline.setText(shortTitle);
+            // Check for a Repetition Event and Change the Description Output with and without
+            // Repetition Element inside.
+            if (repetition.equals("")) {
+                qrScanner_result_descriptoin.setText(startDate + "\n" + place +
+                        "\n" + eventCreatorName);
+            } else {
+                qrScanner_result_descriptoin.setText(startDate + "-" + endDate
+                        + "\n" + repetition + "\n" + startTime + " Uhr - "
+                        + endTime + " Uhr \n" + "Raum " + place + "\n" + "Organisator: " + eventCreatorName);
+            }
+            // In the CatchBlock the User see a Snackbar Information and was pushed to CalendarActivity
+        }catch (NullPointerException e) {
+            com.activeandroid.util.Log.d(TAG, "TabActivity" + e.getMessage());
+            Snackbar.make(this.findViewById(R.id.tabActivity_relativeLayout_snackbarContainer),
+                    "Ups! Fehler Aufgetreten!",
+                    Snackbar.LENGTH_INDEFINITE).setAction("Zum Kalender", new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = getIntent();
+                    finish();
+                    startActivity(intent);
+                }
+            }).show();
+        } catch (ArrayIndexOutOfBoundsException z) {
+            com.activeandroid.util.Log.d(TAG, "QRScanResultFragment" + z.getMessage());
+            Snackbar.make(this.findViewById(R.id.tabActivity_relativeLayout_snackbarContainer),
+                    "Ups! Falscher QR-Code!",
+                    Snackbar.LENGTH_INDEFINITE).setAction("Zum Kalender", new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = getIntent();
+                    finish();
+                    startActivity(intent);
+                }
+            }).show();
+        }
+
+
+    }
+
+
+    public void scanResultData(String codeFormat, String codeContent) {
+
+        openActionDialogAfterScanning(codeContent);
 
     }
 
     @Override
     public void scanResultData(NoScanResultExceptionController noScanData) {
-        Toast toast = Toast.makeText(this,noScanData.getMessage(), Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(this, noScanData.getMessage(), Toast.LENGTH_SHORT);
         toast.show();
     }
 
@@ -211,7 +333,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     }
 
 
-
     private void setupViewPager(ViewPager viewPager) {
         SectionsPageAdapterActivity adapter = mSectionsPageAdapter;
         adapter.addFragment(new EventOverviewActivity(), "");
@@ -225,6 +346,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
     }
+
     //Method calls a Dialog when the User has not added a username
     public void openDialogAskForUsername() {
         final AlertDialog.Builder dialogAskForUsername = new AlertDialog.Builder(this);

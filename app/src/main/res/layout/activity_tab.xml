@@ -49,6 +49,14 @@
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent" >
+
+        <RelativeLayout
+            android:id="@+id/tabActivity_relativeLayout_snackbarContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </RelativeLayout>
+    </FrameLayout>
 
 </android.support.design.widget.CoordinatorLayout>
