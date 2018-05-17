@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Horario</string>
-    <string name="Test">Test</string>
     <string name="title_activity_test">Test</string>
     <string name="title_activity_tab">TabActivity</string>
     <string name="newEventTabText">Tab_1</string>
@@ -30,30 +29,16 @@
     <string name="event_save">Termin speichern</string>
     <string name="event_room">Raum :</string>
     <string name="event_shortTitle">Kurztitel :</string>
-    <string name="r_ckmeldungen_anzeigen">Rückmeldungen anzeigen</string>
-    <string name="qr_code_anzeigen">QR Code anzeigen</string>
-    <string name="headline">Headline</string>
-    <string name="teilen_via">Teilen via...</string>
-    <string-array name="event_repetitions">
-        <item name="event_repetition_yearly">jährlich</item>
-        <item name="event_repetition_monthly">monatlich</item>
-        <item name="event_repetition_weekly">wöchentlich</item>
-        <item name="event_repetition_daily">täglich</item>
-    </string-array>
     <string name="empty_fields">Bitte füllen Sie alle Felder aus.</string>
-
     <string name="endTime_before_startTime">Die Endzeit darf nicht vor der Startzeit liegen.</string>
-
     <string name="endOfRepetition_before_endTime">Das Enddatum der Wiederholung darf nicht vor der Endzeit liegen.</string>
     <string name="event_saving_successful">Der Termin wurde erfolgreich gespeichert. Was möchten Sie nun tun?</string>
     <string name="savingSuccessful_new">neuen Termin erstellen</string>
     <string name="savingSuccessful_qrcode">QRCode anzeigen</string>
-
     <string name="titleDialogUsername">Bitte vergeben Sie einen Benutzernamen :)</string>
     <string name="save_text">speichern</string>
     <string name="later_text">Später</string>
     <string name="thanksForUsername">Benutzername wurde gespeichert. </string>
-
     <!-- TODO: Remove or change this placeholder text -->
     <string name="description_too_long">Die Beschreibung darf nicht länger als 500 Zeichen sein.</string>
     <string name="shortTitle_too_long">Der Kurztitel darf nicht länger als 100 Zeichen sein.</string>
@@ -65,14 +50,17 @@
     <string name="shortTitle_peek">Der Kurztitel darf nicht das Zeichen | enthalten.</string>
     <string name="description_peek">Die Beschreibung darf nicht das Zeichen | enthalten.</string>
     <string name="room_peek">Das Feld Raum darf nicht das Zeichen | enthalten.</string>
-    <string name="termin_zusagen">termin_zusagen</string>
-    <string name="termin_ohne_zusage_speichern">termin_ohne_zusage_speichern</string>
-    <string name="termin_ablehnen">termin_ablehnen</string>
     <string name="pushEnabled">Die Push-Nachrichten wurden eingeschaltet.</string>
     <string name="pushDisabled">Die Push-Nachrichten wurden ausgeschaltet.</string>
+
     <string formatted="true" name="pushMinutesSet">Die Push-Nachrichten erscheinen nun %1$d Minuten vor Ihrem Termin.</string>
-    <string name="wrongQRCodeResult">Das ist der Inhalt vom QR Code:</string>
-    <string name="notAsEventSaveable">Das können wir leider nicht als Termin speichern!</string>
+
+    <string-array name="event_repetitions">
+        <item name="event_repetition_yearly">jährlich</item>
+        <item name="event_repetition_monthly">monatlich</item>
+        <item name="event_repetition_weekly">wöchentlich</item>
+        <item name="event_repetition_daily">täglich</item>
+    </string-array>
 
     <string-array name="push_times">
         <item name="push_time_0">0</item>
@@ -83,6 +71,11 @@
         <item name="push_time_90">90</item>
         <item name="push_time_120">120</item>
     </string-array>
+
+    <!-- QR Scanner & Scanner PopUp -->
+    <string name="eventSave">Termin zusagen</string>
+    <string name="eventSaveWithoutAssign">Termin ohne Zusage speichern</string>
+    <string name="eventReject">Termin ablehnen</string>
 
     <!-- QR Generator & QRSharing elements -->
     <string name="share_with">Teilen via...</string>
@@ -109,6 +102,10 @@
     <string name="toCalender">\u0020Zum Kalender\u0020</string>
     <string name="qrCode_content">Das ist der Inhalt vom QR Code:\u0020</string>
     <string name="cannot_be_saved_as_event">Das können wir leider nicht als Termin speichern!</string>
+    <string name="wrongQRCodeResult">Das ist der Inhalt vom QR Code:</string>
+    <string name="notAsEventSaveable">Das können wir leider nicht als Termin speichern!</string>
     <string name="show_QRCode">QR Code anzeigen</string>
+    <string name="r_ckmeldungen_anzeigen">Rückmeldungen anzeigen</string>
+    <string name="teilen_via">Teilen via...</string>
 
 </resources>
