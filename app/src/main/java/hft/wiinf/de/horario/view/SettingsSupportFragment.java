@@ -16,8 +16,6 @@ import hft.wiinf.de.horario.R;
 
 public class SettingsSupportFragment extends Fragment {
 
-    Spinner spinner_pushMinutes;
-
     public SettingsSupportFragment() {
         // Required empty public constructor
     }

@@ -1,9 +1,13 @@
 package hft.wiinf.de.horario.view;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -26,6 +30,8 @@ import android.widget.Toast;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
@@ -34,6 +40,7 @@ import hft.wiinf.de.horario.model.AcceptedState;
 import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.model.Repetition;
+import hft.wiinf.de.horario.service.NotificationReceiver;
 
 //TODO Kommentieren und Java Doc Info Schreiben
 public class NewEventFragment extends Fragment {
@@ -332,6 +339,7 @@ public class NewEventFragment extends Fragment {
         me.setName(edittext_userName.getText().toString());
         PersonController.savePerson(me);
         openSavedSuccessfulDialog(event.getId());
+        setAlarmForNotification(event);
     }
 
     //clear all entrys and open a dialog where the user can choose what to do next
@@ -384,52 +392,52 @@ public class NewEventFragment extends Fragment {
     //checks if the entrys are valid and opens a toast if not return value: coolean if everything is ok
     private boolean checkValidity() {
         if (editText_description.getText().toString().equals("") || edittext_shortTitle.getText().toString().equals("") || edittext_date.getText().toString().equals("") || edittext_startTime.getText().toString().equals("") || editText_endTime.getText().toString().equals("") || edittext_userName.getText().toString().equals("") || edittext_room.getText().toString().equals("")) {
-            Toast.makeText(getContext(), R.string.empty_fields, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.empty_fields, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (getRepetition() != Repetition.NONE && editText_endOfRepetition.getText().toString().equals("")) {
-            Toast.makeText(getContext(), R.string.empty_fields, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.empty_fields, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (edittext_shortTitle.getText().toString().matches(" +.*")) {
-            Toast.makeText(getContext(), R.string.shortTitle_spaces, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.shortTitle_spaces, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (edittext_shortTitle.getText().toString().contains("|")) {
-            Toast.makeText(getContext(), R.string.shortTitle_peek, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.shortTitle_peek, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (editText_description.getText().toString().matches(" +.*")) {
-            Toast.makeText(getContext(), R.string.description_spaces, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.description_spaces, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (editText_description.getText().toString().contains("|")) {
-            Toast.makeText(getContext(), R.string.description_peek, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.description_peek, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (edittext_room.getText().toString().matches(" +.*")) {
-            Toast.makeText(getContext(), R.string.place_spaces, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.place_spaces, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (edittext_room.getText().toString().contains("|")) {
-            Toast.makeText(getContext(), R.string.room_peek, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.room_peek, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (edittext_userName.getText().toString().matches(" +.*")) {
-            Toast.makeText(getContext(), R.string.noValidUsername, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if (editText_description.getText().length() > 500) {
-            Toast.makeText(getContext(), R.string.description_too_long, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.description_too_long, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (edittext_shortTitle.getText().length() > 100) {
-            Toast.makeText(getContext(), R.string.shortTitle_too_long, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.shortTitle_too_long, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (edittext_room.getText().length() > 100) {
-            Toast.makeText(getContext(), R.string.room_too_long, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.room_too_long, Toast.LENGTH_SHORT).show();
             return false;
         }
         //read the current date and time to compare if the start time is in the past, set seconds and milliseconds to 0 to ensure a ight compare (seonds and milliseconds doesn't matter)
@@ -437,23 +445,23 @@ public class NewEventFragment extends Fragment {
         now.set(Calendar.SECOND, 0);
         now.set(Calendar.MILLISECOND, 0);
         if (startTime.before(now)) {
-            Toast.makeText(getContext(), R.string.startTime_past, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.startTime_past, Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if (endTime.before(startTime)) {
-            Toast.makeText(getContext(), R.string.endTime_before_startTime, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.endTime_before_startTime, Toast.LENGTH_SHORT).show();
             return false;
         }
         //if it is and repetaing event and the end of the repetiton is beofre the end time of the first event
         if (getRepetition() != Repetition.NONE && endOfRepetition.before(endTime)) {
-            Toast.makeText(getContext(), R.string.endOfRepetition_before_endTime, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.endOfRepetition_before_endTime, Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
     }
 
-    //get the right repetiton
+    //get the right repetition
     private Repetition getRepetition() {
         //if the check box isnt checked return none
         if (!checkBox_serialEvent.isChecked()) {
@@ -508,6 +516,37 @@ public class NewEventFragment extends Fragment {
             if (endOfRepetition != null) {
                 format = new SimpleDateFormat("dd.MM.YYYY");
                 editText_endOfRepetition.setText(format.format(endOfRepetition));
+            }
+        }
+    }
+
+    public long calcNotificationTime(Calendar cal, Person person) {
+        cal.add(Calendar.MINUTE, ((-1) * person.getNotificationTime()));
+        return cal.getTimeInMillis();
+    }
+
+    //Method is going to set the alarm x minutes before the event
+    public void setAlarmForNotification(Event event) {
+        if (PersonController.getPersonWhoIam() != null) {
+            Person notificationPerson = PersonController.getPersonWhoIam();
+            if (notificationPerson.isEnablePush()) {
+                Intent alarmIntent = new Intent(getContext(), NotificationReceiver.class);
+                Date date = event.getStartTime();
+                Calendar calendar = GregorianCalendar.getInstance();
+                calendar.setTime(date);
+
+                alarmIntent.putExtra("Event", event.getDescription());
+                alarmIntent.putExtra("Hour", calendar.get(Calendar.HOUR_OF_DAY));
+                if (calendar.get(Calendar.MINUTE) <= 10) {
+                    alarmIntent.putExtra("Minute", "0" + String.valueOf(calendar.get(Calendar.MINUTE)));
+                } else {
+                    alarmIntent.putExtra("Minute", String.valueOf(calendar.get(Calendar.MINUTE)));
+                }
+                alarmIntent.putExtra("ID", event.getId().intValue());
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), event.getId().intValue(), alarmIntent, 0);
+
+                AlarmManager manager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+                manager.set(AlarmManager.RTC_WAKEUP, calcNotificationTime(calendar, notificationPerson), pendingIntent);
             }
         }
     }
