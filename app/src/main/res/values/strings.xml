@@ -83,4 +83,32 @@
         <item name="push_time_90">90</item>
         <item name="push_time_120">120</item>
     </string-array>
+
+    <!-- QR Generator & QRSharing elements -->
+    <string name="share_with">Teilen via...</string>
+    <string name="on">Am\u0020</string>
+    <string name="findes">\u0020findet\u0020</string>
+    <string name="from">von\u0020</string>
+    <string name="clock_at_room">Uhr in Raum\u0020</string>
+    <string name="organisator">Organisator:\u0020</string>
+    <string name="eventDetails">Termindetails sind:\u0020</string>
+    <string name="at">\u0020um\u0020</string>
+    <string name="instead_of">\u0020statt.</string>
+    <string name="as_of">Vom\u0020</string>
+    <string name="until">\u0020bis\u0020</string>
+    <string name="clock_to">Uhr bis\u0020</string>
+    <string name="your_Event">Dein Termin</string>
+    <string name="room">Raum:\u0020</string>
+    <string name="yourself">Du selber</string>
+    <string name="yearly">\u0020jährlich\u0020</string>
+    <string name="monthly">\u0020monatlich\u0020</string>
+    <string name="weekly">\u0020wöchentlich\u0020</string>
+    <string name="daylie">\u0020täglich\u0020</string>
+    <string name="without_repetition">\u0020ohne Wiederholung\u0020</string>
+    <string name="ups_an_error">\u0020Ups! Fehler Aufgetreten!\u0020</string>
+    <string name="toCalender">\u0020Zum Kalender\u0020</string>
+    <string name="qrCode_content">Das ist der Inhalt vom QR Code:\u0020</string>
+    <string name="cannot_be_saved_as_event">Das können wir leider nicht als Termin speichern!</string>
+    <string name="show_QRCode">QR Code anzeigen</string>
+
 </resources>

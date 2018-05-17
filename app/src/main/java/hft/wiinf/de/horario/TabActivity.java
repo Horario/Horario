@@ -2,12 +2,10 @@ package hft.wiinf.de.horario;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -73,26 +71,33 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         }
     }
 
-    //clear all entrys and open a dialog where the user can choose what to do next
+    //After Scanning it was open a Dialog where the user can choose what to do next
     @SuppressLint("ResourceType")
     private void openActionDialogAfterScanning(final String qrScannContentResult) {
 
-            final Dialog afterScanningDialogAction = new Dialog(this);
-            afterScanningDialogAction.setContentView(R.layout.dialog_afterscanning);
-            afterScanningDialogAction.setCancelable(true);
-            afterScanningDialogAction.show();
+        //Create the Dialog with the GUI Elements
+        final Dialog afterScanningDialogAction = new Dialog(this);
+        afterScanningDialogAction.setContentView(R.layout.dialog_afterscanning);
+        afterScanningDialogAction.setCancelable(true);
+        afterScanningDialogAction.show();
 
-            TextView qrScanner_result_descriptoin = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_textView_description);
-            TextView qrScanner_result_headline = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_textView_headline);
-            Button qrScanner_reject = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_eventRecject);
-            Button qrScanner_result_eventSave = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_eventSave);
-            Button qrScanner_result_cancle = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_cancle);
-            Button qrScanner_result_eventSave_without_assign = afterScanningDialogAction.findViewById((R.id.dialog_qrScanner_button_eventSaveOnly));
+        TextView qrScanner_result_description = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_textView_description);
+        TextView qrScanner_result_headline = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_textView_headline);
+        Button qrScanner_reject = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_eventRecject);
+        Button qrScanner_result_eventSave = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_eventSave);
+        Button qrScanner_result_cancle = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_cancle);
+        Button qrScanner_result_toCalender = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_toCalender);
+        Button qrScanner_result_eventSave_without_assign = afterScanningDialogAction.findViewById((R.id.dialog_qrScanner_button_eventSaveOnly));
 
-            qrScanner_result_cancle.setVisibility(View.GONE);
-            try {
-            //create a new event: only close the dialog
-            afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_eventSave).setOnClickListener(new View.OnClickListener() {
+        //Set the Cancel and BackToCalenderButtons to Invisible
+        qrScanner_result_cancle.setVisibility(View.GONE);
+        qrScanner_result_toCalender.setVisibility(View.GONE);
+
+
+        try {
+            // Button to Save the Event and send a SMS for assent the Event
+            afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_eventSave)
+                    .setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //ToDo Dennis hier kommt dein Code rein.
@@ -105,6 +110,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 }
             });
 
+            //Button to Save the Event but don't send a SMS for assent the Event
             afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_eventSaveOnly).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -118,6 +124,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 }
             });
 
+            //Button to Reject the Event und send an Reject SMS to the EventCreator
             afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_eventRecject).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -131,7 +138,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
             //Put StringBufffer in an Array and split the Values to new String Variables
             //Index: 0 = CreatorID; 1 = StartDate; 2 = EndDate; 3 = StartTime; 4 = EndTime;
-            //       5 = Repetition; 6 = ShortTitle; 7 = Place; 8 = Descriptoin;  9 = EventCreatorName
+            //       5 = Repetition; 6 = ShortTitle; 7 = Place; 8 = Descriptoin;  9 = EventCreatorName; 10 = phoneNumber;
             String[] eventStringBufferArray = qrScannContentResult.split("\\|");
             String startDate = eventStringBufferArray[1].trim();
             String endDate = eventStringBufferArray[2].trim();
@@ -140,28 +147,52 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             String repetition = eventStringBufferArray[5].toUpperCase().trim();
             String shortTitle = eventStringBufferArray[6].trim();
             String place = eventStringBufferArray[7].trim();
+            String description = eventStringBufferArray[8].trim();
             String eventCreatorName = eventStringBufferArray[9].trim();
+
+            // There are two SecurityQuerys
+            // First this two Variables are checked to Create an Exeption if the Array isn't in Correct Form
+            // Second is the Switch-Case Method. If der no correct repetition String inside
+            // it will show an Error an the Cancel Button.
+            String creatorID = eventStringBufferArray[0].trim();
+            String phoneNummber = eventStringBufferArray[10].trim();
+
 
             // Change the DataBase Repetition Information in a German String for the Repetition Element
             // like "Daily" into "täglich" and so on
             switch (repetition) {
                 case "YEARLY":
-                    repetition = "jährlich";
+                    repetition = getString(R.string.yearly);
                     break;
                 case "MONTHLY":
-                    repetition = "monatlich";
+                    repetition = getString(R.string.monthly);
                     break;
                 case "WEEKLY":
-                    repetition = "wöchentlich";
+                    repetition = getString(R.string.weekly);
                     break;
                 case "DAILY":
-                    repetition = "täglisch";
+                    repetition = getString(R.string.daylie);
                     break;
                 case "NONE":
                     repetition = "";
                     break;
                 default:
-                    repetition = "ohne Wiederholung";
+                    qrScanner_reject.setVisibility(View.GONE);
+                    qrScanner_result_eventSave_without_assign.setVisibility(View.GONE);
+                    qrScanner_result_eventSave.setVisibility(View.GONE);
+                    qrScanner_result_cancle.setVisibility(View.VISIBLE);
+                    qrScanner_result_description.setText(getString(R.string.wrongQRCodeResult) + "\n" + "\n"
+                            + qrScannContentResult + "\n" + "\n" + getString(R.string.notAsEventSaveable));
+
+                    qrScanner_result_toCalender.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = getIntent();
+                            finish();
+                            startActivity(intent);
+                        }
+                    });
+
             }
 
             // Event shortTitle in Headline with StartDate
@@ -169,37 +200,50 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             // Check for a Repetition Event and Change the Description Output with and without
             // Repetition Element inside.
             if (repetition.equals("")) {
-                qrScanner_result_descriptoin.setText(startDate + "\n" + place +
-                        "\n" + eventCreatorName);
+                qrScanner_result_description.setText(getString(R.string.on) + startDate
+                        + getString(R.string.findes) + getString(R.string.from) + startTime + getString(R.string.until)
+                        + endTime + getString(R.string.clock_at_room) + place + " " + shortTitle
+                        + getString(R.string.instead_of) + "\n" + getString(R.string.eventDetails)
+                        + description + "\n" + "\n" + getString(R.string.organisator) + eventCreatorName);
             } else {
-                
-
-                qrScanner_result_descriptoin.setText(startDate + "-" + endDate
-                        + "\n" + repetition + "\n" + startTime + " Uhr - "
-                        + endTime + " Uhr \n" + "Raum " + place + "\n" + "Organisator: " + eventCreatorName);
+                qrScanner_result_description.setText(getString(R.string.as_of) + startDate
+                        + getString(R.string.until) + endDate + getString(R.string.findes)
+                        + repetition + getString(R.string.at) + startTime + getString(R.string.clock_to)
+                        + endTime + getString(R.string.clock_at_room) + place + " " + shortTitle
+                        + getString(R.string.instead_of) + "\n" + getString(R.string.eventDetails) + description +
+                        "\n" + "\n" + getString(R.string.organisator) + eventCreatorName);
 
             }
-            // In the CatchBlock the User see a Snackbar Information and was pushed to Restart the TabActivity
+            // In the CatchBlock the User see some Error Message and Restart after Clock on OK the TabActivity
         } catch (NullPointerException e) {
             com.activeandroid.util.Log.d(TAG, "TabActivity" + e.getMessage());
-            Snackbar.make(this.findViewById(R.id.tabActivity_relativeLayout_snackbarContainer),
-                    "Ups! Fehler Aufgetreten!",
-                    Snackbar.LENGTH_INDEFINITE).setAction("Zum Kalender", new View.OnClickListener() {
+
+            //Hide the Buttons that's not possible to Save or Reject.
+            qrScanner_reject.setVisibility(View.GONE);
+            qrScanner_result_eventSave_without_assign.setVisibility(View.GONE);
+            qrScanner_result_eventSave.setVisibility(View.GONE);
+
+            // It's show the Cancle Button to Restart the TabActivity
+            qrScanner_result_toCalender.setVisibility(View.VISIBLE);
+            qrScanner_result_description.setText(getString(R.string.ups_an_error));
+            qrScanner_result_toCalender.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
+                public void onClick(View v) {
                     Intent intent = getIntent();
                     finish();
                     startActivity(intent);
                 }
-            }).show();
+            });
+
+            // Same like the NullPointerException
         } catch (ArrayIndexOutOfBoundsException z) {
             com.activeandroid.util.Log.d(TAG, "TabActivity" + z.getMessage());
             qrScanner_reject.setVisibility(View.GONE);
             qrScanner_result_eventSave_without_assign.setVisibility(View.GONE);
             qrScanner_result_eventSave.setVisibility(View.GONE);
             qrScanner_result_cancle.setVisibility(View.VISIBLE);
-            qrScanner_result_descriptoin.setText(getString(R.string.wrongQRCodeResult)+ "\n"+"\n"
-                        +qrScannContentResult+"\n"+"\n"+getString(R.string.notAsEventSaveable));
+            qrScanner_result_description.setText(getString(R.string.wrongQRCodeResult) + "\n" + "\n"
+                    + qrScannContentResult + "\n" + "\n" + getString(R.string.notAsEventSaveable));
 
             qrScanner_result_cancle.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -217,12 +261,13 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     }
 
 
+    // "Catch" the ScanningResult and throw the Content to the processing Method
+    @Override
     public void scanResultData(String codeFormat, String codeContent) {
-
         openActionDialogAfterScanning(codeContent);
-
     }
 
+    // Give some Errormessage if the Code have not Data inside
     @Override
     public void scanResultData(NoScanResultExceptionController noScanData) {
         Toast toast = Toast.makeText(this, noScanData.getMessage(), Toast.LENGTH_SHORT);
@@ -348,7 +393,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         });
     }
 
-
+// Add the Fragments to the VageViewer
     private void setupViewPager(ViewPager viewPager) {
         SectionsPageAdapterActivity adapter = mSectionsPageAdapter;
         adapter.addFragment(new EventOverviewActivity(), "");

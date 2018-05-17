@@ -32,9 +32,6 @@ import hft.wiinf.de.horario.controller.*;
 public class QRScanFragment extends Fragment implements ActivityCompat.OnRequestPermissionsResultCallback {
     private static final String TAG = "QRScanFragmentActivity";
     private static final int PERMISSION_REQUEST_CAMERA = 1;
-
-    private RelativeLayout mScannerResult_RelativeLayout_Main, mScannerResult_RelativeLayout_ButtonFrame, mScannerResult_RelativeLayout_goTo_CalendarFragment;
-    private TextView mScannerResult_TextureView_Description;
     private int counter = 0;
 
     private String codeFormat, codeContent;
