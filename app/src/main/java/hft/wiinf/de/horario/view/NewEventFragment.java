@@ -370,6 +370,7 @@ public class NewEventFragment extends Fragment {
                         .addToBackStack(null)
                         .commit();
                 getView().findViewById(R.id.newEvent_oldFragment).setVisibility(View.INVISIBLE);
+
                 getView().findViewById(R.id.newEvent_newFragment).setVisibility(View.VISIBLE);
             }
         });

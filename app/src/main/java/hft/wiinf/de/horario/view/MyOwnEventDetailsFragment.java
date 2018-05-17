@@ -1,109 +1,200 @@
 package hft.wiinf.de.horario.view;
 
-import android.content.Context;
-import android.net.Uri;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.text.SimpleDateFormat;
 
 import hft.wiinf.de.horario.R;
+import hft.wiinf.de.horario.controller.EventController;
+import hft.wiinf.de.horario.model.Event;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link myOwnEventDetailsFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link myOwnEventDetailsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class myOwnEventDetailsFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class MyOwnEventDetailsFragment extends Fragment {
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
-    private OnFragmentInteractionListener mListener;
+    Button myOwnEventDetailsButtonShowQR, myOwnEventDetailsButtonShowAcceptances;
+    RelativeLayout rLayout_myOwnEvent_helper;
+    ConstraintLayout myOwnEventDetails_constraintLayout;
+    TextView myOwnEventeventDescription, myOwnEventYourAppointment;
+    Event selectedEvent;
+    StringBuffer eventToStringBuffer;
 
-    public myOwnEventDetailsFragment() {
+    public MyOwnEventDetailsFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment myOwnEventDetailsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static myOwnEventDetailsFragment newInstance(String param1, String param2) {
-        myOwnEventDetailsFragment fragment = new myOwnEventDetailsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    // Get the EventIdResultBundle (Long) from the newEventActivity to Start later a DB Request
+    @SuppressLint("LongLogTag")
+    public Long getCreatorEventID() {
+        Bundle MYEventIdBundle = getArguments();
+        Long MYEventIdLongResult = MYEventIdBundle.getLong("creatorEventId");
+        return MYEventIdLongResult;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_own_event_details, container, false);
+        View view = inflater.inflate(R.layout.fragment_my_own_event_details, container, false);
+        myOwnEventDetailsButtonShowAcceptances = view.findViewById(R.id.myOwnEventDetailsButtonShowAcceptances);
+        myOwnEventDetailsButtonShowQR = view.findViewById(R.id.myOwnEventDetailsButtonShowQR);
+        rLayout_myOwnEvent_helper = view.findViewById(R.id.myOwnEvent_relativeLayout_helper);
+        myOwnEventeventDescription = view.findViewById(R.id.myOwnEventeventDescription);
+        myOwnEventYourAppointment = view.findViewById(R.id.myOwnEventyourAppointmentText);
+        myOwnEventDetails_constraintLayout = view.findViewById(R.id.myOwnEventDetails_constraintLayout);
+        setSelectedEvent(EventController.getEventByCreatorEventId(getCreatorEventID()));
+        buildDescriptionEvent(EventController.getEventByCreatorEventId(getCreatorEventID()));
+
+
+
+        myOwnEventDetailsButtonShowAcceptances.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                ParticipantsListFragment participantsFragment = new ParticipantsListFragment();
+                Bundle bundleparticipants = new Bundle();
+                bundleparticipants.putLong("creatorEventId", getCreatorEventID());
+                participantsFragment.setArguments(bundleparticipants);
+                FragmentTransaction fr1 = getFragmentManager().beginTransaction();
+                fr1.replace(R.id.myOwnEvent_relativeLayout_helper,participantsFragment);
+                fr1.addToBackStack(null);
+                fr1.commit();
+                rLayout_myOwnEvent_helper.setVisibility(View.VISIBLE);
+                myOwnEventDetails_constraintLayout.setVisibility(View.GONE);
+            }
+        });
+        myOwnEventDetailsButtonShowQR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO in another US uncomment and adapt with Class-Own variables
+
+//                //Create a Bundle to Send the Information to an other Fragment
+//                //The Bundle input is the StringBuffer with the EventInformation
+//                QRSharingActivity qrSharingBundle = new QRSharingActivity();
+//                Bundle bundle = new Bundle();
+//                bundle.putString("qrStringBufferDescription", String.valueOf(mQRGenerator_StringBuffer_Result));
+//                qrSharingBundle.setArguments(bundle);
+//
+//                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+//                fragmentTransaction.replace(R.id.generator_realtivLayout_show_qrSharingFragment, qrSharingBundle);
+//                fragmentTransaction.addToBackStack(null);
+//                fragmentTransaction.commit();
+//                mQRGenerator_textView_headline.setVisibility(View.GONE);
+//                mQRGenerator_textView_description.setVisibility(View.GONE);
+//                mQRGenerator_button_start_sharingFragment.setVisibility(View.GONE);
+//                mQRGenerator_button_start_eventFeedbackFragment.setVisibility(View.GONE);
+//                mQRGenerator_relativeLayout_show_newFragment.setVisibility(View.VISIBLE);
+            }
+        });
+
+        return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+
+    public Event getSelectedEvent() {
+        return selectedEvent;
+    }
+
+    public void setSelectedEvent(Event selectedEvent) {
+        this.selectedEvent = selectedEvent;
+    }
+
+    private void buildDescriptionEvent(Event selectedEvent) {
+        //Put StringBuffer in an Array and split the Values to new String Variables
+        //Index: 0 = CreatorID; 1 = StartDate; 2 = EndDate; 3 = StartTime; 4 = EndTime;
+        //       5 = Repetition; 6 = ShortTitle; 7 = Place; 8 = Description;  9 = EventCreatorName
+        String[] eventStringBufferArray = String.valueOf(stringBufferGenerator()).split("\\|");
+        String startDate = eventStringBufferArray[1].trim();
+        String endDate = eventStringBufferArray[2].trim();
+        String startTime = eventStringBufferArray[3].trim();
+        String endTime = eventStringBufferArray[4].trim();
+        String repetition = eventStringBufferArray[5].toUpperCase().trim();
+        String shortTitle = eventStringBufferArray[6].trim();
+        String place = eventStringBufferArray[7].trim();
+        String description = eventStringBufferArray[8].trim();
+        String eventCreatorName = eventStringBufferArray[9].trim();
+
+        // Change the DataBase Repetition Information in a German String for the Repetition Element
+        // like "Daily" into "täglich" and so on
+        switch (repetition) {
+            case "YEARLY":
+                repetition = "jährlich";
+                break;
+            case "MONTHLY":
+                repetition = "monatlich";
+                break;
+            case "WEEKLY":
+                repetition = "wöchentlich";
+                break;
+            case "DAILY":
+                repetition = "täglich";
+                break;
+            case "NONE":
+                repetition = "";
+                break;
+            default:
+                repetition = "ohne Wiederholung";
         }
-    }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        // Check the EventCreatorName and is it itself Change the eventCreaterName to "Your Self"
+        if (eventCreatorName.equals(selectedEvent.getCreator().getName())) {
+            eventCreatorName = "Du";
+        }
+        // Event shortTitel in Headline with StartDate
+        myOwnEventYourAppointment.setText("Dein Termin" + "\n" + shortTitle + ", " + startDate);
+        // Check for a Repetition Event and Change the Description Output with and without
+        // Repetition Element inside.
+        if (repetition.equals("")) {
+            myOwnEventeventDescription.setText("Am " + startDate + " findet von " + startTime + " bis "
+                    + endTime + " Uhr in Raum " + place + " " + shortTitle + " statt." + "\n" + "Termindetails sind: "
+                    + description + "\n" + "\n" + "Organisator: " + eventCreatorName);
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+            myOwnEventeventDescription.setText("Vom " + startDate + " bis " + endDate +
+                    " findet " + repetition + " um " + startTime + "Uhr bis " + endTime + "Uhr in Raum "
+                    + place + " " + shortTitle + " statt." + "\n" + "Termindetails sind: " + description +
+                    "\n" + "\n" + "Organisator: " + eventCreatorName);
         }
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
+    public StringBuffer stringBufferGenerator() {
+
+        //Modify the Dateformat form den DB to get a more readable Form for Date and Time disjunct
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        SimpleDateFormat simpleTimeFormat = new SimpleDateFormat("HH:mm");
+
+        //Splitting String Element is the Pipe Symbol (on the Keyboard ALT Gr + <> Button = |)
+        String stringSplitSymbol = " | "; //
+
+        // Merge the Data Base Information to one Single StringBuffer with the Format:
+        // CreatorID (not EventID!!), StartDate, EndDate, StartTime, EndTime, Repetition, ShortTitle
+        // Place, Description and Name of EventCreator
+        eventToStringBuffer = new StringBuffer();
+        eventToStringBuffer.append(selectedEvent.getCreatorEventId() + stringSplitSymbol);
+        eventToStringBuffer.append(simpleDateFormat.format(selectedEvent.getStartTime()) + stringSplitSymbol);
+        eventToStringBuffer.append(simpleDateFormat.format(selectedEvent.getEndDate()) + stringSplitSymbol);
+        eventToStringBuffer.append(simpleTimeFormat.format(selectedEvent.getStartTime()) + stringSplitSymbol);
+        eventToStringBuffer.append(simpleTimeFormat.format(selectedEvent.getEndTime()) + stringSplitSymbol);
+        eventToStringBuffer.append(selectedEvent.getRepetition() + stringSplitSymbol);
+        eventToStringBuffer.append(selectedEvent.getShortTitle() + stringSplitSymbol);
+        eventToStringBuffer.append(selectedEvent.getPlace() + stringSplitSymbol);
+        eventToStringBuffer.append(selectedEvent.getDescription() + stringSplitSymbol);
+        eventToStringBuffer.append(selectedEvent.getCreator().getName());
+
+        return eventToStringBuffer;
+
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
+
 }

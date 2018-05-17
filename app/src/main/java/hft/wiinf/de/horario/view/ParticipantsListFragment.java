@@ -1,6 +1,7 @@
 package hft.wiinf.de.horario.view;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -8,6 +9,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.Telephony;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -17,7 +19,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -26,11 +32,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -38,7 +46,9 @@ import java.util.TimeZone;
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.TabActivity;
 import hft.wiinf.de.horario.controller.EventController;
+import hft.wiinf.de.horario.controller.LazyAdapter;
 import hft.wiinf.de.horario.controller.PersonController;
+import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.model.ReceivedHorarioSMS;
 
@@ -49,81 +59,121 @@ public class ParticipantsListFragment extends Fragment {
 
     SwipeRefreshLayout swipeRefresh;
     ArrayList<String> participants;
-    ArrayAdapter<String> arrayAdapter;
-    //  private static final String DATE_STORAGE_FILE = "lastReadDate.txt";
-
+    LazyAdapter adapter;
+    TextView textViewEventData;
+    int refusalCounter = 0;
+    Event selectedEvent;
     public ParticipantsListFragment() {
         // Required empty public constructor
     }
 
+
+    // Get the EventIdResultBundle (Long) from the newEventActivity to Start later a DB Request
+    @SuppressLint("LongLogTag")
+    public Long getCreatorEventID() {
+        Bundle MYEventIdBundle = getArguments();
+        Long MYEventIdLongResult = MYEventIdBundle.getLong("creatorEventId");
+        return MYEventIdLongResult;
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_participants_list, container, false);
-
+        textViewEventData = view.findViewById(R.id.textViewEventData);
+        setSelectedEvent(EventController.getEventByCreatorEventId(getCreatorEventID()));
         ListView participantsListView = (ListView) view.findViewById(R.id.ParticipantsList);
-
         participants = new ArrayList<String>();
-        //TODO: replace this line with the other one
-        getParticipants();
-        // getParticipants(creatorEventId);
-
-        arrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, participants);
+        getParticipants(getCreatorEventID());
         // Set The Adapter
-        participantsListView.setAdapter(arrayAdapter);
+        adapter = new LazyAdapter(this.getActivity(), participants);
+        participantsListView.setAdapter(adapter);
+
+        textViewEventData.setText(selectedEvent.getShortTitle() + " " + selectedEvent.getStartTime());
 
         swipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh);
         swipeRefresh.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
-                        Toast toast = Toast.makeText(getContext(), R.string.notificationParticipantsBeingFetched, Toast.LENGTH_SHORT);
-                        toast.show();
                         swipeRefresh.setRefreshing(true);
                         refreshConfirmationsAndCancellations();
                         swipeRefresh.setRefreshing(false);
                     }
                 }
         );
-
-
         return view;
     }
 
-    private void getParticipants() {
+    private void getParticipants(long creatorEventId) {
         //TODO: replace method body with functional code
-//TODO: add parameter: (long creatorEventId)
-        participants.add("Lucas Toulon");
-        participants.add("Florian Rietz");
-        participants.add("Daniel Zeller");
-        participants.add("Dennis Rößner");
-        participants.add("Tanja Fraenz");
-        participants.add("Christine Weissenberger");
-        participants.add("Melanie Strauss");
-        participants.add("Frank Garbe");
-        participants.add("Henri Unruh");
-        participants.add("Benedikt Burger");
-        participants.add("Mario Hermann");
-        participants.add("Mariam Baramidze");
+
+        participants.add("Y:Lucas Toulon");
+        participants.add("Y:Florian Rietz");
+        participants.add("N:Daniel Zeller");
+        participants.add("N:Dennis Rößner");
+        participants.add("Y:Tanja Fraenz");
+        participants.add("N:Christine Weissenberger");
+        participants.add("Y:Melanie Strauss");
+        participants.add("N:Frank Garbe");
+        participants.add("Y:Henri Unruh");
+        participants.add("Y:Benedikt Burger");
+        participants.add("N:Mario Hermann");
+        participants.add("N:Mariam Baramidze");
+        participants.add("Y:Benedikt Burger");
+        participants.add("N:Mario Hermann");
+        participants.add("N:Mariam Baramidze");
 
         //following block is the official code, doesnt work yet because of the missing events
-        //and missing parameter for fragment : creatorEventId
+
 
 //        List<Person> allAcceptances = PersonController.getEventAcceptedPersons(EventController.getEventByCreatorEventId(creatorEventId));
 //        for (Person personAccepted : allAcceptances) {
-//            participants.add(personAccepted.getName());
+//            String nameToSave = "Y:" + personAccepted.getName();
+//            participants.add(nameToSave);
+//        }
+//        List<Person> allCancellations = PersonController.getEventCancelledPersons(EventController.getEventByCreatorEventId(creatorEventId));
+//        for (Person personCancelled : allCancellations) {
+//            String nameToSave = "N:" + personCancelled.getName();
+//            participants.add(nameToSave);
 //        }
     }
 
 
     private void refreshConfirmationsAndCancellations() {
-        if (checkAndRequestPermissions()) {
+        if (checkPermissions()) {
+            Toast toast = Toast.makeText(getContext(), R.string.notificationParticipantsBeingFetched, Toast.LENGTH_SHORT);
+            toast.show();
             List<ReceivedHorarioSMS> unreadSMS;
             unreadSMS = getUnreadHorarioSMS(getContext());
             if (unreadSMS.size() > 0) {
                 parseHorarioSMSAndUpdate(unreadSMS);
-                arrayAdapter.notifyDataSetChanged();
+                getParticipants(getCreatorEventID());
+                adapter.notifyDataSetChanged();
+            }
+        } else {
+            switch (refusalCounter) {
+                case 0:
+                    refusalCounter++;
+                    requestPermissions();
+                    break;
+                case 1:
+                    refusalCounter++;
+                    requestPermissions();
+                    break;
+               default:
+                    Snackbar snackbar = Snackbar
+                            .make(getView(), R.string.begForAcceptanceReadSMSAndContacts, Snackbar.LENGTH_INDEFINITE)
+                            .setAction(R.string.okayIWillAccept, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    requestPermissions();
+                                }
+                            });
+
+                    snackbar.show();
+                    break;
+
             }
         }
     }
@@ -141,6 +191,8 @@ public class ParticipantsListFragment extends Fragment {
 
             }
             //TODO: uncomment as soon as Event DB is filled is available
+
+            //USE THIS   selectedEvent
 //            /*Check if acceptance or cancellation*/
 //            if (singleUnreadSMS.isAcceptance()) {
 //                person.setAcceptedEvent(EventController.getEventByCreatorEventId(Long.valueOf(singleUnreadSMS.getCreatorEventId())));
@@ -279,7 +331,24 @@ public class ParticipantsListFragment extends Fragment {
         return lastReadDate;
     }
 
-    private boolean checkAndRequestPermissions() {
+    private boolean checkPermissions() {
+        int sms = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_SMS);
+        int contacts = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CONTACTS);
+        List<String> listPermissionsNeeded = new ArrayList<>();
+
+        if (sms != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.READ_SMS);
+        }
+        if (contacts != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.READ_CONTACTS);
+        }
+        if (!listPermissionsNeeded.isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
+    private void requestPermissions() {
         int sms = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_SMS);
         int contacts = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CONTACTS);
         List<String> listPermissionsNeeded = new ArrayList<>();
@@ -293,9 +362,7 @@ public class ParticipantsListFragment extends Fragment {
         if (!listPermissionsNeeded.isEmpty()) {
             ActivityCompat.requestPermissions(getActivity(), listPermissionsNeeded.toArray(new
                     String[listPermissionsNeeded.size()]), 1);
-            return false;
         }
-        return true;
     }
 
     private void saveReadDate(String date) {
@@ -312,8 +379,18 @@ public class ParticipantsListFragment extends Fragment {
 
     }
 
+    public Event getSelectedEvent() {
+        return selectedEvent;
+    }
+
+    public void setSelectedEvent(Event selectedEvent) {
+        this.selectedEvent = selectedEvent;
+    }
+
+
 
 }
 /*Zwischenablage wegen Schreibfaulheit etc
+
 
  */
