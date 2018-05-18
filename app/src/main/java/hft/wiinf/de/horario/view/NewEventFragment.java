@@ -225,7 +225,7 @@ public class NewEventFragment extends Fragment {
         //get the user, if it is saved in the db, the user name is read
         me = PersonController.getPersonWhoIam();
         if (me == null)
-            me = new Person(true, "007", "");
+            me = new Person(true, "", "");
         edittext_userName.setText(me.getName());
     }
 
@@ -561,20 +561,23 @@ public class NewEventFragment extends Fragment {
 
     // method to read the phone number of the user
     public void readOwnPhoneNumber() {
-        if (checkSelfPermission(getActivity(), READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
-            requestPermission();
-        else {
-            //if permission is granted read the phone number
-            TelephonyManager telephonyManager = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
-            me.setPhoneNumber(telephonyManager.getLine1Number());
-            //if the number could not been read, open a dialog
-            if (me.getPhoneNumber() == null || !me.getPhoneNumber().matches("[0+].*"))
-                openDialogAskForPhoneNumber();
+        if (me.getPhoneNumber() == null || me.getPhoneNumber().equalsIgnoreCase("")) {
+            if (checkSelfPermission(getActivity(), READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
+                requestPermission();
             else {
-                saveEvent();
+                //if permission is granted read the phone number
+                TelephonyManager telephonyManager = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
+                me.setPhoneNumber(telephonyManager.getLine1Number());
+                //if the number could not been read, open a dialog
+                if (me.getPhoneNumber() == null || !me.getPhoneNumber().matches("[0+].*"))
+                    openDialogAskForPhoneNumber();
+                else {
+                    saveEvent();
+                }
             }
-        }
 
+        }
+        saveEvent();
     }
 
     private void requestPermission() {

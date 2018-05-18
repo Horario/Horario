@@ -237,7 +237,8 @@ public class TabActivity extends AppCompatActivity {
 
                 if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches()) {
                     person = new Person(true, "", dialog_inputUsername);
-                    readOwnPhoneNumber();
+                    if (person.getPhoneNumber() == null || person.getPhoneNumber().equalsIgnoreCase(""))
+                        readOwnPhoneNumber();
                     alertDialogAskForUsername.dismiss();
                     return true;
                 } else {

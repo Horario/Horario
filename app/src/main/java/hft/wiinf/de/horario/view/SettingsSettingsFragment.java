@@ -122,7 +122,8 @@ public class SettingsSettingsFragment extends Fragment {
                 String inputText = v.getText().toString();
                 if (actionId == EditorInfo.IME_ACTION_DONE && !inputText.matches(" .*")) {
                     person.setName(inputText);
-                    readOwnPhoneNumber();
+                    if (person.getPhoneNumber() == null || person.getPhoneNumber().equalsIgnoreCase(""))
+                        readOwnPhoneNumber();
                     editTextUsername.setFocusable(false);
                     editTextUsername.setFocusableInTouchMode(false);
                 } else {
