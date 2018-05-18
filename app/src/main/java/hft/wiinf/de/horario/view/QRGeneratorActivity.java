@@ -26,7 +26,7 @@ import hft.wiinf.de.horario.model.Person;
 public class QRGeneratorActivity extends Fragment {
     private static final String TAG = "QRGeneratorFragmentActivity";
     private TextView mQRGenerator_textView_description, mQRGenerator_textView_headline;
-    private RelativeLayout mQRGenerator_relativeLayout_show_newFragment, mQRGenerator_relativeLayout_buttonFrame;
+    private RelativeLayout mQRGenerator_releativeLayout_buttonFrame, mQRGenerator_relativeLayout_show_newFragment;
     private Button mQRGenerator_button_start_sharingFragment, mQRGenerator_button_start_eventFeedbackFragment;
     private Person mPerson;
     private StringBuffer mQRGenerator_StringBuffer_Result;
@@ -39,10 +39,11 @@ public class QRGeneratorActivity extends Fragment {
     // Get the EventIdResultBundle (Long) from the newEventActivity to Start later a DB Request
     @SuppressLint("LongLogTag")
     public Long eventIdDescription() {
-        Bundle qrEventIdBundle = getArguments();
-        Long qrEventIdLongResult = qrEventIdBundle.getLong("eventId");
-        return qrEventIdLongResult;
+          Bundle qrEventIdBundle = getArguments();
+          Long qrEventIdLongResult = qrEventIdBundle.getLong("eventId");
+          return qrEventIdLongResult;
     }
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -54,7 +55,7 @@ public class QRGeneratorActivity extends Fragment {
         mQRGenerator_textView_description = view.findViewById(R.id.generator_textView_description);
         mQRGenerator_textView_headline = view.findViewById(R.id.generator_textView_Headline);
         mQRGenerator_relativeLayout_show_newFragment = view.findViewById(R.id.generator_realtivLayout_show_qrSharingFragment);
-        mQRGenerator_relativeLayout_buttonFrame = view.findViewById(R.id.generator_button_frame);
+        mQRGenerator_releativeLayout_buttonFrame = view.findViewById(R.id.generator_button_frame);
 
         // Show always Scrollbar on Description TextView
         mQRGenerator_textView_description.setMovementMethod(new ScrollingMovementMethod());
@@ -79,16 +80,17 @@ public class QRGeneratorActivity extends Fragment {
         // CreatorID (not EventID!!), StartDate, EndDate, StartTime, EndTime, Repetition, ShortTitle
         // Place, Description and Name of EventCreator
         mQRGenerator_StringBuffer_Result = new StringBuffer();
-        mQRGenerator_StringBuffer_Result.append(mEvent.getCreatorEventId() + stringSplitSymbol);
-        mQRGenerator_StringBuffer_Result.append(simpleDateFormat.format(mEvent.getStartTime()) + stringSplitSymbol);
-        mQRGenerator_StringBuffer_Result.append(simpleDateFormat.format(mEvent.getEndDate()) + stringSplitSymbol);
-        mQRGenerator_StringBuffer_Result.append(simpleTimeFormat.format(mEvent.getStartTime()) + stringSplitSymbol);
-        mQRGenerator_StringBuffer_Result.append(simpleTimeFormat.format(mEvent.getEndTime()) + stringSplitSymbol);
-        mQRGenerator_StringBuffer_Result.append(mEvent.getRepetition() + stringSplitSymbol);
-        mQRGenerator_StringBuffer_Result.append(mEvent.getShortTitle() + stringSplitSymbol);
-        mQRGenerator_StringBuffer_Result.append(mEvent.getPlace() + stringSplitSymbol);
-        mQRGenerator_StringBuffer_Result.append(mEvent.getDescription() + stringSplitSymbol);
-        mQRGenerator_StringBuffer_Result.append(mPerson.getName());
+        mQRGenerator_StringBuffer_Result.append(mEvent.getCreatorEventId()).append(stringSplitSymbol);
+        mQRGenerator_StringBuffer_Result.append(simpleDateFormat.format(mEvent.getStartTime())).append(stringSplitSymbol);
+        mQRGenerator_StringBuffer_Result.append(simpleDateFormat.format(mEvent.getEndDate())).append(stringSplitSymbol);
+        mQRGenerator_StringBuffer_Result.append(simpleTimeFormat.format(mEvent.getStartTime())).append(stringSplitSymbol);
+        mQRGenerator_StringBuffer_Result.append(simpleTimeFormat.format(mEvent.getEndTime())).append(stringSplitSymbol);
+        mQRGenerator_StringBuffer_Result.append(mEvent.getRepetition()).append(stringSplitSymbol);
+        mQRGenerator_StringBuffer_Result.append(mEvent.getShortTitle()).append(stringSplitSymbol);
+        mQRGenerator_StringBuffer_Result.append(mEvent.getPlace()).append(stringSplitSymbol);
+        mQRGenerator_StringBuffer_Result.append(mEvent.getDescription()).append(stringSplitSymbol);
+        mQRGenerator_StringBuffer_Result.append(mPerson.getName()).append(stringSplitSymbol);
+        mQRGenerator_StringBuffer_Result.append(mPerson.getPhoneNumber());
 
         return mQRGenerator_StringBuffer_Result;
 
@@ -102,7 +104,7 @@ public class QRGeneratorActivity extends Fragment {
 
             //Put StringBufffer in an Array and split the Values to new String Variables
             //Index: 0 = CreatorID; 1 = StartDate; 2 = EndDate; 3 = StartTime; 4 = EndTime;
-            //       5 = Repetition; 6 = ShortTitle; 7 = Place; 8 = Descriptoin;  9 = EventCreatorName
+            //       5 = Repetition; 6 = ShortTitle; 7 = Place; 8 = Descriptoin;  9 = EventCreatorName; 10 = PhoneNumber
             String[] eventStringBufferArray = String.valueOf(stringBufferGenerator()).split("\\|");
             String startDate = eventStringBufferArray[1].trim();
             String endDate = eventStringBufferArray[2].trim();
@@ -118,43 +120,46 @@ public class QRGeneratorActivity extends Fragment {
             // like "Daily" into "täglich" and so on
             switch (repetition) {
                 case "YEARLY":
-                    repetition = "jährlich";
+                    repetition = getString(R.string.yearly);
                     break;
                 case "MONTHLY":
-                    repetition = "monatlich";
+                    repetition = getString(R.string.monthly);
                     break;
                 case "WEEKLY":
-                    repetition = "wöchentlich";
+                    repetition = getString(R.string.weekly);
                     break;
                 case "DAILY":
-                    repetition = "täglich";
+                    repetition = getString(R.string.daylie);
                     break;
                 case "NONE":
                     repetition = "";
                     break;
                 default:
-                    repetition = "ohne Wiederholung";
+                    repetition = getString(R.string.without_repetition);
             }
-
 
             // Check the EventCreatorName and is it itself Change the eventCreaterName to "Your Self"
             if (eventCreatorName.equals(mPerson.getName())) {
-                eventCreatorName = "Du selber";
+                eventCreatorName = getString(R.string.yourself);
             }
 
             // Event shortTitel in Headline with StartDate
-            mQRGenerator_textView_headline.setText("Dein Termin" + "\n" + shortTitle + ", " + startDate);
+            mQRGenerator_textView_headline.setText(getString(R.string.your_Event) + "\n" + shortTitle + ", " + startDate);
             // Check for a Repetition Event and Change the Description Output with and without
             // Repetition Element inside.
             if (repetition.equals("")) {
-                mQRGenerator_textView_description.setText("Am " + startDate + " findet von " + startTime + " bis "
-                        + endTime + " Uhr in Raum " + place + " " + shortTitle + " statt." + "\n" + "Termindetails sind: "
-                        + description + "\n" + "\n" + "Organisator: " + eventCreatorName);
+                mQRGenerator_textView_description.setText(getString(R.string.on) + startDate
+                        + getString(R.string.findes)+getString(R.string.from) + startTime + getString(R.string.until)
+                        + endTime + getString(R.string.clock_at_room) + place + " " + shortTitle
+                        + getString(R.string.instead_of) + "\n" + getString(R.string.eventDetails)
+                        + description + "\n" + "\n" + getString(R.string.organisator) + eventCreatorName);
             } else {
-                mQRGenerator_textView_description.setText("Vom " + startDate + " bis " + endDate +
-                        " findet " + repetition + " um " + startTime + "Uhr bis " + endTime + "Uhr in Raum "
-                        + place + " " + shortTitle + " statt." + "\n" + "Termindetails sind: " + description +
-                        "\n" + "\n" + "Organisator: " + eventCreatorName);
+                mQRGenerator_textView_description.setText(getString(R.string.as_of) + startDate
+                        + getString(R.string.until) + endDate+getString(R.string.findes)
+                        + repetition + getString(R.string.at) + startTime + getString(R.string.clock_to)
+                        + endTime + getString(R.string.clock_at_room)+ place + " " + shortTitle
+                        + getString(R.string.instead_of) + "\n" + getString(R.string.eventDetails) + description +
+                        "\n" + "\n" + getString(R.string.organisator) + eventCreatorName);
             }
             // In the CatchBlock the User see a Snackbar Information and was pushed to CalendarActivity
         } catch (NullPointerException e) {
@@ -163,15 +168,15 @@ public class QRGeneratorActivity extends Fragment {
             mQRGenerator_button_start_sharingFragment.setVisibility(View.GONE);
 
             Snackbar.make(getActivity().findViewById(R.id.generator_button_frame),
-                    "Ups! Fehler Aufgetreten!",
-                    Snackbar.LENGTH_INDEFINITE).setAction("Zum Kalender", new View.OnClickListener() {
+                    getString(R.string.ups_an_error),
+                    Snackbar.LENGTH_INDEFINITE).setAction(getString(R.string.toCalender), new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.generator_realtivLayout_show_qrSharingFragment, new CalendarActivity());
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
-                    mQRGenerator_relativeLayout_buttonFrame.setVisibility(View.GONE);
+                    mQRGenerator_releativeLayout_buttonFrame.setVisibility(View.GONE);
                     mQRGenerator_relativeLayout_show_newFragment.setVisibility(View.VISIBLE);
                 }
             }).show();
@@ -182,14 +187,14 @@ public class QRGeneratorActivity extends Fragment {
             Log.d(TAG, "QRGeneratorFragmentActivity:" + z.getMessage());
             mQRGenerator_textView_headline.setVisibility(View.GONE);
             mQRGenerator_textView_description.setVisibility(View.GONE);
-            mQRGenerator_relativeLayout_buttonFrame.setVisibility(View.GONE);
+            mQRGenerator_releativeLayout_buttonFrame.setVisibility(View.GONE);
             mQRGenerator_relativeLayout_show_newFragment.setVisibility(View.VISIBLE);
-            mQRGenerator_textView_description.setText("Das ist der Inhalt vom QR Code: " + "\n" + mQRGenerator_StringBuffer_Result +
-                    "\n" + "Das können wir leider nicht als Termin speichern!");
+            mQRGenerator_textView_description.setText(getString(R.string.qrCode_content) + "\n"
+                    + mQRGenerator_StringBuffer_Result +"\n" + getString(R.string.cannot_be_saved_as_event));
 
             Snackbar.make(getActivity().findViewById(R.id.generator_button_frame),
-                    "Ups! Falscher QR-Code!",
-                    Snackbar.LENGTH_INDEFINITE).setAction("Zum Kalender", new View.OnClickListener() {
+                    getString(R.string.ups_an_error),
+                    Snackbar.LENGTH_INDEFINITE).setAction(getString(R.string.toCalender), new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -198,9 +203,8 @@ public class QRGeneratorActivity extends Fragment {
                     fragmentTransaction.commit();
                     mQRGenerator_textView_headline.setVisibility(View.GONE);
                     mQRGenerator_textView_description.setVisibility(View.GONE);
-                    mQRGenerator_relativeLayout_buttonFrame.setVisibility(View.GONE);
+                    mQRGenerator_releativeLayout_buttonFrame.setVisibility(View.GONE);
                     mQRGenerator_relativeLayout_show_newFragment.setVisibility(View.VISIBLE);
-
                 }
             }).show();
         }

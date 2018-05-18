@@ -16,40 +16,64 @@
         android:id="@+id/settings_relativeLayout_button"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:visibility="visible">
 
         <Button
             android:id="@+id/settings_button_feedback"
-            android:layout_width="228dp"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/feedback_zur_app_text" />
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/settings_button_copyright"
+            android:background="@drawable/button_border"
+            android:drawableLeft="@mipmap/ic_thums_black"
+            android:paddingLeft="5dp"
+            android:shape="rectangle"
+            android:text="@string/feedback_zur_app_text"
+            android:textAlignment="textStart"
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/settings_button_support"
-            android:layout_width="228dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="86dp"
-            android:text="@string/support_text" />
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/settings_button_settings"
+            android:background="@drawable/button_border"
+            android:drawableLeft="@mipmap/ic_info_black"
+            android:paddingLeft="5dp"
+            android:shape="rectangle"
+            android:text="@string/support_text"
+            android:textAlignment="viewStart"
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/settings_button_copyright"
-            android:layout_width="228dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="155dp"
-            android:text="@string/copyright_text" />
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/settings_button_support"
+            android:background="@drawable/button_border"
+            android:drawableLeft="@mipmap/ic_gavel_black"
+            android:paddingLeft="5dp"
+            android:shape="rectangle"
+            android:text="@string/copyright_text"
+            android:textAlignment="textStart"
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/settings_button_settings"
-            android:layout_width="228dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+
+            android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:text="@string/settings_text" />
+            android:layout_marginTop="37dp"
+            android:background="@drawable/button_border"
+            android:drawableLeft="@mipmap/ic_settings_black"
+            android:text="@string/settings_text"
+            android:textAlignment="textStart"
+            android:textSize="18sp" />
     </RelativeLayout>
 </RelativeLayout>

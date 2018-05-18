@@ -8,8 +8,6 @@
     <string name="settingTabText">Tab_3</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
-    <string name="button_name_scan">SCAN</string>
-    <string name="button_show_data">showData</string>
     <string name="title_activity_scan">QRCode Scanner</string>
     <string name="event_repetition">Wiederholungshäufigkeit</string>
     <string name="setting">Setting</string>
@@ -34,10 +32,6 @@
     <string name="event_save">Termin speichern</string>
     <string name="event_room">Raum :</string>
     <string name="event_shortTitle">Kurztitel :</string>
-    <string name="r_ckmeldungen_anzeigen">Rückmeldungen anzeigen</string>
-    <string name="qr_code_anzeigen">QR Code anzeigen</string>
-    <string name="headline">Headline</string>
-    <string name="teilen_via">Teilen via...</string>
     <string-array name="event_repetitions">
         <item name="event_repetition_yearly">jährlich</item>
         <item name="event_repetition_monthly">monatlich</item>
@@ -57,6 +51,8 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <!-- TODO: Remove or change this placeholder text -->
+    <string name="r_ckmeldungen_anzeigen">Rückmeldungen anzeigen</string>
+    <string name="qr_code_anzeigen">QR Code anzeigen</string>
     <string name="description_too_long">Die Beschreibung darf nicht länger als 500 Zeichen sein.</string>
     <string name="shortTitle_too_long">Der Kurztitel darf nicht länger als 100 Zeichen sein.</string>
     <string name="startTime_past">Der Termin darf nicht in der Vergangenheit beginnen.</string>
@@ -70,7 +66,6 @@
     <string name="pushEnabled">Die Push-Nachrichten wurden eingeschaltet.</string>
     <string name="pushDisabled">Die Push-Nachrichten wurden ausgeschaltet.</string>
     <string formatted="true" name="pushMinutesSet">Die Push-Nachrichten erscheinen nun %1$d Minuten vor Ihrem Termin.</string>
-
     <string-array name="push_times">
         <item name="push_time_0">0</item>
         <item name="push_time_5">5</item>
@@ -80,4 +75,34 @@
         <item name="push_time_90">90</item>
         <item name="push_time_120">120</item>
     </string-array>
+
+
+    <!-- QR Generator & QRSharing elements -->
+    <string name="share_with">Teilen via...</string>
+    <string name="on">Am\u0020</string>
+    <string name="findes">\u0020findet\u0020</string>
+    <string name="from">von\u0020</string>
+    <string name="clock_at_room">Uhr in Raum\u0020</string>
+    <string name="organisator">Organisator:\u0020</string>
+    <string name="eventDetails">Termindetails sind:\u0020</string>
+    <string name="at">\u0020um\u0020</string>
+    <string name="instead_of">\u0020statt.</string>
+    <string name="as_of">Vom\u0020</string>
+    <string name="until">\u0020bis\u0020</string>
+    <string name="clock_to">Uhr bis\u0020</string>
+    <string name="your_Event">Dein Termin</string>
+    <string name="room">Raum:\u0020</string>
+    <string name="yourself">Du selber</string>
+    <string name="yearly">\u0020jährlich\u0020</string>
+    <string name="monthly">\u0020monatlich\u0020</string>
+    <string name="weekly">\u0020wöchentlich\u0020</string>
+    <string name="daylie">\u0020täglich\u0020</string>
+    <string name="without_repetition">\u0020ohne Wiederholung\u0020</string>
+    <string name="ups_an_error">\u0020Ups! Fehler Aufgetreten!\u0020</string>
+    <string name="toCalender">\u0020Zum Kalender\u0020</string>
+    <string name="qrCode_content">Das ist der Inhalt vom QR Code:\u0020</string>
+    <string name="cannot_be_saved_as_event">Das können wir leider nicht als Termin speichern!</string>
+    <string name="show_QRCode">QR Code anzeigen</string>
+
+
 </resources>

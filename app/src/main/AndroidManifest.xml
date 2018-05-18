@@ -49,11 +49,9 @@
             android:name="com.activeandroid.content.ContentProvider"
             android:authorities="${applicationId}"
             android:enabled="true"
-            android:exported="false">
-        </provider>
+            android:exported="false"></provider>
 
-        <receiver android:name=".service.NotificationReceiver">
-        </receiver>
+        <receiver android:name=".service.NotificationReceiver"></receiver>
         <receiver
             android:name=".service.DeviceBootReceiver"
             android:enabled="true"
