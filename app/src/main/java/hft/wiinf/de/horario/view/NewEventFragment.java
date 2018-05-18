@@ -415,6 +415,10 @@ me=new Person(true,"007","");
             Toast.makeText(getContext(), R.string.noValidUsername, Toast.LENGTH_LONG).show();
             return false;
         }
+        if (edittext_room.getText().toString().contains("|")) {
+            Toast.makeText(getContext(), R.string.username_peek, Toast.LENGTH_LONG).show();
+            return false;
+        }
 
         if (editText_description.getText().length()>500){
             Toast.makeText(getContext(), R.string.description_too_long, Toast.LENGTH_LONG).show();

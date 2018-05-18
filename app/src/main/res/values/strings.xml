@@ -70,6 +70,7 @@
     <string name="shortTitle_peek">Der Kurztitel darf nicht das Zeichen | enthalten.</string>
     <string name="description_peek">Die Beschreibung darf nicht das Zeichen | enthalten.</string>
     <string name="room_peek">Das Feld Raum darf nicht das Zeichen | enthalten.</string>
+    <string name="username_peek">Der benutzername darf nicht das Symbol | enthalten.</string>
 
     <string-array name="push_times">
         <item name="push_time_0">0</item>
