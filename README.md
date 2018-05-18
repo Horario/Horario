@@ -18,3 +18,5 @@ US027 pushed to Quality. Quality tested and pushed to master on 14.05.2018.
 US028 pushed to Quality. Quality tested and pushed to master on 14.05.2018.  
 US006 bug fixed. Quality tested and pushed to master on 15.05.2018.  
 Design_US002 pushed to Quality. Quality tested and pushed to master on 15.05.2018.  
+US048 pushed to Quality. Quality tested and pushed to master on 16.05.2018.  
+US008 bug fixed. Quality tested and pushed to master on 17.05.2018.  
