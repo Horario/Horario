@@ -212,16 +212,21 @@ public class SettingsSettingsFragment extends Fragment {
 
     }
 
+    // method to read the phone number of the user
     public void readOwnPhoneNumber() {
         if (checkSelfPermission(getActivity(), READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
             requestPermission();
         else {
+            //if permission is granted read the phone number
             TelephonyManager telephonyManager = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
             person.setPhoneNumber(telephonyManager.getLine1Number());
+            //if the number could not been read, open a dialog
             if (person.getPhoneNumber() == null || !person.getPhoneNumber().matches("[0+].*"))
                 openDialogAskForPhoneNumber();
-            else
+            else {
+                PersonController.addPersonMe(person);
                 Toast.makeText(getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT).show();
+            }
         }
 
     }
@@ -233,7 +238,7 @@ public class SettingsSettingsFragment extends Fragment {
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case PERMISSION_REQUEST_TELEPHONE_STATE: {
-                // If Permission ist Granted User get a SnackbarMessage and the Scanner Started
+                // If Permission ist Granted User get a SnackbarMessage and the phone number is read
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Snackbar.make(getView().findViewById(R.id.setting_settings_relativeLayout_buttonFrame),
@@ -241,8 +246,8 @@ public class SettingsSettingsFragment extends Fragment {
                             Snackbar.LENGTH_SHORT).show();
                     readOwnPhoneNumber();
                 } else {
-                    //If the User deny the access to the phone number he get two Chance to accept the Request
-                    //The Counter count from 0 to 2. If the Counter 2 user a dialog is shown where the user can input the phone number
+                    //If the User denies the access to the phone number he gets two Chance to accept the Request
+                    //The Counter counts from 0 to 2. If the Counter is 2 user a dialog is shown where the user can input the phone number
                     switch (counter) {
                         case 0:
                             Snackbar.make(getActivity().findViewById(getView().getId()),
@@ -289,7 +294,6 @@ public class SettingsSettingsFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 String input = v.getText().toString();
-
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     if (input.matches("[\\+0].+")) {
                         alertDialog.dismiss();
