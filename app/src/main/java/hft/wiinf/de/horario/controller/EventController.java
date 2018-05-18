@@ -45,17 +45,17 @@ public class EventController {
 
     //find the list of events that start in the given period (enddate is not included!)
     public static List<Event> findEventsByTimePeriod(Date startDate, Date endDate) {
-        return new Select().from(Event.class).where("starttime between ? AND ?", startDate.getTime(), endDate.getTime() - 1).execute();
+        return new Select().from(Event.class).where("starttime between ? AND ?", startDate.getTime(), endDate.getTime() - 1).orderBy("startTime,endTime,shortTitle").execute();
 
     }
 
     //get a list of all events that I accepted
     public static List<Event> findMyAcceptedEvents() {
-        return new Select().from(Event.class).where("accepted=?", true).execute();
+        return new Select().from(Event.class).where("accepted=?", true).orderBy("startTime,endTime,shortTitle").execute();
     }
 
     public static List<Event> findRepeatingEvents(@NonNull Long eventId) {
-        return new Select().from(Event.class).where("startevent=?", eventId).execute();
+        return new Select().from(Event.class).where("startevent=?", eventId).orderBy("startTime,endTime,shortTitle").execute();
     }
 
     // saves a serial event, firstEvent="StartEvent", repetition: repetition frequence (daily, ...), endOfRepetiton: last day of the repetition (including)
