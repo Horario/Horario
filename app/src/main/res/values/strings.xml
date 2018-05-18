@@ -72,6 +72,13 @@
     <string name="pushEnabled">Die Push-Nachrichten wurden eingeschaltet.</string>
     <string name="pushDisabled">Die Push-Nachrichten wurden ausgeschaltet.</string>
     <string formatted="true" name="pushMinutesSet">Die Push-Nachrichten erscheinen nun %1$d Minuten vor Ihrem Termin.</string>
+    <string name="thanksphoneNumber">Danke für den Zugriff auf deine Telefonnummer</string>
+    <string name="phoneNumber_explanation">Wir brauchen deine Telefonnummer, um Rückmeldungen versenden können</string>
+    <string name="lastTry_phoneNumber">Ohne deine Telefonnummer können wir deinen Nutzernamen nicht speichern.</string>
+    <string name="oneMoreTime">Nochmal</string>
+    <string name="telephonenumerNotRead">Die Telefonnummer konnte nicht ausgelesen werden. Bitte geben Sie Ihre Telefonnummer manuell ein.</string>
+    <string name="wrongNumberFormat">Die Telefonummer muss mit einem + oder einer 0 beginnen.</string>
+    <string name="UsernameNotSaved">Der Benutzername wurde nicht gespeichert.</string>
 
     <string-array name="push_times">
         <item name="push_time_0">0</item>

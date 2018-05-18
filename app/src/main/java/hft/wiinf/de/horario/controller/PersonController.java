@@ -50,4 +50,5 @@ public class PersonController {
     public static List<Person> getEventCancelledPersons(Event event) {
         return new Select().from(Person.class).where("event_canceled=?", event.getId()).execute();
     }
+
 }
