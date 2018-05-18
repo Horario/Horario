@@ -62,8 +62,8 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
         IntentIntegrator integrator = new IntentIntegrator(this.getActivity()).forSupportFragment(this);
         integrator.setCaptureActivity(CaptureActivityPortrait.class); //Necessary to use the intern Sensor for Orientation
         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
-        integrator.setPrompt(getString(R.string.scanneroverlayer_qrCodeScan) +"\n"+
-                getString(R.string.scanneroverlay_positionYourScanner) +"\n"+
+        integrator.setPrompt(getString(R.string.scanneroverlayer_qrCodeScan) + "\n" +
+                getString(R.string.scanneroverlay_positionYourScanner) + "\n" +
                 getString(R.string.scanneroverlay_toShowTheEvent));
         integrator.setCameraId(0);
         integrator.setBeepEnabled(false);

@@ -98,17 +98,17 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             // Button to Save the Event and send for assent the Event a SMS  to the EventCreator
             afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_eventSave)
                     .setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //ToDo Dennis hier kommt dein Code rein.
+                        @Override
+                        public void onClick(View v) {
+                            //ToDo Dennis hier kommt dein Code rein.
 
 
-                    //Restart the TabActivity an Reload all Views
-                    Intent intent = getIntent();
-                    finish();
-                    startActivity(intent);
-                }
-            });
+                            //Restart the TabActivity an Reload all Views
+                            Intent intent = getIntent();
+                            finish();
+                            startActivity(intent);
+                        }
+                    });
 
             //Button to Save the Event but don't send for assent the Event a SMS to the EventCreator
             afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_eventSaveOnly).setOnClickListener(new View.OnClickListener() {
@@ -197,7 +197,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             }
 
             // Event shortTitle in Headline with eventCreatorName
-            qrScanner_result_headline.setText(shortTitle+" "+getString(R.string.from)+eventCreatorName);
+            qrScanner_result_headline.setText(shortTitle + " " + getString(R.string.from) + eventCreatorName);
             // Check for a Repetition Event and Change the Description Output with and without
             // Repetition Element inside.
             if (repetition.equals("")) {
@@ -394,7 +394,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         });
     }
 
-// Add the Fragments to the VageViewer
+    // Add the Fragments to the VageViewer
     private void setupViewPager(ViewPager viewPager) {
         SectionsPageAdapterActivity adapter = mSectionsPageAdapter;
         adapter.addFragment(new EventOverviewActivity(), "");

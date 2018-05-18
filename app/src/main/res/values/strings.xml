@@ -52,7 +52,7 @@
     <string name="pushEnabled">Die Push-Nachrichten wurden eingeschaltet.</string>
     <string name="pushDisabled">Die Push-Nachrichten wurden ausgeschaltet.</string>
 
-    <string formatted="true" name="pushMinutesSet">Die Push-Nachrichten erscheinen nun %1$d Minuten vor Ihrem Termin.</string>
+    <string name="pushMinutesSet" formatted="true">Die Push-Nachrichten erscheinen nun %1$d Minuten vor Ihrem Termin.</string>
 
     <string-array name="event_repetitions">
         <item name="event_repetition_yearly">jährlich</item>

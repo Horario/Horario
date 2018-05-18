@@ -213,18 +213,18 @@ public class QRSharingActivity extends Fragment {
             @SuppressLint("LongLogTag")
             @Override
             public void onClick(View v) {
-              try{
-                FragmentTransaction fragmentTransaction = Objects.requireNonNull(getFragmentManager()).beginTransaction();
-                fragmentTransaction.replace(R.id.qrSharing_relativeLayout_calendarActivity, new CalendarActivity());
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-                mQRSharing_relativeLayout_buttonFrame.setVisibility(View.GONE);
-                mQRSharing_imageView_qrCode.setVisibility(View.GONE);
-                mQRSharing_relativeLayout_textViewFrame.setVisibility(View.GONE);
-                mQRSharing_relativeLayout_calendarActivity.setVisibility(View.VISIBLE);
-            }catch(NullPointerException mNullPointerException){
-                  Log.d(TAG, "QRGeneratorFragmentActivity:" + mNullPointerException.getMessage());
-            }
+                try {
+                    FragmentTransaction fragmentTransaction = Objects.requireNonNull(getFragmentManager()).beginTransaction();
+                    fragmentTransaction.replace(R.id.qrSharing_relativeLayout_calendarActivity, new CalendarActivity());
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                    mQRSharing_relativeLayout_buttonFrame.setVisibility(View.GONE);
+                    mQRSharing_imageView_qrCode.setVisibility(View.GONE);
+                    mQRSharing_relativeLayout_textViewFrame.setVisibility(View.GONE);
+                    mQRSharing_relativeLayout_calendarActivity.setVisibility(View.VISIBLE);
+                } catch (NullPointerException mNullPointerException) {
+                    Log.d(TAG, "QRGeneratorFragmentActivity:" + mNullPointerException.getMessage());
+                }
             }
         });
 

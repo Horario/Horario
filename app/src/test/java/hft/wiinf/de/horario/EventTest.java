@@ -16,7 +16,6 @@ import hft.wiinf.de.horario.controller.EventController;
 import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
-import hft.wiinf.de.horario.model.Repetition;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNull;
@@ -36,7 +35,7 @@ public class EventTest {
 
     @Before
     public void createStandardEvent() {
-new Delete().from(Event.class).execute();
+        new Delete().from(Event.class).execute();
         new Delete().from(Person.class).execute();
         person = new Person();
         person.setPhoneNumber("+23/45678");
@@ -44,9 +43,9 @@ new Delete().from(Event.class).execute();
         person.setItMe(true);
         PersonController.savePerson(person);
         event = new Event(person);
-       // event.setAccepted(true);
+        // event.setAccepted(true);
         event.setDescription("Testevent");
-      //  event.setAccepted(true);
+        //  event.setAccepted(true);
         event.setStartTime(new Date(-3600000));
         event.setEndTime(new Date(-3600000));
         List<Person> persons = new LinkedList<>();
@@ -106,7 +105,7 @@ new Delete().from(Event.class).execute();
         repeatingEvent.setStartTime(new Date(-90000000));
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(-3600000);
-       // EventController.saveSerialevent(repeatingEvent, Repetition.DAILY, calendar);
+        // EventController.saveSerialevent(repeatingEvent, Repetition.DAILY, calendar);
         List<Event> events = EventController.findEventsByTimePeriod(new Date(-3600000), new Date(82800000));
         assertEquals(2, events.size());
         assertTrue(events.contains(event));

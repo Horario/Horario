@@ -38,7 +38,7 @@ public class CalendarActivity extends Fragment {
     TextView calendarTvMonth;
     TextView calendarTvDay;
     TextView calendarIsFloatMenuOpen;
-    
+
     FloatingActionButton calendarFcMenu, calendarFcQrScan, calendarFcNewEvent;
     RelativeLayout rLayout_calendar_helper;
     ConstraintLayout cLayout_calendar_main;

@@ -40,10 +40,10 @@ public class QRGeneratorActivity extends Fragment {
     // Get the EventIdResultBundle (Long) from the newEventActivity to Start later a DB Request
     @SuppressLint("LongLogTag")
     public Long eventIdDescription() {
-          Bundle qrEventIdBundle = getArguments();
+        Bundle qrEventIdBundle = getArguments();
         assert qrEventIdBundle != null;
         Long qrEventIdLongResult = qrEventIdBundle.getLong("eventId");
-          return qrEventIdLongResult;
+        return qrEventIdLongResult;
     }
 
 
@@ -151,15 +151,15 @@ public class QRGeneratorActivity extends Fragment {
             // Repetition Element inside.
             if (repetition.equals("")) {
                 mQRGenerator_textView_description.setText(getString(R.string.on) + startDate
-                        + getString(R.string.find)+getString(R.string.from) + startTime + getString(R.string.until)
+                        + getString(R.string.find) + getString(R.string.from) + startTime + getString(R.string.until)
                         + endTime + getString(R.string.clock_at_room) + place + " " + shortTitle
                         + getString(R.string.instead_of) + "\n" + getString(R.string.eventDetails)
                         + description + "\n" + "\n" + getString(R.string.organizer) + eventCreatorName);
             } else {
                 mQRGenerator_textView_description.setText(getString(R.string.as_of) + startDate
-                        + getString(R.string.until) + endDate+getString(R.string.find)
+                        + getString(R.string.until) + endDate + getString(R.string.find)
                         + repetition + getString(R.string.at) + startTime + getString(R.string.clock_to)
-                        + endTime + getString(R.string.clock_at_room)+ place + " " + shortTitle
+                        + endTime + getString(R.string.clock_at_room) + place + " " + shortTitle
                         + getString(R.string.instead_of) + "\n" + getString(R.string.eventDetails) + description +
                         "\n" + "\n" + getString(R.string.organizer) + eventCreatorName);
             }
@@ -191,8 +191,8 @@ public class QRGeneratorActivity extends Fragment {
             mQRGenerator_textView_description.setVisibility(View.GONE);
             mQRGenerator_relativeLayout_buttonFrame.setVisibility(View.GONE);
             mQRGenerator_relativeLayout_show_newFragment.setVisibility(View.VISIBLE);
-            mQRGenerator_textView_description.setText(getString(R.string.wrongQRCodeResult) + "\n"+"\n"
-                    + mQRGenerator_StringBuffer_Result +"\n" +"\n" + getString(R.string.notAsEventSaveable));
+            mQRGenerator_textView_description.setText(getString(R.string.wrongQRCodeResult) + "\n" + "\n"
+                    + mQRGenerator_StringBuffer_Result + "\n" + "\n" + getString(R.string.notAsEventSaveable));
 
             Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(R.id.generator_button_frame),
                     getString(R.string.ups_an_error),
