@@ -1,175 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/settings_relativeLayout_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:visibility="visible">
 
     <RelativeLayout
-        android:id="@+id/settings_relativeLayout_main"
+        android:id="@+id/settings_relativeLayout_helper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/settings_relativeLayout_button"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:visibility="visible">
 
-
-        <Button
-            android:id="@+id/settings_button_settings"
-            android:layout_width="228dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:text="@string/settings_text" />
-
         <Button
             android:id="@+id/settings_button_feedback"
-            android:layout_width="228dp"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/feedback_zur_app_text" />
-
-        <Button
-            android:id="@+id/settings_button_copyright"
-            android:layout_width="228dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="155dp"
-            android:text="@string/copyright_text" />
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/settings_button_copyright"
+            android:background="@drawable/button_border"
+            android:drawableLeft="@mipmap/ic_thums_black"
+            android:paddingLeft="5dp"
+            android:shape="rectangle"
+            android:text="@string/feedback_zur_app_text"
+            android:textAlignment="textStart"
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/settings_button_support"
-            android:layout_width="228dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="86dp"
-            android:text="@string/support_text" />
-    </RelativeLayout>
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/settings_button_settings"
+            android:background="@drawable/button_border"
+            android:drawableLeft="@mipmap/ic_info_black"
+            android:paddingLeft="5dp"
+            android:shape="rectangle"
+            android:text="@string/support_text"
+            android:textAlignment="viewStart"
+            android:textSize="18sp" />
 
-    <RelativeLayout
-        android:id="@+id/settings_relativeLayout_settings"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:visibility="gone">
+        <Button
+            android:id="@+id/settings_button_copyright"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/settings_button_support"
+            android:background="@drawable/button_border"
+            android:drawableLeft="@mipmap/ic_gavel_black"
+            android:paddingLeft="5dp"
+            android:shape="rectangle"
+            android:text="@string/copyright_text"
+            android:textAlignment="textStart"
+            android:textSize="18sp" />
 
+        <Button
+            android:id="@+id/settings_button_settings"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
 
-        <TextView
-            android:id="@+id/settings_settings_textView_settings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="37dp"
+            android:background="@drawable/button_border"
+            android:drawableLeft="@mipmap/ic_settings_black"
             android:text="@string/settings_text"
-            android:textSize="30sp" />
-
-        <TextView
-            android:id="@+id/settings_settings_textView_username"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/settings_settings_textView_settings"
-            android:layout_marginTop="99dp"
-            android:text="@string/username_text" />
-
-        <TextView
-            android:id="@+id/settings_settings_textView_allowPush"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/settings_settings_textView_settings"
-            android:layout_marginTop="169dp"
-            android:text="@string/allowpush_text" />
-
-        <TextView
-            android:id="@+id/settings_settings_textView_reminder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/settings_settings_textView_settings"
-            android:layout_marginTop="234dp"
-            android:text="@string/reminder_text" />
-
-        <TextView
-            android:id="@+id/settings_settings_textView_minutesBefore"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/settings_settings_textView_reminder"
-            android:layout_toEndOf="@+id/settings_settings_textView_allowPush"
-            android:text="@string/minutesBefore_text" />
-
-        <EditText
-            android:id="@+id/settings_settings_editText_username"
-            android:layout_width="140dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignTop="@+id/settings_settings_textView_username"
-            android:layout_marginEnd="42dp"
-            android:layout_marginTop="-19dp"
-            android:ems="10"
-            android:focusable="false"
-            android:hint="@string/username_hint"
-            android:imeOptions="flagNoExtractUi"
-            android:inputType="textPersonName" />
-
-        <Switch
-            android:id="@+id/settings_settings_Switch_allowPush"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/settings_settings_textView_allowPush"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="62dp" />
-
-        <Spinner
-            android:id="@+id/settings_settings_spinner_minutes"
-            android:layout_width="64dp"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/settings_settings_textView_reminder"
-            android:layout_toEndOf="@+id/settings_settings_textView_username" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/settings_relativeLayout_support"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone">
-
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Support" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/settings_relativeLayout_copyright"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone">
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Impressum" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/settings_relativeLayout_feedback"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone">
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Feedback" />
+            android:textAlignment="textStart"
+            android:textSize="18sp" />
     </RelativeLayout>
 </RelativeLayout>
