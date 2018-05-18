@@ -17,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -27,9 +26,6 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.PersonController;
@@ -124,12 +120,7 @@ public class SettingsSettingsFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 String inputText = v.getText().toString();
-
-                //RegEx: no whitespace at the beginning
-                Pattern pattern_username = Pattern.compile("^([\\S]).*");
-                Matcher matcher_username = pattern_username.matcher(inputText);
-
-                if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches()) {
+                if (actionId == EditorInfo.IME_ACTION_DONE && !inputText.matches(" .*")) {
                     person.setName(inputText);
                     readOwnPhoneNumber();
                     editTextUsername.setFocusable(false);
@@ -285,11 +276,10 @@ public class SettingsSettingsFragment extends Fragment {
         dialogBuilder.setView(R.layout.dialog_askingfortelephonenumber);
         dialogBuilder.setCancelable(true);
         final AlertDialog alertDialog = dialogBuilder.create();
-        alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-        if (person.getPhoneNumber() != null)
-            alertDialog.show();
+        alertDialog.show();
         EditText phoneNumber = alertDialog.findViewById(R.id.dialog_EditText_telephonNumber);
-        phoneNumber.setText(person.getPhoneNumber());
+        if (person.getPhoneNumber() != null)
+            phoneNumber.setText(person.getPhoneNumber());
         phoneNumber.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -304,7 +294,6 @@ public class SettingsSettingsFragment extends Fragment {
                     } else {
                         Toast toast = Toast.makeText(v.getContext(), R.string.wrongNumberFormat, Toast.LENGTH_SHORT);
                         toast.show();
-                        alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
                         return false;
                     }
                 }

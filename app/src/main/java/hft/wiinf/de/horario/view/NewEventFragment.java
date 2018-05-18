@@ -1,16 +1,22 @@
 package hft.wiinf.de.horario.view;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,8 +48,12 @@ import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.model.Repetition;
 import hft.wiinf.de.horario.service.NotificationReceiver;
 
-//TODO Kommentieren und Java Doc Info Schreiben
+import static android.Manifest.permission.READ_PHONE_STATE;
+import static android.support.v4.content.PermissionChecker.checkSelfPermission;
+
+//TODO JAVA DOC
 public class NewEventFragment extends Fragment {
+    private static final int PERMISSION_REQUEST_TELEPHONE_STATE = 0;
     // calendar objects to save the startTime / end Time / endOfRepetition, default: values - today
     Calendar startTime = Calendar.getInstance();
     Calendar endTime = Calendar.getInstance();
@@ -56,6 +66,8 @@ public class NewEventFragment extends Fragment {
     private Button button_save;
     //person object of the user, to get the user name
     private Person me;
+    private Event event;
+    private int counter;
 
     @Nullable
     @Override
@@ -310,14 +322,14 @@ public class NewEventFragment extends Fragment {
     //if the save button is clicked check the entrys and save the event if everything is ok
     public void onButtonClickSave() {
         if (checkValidity()) {
-            saveEvent();
+            readOwnPhoneNumber();
         }
     }
 
     //read the needed parameters / textfield and save the event
     public void saveEvent() {
         PersonController.savePerson(me);
-        Event event = new Event(me);
+        event = new Event(me);
         event.setAccepted(AcceptedState.ACCEPTED);
         event.setDescription(editText_description.getText().toString());
         event.setStartTime(startTime.getTime());
@@ -331,19 +343,12 @@ public class NewEventFragment extends Fragment {
             EventController.saveSerialevent(event);
         } else
             EventController.saveEvent(event);
-        // if me (the user) is not created (aka null) a new user with typed in the user name is created
-        if (me == null)
-            //TODO: read the phone number of the user
-            me = new Person(true, "007", "");
-        //update or save a new person (me)
-        me.setName(edittext_userName.getText().toString());
-        PersonController.savePerson(me);
-        openSavedSuccessfulDialog(event.getId());
         setAlarmForNotification(event);
+        openSavedSuccessfulDialog();
     }
 
     //clear all entrys and open a dialog where the user can choose what to do next
-    private void openSavedSuccessfulDialog(final long eventId) {
+    private void openSavedSuccessfulDialog() {
         clearEntrys();
         final Dialog dialogSavingSuccessful = new Dialog(getContext());
         dialogSavingSuccessful.setContentView(R.layout.dialog_savingsucessfull);
@@ -356,14 +361,13 @@ public class NewEventFragment extends Fragment {
                 dialogSavingSuccessful.dismiss();
             }
         });
-        //TODO: open qrcode
         dialogSavingSuccessful.findViewById(R.id.savingSuccessful_button_qrcode).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialogSavingSuccessful.dismiss();
                 QRGeneratorActivity qrFrag = new QRGeneratorActivity();
                 Bundle bundle = new Bundle();
-                bundle.putLong("eventId", eventId);
+                bundle.putLong("eventId", event.getId());
                 qrFrag.setArguments(bundle);
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.newEvent_newFragment, qrFrag)
@@ -549,5 +553,110 @@ public class NewEventFragment extends Fragment {
                 manager.set(AlarmManager.RTC_WAKEUP, calcNotificationTime(calendar, notificationPerson), pendingIntent);
             }
         }
+    }
+
+    // method to read the phone number of the user
+    public void readOwnPhoneNumber() {
+        if (checkSelfPermission(getActivity(), READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
+            requestPermission();
+        else {
+            //if permission is granted read the phone number
+            TelephonyManager telephonyManager = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
+            me.setPhoneNumber(telephonyManager.getLine1Number());
+            //if the number could not been read, open a dialog
+            if (me.getPhoneNumber() == null || !me.getPhoneNumber().matches("[0+].*"))
+                openDialogAskForPhoneNumber();
+            else {
+                saveEvent();
+            }
+        }
+
+    }
+
+    private void requestPermission() {
+        requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, PERMISSION_REQUEST_TELEPHONE_STATE);
+    }
+
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_REQUEST_TELEPHONE_STATE: {
+                // If Permission ist Granted User get a SnackbarMessage and the phone number is read
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Snackbar.make(getView(),
+                            R.string.thanksphoneNumber,
+                            Snackbar.LENGTH_SHORT).show();
+                    readOwnPhoneNumber();
+                } else {
+                    //If the User denies the access to the phone number he gets two Chance to accept the Request
+                    //The Counter counts from 0 to 2. If the Counter is 2 user a dialog is shown where the user can input the phone number
+                    switch (counter) {
+                        case 0:
+                            Snackbar.make(getView(),
+                                    R.string.phoneNumber_explanation,
+                                    Snackbar.LENGTH_INDEFINITE).setAction(R.string.oneMoreTime, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    counter++;
+                                    readOwnPhoneNumber();
+                                }
+                            }).show();
+                            break;
+
+                        case 1:
+                            Snackbar.make(getView(),
+                                    R.string.lastTry_phoneNumber_event,
+                                    Snackbar.LENGTH_INDEFINITE).setAction(R.string.oneMoreTime, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    counter++;
+                                    readOwnPhoneNumber();
+                                }
+                            }).show();
+                            break;
+                        default:
+                            openDialogAskForPhoneNumber();
+                    }
+                }
+            }
+        }
+    }
+
+    public void openDialogAskForPhoneNumber() {
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+        dialogBuilder.setView(R.layout.dialog_askingfortelephonenumber);
+        dialogBuilder.setCancelable(true);
+        final AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
+        EditText phoneNumber = alertDialog.findViewById(R.id.dialog_EditText_telephonNumber);
+        if (me.getPhoneNumber() != null)
+            phoneNumber.setText(me.getPhoneNumber());
+        phoneNumber.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                String input = v.getText().toString();
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    if (input.matches("[\\+0].+")) {
+                        alertDialog.dismiss();
+                        me.setPhoneNumber(input);
+                        saveEvent();
+                        return true;
+                    } else {
+                        Toast toast = Toast.makeText(getContext(), R.string.wrongNumberFormat, Toast.LENGTH_SHORT);
+                        toast.show();
+                        return false;
+                    }
+                }
+                return false;
+            }
+        });
+        alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                Toast toast = Toast.makeText(getContext(), R.string.EventNotSaved, Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
+
     }
 }

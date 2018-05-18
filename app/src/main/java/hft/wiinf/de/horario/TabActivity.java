@@ -1,12 +1,18 @@
 package hft.wiinf.de.horario;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -28,14 +34,19 @@ import hft.wiinf.de.horario.view.CalendarActivity;
 import hft.wiinf.de.horario.view.EventOverviewActivity;
 import hft.wiinf.de.horario.view.SettingsActivity;
 
+import static android.Manifest.permission.READ_PHONE_STATE;
+import static com.activeandroid.Cache.getContext;
+
 public class TabActivity extends AppCompatActivity {
 
     //TODO Kommentieren und Java Doc Info Schreiben
     private static final String TAG = "TabActivity";
+    private static final int PERMISSION_REQUEST_TELEPHONE_STATE = 0;
     private SectionsPageAdapterActivity mSectionsPageAdapter;
     private ViewPager mViewPager;
     TabLayout tabLayout;
-    Person personMe;
+    Person person;
+    private int counter;
 
     @Override
     public void onBackPressed() {
@@ -212,7 +223,7 @@ public class TabActivity extends AppCompatActivity {
         final AlertDialog alertDialogAskForUsername = dialogAskForUsername.create();
         alertDialogAskForUsername.show();
 
-        EditText username = (EditText) alertDialogAskForUsername.findViewById(R.id.dialog_EditText_Username);
+        final EditText username = alertDialogAskForUsername.findViewById(R.id.dialog_EditText_Username);
 
         username.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -225,32 +236,127 @@ public class TabActivity extends AppCompatActivity {
                 Matcher matcher_username = pattern_username.matcher(dialog_inputUsername);
 
                 if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches()) {
-                    if (PersonController.getPersonWhoIam() == null) {
-                        //ToDo: Flo - PhoneNumber
-                        personMe = new Person(true, "007", dialog_inputUsername);
-                        PersonController.addPersonMe(personMe);
-
-                        Toast toast = Toast.makeText(v.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT);
-                        toast.show();
-
-                        alertDialogAskForUsername.cancel();
-                    } else {
-                        personMe = PersonController.getPersonWhoIam();
-                        personMe.setName(dialog_inputUsername);
-                        PersonController.savePerson(personMe);
-
-                        Toast toast = Toast.makeText(v.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT);
-                        toast.show();
-
-                        alertDialogAskForUsername.cancel();
-                    }
-                    return false;
+                    person = new Person(true, "", dialog_inputUsername);
+                    readOwnPhoneNumber();
+                    alertDialogAskForUsername.dismiss();
+                    return true;
                 } else {
                     Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
                     toast.show();
-                    return true;
+                    return false;
                 }
             }
+
         });
     }
+
+    // method to read the phone number of the user
+    public void readOwnPhoneNumber() {
+        if (ActivityCompat.checkSelfPermission(this, READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
+            requestPermission();
+        else {
+            //if permission is granted read the phone number
+            TelephonyManager telephonyManager = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
+            person.setPhoneNumber(telephonyManager.getLine1Number());
+            //if the number could not been read, open a dialog
+            if (person.getPhoneNumber() == null || !person.getPhoneNumber().matches("[0+].*"))
+                openDialogAskForPhoneNumber();
+            else {
+                PersonController.addPersonMe(person);
+                Toast.makeText(getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT).show();
+            }
+        }
+
+    }
+
+    private void requestPermission() {
+        requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, PERMISSION_REQUEST_TELEPHONE_STATE);
+    }
+
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case PERMISSION_REQUEST_TELEPHONE_STATE: {
+                // If Permission ist Granted User get a SnackbarMessage and the phone number is read
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Snackbar.make(findViewById(R.id.tabBarLayout),
+                            R.string.thanksphoneNumber,
+                            Snackbar.LENGTH_SHORT).show();
+                    readOwnPhoneNumber();
+                } else {
+                    //If the User denies the access to the phone number he gets two Chance to accept the Request
+                    //The Counter counts from 0 to 2. If the Counter is 2 user a dialog is shown where the user can input the phone number
+                    switch (counter) {
+                        case 0:
+                            Snackbar.make(this.findViewById(R.id.tabBarLayout),
+                                    R.string.phoneNumber_explanation,
+                                    Snackbar.LENGTH_INDEFINITE).setAction(R.string.oneMoreTime, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    counter++;
+                                    readOwnPhoneNumber();
+                                }
+                            }).show();
+                            break;
+
+                        case 1:
+                            Snackbar.make(this.findViewById(R.id.tabBarLayout),
+                                    R.string.lastTry_phoneNumber,
+                                    Snackbar.LENGTH_INDEFINITE).setAction(R.string.oneMoreTime, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    counter++;
+                                    readOwnPhoneNumber();
+                                }
+                            }).show();
+                            break;
+                        default:
+                            openDialogAskForPhoneNumber();
+                    }
+                }
+            }
+        }
+    }
+
+    public void openDialogAskForPhoneNumber() {
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setView(R.layout.dialog_askingfortelephonenumber);
+        dialogBuilder.setCancelable(true);
+        final AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
+        EditText phoneNumber = alertDialog.findViewById(R.id.dialog_EditText_telephonNumber);
+        if (person.getPhoneNumber() != null)
+            phoneNumber.setText(person.getPhoneNumber());
+        phoneNumber.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                String input = v.getText().toString();
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    if (input.matches("[+0].+")) {
+                        alertDialog.dismiss();
+                        person.setPhoneNumber(input);
+                        PersonController.addPersonMe(person);
+                        Toast.makeText(v.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT).show();
+                        // ((InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                        return false;
+                    } else {
+                        Toast toast = Toast.makeText(v.getContext(), R.string.wrongNumberFormat, Toast.LENGTH_SHORT);
+                        toast.show();
+                        return false;
+                    }
+                }
+                return false;
+            }
+        });
+        alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                Toast toast = Toast.makeText(getContext(), R.string.UsernameNotSaved, Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
+
+    }
 }
+

@@ -31,8 +31,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import hft.wiinf.de.horario.R;
-import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.controller.PersonController;
+import hft.wiinf.de.horario.model.Person;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -212,18 +212,18 @@ public class QRSharingActivity extends Fragment {
             @SuppressLint("LongLogTag")
             @Override
             public void onClick(View v) {
-              try{
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.qrSharing_relativeLayout_calendarActivity, new CalendarActivity());
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-                mQRSharing_relativeLayout_buttonFrame.setVisibility(View.GONE);
-                mQRSharing_imageView_qrCode.setVisibility(View.GONE);
-                mQRSharing_reativeLayout_textViewFrame.setVisibility(View.GONE);
-                mQRSharing_relativeLayout_calendarActivity.setVisibility(View.VISIBLE);
-            }catch(NullPointerException mNullPointerException){
-                  Log.d(TAG, "QRGeneratorFragmentActivity:" + mNullPointerException.getMessage());
-            }
+                try {
+                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.qrSharing_relativeLayout_calendarActivity, new CalendarActivity());
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                    mQRSharing_relativeLayout_buttonFrame.setVisibility(View.GONE);
+                    mQRSharing_imageView_qrCode.setVisibility(View.GONE);
+                    mQRSharing_reativeLayout_textViewFrame.setVisibility(View.GONE);
+                    mQRSharing_relativeLayout_calendarActivity.setVisibility(View.VISIBLE);
+                } catch (NullPointerException mNullPointerException) {
+                    Log.d(TAG, "QRGeneratorFragmentActivity:" + mNullPointerException.getMessage());
+                }
             }
         });
 

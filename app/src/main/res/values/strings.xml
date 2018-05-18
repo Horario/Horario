@@ -110,6 +110,8 @@
     <string name="qrCode_content">Das ist der Inhalt vom QR Code:\u0020</string>
     <string name="cannot_be_saved_as_event">Das können wir leider nicht als Termin speichern!</string>
     <string name="show_QRCode">QR Code anzeigen</string>
+    <string name="lastTry_phoneNumber_event">Wir brauchen deine telefonnummer, um den Termin zu speichern.</string>
+    <string name="EventNotSaved">Der Termin konnte nicht gespeichert werden.</string>
 
 
 </resources>
