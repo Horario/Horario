@@ -87,10 +87,10 @@ public class CalendarActivity extends Fragment {
         //TODO just for testing (add entry to database), delete
         hft.wiinf.de.horario.model.Event test = new hft.wiinf.de.horario.model.Event();
         test.setStartTime(new Date(1524261326000L)); //20.04.18
-        test.setEndTime(new Date(1524261326000L));
+        test.setEndTime(new Date(1524261426000L));
         test.setShortTitle("Termin 1");
         test.setDescription("Das ist ein Testtermin");
-        test.setAccepted(AcceptedState.ACCEPTED);
+        test.setAccepted(AcceptedState.REJECTED);
         test.save();
 
         calendarCvCalendar.setListener(new CompactCalendarView.CompactCalendarViewListener() {
@@ -184,7 +184,7 @@ public class CalendarActivity extends Fragment {
     public static void updateCompactCalendar(){
         List<hft.wiinf.de.horario.model.Event> acceptedEvents = EventController.findMyEvents();
         for (int i = 0; i<acceptedEvents.size(); i++){
-            if(calendarCvCalendar.getEvents(acceptedEvents.get(i).getStartTime().getTime()).size() == 0){
+            if(calendarCvCalendar.getEvents(acceptedEvents.get(i).getStartTime().getTime()).size() == 0 && acceptedEvents.get(i).getAccepted() != AcceptedState.REJECTED){
                 Event event = new Event(Color.BLUE, acceptedEvents.get(i).getStartTime().getTime());
                 calendarCvCalendar.addEvent(event, false);
             }
@@ -200,7 +200,9 @@ public class CalendarActivity extends Fragment {
         endOfDay.add(Calendar.DAY_OF_MONTH, 1);
         final List<hft.wiinf.de.horario.model.Event> eventList = EventController.findEventsByTimePeriod(date, endOfDay.getTime());
         for (int i = 0; i<eventList.size(); i++){
-            eventsAsString.add(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle());
+            if(eventList.get(i).getAccepted() != AcceptedState.REJECTED) {
+                eventsAsString.add(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle());
+            }
         }
         final ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1, eventsAsString){
             @NonNull

@@ -169,8 +169,10 @@ public class EventOverviewActivity extends Fragment{
             for (int i = 0; i<eventList.size(); i++){
                 if(eventList.get(i).getAccepted().equals(AcceptedState.ACCEPTED)){
                     eventArray.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 1));
-                }else{
+                }else if(eventList.get(i).getAccepted().equals(AcceptedState.WAITING)){
                     eventArray.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 2));
+                }else{
+                    eventArray.clear();
                 }
             }
             day.setTime(endOfDay.getTimeInMillis());
@@ -226,7 +228,7 @@ class Appointment{
         this.type = type;
     }
 
-    /** 0 = date, 1 = accepted, 2 = rejected */
+    /** 0 = date, 1 = accepted, 2 = waiting, 3 = rejected */
     public String getDescription() {
         return description;
     }

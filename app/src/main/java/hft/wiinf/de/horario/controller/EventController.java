@@ -50,7 +50,7 @@ public class EventController {
 
     //get a list of all events
     public static List<Event> findMyEvents() {
-        return new Select().from(Event.class).execute();
+        return new Select().from(Event.class).orderBy("startTime,endTime,shortTitle").execute();
     }
 
     //get a list of all events that I accepted
