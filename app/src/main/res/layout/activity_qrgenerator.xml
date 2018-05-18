@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/generator_realtivLayout_show_qrSharingFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/generator_texView_frame"
+        android:layout_width="382dp"
+        android:layout_height="347dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
+
+        <TextView
+            android:id="@+id/generator_textView_Headline"
+            android:layout_width="371dp"
+            android:layout_height="74dp"
+            android:layout_alignParentTop="true" />
+
+        <TextView
+            android:id="@+id/generator_textView_description"
+            android:layout_width="382dp"
+            android:layout_height="195dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="21dp"
+            android:scrollbars="vertical"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="152dp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/generator_button_frame"
+        android:layout_width="384dp"
+        android:layout_height="217dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="359dp">
+
+
+        <Button
+            android:id="@+id/generator_button_start_qrShareingFragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/savingSuccessful_qrcode"
+            tools:layout_editor_absoluteX="40dp"
+            tools:layout_editor_absoluteY="49dp" />
+
+        <Button
+            android:id="@+id/generator_button_show_eventFeedbackFragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:text="@string/r_ckmeldungen_anzeigen"
+            tools:layout_editor_absoluteX="85dp"
+            tools:layout_editor_absoluteY="137dp" />
+
+    </RelativeLayout>
+</RelativeLayout>
+

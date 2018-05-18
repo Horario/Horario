@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:windowBackground">
+    android:background="?android:windowBackground"
+    android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/newEvent_newFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/newEvent_newFragment"
         android:visibility="gone"></RelativeLayout>
 
     <RelativeLayout
@@ -211,7 +211,8 @@
             android:layout_alignParentEnd="true"
             android:layout_marginBottom="36dp"
             android:ems="10"
-            android:focusable="true"
+            android:focusable="false"
+            android:focusableInTouchMode="true"
             android:visibility="gone" />
 
 

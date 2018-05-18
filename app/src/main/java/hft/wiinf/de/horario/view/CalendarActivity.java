@@ -53,9 +53,9 @@ public class CalendarActivity extends Fragment {
         View view = inflater.inflate(R.layout.activity_calendar, container, false);
 
         //FloatingButton
-        calendarFcMenu = (FloatingActionButton) view.findViewById(R.id.calendar_floatingActionButtonMenu);
-        calendarFcNewEvent = (FloatingActionButton) view.findViewById(R.id.calendar_floatingActionButtonNewEvent);
-        calendarFcQrScan = (FloatingActionButton) view.findViewById(R.id.calendar_floatingActionButtonScan);
+        calendarFcMenu = view.findViewById(R.id.calendar_floatingActionButtonMenu);
+        calendarFcNewEvent = view.findViewById(R.id.calendar_floatingActionButtonNewEvent);
+        calendarFcQrScan = view.findViewById(R.id.calendar_floatingActionButtonScan);
         rLayout_calendar_helper = view.findViewById(R.id.calendar_relativeLayout_helper);
         cLayout_calendar_main = view.findViewById(R.id.calendar_constrainLayout_main);
         calendarIsFloatMenuOpen = view.findViewById(R.id.calendar_hiddenField);
