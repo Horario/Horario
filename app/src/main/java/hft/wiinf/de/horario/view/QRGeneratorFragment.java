@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.method.ScrollingMovementMethod;
@@ -175,9 +176,10 @@ public class QRGeneratorFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     FragmentTransaction fragmentTransaction = Objects.requireNonNull(getFragmentManager()).beginTransaction();
-                    fragmentTransaction.replace(R.id.calendar_frameLayout, new CalendarFragment());
-                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.replace(R.id.calendar_frameLayout, new CalendarActivity());
                     fragmentTransaction.commit();
+                    TabLayout tabLayout = getActivity().findViewById(R.id.tabBarLayout);
+                    tabLayout.getTabAt(1).select();
                 }
             }).show();
 
@@ -198,10 +200,10 @@ public class QRGeneratorFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     FragmentTransaction fragmentTransaction = Objects.requireNonNull(getFragmentManager()).beginTransaction();
-                    fragmentTransaction.replace(R.id.calendar_frameLayout, new CalendarFragment());
-                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.replace(R.id.calendar_frameLayout, new CalendarActivity());
                     fragmentTransaction.commit();
-                    fragmentTransaction.show(new CalendarFragment());
+                    TabLayout tabLayout = getActivity().findViewById(R.id.tabBarLayout);
+                    tabLayout.getTabAt(1).select();
                 }
             }).show();
         }
