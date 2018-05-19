@@ -366,12 +366,11 @@ public class NewEventFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putLong("eventId", eventId);
                 qrFrag.setArguments(bundle);
+
                 getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.newEvent_newFragment, qrFrag, "QrGenerator")
+                        .replace(R.id.frameLayout, qrFrag, "QrGenerator")
                         .addToBackStack("QrGenerator")
                         .commit();
-                getView().findViewById(R.id.newEvent_oldFragment).setVisibility(View.INVISIBLE);
-                getView().findViewById(R.id.newEvent_newFragment).setVisibility(View.VISIBLE);
             }
         });
     }

@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -29,7 +31,9 @@ import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.controller.ScanResultReceiverController;
 import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.view.CalendarActivity;
+import hft.wiinf.de.horario.view.CalendarFragment;
 import hft.wiinf.de.horario.view.EventOverviewActivity;
+import hft.wiinf.de.horario.view.NewEventFragment;
 import hft.wiinf.de.horario.view.SettingsActivity;
 
 public class TabActivity extends AppCompatActivity implements ScanResultReceiverController {
@@ -291,27 +295,11 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 if (tab.getPosition() == 2) {
                     getSupportFragmentManager().popBackStack();
                 } else if (tab.getPosition() == 1) {
-                    getSupportFragmentManager().popBackStack();
-                    FloatingActionButton floatNewEvent = Objects.requireNonNull(mSectionsPageAdapter.getItem(1).getView()).findViewById(R.id.calendar_floatingActionButtonNewEvent);
-                    FloatingActionButton floatQRScan = Objects.requireNonNull(mSectionsPageAdapter.getItem(1).getView()).findViewById(R.id.calendar_floatingActionButtonScan);
-                    FloatingActionButton floatMenu = Objects.requireNonNull(mSectionsPageAdapter.getItem(1).getView()).findViewById(R.id.calendar_floatingActionButtonMenu);
-                    TextView isFloatingMenuOpen = Objects.requireNonNull(mSectionsPageAdapter.getItem(1).getView()).findViewById(R.id.calendar_hiddenField);
-
-                    floatNewEvent.hide();
-                    floatQRScan.hide();
-                    floatMenu.setImageResource(R.drawable.ic_android_black2_24dp);
-                    isFloatingMenuOpen.setText("false");
+                    FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
+                    fr.replace(R.id.frameLayout, new CalendarFragment());
+                    fr.commit();
                 } else if (tab.getPosition() == 0) {
-                    getSupportFragmentManager().popBackStack();
-                    FloatingActionButton floatNewEvent = Objects.requireNonNull(mSectionsPageAdapter.getItem(0).getView()).findViewById(R.id.eventOverview_floatingActionButtonNewEvent);
-                    FloatingActionButton floatQRScan = Objects.requireNonNull(mSectionsPageAdapter.getItem(0).getView()).findViewById(R.id.eventOverview_floatingActionButtonScan);
-                    FloatingActionButton floatMenu = Objects.requireNonNull(mSectionsPageAdapter.getItem(0).getView()).findViewById(R.id.eventOverview_floatingActionButtonMenu);
-                    TextView isFloatingMenuOpen = Objects.requireNonNull(mSectionsPageAdapter.getItem(0).getView()).findViewById(R.id.eventOverviewFabClosed);
-
-                    floatNewEvent.hide();
-                    floatQRScan.hide();
-                    floatMenu.setImageResource(R.drawable.ic_android_black2_24dp);
-                    isFloatingMenuOpen.setText("false");
+                    //ToDO
                 }
             }
 
@@ -322,27 +310,11 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 if (tab.getPosition() == 2) {
                     getSupportFragmentManager().popBackStack();
                 } else if (tab.getPosition() == 1) {
-                    getSupportFragmentManager().popBackStack();
-                    FloatingActionButton floatNewEvent = Objects.requireNonNull(mSectionsPageAdapter.getItem(1).getView()).findViewById(R.id.calendar_floatingActionButtonNewEvent);
-                    FloatingActionButton floatQRScan = Objects.requireNonNull(mSectionsPageAdapter.getItem(1).getView()).findViewById(R.id.calendar_floatingActionButtonScan);
-                    FloatingActionButton floatMenu = Objects.requireNonNull(mSectionsPageAdapter.getItem(1).getView()).findViewById(R.id.calendar_floatingActionButtonMenu);
-                    TextView isFloatingMenuOpen = Objects.requireNonNull(mSectionsPageAdapter.getItem(1).getView()).findViewById(R.id.calendar_hiddenField);
-
-                    floatNewEvent.hide();
-                    floatQRScan.hide();
-                    floatMenu.setImageResource(R.drawable.ic_android_black2_24dp);
-                    isFloatingMenuOpen.setText("false");
+                    FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
+                    fr.replace(R.id.frameLayout, new CalendarFragment());
+                    fr.commit();
                 } else if (tab.getPosition() == 0) {
-                    getSupportFragmentManager().popBackStack();
-                    FloatingActionButton floatNewEvent = Objects.requireNonNull(mSectionsPageAdapter.getItem(0).getView()).findViewById(R.id.eventOverview_floatingActionButtonNewEvent);
-                    FloatingActionButton floatQRScan = Objects.requireNonNull(mSectionsPageAdapter.getItem(0).getView()).findViewById(R.id.eventOverview_floatingActionButtonScan);
-                    FloatingActionButton floatMenu = Objects.requireNonNull(mSectionsPageAdapter.getItem(0).getView()).findViewById(R.id.eventOverview_floatingActionButtonMenu);
-                    TextView isFloatingMenuOpen = Objects.requireNonNull(mSectionsPageAdapter.getItem(0).getView()).findViewById(R.id.eventOverviewFabClosed);
-
-                    floatNewEvent.hide();
-                    floatQRScan.hide();
-                    floatMenu.setImageResource(R.drawable.ic_android_black2_24dp);
-                    isFloatingMenuOpen.setText("false");
+                    //ToDO
                 }
             }
         });
