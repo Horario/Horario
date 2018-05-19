@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 import hft.wiinf.de.horario.R;
+import hft.wiinf.de.horario.TabActivity;
 import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.controller.PersonController;
 
@@ -211,7 +212,7 @@ public class QRSharingFragment extends Fragment {
             public void onClick(View v) {
                 try {
                     FragmentTransaction fragmentTransaction = Objects.requireNonNull(getFragmentManager()).beginTransaction();
-                    fragmentTransaction.replace(R.id.calendar_frameLayout, new CalendarFragment());
+                    fragmentTransaction.replace(R.id.calendar_frameLayout, new CalendarActivity());
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
                 } catch (NullPointerException mNullPointerException) {
