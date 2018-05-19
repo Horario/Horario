@@ -292,25 +292,18 @@ public class TabActivity extends AppCompatActivity {
                         case 0:
                             Snackbar.make(this.findViewById(R.id.tabBarLayout),
                                     R.string.phoneNumber_explanation,
-                                    Snackbar.LENGTH_INDEFINITE).setAction(R.string.oneMoreTime, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    counter++;
-                                    readOwnPhoneNumber();
-                                }
-                            }).show();
+                                    Snackbar.LENGTH_LONG).show();
+                            counter++;
+                            readOwnPhoneNumber();
                             break;
 
                         case 1:
                             Snackbar.make(this.findViewById(R.id.tabBarLayout),
                                     R.string.lastTry_phoneNumber,
-                                    Snackbar.LENGTH_INDEFINITE).setAction(R.string.oneMoreTime, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    counter++;
-                                    readOwnPhoneNumber();
-                                }
-                            }).show();
+                                    Snackbar.LENGTH_LONG)
+                                    .show();
+                            counter++;
+                            readOwnPhoneNumber();
                             break;
                         default:
                             openDialogAskForPhoneNumber();

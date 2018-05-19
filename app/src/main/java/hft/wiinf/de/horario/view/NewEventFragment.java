@@ -246,7 +246,8 @@ public class NewEventFragment extends Fragment {
 
     public void getDate() {
         //close keyboard if it's open
-        ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+        if (getActivity().getCurrentFocus() != null)
+            ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
         // create a listener for the date picker dialog: update the date parts (year, month, date) of start and end time with the selected values
         DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -264,7 +265,8 @@ public class NewEventFragment extends Fragment {
 
     public void getStartTime() {
         //close keyboard if it's open
-        ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+        if (getActivity().getCurrentFocus() != null)
+            ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
         // create a listener for the time picker dialog: update the start time with the selected values
         TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
             @Override
@@ -283,7 +285,8 @@ public class NewEventFragment extends Fragment {
 
     public void getEndTime() {
         //close keyboard if it's open
-        ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+        if (getActivity().getCurrentFocus() != null)
+            ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
         // create a listener for the time picker dialog: update the end time and the time for the end of repetition (for the comparing later) with the selected values
         TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
             @Override
@@ -304,7 +307,8 @@ public class NewEventFragment extends Fragment {
 
     public void getEndOfRepetition() {
         //close keyboard if it's open
-        ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+        if (getActivity().getCurrentFocus() != null)
+            ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
         // create a listener for the time picker dialog: update the date part (year, month, day) of the end of repetition with the selected values
         DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -322,7 +326,7 @@ public class NewEventFragment extends Fragment {
     //if the save button is clicked check the entrys and save the event if everything is ok
     public void onButtonClickSave() {
         if (checkValidity()) {
-            readOwnPhoneNumber();
+            concatenateAndSavePersonalData();
         }
     }
 
@@ -559,8 +563,9 @@ public class NewEventFragment extends Fragment {
         }
     }
 
-    // method to read the phone number of the user
-    public void readOwnPhoneNumber() {
+    // method to read the phone number of the user + save user name
+    public void concatenateAndSavePersonalData() {
+        //if phone number is set read only the user name
         if (me.getPhoneNumber() == null || me.getPhoneNumber().equalsIgnoreCase("")) {
             if (checkSelfPermission(getActivity(), READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
                 requestPermission();
@@ -592,8 +597,8 @@ public class NewEventFragment extends Fragment {
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Snackbar.make(getView(),
                             R.string.thanksphoneNumber,
-                            Snackbar.LENGTH_SHORT).show();
-                    readOwnPhoneNumber();
+                            Snackbar.LENGTH_LONG).show();
+                    concatenateAndSavePersonalData();
                 } else {
                     //If the User denies the access to the phone number he gets two Chance to accept the Request
                     //The Counter counts from 0 to 2. If the Counter is 2 user a dialog is shown where the user can input the phone number
@@ -601,25 +606,17 @@ public class NewEventFragment extends Fragment {
                         case 0:
                             Snackbar.make(getView(),
                                     R.string.phoneNumber_explanation,
-                                    Snackbar.LENGTH_INDEFINITE).setAction(R.string.oneMoreTime, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    counter++;
-                                    readOwnPhoneNumber();
-                                }
-                            }).show();
+                                    Snackbar.LENGTH_LONG).show();
+                            counter++;
+                            concatenateAndSavePersonalData();
                             break;
 
                         case 1:
                             Snackbar.make(getView(),
                                     R.string.lastTry_phoneNumber_event,
-                                    Snackbar.LENGTH_INDEFINITE).setAction(R.string.oneMoreTime, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    counter++;
-                                    readOwnPhoneNumber();
-                                }
-                            }).show();
+                                    Snackbar.LENGTH_SHORT).show();
+                            counter++;
+                            concatenateAndSavePersonalData();
                             break;
                         default:
                             openDialogAskForPhoneNumber();

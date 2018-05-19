@@ -122,8 +122,7 @@ public class SettingsSettingsFragment extends Fragment {
                 String inputText = v.getText().toString();
                 if (actionId == EditorInfo.IME_ACTION_DONE && !inputText.matches(" .*")) {
                     person.setName(inputText);
-                    if (person.getPhoneNumber() == null || person.getPhoneNumber().equalsIgnoreCase(""))
-                        readOwnPhoneNumber();
+                    concatenateAndSavePersonData();
                     editTextUsername.setFocusable(false);
                     editTextUsername.setFocusableInTouchMode(false);
                 } else {
@@ -205,22 +204,28 @@ public class SettingsSettingsFragment extends Fragment {
     }
 
     // method to read the phone number of the user
-    public void readOwnPhoneNumber() {
-        if (checkSelfPermission(getActivity(), READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
-            requestPermission();
-        else {
-            //if permission is granted read the phone number
-            TelephonyManager telephonyManager = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
-            person.setPhoneNumber(telephonyManager.getLine1Number());
-            //if the number could not been read, open a dialog
-            if (person.getPhoneNumber() == null || !person.getPhoneNumber().matches("[0+].*"))
-                openDialogAskForPhoneNumber();
-            else {
-                PersonController.addPersonMe(person);
-                Toast.makeText(getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT).show();
-            }
-        }
+    public void concatenateAndSavePersonData() {
 
+        if (person.getPhoneNumber() == null || person.getPhoneNumber().equalsIgnoreCase("")) {
+            if (checkSelfPermission(getActivity(), READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
+                requestPermission();
+            else {
+                //if permission is granted read the phone number
+                TelephonyManager telephonyManager = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
+                person.setPhoneNumber(telephonyManager.getLine1Number());
+                //if the number could not been read, open a dialog
+                if (person.getPhoneNumber() == null || !person.getPhoneNumber().matches("[0+].*"))
+                    openDialogAskForPhoneNumber();
+                else {
+                    PersonController.addPersonMe(person);
+                    Toast.makeText(getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT).show();
+                }
+            }
+        } else {
+            PersonController.addPersonMe(person);
+            Toast.makeText(getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT).show();
+
+        }
     }
 
     private void requestPermission() {
@@ -235,8 +240,8 @@ public class SettingsSettingsFragment extends Fragment {
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Snackbar.make(getView().findViewById(R.id.setting_settings_relativeLayout_buttonFrame),
                             R.string.thanksphoneNumber,
-                            Snackbar.LENGTH_SHORT).show();
-                    readOwnPhoneNumber();
+                            Snackbar.LENGTH_LONG).show();
+                    concatenateAndSavePersonData();
                 } else {
                     //If the User denies the access to the phone number he gets two Chance to accept the Request
                     //The Counter counts from 0 to 2. If the Counter is 2 user a dialog is shown where the user can input the phone number
@@ -244,25 +249,17 @@ public class SettingsSettingsFragment extends Fragment {
                         case 0:
                             Snackbar.make(getActivity().findViewById(getView().getId()),
                                     R.string.phoneNumber_explanation,
-                                    Snackbar.LENGTH_INDEFINITE).setAction(R.string.oneMoreTime, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    counter++;
-                                    readOwnPhoneNumber();
-                                }
-                            }).show();
+                                    Snackbar.LENGTH_LONG).show();
+                            counter++;
+                            concatenateAndSavePersonData();
                             break;
 
                         case 1:
                             Snackbar.make(getActivity().findViewById(getView().getId()),
                                     R.string.lastTry_phoneNumber,
-                                    Snackbar.LENGTH_INDEFINITE).setAction(R.string.oneMoreTime, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    counter++;
-                                    readOwnPhoneNumber();
-                                }
-                            }).show();
+                                    Snackbar.LENGTH_LONG).show();
+                            counter++;
+                            concatenateAndSavePersonData();
                             break;
                         default:
                             openDialogAskForPhoneNumber();

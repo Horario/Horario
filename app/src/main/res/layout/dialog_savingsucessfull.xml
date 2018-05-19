@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/relativeLayout2"
     android:layout_width="wrap_content"
@@ -8,41 +8,33 @@
     tools:context=".TabActivity">
 
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/savingSuccessful_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/event_saving_successful" />
-    </TableRow>
 
-    <TableRow
+            android:text="@string/event_saving_successful" />
+
+
+    <Button
+        android:id="@+id/savingSuccessful_button_new"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="visible">
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/savingSuccessful_button_qrcode"
+        android:text="@string/savingSuccessful_new"
+        android:visibility="visible" />
 
-        <Button
-            android:id="@+id/savingSuccessful_button_new"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+    <Button
+        android:id="@+id/savingSuccessful_button_qrcode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="54dp"
+        android:text="@string/savingSuccessful_qrcode"
+        android:visibility="visible" />
 
 
-            android:text="@string/savingSuccessful_new"
-            android:visibility="visible" />
-    </TableRow>
-
-    <TableRow>
-
-        <Button
-            android:id="@+id/savingSuccessful_button_qrcode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:text="@string/savingSuccessful_qrcode"
-            android:visibility="visible" />
-    </TableRow>
-
-</TableLayout>
+</RelativeLayout>
