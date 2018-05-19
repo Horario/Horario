@@ -370,8 +370,8 @@ public class NewEventFragment extends Fragment {
                         .replace(R.id.newEvent_newFragment, qrFrag, "QrGenerator")
                         .addToBackStack("QrGenerator")
                         .commit();
-                //getView().findViewById(R.id.newEvent_oldFragment).setVisibility(View.INVISIBLE);
-                //getView().findViewById(R.id.newEvent_newFragment).setVisibility(View.VISIBLE);
+                getView().findViewById(R.id.newEvent_oldFragment).setVisibility(View.INVISIBLE);
+                getView().findViewById(R.id.newEvent_newFragment).setVisibility(View.VISIBLE);
             }
         });
     }
