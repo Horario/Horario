@@ -24,7 +24,7 @@ import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
 
-public class QRGeneratorActivity extends Fragment {
+public class QRGeneratorFragment extends Fragment {
     private static final String TAG = "QRGeneratorFragmentActivity";
     private TextView mQRGenerator_textView_description, mQRGenerator_textView_headline;
     private RelativeLayout mQRGenerator_relativeLayout_buttonFrame, mQRGenerator_relativeLayout_show_newFragment;
@@ -33,7 +33,7 @@ public class QRGeneratorActivity extends Fragment {
     private StringBuffer mQRGenerator_StringBuffer_Result;
     private Event mEvent;
 
-    public QRGeneratorActivity() {
+    public QRGeneratorFragment() {
         // Required empty public constructor
     }
 
@@ -49,7 +49,7 @@ public class QRGeneratorActivity extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_qrgenerator, container, false);
+        View view = inflater.inflate(R.layout.fragment_qrgenerator, container, false);
 
         //Initial GUI
         mQRGenerator_button_start_sharingFragment = view.findViewById(R.id.generator_button_start_qrShareingFragment);
@@ -175,11 +175,9 @@ public class QRGeneratorActivity extends Fragment {
                 @Override
                 public void onClick(View view) {
                     FragmentTransaction fragmentTransaction = Objects.requireNonNull(getFragmentManager()).beginTransaction();
-                    fragmentTransaction.replace(R.id.generator_realtivLayout_show_qrSharingFragment, new CalendarActivity());
+                    fragmentTransaction.replace(R.id.calendar_frameLayout, new CalendarFragment());
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
-                    mQRGenerator_relativeLayout_buttonFrame.setVisibility(View.GONE);
-                    mQRGenerator_relativeLayout_show_newFragment.setVisibility(View.VISIBLE);
                 }
             }).show();
 
@@ -200,13 +198,10 @@ public class QRGeneratorActivity extends Fragment {
                 @Override
                 public void onClick(View view) {
                     FragmentTransaction fragmentTransaction = Objects.requireNonNull(getFragmentManager()).beginTransaction();
-                    fragmentTransaction.replace(R.id.generator_realtivLayout_show_qrSharingFragment, new CalendarActivity());
+                    fragmentTransaction.replace(R.id.calendar_frameLayout, new CalendarFragment());
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
-                    mQRGenerator_textView_headline.setVisibility(View.GONE);
-                    mQRGenerator_textView_description.setVisibility(View.GONE);
-                    mQRGenerator_relativeLayout_buttonFrame.setVisibility(View.GONE);
-                    mQRGenerator_relativeLayout_show_newFragment.setVisibility(View.VISIBLE);
+                    fragmentTransaction.show(new CalendarFragment());
                 }
             }).show();
         }
@@ -218,21 +213,24 @@ public class QRGeneratorActivity extends Fragment {
 
                 //Create a Bundle to send the Information to an other Fragment
                 //The Bundle Input is the StringBuffer with the EventInformation
-                QRSharingActivity qrSharingBundle = new QRSharingActivity();
+                QRSharingFragment qrSharingBundle = new QRSharingFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("qrStringBufferDescription", String.valueOf(mQRGenerator_StringBuffer_Result));
                 qrSharingBundle.setArguments(bundle);
 
-                FragmentTransaction fragmentTransaction = Objects.requireNonNull(getFragmentManager()).beginTransaction();
-                fragmentTransaction.replace(R.id.generator_realtivLayout_show_qrSharingFragment, qrSharingBundle);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-                mQRGenerator_textView_headline.setVisibility(View.GONE);
-                mQRGenerator_textView_description.setVisibility(View.GONE);
-                mQRGenerator_button_start_sharingFragment.setVisibility(View.GONE);
-                mQRGenerator_button_start_eventFeedbackFragment.setVisibility(View.GONE);
-                mQRGenerator_relativeLayout_show_newFragment.setVisibility(View.VISIBLE);
+                Bundle whichFragment = getArguments();
 
+                if(whichFragment.get("fragment").equals("EventOverview")) {
+                    FragmentTransaction fragmentTransaction = Objects.requireNonNull(getFragmentManager()).beginTransaction();
+                    fragmentTransaction.replace(R.id.eventOverview_frameLayout, qrSharingBundle,"");
+                    fragmentTransaction.addToBackStack("QrShareCA");
+                    fragmentTransaction.commit();
+                } else{
+                    FragmentTransaction fragmentTransaction = Objects.requireNonNull(getFragmentManager()).beginTransaction();
+                    fragmentTransaction.replace(R.id.calendar_frameLayout, qrSharingBundle, "QrShareCA");
+                    fragmentTransaction.addToBackStack("QrShareCA");
+                    fragmentTransaction.commit();
+                }
             }
         });
     }

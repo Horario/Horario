@@ -38,7 +38,7 @@ import hft.wiinf.de.horario.controller.PersonController;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class QRSharingActivity extends Fragment {
+public class QRSharingFragment extends Fragment {
     private static final String TAG = "QRSharingFragmentActivity";
     private RelativeLayout mQRSharing_relativeLayout_buttonFrame, mQRSharing_relativeLayout_textViewFrame,
             mQRSharing_relativeLayout_calendarActivity;
@@ -49,7 +49,7 @@ public class QRSharingActivity extends Fragment {
     private Bitmap mBitmapOfQRCode;
     private Person mPerson;
 
-    public QRSharingActivity() {
+    public QRSharingFragment() {
         // Required empty public constructor
     }
 
@@ -80,7 +80,7 @@ public class QRSharingActivity extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.activity_qrsharing, container, false);
+        View view = inflater.inflate(R.layout.fragment_qrsharing, container, false);
 
         //GUI initial
         mQRSharing_relativeLayout_buttonFrame = view.findViewById(R.id.qrSharing_relativeLayout_buttonFrame);
@@ -165,11 +165,9 @@ public class QRSharingActivity extends Fragment {
                 @Override
                 public void onClick(View view) {
                     FragmentTransaction fragmentTransaction = Objects.requireNonNull(getFragmentManager()).beginTransaction();
-                    fragmentTransaction.replace(R.id.generator_realtivLayout_show_qrSharingFragment, new CalendarActivity());
+                    fragmentTransaction.replace(R.id.calendar_frameLayout, new CalendarFragment());
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
-                    mQRSharing_relativeLayout_buttonFrame.setVisibility(View.GONE);
-                    mQRSharing_relativeLayout_calendarActivity.setVisibility(View.VISIBLE);
                 }
             }).show();
 
@@ -191,11 +189,9 @@ public class QRSharingActivity extends Fragment {
                 @Override
                 public void onClick(View view) {
                     FragmentTransaction fragmentTransaction = Objects.requireNonNull(getFragmentManager()).beginTransaction();
-                    fragmentTransaction.replace(R.id.generator_realtivLayout_show_qrSharingFragment, new CalendarActivity());
+                    fragmentTransaction.replace(R.id.calendar_frameLayout, new CalendarFragment());
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
-                    mQRSharing_relativeLayout_buttonFrame.setVisibility(View.GONE);
-                    mQRSharing_relativeLayout_calendarActivity.setVisibility(View.VISIBLE);
                 }
             }).show();
         }
@@ -215,13 +211,9 @@ public class QRSharingActivity extends Fragment {
             public void onClick(View v) {
                 try {
                     FragmentTransaction fragmentTransaction = Objects.requireNonNull(getFragmentManager()).beginTransaction();
-                    fragmentTransaction.replace(R.id.qrSharing_relativeLayout_calendarActivity, new CalendarActivity());
+                    fragmentTransaction.replace(R.id.calendar_frameLayout, new CalendarFragment());
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
-                    mQRSharing_relativeLayout_buttonFrame.setVisibility(View.GONE);
-                    mQRSharing_imageView_qrCode.setVisibility(View.GONE);
-                    mQRSharing_relativeLayout_textViewFrame.setVisibility(View.GONE);
-                    mQRSharing_relativeLayout_calendarActivity.setVisibility(View.VISIBLE);
                 } catch (NullPointerException mNullPointerException) {
                     Log.d(TAG, "QRGeneratorFragmentActivity:" + mNullPointerException.getMessage());
                 }

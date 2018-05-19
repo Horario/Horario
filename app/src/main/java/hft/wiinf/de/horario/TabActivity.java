@@ -313,10 +313,12 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 } else if (tab.getPosition() == 1) {
                     FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
                     fr.replace(R.id.calendar_frameLayout, new CalendarFragment());
+                    fr.addToBackStack(null);
                     fr.commit();
                 } else if (tab.getPosition() == 0) {
                     FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
                     fr.replace(R.id.eventOverview_frameLayout, new EventOverviewFragment());
+                    fr.addToBackStack(null);
                     fr.commit();
                 }
             }

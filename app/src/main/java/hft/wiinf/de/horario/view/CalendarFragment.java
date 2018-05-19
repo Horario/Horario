@@ -73,8 +73,13 @@ public class CalendarFragment extends Fragment {
         calendarFcNewEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                NewEventFragment newEventFragment = new NewEventFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("fragment","Calendar");
+                newEventFragment.setArguments(bundle);
+
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
-                fr.replace(R.id.calendar_frameLayout, new NewEventFragment(), "NewEvent");
+                fr.replace(R.id.calendar_frameLayout, newEventFragment, "NewEvent");
                 fr.addToBackStack("NewEvent");
                 fr.commit();
                 closeFABMenu();
@@ -84,8 +89,13 @@ public class CalendarFragment extends Fragment {
         calendarFcQrScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                QRScanFragment qrScanFragment = new QRScanFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("fragment","Calendar");
+                qrScanFragment.setArguments(bundle);
+
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
-                fr.replace(R.id.calendar_frameLayout, new QRScanFragment(), "QrScan");
+                fr.replace(R.id.calendar_frameLayout, qrScanFragment, "QrScan");
                 fr.addToBackStack("QrScan");
                 fr.commit();
                 closeFABMenu();

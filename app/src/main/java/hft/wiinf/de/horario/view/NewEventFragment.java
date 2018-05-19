@@ -62,7 +62,7 @@ public class NewEventFragment extends Fragment {
     //create the view
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_new_event, container, false);
+        View view = inflater.inflate(R.layout.fragment_new_event, container, false);
         return view;
     }
 
@@ -360,13 +360,14 @@ public class NewEventFragment extends Fragment {
         dialogSavingSuccessful.findViewById(R.id.savingSuccessful_button_qrcode).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Bundle whichFragment = getArguments();
                 dialogSavingSuccessful.dismiss();
-                QRGeneratorActivity qrFrag = new QRGeneratorActivity();
+                QRGeneratorFragment qrFrag = new QRGeneratorFragment();
                 Bundle bundle = new Bundle();
                 bundle.putLong("eventId", eventId);
+                bundle.putString("fragment",whichFragment.getString("fragment"));
                 qrFrag.setArguments(bundle);
 
-                Bundle whichFragment = getArguments();
                 if(whichFragment.getString("fragment").equals("EventOverview")){
                     getActivity().getSupportFragmentManager().beginTransaction()
                             .replace(R.id.eventOverview_frameLayout, qrFrag, "QrGeneratorEO")
