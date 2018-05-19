@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.QRSharingActivity">
+    tools:context=".view.QRSharingActivity"
+    android:background="?android:windowBackground">
 
     <RelativeLayout
         android:id="@+id/qrSharing_relativeLayout_calendarActivity"
@@ -15,7 +16,7 @@
     <RelativeLayout
         android:id="@+id/qrSharing_relativeLayout_textViewFrame"
         android:layout_width="match_parent"
-        android:layout_height="220dp">
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/qrSharing_textView_headline"
