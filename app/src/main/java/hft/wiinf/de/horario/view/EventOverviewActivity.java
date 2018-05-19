@@ -45,7 +45,7 @@ public class EventOverviewActivity extends Fragment{
     ConstraintLayout layoutOverview;
     ConstraintLayout layoutHelper;
     static Context context = null;
-    static DateFormat timeFormat = new SimpleDateFormat("hh:mm");
+    static DateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
     @Nullable
     @Override
@@ -82,7 +82,11 @@ public class EventOverviewActivity extends Fragment{
         overviewBtNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectedMonth.setMonth(selectedMonth.getMonth()+1);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(selectedMonth);
+                calendar.add(Calendar.MONTH, 1);
+                selectedMonth.setTime(calendar.getTimeInMillis());
+                //selectedMonth.setMonth(selectedMonth.getMonth()+1); //TODO delete
                 update();
             }
         });
@@ -90,7 +94,11 @@ public class EventOverviewActivity extends Fragment{
         overviewBtPrevious.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectedMonth.setMonth(selectedMonth.getMonth()-1);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(selectedMonth);
+                calendar.add(Calendar.MONTH, -1);
+                selectedMonth.setTime(calendar.getTimeInMillis());
+                //selectedMonth.setMonth(selectedMonth.getMonth()-1); //TODO delete
                 update();
             }
         });

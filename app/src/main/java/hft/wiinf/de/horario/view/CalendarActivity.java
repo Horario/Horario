@@ -84,15 +84,6 @@ public class CalendarActivity extends Fragment {
         calendarTvMonth.setText(monthFormat.format(today.getTime())); //initialize month field
         update(today.getTime());
 
-        //TODO just for testing (add entry to database), delete
-        hft.wiinf.de.horario.model.Event test = new hft.wiinf.de.horario.model.Event();
-        test.setStartTime(new Date(1524261326000L)); //20.04.18
-        test.setEndTime(new Date(1524261426000L));
-        test.setShortTitle("Termin 1");
-        test.setDescription("Das ist ein Testtermin");
-        test.setAccepted(AcceptedState.REJECTED);
-        test.save();
-
         calendarCvCalendar.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
             //when a day get clicked, the date field will be updated and the events for the day displayed in the ListView
@@ -183,10 +174,10 @@ public class CalendarActivity extends Fragment {
     //is marking the day in the calendar for the parameter date
     public static void updateCompactCalendar(){
         List<hft.wiinf.de.horario.model.Event> acceptedEvents = EventController.findMyEvents();
-        for (int i = 0; i<acceptedEvents.size(); i++){
-            if(calendarCvCalendar.getEvents(acceptedEvents.get(i).getStartTime().getTime()).size() == 0 && acceptedEvents.get(i).getAccepted() != AcceptedState.REJECTED){
+        for (int i = 0; i<acceptedEvents.size(); i++) {
+            if (calendarCvCalendar.getEvents(acceptedEvents.get(i).getStartTime().getTime()).size() == 0 && acceptedEvents.get(i).getAccepted() != AcceptedState.REJECTED) {
                 Event event = new Event(Color.BLUE, acceptedEvents.get(i).getStartTime().getTime());
-                calendarCvCalendar.addEvent(event, false);
+                calendarCvCalendar.addEvent(event, true);
             }
         }
     }
