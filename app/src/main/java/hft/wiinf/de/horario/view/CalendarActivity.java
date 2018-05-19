@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,7 +39,6 @@ public class CalendarActivity extends Fragment {
     TextView calendarIsFloatMenuOpen;
 
     FloatingActionButton calendarFcMenu, calendarFcQrScan, calendarFcNewEvent;
-    RelativeLayout rLayout_calendar_helper;
     ConstraintLayout cLayout_calendar_main;
 
     DateFormat monthFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
@@ -58,7 +56,6 @@ public class CalendarActivity extends Fragment {
         calendarFcMenu = view.findViewById(R.id.calendar_floatingActionButtonMenu);
         calendarFcNewEvent = view.findViewById(R.id.calendar_floatingActionButtonNewEvent);
         calendarFcQrScan = view.findViewById(R.id.calendar_floatingActionButtonScan);
-        rLayout_calendar_helper = view.findViewById(R.id.calendar_relativeLayout_helper);
         cLayout_calendar_main = view.findViewById(R.id.calendar_constrainLayout_main);
         calendarIsFloatMenuOpen = view.findViewById(R.id.calendar_hiddenField);
 
@@ -82,12 +79,10 @@ public class CalendarActivity extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
-                fr.replace(R.id.calendar_relativeLayout_helper, new NewEventFragment());
-                fr.addToBackStack(null);
+                fr.replace(R.id.calendar_constrainLayout_main, new NewEventFragment(), "NewEvent");
+                fr.addToBackStack("NewEvent");
                 fr.commit();
-                rLayout_calendar_helper.setVisibility(View.VISIBLE);
                 closeFABMenu();
-                calendarFcMenu.setVisibility(View.GONE);
             }
         });
 
@@ -95,16 +90,10 @@ public class CalendarActivity extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
-                fr.replace(R.id.calendar_relativeLayout_helper, new QRScanFragment());
-                fr.addToBackStack(null);
+                fr.replace(R.id.calendar_constrainLayout_main, new QRScanFragment(), "QrScan");
+                fr.addToBackStack("QrScan");
                 fr.commit();
                 closeFABMenu();
-                calendarTvMonth.setVisibility(View.GONE);
-                calendarCvCalendar.setVisibility(View.GONE);
-                calendarLvList.setVisibility(View.GONE);
-                calendarTvDay.setVisibility(View.GONE);
-                calendarFcMenu.setVisibility(View.GONE);
-                rLayout_calendar_helper.setVisibility(View.VISIBLE);
             }
         });
 

@@ -20,7 +20,7 @@ public class SettingsActivity extends Fragment {
 
     private static final String TAG = "SettingFragmentActivity";
     Button button_settings, button_support, button_copyright, button_feedback;
-    RelativeLayout rLayout_settings_helper, rLayout_settings_button;
+    RelativeLayout rLayout_settings_button;
     Person person;
 
     public SettingsActivity() {
@@ -52,7 +52,6 @@ public class SettingsActivity extends Fragment {
         button_copyright = view.findViewById(R.id.settings_button_copyright);
         button_feedback = view.findViewById(R.id.settings_button_feedback);
 
-        rLayout_settings_helper = view.findViewById(R.id.settings_relativeLayout_helper);
         rLayout_settings_button = view.findViewById(R.id.settings_relativeLayout_button);
 
 
@@ -62,12 +61,9 @@ public class SettingsActivity extends Fragment {
             public void onClick(View v) {
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
                 //settings_relativeLayout_helper: in this Layout all other layouts will be uploaded
-                fr.replace(R.id.settings_relativeLayout_helper, new SettingsSettingsFragment());
-                fr.addToBackStack(null);
+                fr.replace(R.id.settings_relativeLayout_main, new SettingsSettingsFragment(), "SettingsSettings");
+                fr.addToBackStack("SettingsSettings");
                 fr.commit();
-                //set settings-buttons invisible and new Layout_helper visible
-                rLayout_settings_button.setVisibility(View.GONE);
-                rLayout_settings_helper.setVisibility(View.VISIBLE);
             }
         });
 
@@ -75,11 +71,9 @@ public class SettingsActivity extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
-                fr.replace(R.id.settings_relativeLayout_helper, new SettingsSupportFragment());
-                fr.addToBackStack(null);
+                fr.replace(R.id.settings_relativeLayout_main, new SettingsSupportFragment(), "SettingsSupport");
+                fr.addToBackStack("SettingsSupport");
                 fr.commit();
-                rLayout_settings_button.setVisibility(View.GONE);
-                rLayout_settings_helper.setVisibility(View.VISIBLE);
             }
         });
 
@@ -87,11 +81,9 @@ public class SettingsActivity extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
-                fr.replace(R.id.settings_relativeLayout_helper, new SettingsCopyrightFragment());
-                fr.addToBackStack(null);
+                fr.replace(R.id.settings_relativeLayout_main, new SettingsCopyrightFragment(), "SettingsCopyright");
+                fr.addToBackStack("SettingsCopyright");
                 fr.commit();
-                rLayout_settings_button.setVisibility(View.GONE);
-                rLayout_settings_helper.setVisibility(View.VISIBLE);
             }
         });
 
@@ -99,11 +91,9 @@ public class SettingsActivity extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
-                fr.replace(R.id.settings_relativeLayout_helper, new SettingsFeedbackFragment());
-                fr.addToBackStack(null);
+                fr.replace(R.id.settings_relativeLayout_main, new SettingsFeedbackFragment(), "SettingsFeedback");
+                fr.addToBackStack("SettingsFeedback");
                 fr.commit();
-                rLayout_settings_button.setVisibility(View.GONE);
-                rLayout_settings_helper.setVisibility(View.VISIBLE);
             }
         });
     }

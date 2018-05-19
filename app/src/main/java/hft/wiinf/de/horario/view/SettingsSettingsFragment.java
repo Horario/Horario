@@ -29,12 +29,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
 import hft.wiinf.de.horario.controller.PersonController;
+import hft.wiinf.de.horario.interfaces.IOnBackPressed;
 import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.service.NotificationReceiver;
@@ -42,7 +44,7 @@ import hft.wiinf.de.horario.service.NotificationReceiver;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SettingsSettingsFragment extends Fragment {
+public class SettingsSettingsFragment extends Fragment{
     private static final String TAG = "SettingFragmentActivity";
     EditText editTextUsername;
     Person person;

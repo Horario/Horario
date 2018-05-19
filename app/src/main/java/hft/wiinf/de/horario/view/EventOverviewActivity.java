@@ -17,7 +17,6 @@ import hft.wiinf.de.horario.R;
 public class EventOverviewActivity extends Fragment {
 
     FloatingActionButton eventOverviewFcMenu, eventOverviewFcQrScan, eventOverviewFcNewEvent;
-    RelativeLayout rLayout_eventOverview_helper;
     ConstraintLayout cLayout_eventOverview_main;
     TextView eventOverview_HiddenIsFloatingMenuOpen;
 
@@ -30,7 +29,6 @@ public class EventOverviewActivity extends Fragment {
         eventOverviewFcMenu = view.findViewById(R.id.eventOverview_floatingActionButtonMenu);
         eventOverviewFcNewEvent = view.findViewById(R.id.eventOverview_floatingActionButtonNewEvent);
         eventOverviewFcQrScan = view.findViewById(R.id.eventOverview_floatingActionButtonScan);
-        rLayout_eventOverview_helper = view.findViewById(R.id.eventOverview_relativeLayout_helper);
         cLayout_eventOverview_main = view.findViewById(R.id.eventOverview_Layout_main);
         eventOverview_HiddenIsFloatingMenuOpen = view.findViewById(R.id.eventOverviewFabClosed);
 
@@ -55,12 +53,10 @@ public class EventOverviewActivity extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
-                fr.replace(R.id.eventOverview_relativeLayout_helper, new NewEventFragment());
-                fr.addToBackStack(null);
+                fr.replace(R.id.eventOverview_Layout_main, new NewEventFragment(), "NewEvent");
+                fr.addToBackStack("NewEvent");
                 fr.commit();
-                rLayout_eventOverview_helper.setVisibility(View.VISIBLE);
                 closeFABMenu();
-                eventOverviewFcMenu.setVisibility(View.GONE);
             }
         });
 
@@ -69,12 +65,10 @@ public class EventOverviewActivity extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
-                fr.replace(R.id.eventOverview_relativeLayout_helper, new QRScanFragment());
-                fr.addToBackStack(null);
+                fr.replace(R.id.eventOverview_Layout_main, new QRScanFragment(), "QrScan");
+                fr.addToBackStack("QrScan");
                 fr.commit();
-                rLayout_eventOverview_helper.setVisibility(View.VISIBLE);
                 closeFABMenu();
-                eventOverviewFcMenu.setVisibility(View.GONE);
             }
         });
 

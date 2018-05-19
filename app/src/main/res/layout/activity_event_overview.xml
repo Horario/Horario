@@ -7,6 +7,9 @@
     android:background="?android:windowBackground"
     android:orientation="vertical">
 
+<android.support.constraint.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/newEventTab"
@@ -59,12 +62,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_menu_camera" />
 
-    <RelativeLayout
-        android:id="@+id/eventOverview_relativeLayout_helper"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone" />
-
     <TextView
         android:id="@+id/eventOverviewFabClosed"
         android:layout_width="wrap_content"
@@ -77,5 +74,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
+</android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>

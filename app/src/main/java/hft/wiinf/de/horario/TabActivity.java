@@ -2,7 +2,6 @@ package hft.wiinf.de.horario;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,23 +12,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.activeandroid.ActiveAndroid;
-import com.activeandroid.util.Log;
 import com.facebook.stetho.Stetho;
 
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import hft.wiinf.de.horario.controller.NoScanResultExceptionController;
+import hft.wiinf.de.horario.controller.PersonController;
+import hft.wiinf.de.horario.controller.ScanResultReceiverController;
 import hft.wiinf.de.horario.model.Person;
-import hft.wiinf.de.horario.controller.*;
-import hft.wiinf.de.horario.view.*;
+import hft.wiinf.de.horario.view.CalendarActivity;
+import hft.wiinf.de.horario.view.EventOverviewActivity;
+import hft.wiinf.de.horario.view.SettingsActivity;
 
 public class TabActivity extends AppCompatActivity implements ScanResultReceiverController {
 
@@ -254,11 +255,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                     startActivity(intent);
                 }
             });
-
-
         }
-
-
     }
 
 
@@ -292,26 +289,9 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             public void onTabUnselected(TabLayout.Tab tab) {
                 //check if settings Tab is unselected
                 if (tab.getPosition() == 2) {
-                    //Set Visibility of mainLayout to Visible and the rest to Gone, to see only the overview
-                    try {
-                        Objects.requireNonNull(mSectionsPageAdapter.getItem(2).getView()).findViewById(R.id.settings_relativeLayout_helper).setVisibility(View.GONE);
-                        Objects.requireNonNull(mSectionsPageAdapter.getItem(2).getView()).findViewById(R.id.settings_relativeLayout_button).setVisibility(View.VISIBLE);
-
-                        //Leave edit mode from EditText in Settings (username)
-                        Objects.requireNonNull(mSectionsPageAdapter.getItem(2).getActivity()).findViewById(R.id.settings_settings_editText_username).setFocusableInTouchMode(false);
-                        Objects.requireNonNull(mSectionsPageAdapter.getItem(2).getActivity()).findViewById(R.id.settings_settings_editText_username).setFocusable(false);
-
-                        //Close the keyboard on a tab change
-                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        Objects.requireNonNull(imm).hideSoftInputFromWindow(Objects.requireNonNull(mSectionsPageAdapter.getItem(2).getView()).getApplicationWindowToken(), 0);
-                    } catch (NullPointerException e) {
-                        Log.d(TAG, "TabActivity:" + e.getMessage());
-                    }
+                    getSupportFragmentManager().popBackStack();
                 } else if (tab.getPosition() == 1) {
-                    Objects.requireNonNull(mSectionsPageAdapter.getItem(1).getView()).findViewById(R.id.calendar_relativeLayout_helper).setVisibility(View.GONE);
-                    Objects.requireNonNull(mSectionsPageAdapter.getItem(1).getView()).findViewById(R.id.calendar_constrainLayout_main).setVisibility(View.VISIBLE);
-                    Objects.requireNonNull(mSectionsPageAdapter.getItem(1).getView()).findViewById(R.id.calendar_floatingActionButtonMenu).setVisibility(View.VISIBLE);
-
+                    getSupportFragmentManager().popBackStack();
                     FloatingActionButton floatNewEvent = Objects.requireNonNull(mSectionsPageAdapter.getItem(1).getView()).findViewById(R.id.calendar_floatingActionButtonNewEvent);
                     FloatingActionButton floatQRScan = Objects.requireNonNull(mSectionsPageAdapter.getItem(1).getView()).findViewById(R.id.calendar_floatingActionButtonScan);
                     FloatingActionButton floatMenu = Objects.requireNonNull(mSectionsPageAdapter.getItem(1).getView()).findViewById(R.id.calendar_floatingActionButtonMenu);
@@ -321,12 +301,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                     floatQRScan.hide();
                     floatMenu.setImageResource(R.drawable.ic_android_black2_24dp);
                     isFloatingMenuOpen.setText("false");
-
                 } else if (tab.getPosition() == 0) {
-                    Objects.requireNonNull(mSectionsPageAdapter.getItem(0).getView()).findViewById(R.id.eventOverview_relativeLayout_helper).setVisibility(View.GONE);
-                    Objects.requireNonNull(mSectionsPageAdapter.getItem(0).getView()).findViewById(R.id.eventOverview_Layout_main).setVisibility(View.VISIBLE);
-                    Objects.requireNonNull(mSectionsPageAdapter.getItem(0).getView()).findViewById(R.id.eventOverview_floatingActionButtonMenu).setVisibility(View.VISIBLE);
-
+                    getSupportFragmentManager().popBackStack();
                     FloatingActionButton floatNewEvent = Objects.requireNonNull(mSectionsPageAdapter.getItem(0).getView()).findViewById(R.id.eventOverview_floatingActionButtonNewEvent);
                     FloatingActionButton floatQRScan = Objects.requireNonNull(mSectionsPageAdapter.getItem(0).getView()).findViewById(R.id.eventOverview_floatingActionButtonScan);
                     FloatingActionButton floatMenu = Objects.requireNonNull(mSectionsPageAdapter.getItem(0).getView()).findViewById(R.id.eventOverview_floatingActionButtonMenu);
@@ -342,44 +318,22 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             //Do something if Tab is reselected. Parameters: selected Tab.--- Info: tab.getPosition() == x for check which Tab
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
+                //check if settings Tab is unselected
                 if (tab.getPosition() == 2) {
-                    //Set Visibility of mainLayout to Visible and the rest to Gone, to see only the overview
-                    try {
-                        Objects.requireNonNull(mSectionsPageAdapter.getItem(2).getView()).findViewById(R.id.settings_relativeLayout_helper).setVisibility(View.GONE);
-                        Objects.requireNonNull(mSectionsPageAdapter.getItem(2).getView()).findViewById(R.id.settings_relativeLayout_button).setVisibility(View.VISIBLE);
-
-                        //Leave edit mode from EditText in Settings (username)
-                        Objects.requireNonNull(mSectionsPageAdapter.getItem(2).getActivity()).findViewById(R.id.settings_settings_editText_username).setFocusableInTouchMode(false);
-                        Objects.requireNonNull(mSectionsPageAdapter.getItem(2).getActivity()).findViewById(R.id.settings_settings_editText_username).setFocusable(false);
-
-                        //Close the keyboard on a tab change
-                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        Objects.requireNonNull(imm).hideSoftInputFromWindow(Objects.requireNonNull(mSectionsPageAdapter.getItem(2).getView()).getApplicationWindowToken(), 0);
-
-                    } catch (NullPointerException e) {
-                        Log.d(TAG, "TabActivity:" + e.getMessage());
-                    }
+                    getSupportFragmentManager().popBackStack();
                 } else if (tab.getPosition() == 1) {
-                    Objects.requireNonNull(mSectionsPageAdapter.getItem(1).getView()).findViewById(R.id.calendar_relativeLayout_helper).setVisibility(View.GONE);
-                    Objects.requireNonNull(mSectionsPageAdapter.getItem(1).getView()).findViewById(R.id.calendar_constrainLayout_main).setVisibility(View.VISIBLE);
-                    Objects.requireNonNull(mSectionsPageAdapter.getItem(1).getView()).findViewById(R.id.calendar_floatingActionButtonMenu).setVisibility(View.VISIBLE);
-
+                    getSupportFragmentManager().popBackStack();
                     FloatingActionButton floatNewEvent = Objects.requireNonNull(mSectionsPageAdapter.getItem(1).getView()).findViewById(R.id.calendar_floatingActionButtonNewEvent);
                     FloatingActionButton floatQRScan = Objects.requireNonNull(mSectionsPageAdapter.getItem(1).getView()).findViewById(R.id.calendar_floatingActionButtonScan);
                     FloatingActionButton floatMenu = Objects.requireNonNull(mSectionsPageAdapter.getItem(1).getView()).findViewById(R.id.calendar_floatingActionButtonMenu);
                     TextView isFloatingMenuOpen = Objects.requireNonNull(mSectionsPageAdapter.getItem(1).getView()).findViewById(R.id.calendar_hiddenField);
 
-
                     floatNewEvent.hide();
                     floatQRScan.hide();
                     floatMenu.setImageResource(R.drawable.ic_android_black2_24dp);
                     isFloatingMenuOpen.setText("false");
-
                 } else if (tab.getPosition() == 0) {
-                    Objects.requireNonNull(mSectionsPageAdapter.getItem(0).getView()).findViewById(R.id.eventOverview_relativeLayout_helper).setVisibility(View.GONE);
-                    Objects.requireNonNull(mSectionsPageAdapter.getItem(0).getView()).findViewById(R.id.eventOverview_Layout_main).setVisibility(View.VISIBLE);
-                    Objects.requireNonNull(mSectionsPageAdapter.getItem(0).getView()).findViewById(R.id.eventOverview_floatingActionButtonMenu).setVisibility(View.VISIBLE);
-
+                    getSupportFragmentManager().popBackStack();
                     FloatingActionButton floatNewEvent = Objects.requireNonNull(mSectionsPageAdapter.getItem(0).getView()).findViewById(R.id.eventOverview_floatingActionButtonNewEvent);
                     FloatingActionButton floatQRScan = Objects.requireNonNull(mSectionsPageAdapter.getItem(0).getView()).findViewById(R.id.eventOverview_floatingActionButtonScan);
                     FloatingActionButton floatMenu = Objects.requireNonNull(mSectionsPageAdapter.getItem(0).getView()).findViewById(R.id.eventOverview_floatingActionButtonMenu);
@@ -459,5 +413,16 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 }
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        int count = getSupportFragmentManager().getBackStackEntryCount();
+
+        if (count == 0) {
+            super.onBackPressed();
+        } else {
+            getSupportFragmentManager().popBackStack();
+        }
     }
 }
