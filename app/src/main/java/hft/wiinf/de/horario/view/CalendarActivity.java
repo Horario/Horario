@@ -23,7 +23,7 @@ public class CalendarActivity extends Fragment {
 
         FragmentTransaction fr = getFragmentManager().beginTransaction();
         //settings_relativeLayout_helper: in this Layout all other layouts will be uploaded
-        fr.replace(R.id.frameLayout, new CalendarFragment(),"Calendar");
+        fr.replace(R.id.calendar_frameLayout, new CalendarFragment(),"Calendar");
         fr.commit();
 
         return view;

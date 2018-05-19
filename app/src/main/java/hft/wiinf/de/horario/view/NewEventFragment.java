@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -368,7 +367,7 @@ public class NewEventFragment extends Fragment {
                 qrFrag.setArguments(bundle);
 
                 getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.frameLayout, qrFrag, "QrGenerator")
+                        .replace(R.id.calendar_frameLayout, qrFrag, "QrGenerator")
                         .addToBackStack("QrGenerator")
                         .commit();
             }

@@ -74,7 +74,7 @@ public class CalendarFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
-                fr.replace(R.id.frameLayout, new NewEventFragment(), "NewEvent");
+                fr.replace(R.id.calendar_frameLayout, new NewEventFragment(), "NewEvent");
                 fr.addToBackStack("NewEvent");
                 fr.commit();
                 closeFABMenu();
@@ -85,7 +85,7 @@ public class CalendarFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
-                fr.replace(R.id.frameLayout, new QRScanFragment(), "QrScan");
+                fr.replace(R.id.calendar_frameLayout, new QRScanFragment(), "QrScan");
                 fr.addToBackStack("QrScan");
                 fr.commit();
                 closeFABMenu();
