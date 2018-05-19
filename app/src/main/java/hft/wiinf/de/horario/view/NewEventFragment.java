@@ -366,10 +366,18 @@ public class NewEventFragment extends Fragment {
                 bundle.putLong("eventId", eventId);
                 qrFrag.setArguments(bundle);
 
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.calendar_frameLayout, qrFrag, "QrGenerator")
-                        .addToBackStack("QrGenerator")
-                        .commit();
+                Bundle whichFragment = getArguments();
+                if(whichFragment.getString("fragment").equals("EventOverview")){
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.eventOverview_frameLayout, qrFrag, "QrGeneratorEO")
+                            .addToBackStack("QrGeneratorEO")
+                            .commit();
+                }else {
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.calendar_frameLayout, qrFrag, "QrGeneratorCA")
+                            .addToBackStack("QrGeneratorCA")
+                            .commit();
+                }
             }
         });
     }
