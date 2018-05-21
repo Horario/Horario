@@ -1,234 +1,31 @@
 package hft.wiinf.de.horario.view;
 
-import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.github.sundeepk.compactcalendarview.CompactCalendarView;
-import com.github.sundeepk.compactcalendarview.domain.Event;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 
 import hft.wiinf.de.horario.R;
-import hft.wiinf.de.horario.controller.EventController;
-import hft.wiinf.de.horario.model.AcceptedState;
 
+//TODO Kommentieren und Java Doc Info Schreiben
 public class CalendarActivity extends Fragment {
     private static final String TAG = "CalendarFragmentActivity";
 
-    public static CompactCalendarView calendarCvCalendar;
-    static ListView calendarLvList;
-    static TextView calendarTvMonth;
-    static TextView calendarTvDay;
-    TextView calendarIsFloatMenuOpen;
-    FloatingActionButton calendarFcMenu, calendarFcQrScan, calendarFcNewEvent;
-    RelativeLayout rLayout_calendar_helper;
-    ConstraintLayout cLayout_calendar_main;
-    ConstraintLayout layoutCalendar;
-    ConstraintLayout layoutHelper;
-    static Context context = null;
-
-    static DateFormat monthFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
-    static DateFormat dayFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
-    static DateFormat timeFormat = new SimpleDateFormat("hh:mm");
-    public static Date selectedMonth;
-
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        //initialize variables
-        final View view = inflater.inflate(R.layout.activity_calendar, container, false);
-        calendarCvCalendar = view.findViewById(R.id.calendarCvCalendar);
-        calendarTvMonth = view.findViewById(R.id.calendarTvMonth);
-        calendarLvList = view.findViewById(R.id.calendarLvList);
-        calendarTvDay = view.findViewById(R.id.calendarTvDay);
-        layoutCalendar = view.findViewById(R.id.layoutCalendar);
-        layoutHelper = view.findViewById(R.id.layoutHelper);
-        context = this.getActivity();
-        //FloatingButton
-        calendarFcMenu = view.findViewById(R.id.calendar_floatingActionButtonMenu);
-        calendarFcNewEvent = view.findViewById(R.id.calendar_floatingActionButtonNewEvent);
-        calendarFcQrScan = view.findViewById(R.id.calendar_floatingActionButtonScan);
-        rLayout_calendar_helper = view.findViewById(R.id.calendar_relativeLayout_helper);
-        cLayout_calendar_main = view.findViewById(R.id.calendar_constrainLayout_main);
-        calendarIsFloatMenuOpen = view.findViewById(R.id.calendar_hiddenField);
-        calendarFcQrScan.hide();
-        calendarFcNewEvent.hide();
 
-        //Date today = new Date();
-        Calendar today = Calendar.getInstance();
-        today.set(Calendar.HOUR_OF_DAY, 0);
-        today.set(Calendar.MINUTE, 0);
-        selectedMonth = today.getTime();
-        calendarTvMonth.setText(monthFormat.format(today.getTime())); //initialize month field
-        update(today.getTime());
+        View view = inflater.inflate(R.layout.activity_calendar, container, false);
 
-        calendarCvCalendar.setListener(new CompactCalendarView.CompactCalendarViewListener() {
-            @Override
-            //when a day get clicked, the date field will be updated and the events for the day displayed in the ListView
-            public void onDayClick(Date dateClicked) {
-                update(dateClicked);
-                closeFABMenu();
-            }
-
-            @Override
-            //handle everything when the user swipe the month
-            public void onMonthScroll(Date firstDayOfNewMonth) {
-                update(firstDayOfNewMonth);
-                selectedMonth = firstDayOfNewMonth;
-            }
-        });
-
-        //handle actions after a event entry get clicked
-        calendarLvList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedItem = (String) parent.getItemAtPosition(position); //Get the clicked item as String
-                Toast.makeText(getActivity(), selectedItem, Toast.LENGTH_SHORT).show(); //TODO just for testing, delete
-                closeFABMenu();
-            }
-        });
-
-        calendarFcMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (calendarIsFloatMenuOpen.getText().equals("false")) {
-                    showFABMenu();
-                    calendarIsFloatMenuOpen.setText("true");
-                } else {
-                    closeFABMenu();
-                    calendarIsFloatMenuOpen.setText("false");
-                }
-            }
-        });
-
-        calendarFcNewEvent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentTransaction fr = getFragmentManager().beginTransaction();
-                fr.replace(R.id.calendar_relativeLayout_helper, new NewEventFragment());
-                fr.addToBackStack(null);
-                fr.commit();
-                rLayout_calendar_helper.setVisibility(View.VISIBLE);
-                layoutHelper.setVisibility(View.VISIBLE);
-                layoutCalendar.setVisibility(View.GONE);
-                closeFABMenu();
-                calendarFcMenu.setVisibility(View.GONE);
-            }
-        });
-
-        calendarFcQrScan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentTransaction fr = getFragmentManager().beginTransaction();
-                fr.replace(R.id.calendar_relativeLayout_helper, new QRScanFragment());
-                fr.addToBackStack(null);
-                fr.commit();
-                rLayout_calendar_helper.setVisibility(View.VISIBLE);
-                layoutHelper.setVisibility(View.VISIBLE);
-                layoutCalendar.setVisibility(View.GONE);
-                closeFABMenu();
-                calendarFcMenu.setVisibility(View.GONE);
-            }
-        });
-
-        cLayout_calendar_main.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                closeFABMenu();
-            }
-        });
+        FragmentTransaction fr = getFragmentManager().beginTransaction();
+        //settings_relativeLayout_helper: in this Layout all other layouts will be uploaded
+        fr.replace(R.id.calendar_frameLayout, new CalendarFragment(),"Calendar");
+        fr.commit();
 
         return view;
-    }
-
-    public static void update(Date date){
-        calendarTvDay.setText(dayFormat.format(date));
-        calendarLvList.setAdapter(getAdapter(date));
-        calendarTvMonth.setText(monthFormat.format(date));
-        updateCompactCalendar();
-    }
-
-
-    //is marking the day in the calendar for the parameter date
-    public static void updateCompactCalendar(){
-        List<hft.wiinf.de.horario.model.Event> acceptedEvents = EventController.findMyEvents();
-        for (int i = 0; i<acceptedEvents.size(); i++) {
-            if (calendarCvCalendar.getEvents(acceptedEvents.get(i).getStartTime().getTime()).size() == 0 && acceptedEvents.get(i).getAccepted() != AcceptedState.REJECTED) {
-                Event event = new Event(Color.BLUE, acceptedEvents.get(i).getStartTime().getTime());
-                calendarCvCalendar.addEvent(event, true);
-            }
-        }
-    }
-
-    /** TODO need a description */
-    public static ArrayAdapter getAdapter(Date date){
-        //TODO Testing
-        ArrayList<String> eventsAsString = new ArrayList<>();
-        Calendar endOfDay = Calendar.getInstance();
-        endOfDay.setTime(date);
-        endOfDay.add(Calendar.DAY_OF_MONTH, 1);
-        final List<hft.wiinf.de.horario.model.Event> eventList = EventController.findEventsByTimePeriod(date, endOfDay.getTime());
-        for (int i = 0; i<eventList.size(); i++){
-            if(eventList.get(i).getAccepted() != AcceptedState.REJECTED) {
-                eventsAsString.add(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle());
-            }
-        }
-        final ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1, eventsAsString){
-            @NonNull
-            @Override
-            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-                TextView textView = (TextView) super.getView(position, convertView, parent);
-                if (eventList.get(position).getAccepted().equals(AcceptedState.ACCEPTED)){
-                    textView.setBackgroundColor(Color.GREEN);
-                }else if(eventList.get(position).getAccepted().equals(AcceptedState.WAITING)){
-                    textView.setBackgroundColor(Color.RED);
-                }else{
-                    textView.setBackgroundColor(Color.WHITE);
-                }
-                return textView;
-            }
-        };
-        return adapter;
-    }
-
-    public void showFABMenu() {
-        calendarIsFloatMenuOpen.setText("true");
-        calendarFcQrScan.show();
-        calendarFcNewEvent.show();
-        calendarFcMenu.setImageResource(R.drawable.ic_android_black_24dp);
-
-    }
-
-    public void closeFABMenu() {
-        calendarIsFloatMenuOpen.setText("false");
-        calendarFcQrScan.hide();
-        calendarFcNewEvent.hide();
-        calendarFcMenu.setImageResource(R.drawable.ic_android_black2_24dp);
-    }
-
-    public CalendarActivity() {
-        super();
     }
 }
