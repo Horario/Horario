@@ -285,19 +285,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             //Do something if Tab is selected. Parameters: selected Tab.--- Info: tab.getPosition() == x for check which Tab
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                if(tab.getPosition() == 0){
-                    EventOverviewActivity.selectedMonth = CalendarActivity.selectedMonth;
-                    EventOverviewActivity.update();
-                    mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.layoutHelper).setVisibility(View.GONE);
-                    mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.layoutOverview).setVisibility(View.VISIBLE);
-                    mSectionsPageAdapter.getItem(0).getView().findViewById(R.id.eventOverview_floatingActionButtonMenu).setVisibility(View.VISIBLE);
-                }else if(tab.getPosition() == 1){
-                    CalendarActivity.selectedMonth = EventOverviewActivity.selectedMonth;
-                    CalendarActivity.update(CalendarActivity.selectedMonth);
-                    mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.layoutHelper).setVisibility(View.GONE);
-                    mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.layoutCalendar).setVisibility(View.VISIBLE);
-                    mSectionsPageAdapter.getItem(1).getView().findViewById(R.id.calendar_floatingActionButtonMenu).setVisibility(View.VISIBLE);
-                }
             }
 
             //Do something if Tab is unselected. Parameters: selected Tab.--- Info: tab.getPosition() == x for check which Tab
@@ -333,7 +320,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                     fr.replace(R.id.eventOverview_frameLayout, new EventOverviewFragment());
                     fr.addToBackStack(null);
                     fr.commit();
-                    EventOverviewActivity.update();
                 }
             }
         });
