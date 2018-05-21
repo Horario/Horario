@@ -10,6 +10,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
@@ -38,7 +39,7 @@ import static android.Manifest.permission.READ_PHONE_STATE;
 import static android.Manifest.permission.SEND_SMS;
 import static com.activeandroid.Cache.getContext;
 
-public class TabActivity extends AppCompatActivity {
+public class TabActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback{
 
     //TODO Kommentieren und Java Doc Info Schreiben
     private static final String TAG = "TabActivity";
@@ -238,7 +239,6 @@ public class TabActivity extends AppCompatActivity {
 
                 if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches()) {
                     person = new Person(true, "", dialog_inputUsername);
-                    if (person.getPhoneNumber() == null || person.getPhoneNumber().equalsIgnoreCase(""))
                         readOwnPhoneNumber();
                     alertDialogAskForUsername.dismiss();
                     return true;
@@ -254,7 +254,7 @@ public class TabActivity extends AppCompatActivity {
 
     // method to read the phone number of the user
     public void readOwnPhoneNumber() {
-        if (ActivityCompat.checkSelfPermission(this, SEND_SMS) != PackageManager.PERMISSION_GRANTED)
+        if (ActivityCompat.checkSelfPermission(getContext(), SEND_SMS) != PackageManager.PERMISSION_GRANTED)
             requestPermission();
         else {
             //if permission is granted read the phone number
@@ -272,9 +272,9 @@ public class TabActivity extends AppCompatActivity {
     }
 
     private void requestPermission() {
-        requestPermissions(new String[]{Manifest.permission.SEND_SMS}, PERMISSION_REQUEST_SEND_SMS);
+        ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.SEND_SMS}, PERMISSION_REQUEST_SEND_SMS);
     }
-
+@Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
