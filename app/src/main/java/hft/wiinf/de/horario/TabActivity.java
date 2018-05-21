@@ -1,25 +1,20 @@
 package hft.wiinf.de.horario;
 
-import android.annotation.SuppressLint;
-import android.app.Dialog;
-import android.content.Intent;
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -43,22 +38,20 @@ import hft.wiinf.de.horario.view.CalendarActivity;
 import hft.wiinf.de.horario.view.CalendarFragment;
 import hft.wiinf.de.horario.view.EventOverviewActivity;
 import hft.wiinf.de.horario.view.EventOverviewFragment;
-import hft.wiinf.de.horario.view.NewEventFragment;
 import hft.wiinf.de.horario.view.SettingsActivity;
 
-import static android.Manifest.permission.SEND_SMS;
+import static android.Manifest.permission.READ_SMS;
 import static com.activeandroid.Cache.getContext;
 
-public class TabActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback{
 public class TabActivity extends AppCompatActivity implements ScanResultReceiverController {
 
     //TODO Kommentieren und Java Doc Info Schreiben
     private static final String TAG = "TabActivity";
     private static final int PERMISSION_REQUEST_SEND_SMS = 0;
-    private SectionsPageAdapterActivity mSectionsPageAdapter;
-    private ViewPager mViewPager;
     TabLayout tabLayout;
     Person person;
+    private SectionsPageAdapterActivity mSectionsPageAdapter;
+    private ViewPager mViewPager;
     private int counter;
 
     @Override
@@ -69,6 +62,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             super.onBackPressed();
         }
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -404,7 +398,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
     // method to read the phone number of the user
     public void readOwnPhoneNumber() {
-        if (ActivityCompat.checkSelfPermission(getContext(), SEND_SMS) != PackageManager.PERMISSION_GRANTED)
+        if (checkSelfPermission(READ_SMS) != PackageManager.PERMISSION_GRANTED)
             requestPermission();
         else {
             //if permission is granted read the phone number
@@ -422,10 +416,12 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     }
 
     private void requestPermission() {
-        ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.SEND_SMS}, PERMISSION_REQUEST_SEND_SMS);
+        requestPermissions(new String[]{Manifest.permission.READ_SMS}, PERMISSION_REQUEST_SEND_SMS);
     }
-@Override
+
+    @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        Toast.makeText(getContext(), requestCode + "", Toast.LENGTH_LONG).show();
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case PERMISSION_REQUEST_SEND_SMS: {
@@ -465,10 +461,10 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     }
 
     public void openDialogAskForPhoneNumber() {
-        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        final android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder(this);
         dialogBuilder.setView(R.layout.dialog_askingfortelephonenumber);
         dialogBuilder.setCancelable(true);
-        final AlertDialog alertDialog = dialogBuilder.create();
+        final android.app.AlertDialog alertDialog = dialogBuilder.create();
         alertDialog.show();
         EditText phoneNumber = alertDialog.findViewById(R.id.dialog_EditText_telephonNumber);
         if (person.getPhoneNumber() != null)
@@ -503,16 +499,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         });
 
     }
-
-    @Override
-    public void onBackPressed() {
-        int count = getSupportFragmentManager().getBackStackEntryCount();
-
-        if (count == 0) {
-            super.onBackPressed();
-        } else {
-            getSupportFragmentManager().popBackStack();
-        }
-    }
 }
+
 

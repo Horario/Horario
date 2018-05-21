@@ -101,7 +101,7 @@
     <string name="yearly">\u0020jährlich\u0020</string>
     <string name="monthly">\u0020monatlich\u0020</string>
     <string name="weekly">\u0020wöchentlich\u0020</string>
-    <string name="daylie">\u0020täglich\u0020</string>
+    <string name="daily">\u0020täglich\u0020</string>
     <string name="without_repetition">\u0020ohne Wiederholung\u0020</string>
     <string name="ups_an_error">\u0020Ups! Fehler Aufgetreten!\u0020</string>
     <string name="toCalender">\u0020Zum Kalender\u0020</string>

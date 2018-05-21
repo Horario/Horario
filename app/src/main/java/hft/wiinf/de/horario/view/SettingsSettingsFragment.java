@@ -3,9 +3,7 @@ package hft.wiinf.de.horario.view;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -32,7 +30,6 @@ import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.Person;
 
-import static android.Manifest.permission.READ_PHONE_STATE;
 import static android.Manifest.permission.READ_SMS;
 import static android.support.v4.content.PermissionChecker.checkSelfPermission;
 
@@ -265,7 +262,9 @@ public class SettingsSettingsFragment extends Fragment{
         requestPermissions(new String[]{Manifest.permission.READ_SMS}, PERMISSION_REQUEST_SEND_SMS);
     }
 
+    @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        Toast.makeText(getContext(), requestCode + "", Toast.LENGTH_LONG).show();
         switch (requestCode) {
             case PERMISSION_REQUEST_SEND_SMS: {
                 // If Permission ist Granted User get a SnackbarMessage and the phone number is read
