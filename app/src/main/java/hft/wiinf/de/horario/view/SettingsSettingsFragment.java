@@ -39,7 +39,7 @@ import static android.support.v4.content.PermissionChecker.checkSelfPermission;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SettingsSettingsFragment extends Fragment {
+public class SettingsSettingsFragment extends Fragment{
     private static final String TAG = "SettingFragmentActivity";
     EditText editTextUsername,editText_PhoneNumber;
     Person person;
