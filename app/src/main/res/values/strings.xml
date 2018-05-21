@@ -114,6 +114,10 @@
     <string name="show_QRCode">QR Code anzeigen</string>
     <string name="lastTry_phoneNumber_event">Wir brauchen deine telefonnummer, um den Termin zu speichern.</string>
     <string name="EventNotSaved">Der Termin konnte nicht gespeichert werden.</string>
+    <string name="phoneNumber">Telefonnummer</string>
+    <string name="phoneNumberHint">Telefonnummer</string>
+    <string name="PhoneNumberCouldNotBeenRead">Die Telefonnummer konnte nicht ausgelesen werden. Bitte tragen Sie die Telefonnummer manuell ein.</string>
+    <string name="phoneNumberSaved">Die telefonnummer wurde gespeichert</string>
 
 
 </resources>

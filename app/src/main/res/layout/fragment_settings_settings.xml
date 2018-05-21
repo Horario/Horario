@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/settings_relativeLayout_settings"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:windowBackground"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
     <TextView
         android:id="@+id/settings_settings_textView_username"
@@ -20,8 +23,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/settings_settings_textView_settings"
-        android:layout_marginTop="169dp"
+        android:layout_alignStart="@+id/settings_settings_textView_username"
+        android:layout_marginTop="201dp"
         android:text="@string/allowpush_text" />
 
     <TextView
@@ -54,10 +57,10 @@
         android:layout_marginEnd="42dp"
         android:layout_marginTop="-19dp"
         android:ems="10"
-        android:focusable="false"
         android:hint="@string/username_hint"
-        android:imeOptions="flagNoExtractUi"
-        android:inputType="textPersonName" />
+        android:imeOptions="actionDone"
+        android:inputType="text"
+        android:singleLine="true" />
 
     <Switch
         android:id="@+id/settings_settings_Switch_allowPush"
@@ -87,15 +90,23 @@
         android:layout_marginTop="234dp"
         android:text="@string/reminder_text" />
 
-    <RelativeLayout
-        android:id="@+id/setting_settings_relativeLayout_buttonFrame"
-        android:layout_width="368dp"
-        android:layout_height="182dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:orientation="vertical">
+    <TextView
+        android:id="@+id/settings_settings_phoneNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/settings_settings_textView_username"
+        android:layout_marginTop="143dp"
+        android:text="@string/phoneNumber" />
 
-
-    </RelativeLayout>
+    <EditText
+        android:id="@+id/settings_settings_editText_phoneNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/settings_settings_editText_username"
+        android:ems="10"
+        android:hint="@string/phoneNumberHint"
+        android:inputType="phone" />
 
 </RelativeLayout>

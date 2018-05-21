@@ -35,13 +35,14 @@ import hft.wiinf.de.horario.view.EventOverviewActivity;
 import hft.wiinf.de.horario.view.SettingsActivity;
 
 import static android.Manifest.permission.READ_PHONE_STATE;
+import static android.Manifest.permission.SEND_SMS;
 import static com.activeandroid.Cache.getContext;
 
 public class TabActivity extends AppCompatActivity {
 
     //TODO Kommentieren und Java Doc Info Schreiben
     private static final String TAG = "TabActivity";
-    private static final int PERMISSION_REQUEST_TELEPHONE_STATE = 0;
+    private static final int PERMISSION_REQUEST_SEND_SMS = 0;
     private SectionsPageAdapterActivity mSectionsPageAdapter;
     private ViewPager mViewPager;
     TabLayout tabLayout;
@@ -253,7 +254,7 @@ public class TabActivity extends AppCompatActivity {
 
     // method to read the phone number of the user
     public void readOwnPhoneNumber() {
-        if (ActivityCompat.checkSelfPermission(this, READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
+        if (ActivityCompat.checkSelfPermission(this, SEND_SMS) != PackageManager.PERMISSION_GRANTED)
             requestPermission();
         else {
             //if permission is granted read the phone number
@@ -271,13 +272,13 @@ public class TabActivity extends AppCompatActivity {
     }
 
     private void requestPermission() {
-        requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, PERMISSION_REQUEST_TELEPHONE_STATE);
+        requestPermissions(new String[]{Manifest.permission.SEND_SMS}, PERMISSION_REQUEST_SEND_SMS);
     }
 
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-            case PERMISSION_REQUEST_TELEPHONE_STATE: {
+            case PERMISSION_REQUEST_SEND_SMS: {
                 // If Permission ist Granted User get a SnackbarMessage and the phone number is read
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {

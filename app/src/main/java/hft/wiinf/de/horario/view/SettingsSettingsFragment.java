@@ -18,6 +18,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
@@ -32,6 +33,7 @@ import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.Person;
 
 import static android.Manifest.permission.READ_PHONE_STATE;
+import static android.Manifest.permission.READ_SMS;
 import static android.support.v4.content.PermissionChecker.checkSelfPermission;
 
 /**
@@ -39,12 +41,12 @@ import static android.support.v4.content.PermissionChecker.checkSelfPermission;
  */
 public class SettingsSettingsFragment extends Fragment {
     private static final String TAG = "SettingFragmentActivity";
-    EditText editTextUsername;
+    EditText editTextUsername,editText_PhoneNumber;
     Person person;
     Spinner spinner_pushMinutes;
     Switch switch_enablePush;
     TextView textView_minutesBefore, textView_reminder;
-    private static final int PERMISSION_REQUEST_TELEPHONE_STATE = 0;
+    private static final int PERMISSION_REQUEST_SEND_SMS = 0;
     private int counter = 0;
 
     public SettingsSettingsFragment() {
@@ -75,6 +77,7 @@ public class SettingsSettingsFragment extends Fragment {
         textView_reminder = view.findViewById(R.id.settings_settings_textView_reminder);
         switch_enablePush = view.findViewById(R.id.settings_settings_Switch_allowPush);
         spinner_pushMinutes = view.findViewById(R.id.settings_settings_spinner_minutes);
+        editText_PhoneNumber = view.findViewById(R.id.settings_settings_editText_phoneNumber);
         switch_enablePush.setChecked(person.isEnablePush());
         //save a change of the switch in the db and change visibility of the minutes spinner and textview
         switch_enablePush.setOnTouchListener(new View.OnTouchListener() {
@@ -103,6 +106,7 @@ public class SettingsSettingsFragment extends Fragment {
 
 // set the user name of the person (empty string if no person set)
         editTextUsername.setText(person.getName());
+        editText_PhoneNumber.setText(person.getPhoneNumber());
 
         //Make EditText-Field editable
         editTextUsername.setOnTouchListener(new View.OnTouchListener() {
@@ -110,6 +114,15 @@ public class SettingsSettingsFragment extends Fragment {
             public boolean onTouch(View v, MotionEvent event) {
                 editTextUsername.setFocusable(true);
                 editTextUsername.setFocusableInTouchMode(true);
+                return false;
+            }
+        });
+        //Make EditText-Field editable
+        editText_PhoneNumber.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                editText_PhoneNumber.setFocusable(true);
+                editText_PhoneNumber.setFocusableInTouchMode(true);
                 return false;
             }
         });
@@ -123,18 +136,38 @@ public class SettingsSettingsFragment extends Fragment {
                 if (actionId == EditorInfo.IME_ACTION_DONE && !inputText.matches(" .*")) {
                     person.setName(inputText);
                     concatenateAndSavePersonData();
-                    editTextUsername.setFocusable(false);
                     editTextUsername.setFocusableInTouchMode(false);
+                    editTextUsername.setFocusable(false);
+                    InputMethodManager imm = (InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    return true;
                 } else {
                     Toast toast = Toast.makeText(view.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
                     toast.show();
                     editTextUsername.setText(person.getName());
+                    return false;
+                }
+            }
+        });
+        editText_PhoneNumber.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                String inputText = v.getText().toString();
+                if (actionId == EditorInfo.IME_ACTION_DONE && inputText.matches("[+0].*")) {
+                    person.setPhoneNumber(editText_PhoneNumber.getText().toString());
+                    PersonController.savePerson(person);
+                      editText_PhoneNumber.setFocusable(false);
+                      editText_PhoneNumber.setFocusableInTouchMode(false);
+                        InputMethodManager imm = (InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    Toast.makeText(getContext(), R.string.phoneNumberSaved, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(view.getContext(), R.string.wrongNumberFormat, Toast.LENGTH_SHORT).show();
                     return true;
                 }
                 return false;
             }
         });
-
 // set the choice posibilities of the push minutes dropdown
         ArrayAdapter minutesAdapter = ArrayAdapter.createFromResource(getContext(), R.array.push_times, android.R.layout.simple_spinner_item);
         minutesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -207,7 +240,7 @@ public class SettingsSettingsFragment extends Fragment {
     public void concatenateAndSavePersonData() {
 
         if (person.getPhoneNumber() == null || person.getPhoneNumber().equalsIgnoreCase("")) {
-            if (checkSelfPermission(getActivity(), READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
+            if (checkSelfPermission(getActivity(), READ_SMS) != PackageManager.PERMISSION_GRANTED)
                 requestPermission();
             else {
                 //if permission is granted read the phone number
@@ -215,7 +248,7 @@ public class SettingsSettingsFragment extends Fragment {
                 person.setPhoneNumber(telephonyManager.getLine1Number());
                 //if the number could not been read, open a dialog
                 if (person.getPhoneNumber() == null || !person.getPhoneNumber().matches("[0+].*"))
-                    openDialogAskForPhoneNumber();
+                    Toast.makeText(getContext(),R.string.PhoneNumberCouldNotBeenRead,Toast.LENGTH_SHORT);
                 else {
                     PersonController.addPersonMe(person);
                     Toast.makeText(getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT).show();
@@ -229,19 +262,20 @@ public class SettingsSettingsFragment extends Fragment {
     }
 
     private void requestPermission() {
-        requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, PERMISSION_REQUEST_TELEPHONE_STATE);
+        requestPermissions(new String[]{Manifest.permission.READ_SMS}, PERMISSION_REQUEST_SEND_SMS);
     }
 
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
-            case PERMISSION_REQUEST_TELEPHONE_STATE: {
+            case PERMISSION_REQUEST_SEND_SMS: {
                 // If Permission ist Granted User get a SnackbarMessage and the phone number is read
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Snackbar.make(getView().findViewById(R.id.setting_settings_relativeLayout_buttonFrame),
+                    Snackbar.make(getView().findViewById(R.id.settings_relativeLayout_settings),
                             R.string.thanksphoneNumber,
                             Snackbar.LENGTH_LONG).show();
                     concatenateAndSavePersonData();
+                    editText_PhoneNumber.setText(person.getPhoneNumber());
                 } else {
                     //If the User denies the access to the phone number he gets two Chance to accept the Request
                     //The Counter counts from 0 to 2. If the Counter is 2 user a dialog is shown where the user can input the phone number
@@ -262,13 +296,13 @@ public class SettingsSettingsFragment extends Fragment {
                             concatenateAndSavePersonData();
                             break;
                         default:
-                            openDialogAskForPhoneNumber();
+                            Toast.makeText(getContext(),R.string.PhoneNumberCouldNotBeenRead,Toast.LENGTH_SHORT).show();
                     }
                 }
             }
         }
     }
-
+/*
     public void openDialogAskForPhoneNumber() {
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
         dialogBuilder.setView(R.layout.dialog_askingfortelephonenumber);
@@ -282,7 +316,7 @@ public class SettingsSettingsFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 String input = v.getText().toString();
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                ifION_DONE) {
                     if (input.matches("[\\+0].+")) {
                         alertDialog.dismiss();
                         person.setPhoneNumber(input);
@@ -306,7 +340,7 @@ public class SettingsSettingsFragment extends Fragment {
             }
         });
 
-    }
+    }*/
 }
 
 
