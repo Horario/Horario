@@ -31,7 +31,7 @@ import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
 import hft.wiinf.de.horario.model.AcceptedState;
 
-public class EventOverviewFragment extends Fragment{
+public class EventOverviewFragment extends Fragment {
 
     static ListView overviewLvList;
     static TextView overviewTvMonth;
@@ -49,14 +49,10 @@ public class EventOverviewFragment extends Fragment{
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_event_overview, container, false);
-        return  view;
-    }
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_event_overview, container, false);
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
 
         //initialize variables
         overviewLvList = view.findViewById(R.id.overviewTvList);
@@ -72,6 +68,7 @@ public class EventOverviewFragment extends Fragment{
         eventOverviewFcNewEvent = view.findViewById(R.id.eventOverview_floatingActionButtonNewEvent);
         eventOverviewFcQrScan = view.findViewById(R.id.eventOverview_floatingActionButtonScan);
         rLayout_eventOverview_helper = view.findViewById(R.id.eventOverview_relativeLayout_helper);
+        layout_eventOverview_main = view.findViewById(R.id.eventOverview_Layout_main);
         eventOverview_HiddenIsFloatingMenuOpen = view.findViewById(R.id.eventOverviewFabClosed);
         eventOverviewFcQrScan.hide();
         eventOverviewFcNewEvent.hide();
@@ -147,12 +144,7 @@ public class EventOverviewFragment extends Fragment{
             }
         });
 
-        layout_eventOverview_main.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                closeFABMenu();
-            }
-        });
+        return view;
     }
 
     public static void update(){

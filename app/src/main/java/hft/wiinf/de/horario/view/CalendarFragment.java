@@ -43,15 +43,12 @@ public class CalendarFragment extends Fragment {
     static TextView calendarTvDay;
     TextView calendarIsFloatMenuOpen;
     FloatingActionButton calendarFcMenu, calendarFcQrScan, calendarFcNewEvent;
-    RelativeLayout rLayout_calendar_helper;
     ConstraintLayout cLayout_calendar_main;
-    ConstraintLayout layoutCalendar;
-    ConstraintLayout layoutHelper;
     static Context context = null;
 
     static DateFormat monthFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
     static DateFormat dayFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
-    static DateFormat timeFormat = new SimpleDateFormat("hh:mm");
+    static DateFormat timeFormat = new SimpleDateFormat("HH:mm");
     public static Date selectedMonth;
 
     @Nullable
