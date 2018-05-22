@@ -170,8 +170,8 @@ public class EventOverviewFragment extends Fragment {
                     eventArray.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 1));
                 }else if(eventList.get(i).getAccepted().equals(AcceptedState.WAITING)){
                     eventArray.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 2));
-                //}else if(eventList.get(i).getCreator().isItMe()){ //TODO testing
-                  //  eventArray.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 3));
+                }else if(eventList.get(i).getCreator().isItMe()){ //TODO testing
+                    eventArray.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 3));
                 }else{
                     eventArray.clear();
                 }

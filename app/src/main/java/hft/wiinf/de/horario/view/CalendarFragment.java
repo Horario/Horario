@@ -201,6 +201,8 @@ public class CalendarFragment extends Fragment {
                     textView.setBackgroundColor(Color.GREEN);
                 }else if(eventList.get(position).getAccepted().equals(AcceptedState.WAITING)){
                     textView.setBackgroundColor(Color.RED);
+                }else if(eventList.get(position).getCreator().isItMe()){ //TODO testing
+                    textView.setBackgroundColor(Color.BLUE);
                 }else{
                     textView.setBackgroundColor(Color.WHITE);
                 }
