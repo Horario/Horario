@@ -153,7 +153,7 @@ public class EventOverviewFragment extends Fragment {
     }
 
     //get all events for the selected month and save them in a adapter
-    public static ArrayAdapter iterateOverMonth(Date date){ //TODO create own Adapter
+    public static ArrayAdapter iterateOverMonth(Date date){
         final ArrayList<Appointment> eventArray = new ArrayList<>();
         Date day = new Date(date.getTime());
         int endDate = date.getMonth();
@@ -170,6 +170,8 @@ public class EventOverviewFragment extends Fragment {
                     eventArray.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 1));
                 }else if(eventList.get(i).getAccepted().equals(AcceptedState.WAITING)){
                     eventArray.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 2));
+                //}else if(eventList.get(i).getCreator().isItMe()){ //TODO testing
+                  //  eventArray.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 3));
                 }else{
                     eventArray.clear();
                 }
@@ -188,6 +190,8 @@ public class EventOverviewFragment extends Fragment {
                     textView.setBackgroundColor(Color.GREEN);
                 }else if(eventArray.get(position).getType() == 2){
                     textView.setBackgroundColor(Color.RED);
+                }else if(eventArray.get(position).getType() == 3){
+                    textView.setBackgroundColor(Color.BLUE);
                 }else if(eventArray.get(position).getType() == 0){
                     textView.setBackgroundColor(Color.WHITE);
                     textView.setFocusable(false);
@@ -227,7 +231,7 @@ class Appointment{
         this.type = type;
     }
 
-    /** 0 = date, 1 = accepted, 2 = waiting, 3 = rejected */
+    /** 0 = date, 1 = accepted, 2 = waiting, 3 = own */
     public String getDescription() {
         return description;
     }
