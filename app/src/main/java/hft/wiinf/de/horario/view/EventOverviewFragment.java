@@ -153,11 +153,12 @@ public class EventOverviewFragment extends Fragment {
         overviewLvList.setAdapter(iterateOverMonth(selectedMonth));
     }
 
-    //get all events for the selected month and save them in a adapter
+    //load entries from database and return an adapter for ListView
     public static ArrayAdapter iterateOverMonth(Date date){
         final ArrayList<Appointment> eventArray = new ArrayList<>();
         Date day = new Date(date.getTime());
         int endDate = date.getMonth();
+        //iterate over month
         while (day.getMonth() <= endDate){
             Calendar endOfDay = Calendar.getInstance();
             endOfDay.setTime(day);

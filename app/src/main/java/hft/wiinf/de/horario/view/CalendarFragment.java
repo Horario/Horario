@@ -157,7 +157,6 @@ public class CalendarFragment extends Fragment {
                 closeFABMenu();
             }
         });
-
         return view;
     }
 
@@ -180,9 +179,8 @@ public class CalendarFragment extends Fragment {
         }
     }
 
-    /** TODO need a description */
+    //load entries from database and return an adapter for the ListView
     public static ArrayAdapter getAdapter(Date date){
-        //TODO Testing
         ArrayList<String> eventsAsString = new ArrayList<>();
         Calendar endOfDay = Calendar.getInstance();
         endOfDay.setTime(date);
@@ -198,6 +196,7 @@ public class CalendarFragment extends Fragment {
             @Override
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
+                //change the color of the ListView Items
                 if(eventList.get(position).getCreator().equals(PersonController.getPersonWhoIam())) {
                     textView.setBackgroundColor(Color.BLUE);
                 }else{
@@ -205,8 +204,6 @@ public class CalendarFragment extends Fragment {
                         textView.setBackgroundColor(Color.GREEN);
                     } else if (eventList.get(position).getAccepted().equals(AcceptedState.WAITING)) {
                         textView.setBackgroundColor(Color.RED);
-                    } else if (eventList.get(position).getCreator().isItMe()) { //TODO testing
-                        textView.setBackgroundColor(Color.BLUE);
                     } else {
                         textView.setBackgroundColor(Color.WHITE);
                     }
