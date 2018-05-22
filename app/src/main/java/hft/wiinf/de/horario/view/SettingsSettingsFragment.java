@@ -25,6 +25,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import hft.wiinf.de.horario.R;
+import hft.wiinf.de.horario.TabActivity;
 import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.Person;
 
@@ -35,7 +36,7 @@ public class SettingsSettingsFragment extends Fragment {
     private static final String TAG = "SettingFragmentActivity";
     EditText editTextUsername;
     Person person;
-    Spinner spinner_pushMinutes;
+    Spinner spinner_notificationTime, spinner_startTab;
     Switch switch_enablePush;
     TextView textView_minutesBefore, textView_reminder;
 
@@ -70,8 +71,10 @@ public class SettingsSettingsFragment extends Fragment {
         textView_minutesBefore = view.findViewById(R.id.settings_settings_textView_minutesBefore);
         textView_reminder = view.findViewById(R.id.settings_settings_textView_reminder);
         switch_enablePush = view.findViewById(R.id.settings_settings_Switch_allowPush);
-        spinner_pushMinutes = view.findViewById(R.id.settings_settings_spinner_minutes);
+        spinner_notificationTime = view.findViewById(R.id.settings_settings_spinner_minutes);
+        spinner_startTab = view.findViewById(R.id.settings_settings_spinner_startTab);
         switch_enablePush.setChecked(person.isEnablePush());
+        // on touch add a selection listener, remove the on touch listener after the first touch
         //save a change of the switch in the db and change visibility of the minutes spinner and textview
         switch_enablePush.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -89,12 +92,36 @@ public class SettingsSettingsFragment extends Fragment {
                     }
 
                 });
+                switch_enablePush.setOnTouchListener(null);
                 return false;
             }
         });
 
 
-        spinner_pushMinutes.setSelection(getItemPosition());
+        spinner_notificationTime.setSelection(getItemPositionPushMinutes());
+        spinner_startTab.setSelection(TabActivity.startTab);
+        // if the start tab spinenr was touched, add a SelectionListener and remove the touch listener
+        spinner_startTab.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                spinner_startTab.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        person.setStartTab(position);
+                        PersonController.savePerson(person);
+                        TabActivity.startTab = position;
+                        Toast.makeText(getContext(), getString(R.string.startTabChanged, parent.getSelectedItem()), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
+                spinner_startTab.setOnTouchListener(null);
+                return true;
+            }
+        });
 
 
 // set the user name of the person (empty string if no person set)
@@ -142,14 +169,14 @@ public class SettingsSettingsFragment extends Fragment {
 // set the choice posibilities of the push minutes dropdown
         ArrayAdapter minutesAdapter = ArrayAdapter.createFromResource(getContext(), R.array.push_times, android.R.layout.simple_spinner_item);
         minutesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_pushMinutes.setAdapter(minutesAdapter);
+        spinner_notificationTime.setAdapter(minutesAdapter);
         //set the choice selection - if there is something in db saved
-        spinner_pushMinutes.setSelection(getItemPosition());
+        spinner_notificationTime.setSelection(getItemPositionPushMinutes());
         //if something is selected of the spinner, update the person
-        spinner_pushMinutes.setOnTouchListener(new View.OnTouchListener() {
+        spinner_notificationTime.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                spinner_pushMinutes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                spinner_notificationTime.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         String s = (String) parent.getItemAtPosition(position);
@@ -175,16 +202,16 @@ public class SettingsSettingsFragment extends Fragment {
         if (person.isEnablePush()) {
             textView_reminder.setVisibility(View.VISIBLE);
             textView_minutesBefore.setVisibility(View.VISIBLE);
-            spinner_pushMinutes.setVisibility(View.VISIBLE);
+            spinner_notificationTime.setVisibility(View.VISIBLE);
         } else {
             textView_reminder.setVisibility(View.GONE);
             textView_minutesBefore.setVisibility(View.GONE);
-            spinner_pushMinutes.setVisibility(View.GONE);
+            spinner_notificationTime.setVisibility(View.GONE);
         }
     }
 
     //return the correct item position based of the saved pushminutes
-    private int getItemPosition() {
+    private int getItemPositionPushMinutes() {
         switch (person.getNotificationTime()) {
             case 0:
                 return 0;
@@ -206,4 +233,5 @@ public class SettingsSettingsFragment extends Fragment {
         }
 
     }
+
 }

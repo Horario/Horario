@@ -36,6 +36,7 @@ public class TabActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     TabLayout tabLayout;
     Person personMe;
+    public static int startTab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,11 @@ public class TabActivity extends AppCompatActivity {
         //Start DB
         ActiveAndroid.initialize(this);
         Stetho.initializeWithDefaults(this);
+        //read startTab out of db, default=1(calendar tab)
+        Person person = PersonController.getPersonWhoIam();
+        if (person == null)
+            startTab = 1;
+        else startTab = person.getStartTab();
 
         mSectionsPageAdapter = new SectionsPageAdapterActivity(getSupportFragmentManager());
 
@@ -71,7 +77,7 @@ public class TabActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         //Select calendar by default
-        tabLayout.getTabAt(1).select();
+        tabLayout.getTabAt(startTab).select();
         //Listener that will check when a Tab is selected, unselected and reselected
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             //Do something if Tab is selected. Parameters: selected Tab.--- Info: tab.getPosition() == x for check which Tab

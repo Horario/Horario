@@ -72,6 +72,8 @@
     <string name="pushEnabled">Die Push-Nachrichten wurden eingeschaltet.</string>
     <string name="pushDisabled">Die Push-Nachrichten wurden ausgeschaltet.</string>
     <string formatted="true" name="pushMinutesSet">Die Push-Nachrichten erscheinen nun %1$d Minuten vor Ihrem Termin.</string>
+    <string name="startTab">Start-Tab :</string>
+    <string name="startTabChanged" formatted="true">Beim nächsten Start zeigt Horario nun den Tab %1$s.</string>
 
     <string-array name="push_times">
         <item name="push_time_0">0</item>
@@ -81,5 +83,10 @@
         <item name="push_time_60">60</item>
         <item name="push_time_90">90</item>
         <item name="push_time_120">120</item>
+    </string-array>
+    <string-array name="start_tab">
+        <item name="overview">Terminübersicht</item>
+        <item name="calendar">Kalenderansicht</item>
+        <item name="settings">Einstellungen</item>
     </string-array>
 </resources>
