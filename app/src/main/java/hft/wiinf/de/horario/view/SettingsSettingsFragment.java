@@ -156,7 +156,7 @@ public class SettingsSettingsFragment extends Fragment{
                 //on click: read out the textfield, save the personand close the keyboard
                 //regex: perhaps + then numbers
                 if (actionId == EditorInfo.IME_ACTION_DONE && inputText.matches("\\+?[0-9]*")) {
-                    person.setPhoneNumber(editText_PhoneNumber.getText().toString());
+                    person.setPhoneNumber(editText_PhoneNumber.getText().toString().replaceAll(" ", ""));
                     editText_PhoneNumber.setText(person.getPhoneNumber());
                     PersonController.savePerson(person);
                       editText_PhoneNumber.setFocusable(false);
