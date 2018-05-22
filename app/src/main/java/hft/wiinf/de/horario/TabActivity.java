@@ -421,7 +421,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        Toast.makeText(getContext(), requestCode + "", Toast.LENGTH_LONG).show();
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case PERMISSION_REQUEST_SEND_SMS: {
@@ -479,7 +478,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         person.setPhoneNumber(input);
                         PersonController.addPersonMe(person);
                         Toast.makeText(v.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT).show();
-                        // ((InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                         return false;
                     } else {
                         Toast toast = Toast.makeText(v.getContext(), R.string.wrongNumberFormat, Toast.LENGTH_SHORT);

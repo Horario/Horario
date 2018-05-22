@@ -127,6 +127,7 @@ public class SettingsSettingsFragment extends Fragment{
         pushNotificationVisibility();
         //Everything that needs to happen after Username was written in the EditText-Field
         editTextUsername.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            //on click: read out the textfield, ask for phone number and close the keyboard
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 String inputText = v.getText().toString();
@@ -139,6 +140,7 @@ public class SettingsSettingsFragment extends Fragment{
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                     return true;
                 } else {
+                    //if the user name is not valid show a toast
                     Toast toast = Toast.makeText(view.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
                     toast.show();
                     editTextUsername.setText(person.getName());
@@ -146,10 +148,12 @@ public class SettingsSettingsFragment extends Fragment{
                 }
             }
         });
+        //Everything that needs to happen after phone number was written in the EditText-Field
         editText_PhoneNumber.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 String inputText = v.getText().toString();
+                //on click: read out the textfield, save the personand close the keyboard
                 if (actionId == EditorInfo.IME_ACTION_DONE && inputText.matches("[+0].*")) {
                     person.setPhoneNumber(editText_PhoneNumber.getText().toString());
                     PersonController.savePerson(person);
@@ -159,6 +163,7 @@ public class SettingsSettingsFragment extends Fragment{
                         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                     Toast.makeText(getContext(), R.string.phoneNumberSaved, Toast.LENGTH_SHORT).show();
                 } else {
+                    //show a toast if the number doe not atart with 0 or +
                     Toast.makeText(view.getContext(), R.string.wrongNumberFormat, Toast.LENGTH_SHORT).show();
                     return true;
                 }
@@ -258,13 +263,14 @@ public class SettingsSettingsFragment extends Fragment{
         }
     }
 
+    //request ppermission send sms
     private void requestPermission() {
         requestPermissions(new String[]{Manifest.permission.READ_SMS}, PERMISSION_REQUEST_SEND_SMS);
     }
 
+    //react on accept or deny of permission
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        Toast.makeText(getContext(), requestCode + "", Toast.LENGTH_LONG).show();
         switch (requestCode) {
             case PERMISSION_REQUEST_SEND_SMS: {
                 // If Permission ist Granted User get a SnackbarMessage and the phone number is read
@@ -301,45 +307,6 @@ public class SettingsSettingsFragment extends Fragment{
             }
         }
     }
-/*
-    public void openDialogAskForPhoneNumber() {
-        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
-        dialogBuilder.setView(R.layout.dialog_askingfortelephonenumber);
-        dialogBuilder.setCancelable(true);
-        final AlertDialog alertDialog = dialogBuilder.create();
-        alertDialog.show();
-        EditText phoneNumber = alertDialog.findViewById(R.id.dialog_EditText_telephonNumber);
-        if (person.getPhoneNumber() != null)
-            phoneNumber.setText(person.getPhoneNumber());
-        phoneNumber.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                String input = v.getText().toString();
-                ifION_DONE) {
-                    if (input.matches("[\\+0].+")) {
-                        alertDialog.dismiss();
-                        person.setPhoneNumber(input);
-                        PersonController.addPersonMe(person);
-                        Toast.makeText(getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT).show();
-                        return true;
-                    } else {
-                        Toast toast = Toast.makeText(v.getContext(), R.string.wrongNumberFormat, Toast.LENGTH_SHORT);
-                        toast.show();
-                        return false;
-                    }
-                }
-                return false;
-            }
-        });
-        alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                Toast toast = Toast.makeText(getContext(), R.string.UsernameNotSaved, Toast.LENGTH_SHORT);
-                toast.show();
-            }
-        });
-
-    }*/
 }
 
 

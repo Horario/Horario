@@ -48,7 +48,6 @@ import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.model.Repetition;
 import hft.wiinf.de.horario.service.NotificationReceiver;
 
-import static android.Manifest.permission.READ_PHONE_STATE;
 import static android.Manifest.permission.READ_SMS;
 import static android.support.v4.content.PermissionChecker.checkSelfPermission;
 
@@ -627,6 +626,7 @@ public class NewEventFragment extends Fragment {
                             counter++;
                             concatenateAndSavePersonalData();
                             break;
+                        //open phone number dialog if counter is >1
                         default:
                             openDialogAskForPhoneNumber();
                     }
@@ -635,15 +635,14 @@ public class NewEventFragment extends Fragment {
         }
     }
 
+    //open a dialog to ask for the phone number
     public void openDialogAskForPhoneNumber() {
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
         dialogBuilder.setView(R.layout.dialog_askingfortelephonenumber);
         dialogBuilder.setCancelable(true);
-        final AlertDialog alertDialog = dialogBuilder.create();
-        alertDialog.show();
+        final AlertDialog alertDialog = dialogBuilder.show();
         EditText phoneNumber = alertDialog.findViewById(R.id.dialog_EditText_telephonNumber);
-        if (me.getPhoneNumber() != null)
-            phoneNumber.setText(me.getPhoneNumber());
+        //on enter: check and save the number
         phoneNumber.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -654,20 +653,20 @@ public class NewEventFragment extends Fragment {
                         me.setPhoneNumber(input);
                         saveEvent();
                         return true;
+                        //number does not begin with + or 0 show a toast
                     } else {
-                        Toast toast = Toast.makeText(getContext(), R.string.wrongNumberFormat, Toast.LENGTH_SHORT);
-                        toast.show();
+                        Toast.makeText(getContext(), R.string.wrongNumberFormat, Toast.LENGTH_SHORT).show();
                         return false;
                     }
                 }
                 return false;
             }
         });
+        //dont save the event if the dialog is cancellled
         alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
-                Toast toast = Toast.makeText(getContext(), R.string.EventNotSaved, Toast.LENGTH_SHORT);
-                toast.show();
+                Toast.makeText(getContext(), R.string.EventNotSaved, Toast.LENGTH_SHORT).show();
             }
         });
 
