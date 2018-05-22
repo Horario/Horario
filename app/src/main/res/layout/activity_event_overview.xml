@@ -6,10 +6,9 @@
     android:background="?android:windowBackground"
     android:orientation="vertical">
 
-<FrameLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/eventOverview_frameLayout">
-</FrameLayout>
+    <FrameLayout
+        android:id="@+id/eventOverview_frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></FrameLayout>
 
 </android.support.constraint.ConstraintLayout>

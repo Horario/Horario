@@ -33,9 +33,8 @@ import java.io.IOException;
 import java.util.Objects;
 
 import hft.wiinf.de.horario.R;
-import hft.wiinf.de.horario.TabActivity;
-import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.controller.PersonController;
+import hft.wiinf.de.horario.model.Person;
 
 /**
  * A simple {@link Fragment} subclass.

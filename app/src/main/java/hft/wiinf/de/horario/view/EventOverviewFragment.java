@@ -50,7 +50,7 @@ public class EventOverviewFragment extends Fragment {
             public void onClick(View v) {
                 NewEventFragment newEventFragment = new NewEventFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("fragment","EventOverview");
+                bundle.putString("fragment", "EventOverview");
                 newEventFragment.setArguments(bundle);
 
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
@@ -67,7 +67,7 @@ public class EventOverviewFragment extends Fragment {
             public void onClick(View v) {
                 QRScanFragment qrScanFragment = new QRScanFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("fragment","EventOverview");
+                bundle.putString("fragment", "EventOverview");
                 qrScanFragment.setArguments(bundle);
 
                 FragmentTransaction fr = getFragmentManager().beginTransaction();

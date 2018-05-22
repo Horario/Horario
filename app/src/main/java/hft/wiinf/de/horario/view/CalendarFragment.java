@@ -42,6 +42,12 @@ public class CalendarFragment extends Fragment {
     DateFormat monthFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
     DateFormat dayFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
 
+    //TODO just a placeholder, maybe need a rework (1523318400000L)
+    public static void addEvent(Date date) {
+        Event event = new Event(Color.BLUE, date.getTime());
+        calendarCvCalendar.addEvent(event);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -75,7 +81,7 @@ public class CalendarFragment extends Fragment {
             public void onClick(View v) {
                 NewEventFragment newEventFragment = new NewEventFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("fragment","Calendar");
+                bundle.putString("fragment", "Calendar");
                 newEventFragment.setArguments(bundle);
 
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
@@ -91,7 +97,7 @@ public class CalendarFragment extends Fragment {
             public void onClick(View v) {
                 QRScanFragment qrScanFragment = new QRScanFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("fragment","Calendar");
+                bundle.putString("fragment", "Calendar");
                 qrScanFragment.setArguments(bundle);
 
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
@@ -156,12 +162,6 @@ public class CalendarFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-    }
-
-    //TODO just a placeholder, maybe need a rework (1523318400000L)
-    public static void addEvent(Date date) {
-        Event event = new Event(Color.BLUE, date.getTime());
-        calendarCvCalendar.addEvent(event);
     }
 
     /**
