@@ -16,7 +16,8 @@ import hft.wiinf.de.horario.model.Person;
 public class EventController {
     //saves (update or create)an event
     public static void saveEvent(@NonNull Event event) {
-        event.setCreatorEventId(event.save());
+        if (event.getCreatorEventId() < 0)
+            event.setCreatorEventId(event.save());
         event.save();
     }
 
