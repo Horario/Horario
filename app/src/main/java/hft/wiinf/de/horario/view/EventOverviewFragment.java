@@ -155,9 +155,15 @@ public class EventOverviewFragment extends Fragment {
     //get all events for the selected month and save them in a adapter
     public static ArrayAdapter iterateOverMonth(Date date){
         final ArrayList<Appointment> eventArray = new ArrayList<>();
-        Date day = new Date(date.getTime());
-        int endDate = date.getMonth();
-        while (day.getMonth() <= endDate){
+        Calendar helper = Calendar.getInstance();
+        helper.setTime(date);
+        helper.set(Calendar.DAY_OF_MONTH, 1);
+        helper.set(Calendar.HOUR_OF_DAY, 0);
+        helper.set(Calendar.MINUTE, 0);
+        Date day = helper.getTime();
+        System.out.println(day.toString());
+        int endDate = helper.get(Calendar.MONTH);
+        while (day.getMonth() == endDate){
             Calendar endOfDay = Calendar.getInstance();
             endOfDay.setTime(day);
             endOfDay.add(Calendar.DAY_OF_MONTH, 1);
