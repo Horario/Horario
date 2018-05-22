@@ -93,10 +93,15 @@ public class QRScanResultFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 person = PersonController.getPersonWhoIam();
+
+                Person person = new Person();
+                person.setName(eventCreatorName);
+                person.setPhoneNumber(creatorPhoneNumber);
+                person.save();
+
                 Event event = new Event(person);
                 event.setAccepted(AcceptedState.ACCEPTED);
                 event.setCreatorEventId(Long.parseLong(creatorID.toString()));
-//                event.setStartEvent();
                 event.setStartTime(getStartTime().getTime());
                 event.setEndTime(getEndTime().getTime());
                 event.setRepetition(getRepetition());
@@ -120,10 +125,15 @@ public class QRScanResultFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 person = PersonController.getPersonWhoIam();
+
+                Person person = new Person();
+                person.setName(eventCreatorName);
+                person.setPhoneNumber(creatorPhoneNumber);
+                person.save();
+
                 Event event = new Event(person);
                 event.setAccepted(AcceptedState.REJECTED);
                 event.setCreatorEventId(Long.parseLong(creatorID.toString()));
-//                event.setStartEvent();
                 event.setStartTime(getStartTime().getTime());
                 event.setEndTime(getEndTime().getTime());
                 event.setRepetition(getRepetition());
@@ -147,6 +157,12 @@ public class QRScanResultFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 person = PersonController.getPersonWhoIam();
+
+                Person person = new Person();
+                person.setName(eventCreatorName);
+                person.setPhoneNumber(creatorPhoneNumber);
+                person.save();
+
                 Event event = new Event(person);
                 event.setAccepted(AcceptedState.WAITING);
                 event.setCreatorEventId(Long.parseLong(creatorID.toString()));
