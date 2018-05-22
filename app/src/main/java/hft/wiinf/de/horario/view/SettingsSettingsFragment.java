@@ -154,8 +154,10 @@ public class SettingsSettingsFragment extends Fragment{
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 String inputText = v.getText().toString();
                 //on click: read out the textfield, save the personand close the keyboard
-                if (actionId == EditorInfo.IME_ACTION_DONE && inputText.matches("[+0].*")) {
-                    person.setPhoneNumber(editText_PhoneNumber.getText().toString());
+                //regex: perhaps + then numbers
+                if (actionId == EditorInfo.IME_ACTION_DONE && inputText.matches("\\+?[0-9]*")) {
+                    person.setPhoneNumber(editText_PhoneNumber.getText().toString().trim());
+                    editText_PhoneNumber.setText(person.getPhoneNumber());
                     PersonController.savePerson(person);
                       editText_PhoneNumber.setFocusable(false);
                       editText_PhoneNumber.setFocusableInTouchMode(false);

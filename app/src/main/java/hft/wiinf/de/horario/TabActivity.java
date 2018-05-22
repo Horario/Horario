@@ -405,7 +405,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             TelephonyManager telephonyManager = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
             person.setPhoneNumber(telephonyManager.getLine1Number());
             //if the number could not been read, open a dialog
-            if (person.getPhoneNumber() == null || !person.getPhoneNumber().matches("[0+].*"))
+            if (person.getPhoneNumber() == null || !person.getPhoneNumber().matches("\\+?[0-9]+"))
                 openDialogAskForPhoneNumber();
             else {
                 PersonController.addPersonMe(person);
@@ -471,9 +471,10 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         phoneNumber.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                String input = v.getText().toString();
+                String input = v.getText().toString().trim();
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    if (input.matches("[+0].+")) {
+                    //regex: perhaps + at beginning, then numbers
+                    if (input.matches("\\+?[0-9]+")) {
                         alertDialog.dismiss();
                         person.setPhoneNumber(input);
                         PersonController.addPersonMe(person);

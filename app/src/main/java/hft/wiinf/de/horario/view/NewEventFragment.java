@@ -582,7 +582,7 @@ public class NewEventFragment extends Fragment {
                 TelephonyManager telephonyManager = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
                 me.setPhoneNumber(telephonyManager.getLine1Number());
                 //if the number could not been read, open a dialog
-                if (me.getPhoneNumber() == null || !me.getPhoneNumber().matches("[0+].*"))
+                if (me.getPhoneNumber() == null || !me.getPhoneNumber().matches("\\+?[0-9]+"))
                     openDialogAskForPhoneNumber();
                 else {
                     saveEvent();
@@ -647,7 +647,7 @@ public class NewEventFragment extends Fragment {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 String input = v.getText().toString();
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    if (input.matches("[\\+0].+")) {
+                    if (input.matches("\\+?[0-9]+")) {
                         alertDialog.dismiss();
                         me.setPhoneNumber(input);
                         saveEvent();
