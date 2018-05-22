@@ -155,7 +155,7 @@ public class SettingsSettingsFragment extends Fragment{
                 String inputText = v.getText().toString().replaceAll(" ", "");
                 //on click: read out the textfield, save the personand close the keyboard
                 //regex: perhaps + then numbers
-                if (actionId == EditorInfo.IME_ACTION_DONE && inputText.matches("\\+?[0-9]*")) {
+                if (actionId == EditorInfo.IME_ACTION_DONE && inputText.matches("\\+?[0-9]+")) {
                     person.setPhoneNumber(editText_PhoneNumber.getText().toString().replaceAll(" ", ""));
                     editText_PhoneNumber.setText(person.getPhoneNumber());
                     PersonController.savePerson(person);
@@ -249,9 +249,12 @@ public class SettingsSettingsFragment extends Fragment{
             else {
                 //if permission is granted read the phone number
                 TelephonyManager telephonyManager = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
-                person.setPhoneNumber(telephonyManager.getLine1Number());
+                String phoneNumber = telephonyManager.getLine1Number();
+                if (phoneNumber != null)
+                    phoneNumber.replaceAll(" ", "");
+                person.setPhoneNumber(phoneNumber);
                 //if the number could not been read, open a dialog
-                if (person.getPhoneNumber() == null || !person.getPhoneNumber().matches("[0+].*"))
+                if (person.getPhoneNumber() == null || !person.getPhoneNumber().matches("\\+?[0-9]+"))
                     Toast.makeText(getContext(),R.string.PhoneNumberCouldNotBeenRead,Toast.LENGTH_SHORT);
                 else {
                     PersonController.addPersonMe(person);

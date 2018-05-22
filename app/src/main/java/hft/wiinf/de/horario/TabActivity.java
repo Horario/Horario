@@ -403,7 +403,10 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         else {
             //if permission is granted read the phone number
             TelephonyManager telephonyManager = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
-            person.setPhoneNumber(telephonyManager.getLine1Number());
+            String phoneNumber = (telephonyManager.getLine1Number());
+            if (phoneNumber != null)
+                phoneNumber.replaceAll(" ", "");
+            person.setPhoneNumber(phoneNumber);
             //if the number could not been read, open a dialog
             if (person.getPhoneNumber() == null || !person.getPhoneNumber().matches("\\+?[0-9]+"))
                 openDialogAskForPhoneNumber();
