@@ -645,7 +645,7 @@ public class NewEventFragment extends Fragment {
         phoneNumber.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                String input = v.getText().toString().trim();
+                String input = v.getText().toString().replaceAll(" ", "");
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     if (input.matches("\\+?[0-9]+")) {
                         alertDialog.dismiss();

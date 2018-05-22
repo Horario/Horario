@@ -152,7 +152,7 @@ public class SettingsSettingsFragment extends Fragment{
         editText_PhoneNumber.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                String inputText = v.getText().toString().trim();
+                String inputText = v.getText().toString().replaceAll(" ", "");
                 //on click: read out the textfield, save the personand close the keyboard
                 //regex: perhaps + then numbers
                 if (actionId == EditorInfo.IME_ACTION_DONE && inputText.matches("\\+?[0-9]*")) {

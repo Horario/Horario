@@ -471,7 +471,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         phoneNumber.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                String input = v.getText().toString().trim();
+                String input = v.getText().toString().replaceAll(" ", "");
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     //regex: perhaps + at beginning, then numbers
                     if (input.matches("\\+?[0-9]+")) {
