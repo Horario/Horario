@@ -32,6 +32,7 @@ import java.util.Locale;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
+import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.AcceptedState;
 
 public class CalendarFragment extends Fragment {
@@ -197,14 +198,18 @@ public class CalendarFragment extends Fragment {
             @Override
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
-                if (eventList.get(position).getAccepted().equals(AcceptedState.ACCEPTED)){
-                    textView.setBackgroundColor(Color.GREEN);
-                }else if(eventList.get(position).getAccepted().equals(AcceptedState.WAITING)){
-                    textView.setBackgroundColor(Color.RED);
-                }else if(eventList.get(position).getCreator().isItMe()){ //TODO testing
+                if(eventList.get(position).getCreator().equals(PersonController.getPersonWhoIam())) {
                     textView.setBackgroundColor(Color.BLUE);
                 }else{
-                    textView.setBackgroundColor(Color.WHITE);
+                    if (eventList.get(position).getAccepted().equals(AcceptedState.ACCEPTED)) {
+                        textView.setBackgroundColor(Color.GREEN);
+                    } else if (eventList.get(position).getAccepted().equals(AcceptedState.WAITING)) {
+                        textView.setBackgroundColor(Color.RED);
+                    } else if (eventList.get(position).getCreator().isItMe()) { //TODO testing
+                        textView.setBackgroundColor(Color.BLUE);
+                    } else {
+                        textView.setBackgroundColor(Color.WHITE);
+                    }
                 }
                 return textView;
             }
