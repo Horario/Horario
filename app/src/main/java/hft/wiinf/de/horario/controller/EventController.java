@@ -89,9 +89,8 @@ public class EventController {
             repetitionEvent.setPlace(firstEvent.getPlace());
             repetitionEvent.setDescription(firstEvent.getDescription());
             repetitionEvent.setAccepted(firstEvent.getAccepted());
-            repetitionEvent.setEndTime(firstEvent.getEndTime());
             repetitionEvent.setShortTitle(firstEvent.getShortTitle());
-            repetitionEvent.setStartEvent(firstEvent);
+            repetitionEvent.setCreatorEventId(firstEvent.getCreatorEventId());
             //copy the start and end time of the start event into a temporary variable, add 1 to the corresponding field and save the new value into the next event
             Calendar temporary = new GregorianCalendar();
             temporary.setTime(firstEvent.getStartTime());
