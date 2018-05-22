@@ -67,7 +67,7 @@
     <string name="lastTry_phoneNumber">Ohne deine Telefonnummer können wir deinen Nutzernamen nicht speichern.</string>
     <string name="oneMoreTime">Nochmal</string>
     <string name="telephonenumerNotRead">Die Telefonnummer konnte nicht ausgelesen werden. Bitte geben Sie Ihre Telefonnummer manuell ein.</string>
-    <string name="wrongNumberFormat">Die Telefonummer darf nur aus Zahlen und ggf. einem + am Anfang bestehen.</string>
+    <string name="wrongNumberFormat">Die Telefonummer muss aus mindestens einer Zahl und ggf. einem + am Anfang bestehen.</string>
     <string name="UsernameNotSaved">Der Benutzername wurde nicht gespeichert.</string>
 
     <string-array name="push_times">
@@ -108,7 +108,7 @@
     <string name="qrCode_content">Das ist der Inhalt vom QR Code:\u0020</string>
     <string name="cannot_be_saved_as_event">Das können wir leider nicht als Termin speichern!</string>
     <string name="show_QRCode">QR Code anzeigen</string>
-    <string name="lastTry_phoneNumber_event">Wir brauchen deine telefonnummer, um den Termin zu speichern.</string>
+    <string name="lastTry_phoneNumber_event">Wir brauchen deine Telefonnummer, um den Termin zu speichern.</string>
     <string name="EventNotSaved">Der Termin konnte nicht gespeichert werden.</string>
     <string name="phoneNumber">Telefonnummer</string>
     <string name="phoneNumberHint">Telefonnummer</string>
