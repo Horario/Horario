@@ -6,24 +6,21 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-import com.activeandroid.util.Log;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import java.util.Calendar;
+
+import java.util.Objects;
 
 import hft.wiinf.de.horario.CaptureActivityPortrait;
 import hft.wiinf.de.horario.R;
@@ -33,92 +30,49 @@ import hft.wiinf.de.horario.controller.*;
 public class QRScanFragment extends Fragment implements ActivityCompat.OnRequestPermissionsResultCallback {
     private static final String TAG = "QRScanFragmentActivity";
     private static final int PERMISSION_REQUEST_CAMERA = 1;
-    private String qrResult;
 
-    private RelativeLayout mScannerResult_RelativeLayout_Main, mScannerResult_RelativeLayout_ButtonFrame, mScannerResult_RelativeLayout_goTo_CalendarFragment;
-    private TextView mScannerResult_TextureView_Headline, mScannerResult_TextureView_Description;
-    private Button mScannerResult_Button_addEvent, mScannerResult_Button_saveWithoutassent, mScannerResult_Button_rejectEvent;
+    //Counter for the Loop of PermissionChecks
     private int counter = 0;
-
     private String codeFormat, codeContent;
     private final String noResultErrorMsg = "No scan data received!";
 
 
     @Override
-    public void onActivityCreated(Bundle savednstanceState) {
-        super.onActivityCreated(savednstanceState);
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
     }
 
     //The Scanner start with the Call form CalendarActivity directly
-    //ToDo Versuchen die Ansicht immernoch zu verbessern ..
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle saveInstanceState) {
         View view = inflater.inflate(R.layout.fragment_calendar_qrscan, container, false);
         return view;
     }
 
     @SuppressLint("ResourceType")
-    public void onViewCreated(final View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull final View view, Bundle savedInstanceState) {
 
-        //GUI initial
-        mScannerResult_RelativeLayout_Main = view.findViewById(R.id.scanner_result_relativeLayout_main);
-        mScannerResult_RelativeLayout_ButtonFrame = view.findViewById(R.id.scanner_result_relativeLayout_buttonFrame);
-        mScannerResult_RelativeLayout_goTo_CalendarFragment = view.findViewById(R.id.scanner_result_realtiveLayout_CalendarFragment);
-        mScannerResult_TextureView_Description = view.findViewById(R.id.scanner_result_textview_eventText);
-        mScannerResult_TextureView_Headline = view.findViewById(R.id.scanner_result_textView_headline);
-        mScannerResult_Button_saveWithoutassent = view.findViewById(R.id.scanner_result_button_save_without_assent);
-        mScannerResult_Button_rejectEvent = view.findViewById(R.id.scanner_result_button_reject_event);
-        mScannerResult_Button_addEvent = view.findViewById(R.id.scanner_result_button_addEvent);
-
-        //Make the Element at first Unvisible
-        mScannerResult_TextureView_Description.setVisibility(View.GONE);
-        mScannerResult_TextureView_Headline.setVisibility(View.GONE);
-        mScannerResult_Button_addEvent.setVisibility(View.GONE);
-        mScannerResult_Button_saveWithoutassent.setVisibility(View.GONE);
-        mScannerResult_Button_rejectEvent.setVisibility(View.GONE);
-        /*
-        //ToDo Start TempButton
-        mScannerResult_Button_addEvent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startScanner();
-            }
-        });
-        */
-        //Ende TempButton
-        //Eigentlich startet es mit der Camerazugriffsberechtigung
+        //Call a Method to start at first a permission Check and if this granted it start the Scanner
+        //in FullScreenMode
         showCameraPreview();
     }
-/*
-    //ToDo Temp Klickbutten um den Scanner irgendwie manuell zu starten
-    public void onClick(View view) {
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.scanner_result_realtiveLayout_CalendarFragment, new CalendarActivity());
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-        mScannerResult_RelativeLayout_ButtonFrame.setVisibility(View.GONE);
-        mScannerResult_RelativeLayout_Main.setVisibility(View.GONE);
-        mScannerResult_RelativeLayout_goTo_CalendarFragment.setVisibility(View.VISIBLE);
-    }
-*/
+
     public void startScanner() {
         IntentIntegrator integrator = new IntentIntegrator(this.getActivity()).forSupportFragment(this);
         integrator.setCaptureActivity(CaptureActivityPortrait.class); //Necessary to use the intern Sensor for Orientation
         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
-        integrator.setPrompt("Termincode scannen\n" +
-                "Halte dein Smartphone vor den QR-Code und \n" +
-                "scanne ihn ab, um den Termin zu öffnen");
+        integrator.setPrompt(getString(R.string.scanneroverlayer_qrCodeScan) + "\n" +
+                getString(R.string.scanneroverlay_positionYourScanner) + "\n" +
+                getString(R.string.scanneroverlay_toShowTheEvent));
         integrator.setCameraId(0);
-        //ToDo Größe des Anzeigebereiches im Hochformat ändern.
         integrator.setBeepEnabled(false);
         integrator.setBarcodeImageEnabled(false);
         integrator.initiateScan();
     }
 
-
     public void showCameraPreview() {
-        //Check if User has permission to start to scan
+        //Check if User has permission to start to scan, if not it's start a RequestLoop
         if (!isCameraPermissionGranted()) {
             requestCameraPermission();
         } else {
@@ -137,27 +91,26 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+
         switch (requestCode) {
             case PERMISSION_REQUEST_CAMERA: {
                 // If Permission ist Granted User get a SnackbarMessage and the Scanner Started
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Snackbar.make((getActivity().findViewById(R.id.scanner_result_relativeLayout_buttonFrame)),
-                            "Danke für die Zugriffsrechte auf die Kamera!",
+                    Snackbar.make((Objects.requireNonNull(getActivity()).findViewById(R.id.scanner_result_relativeLayout_buttonFrame)),
+                            R.string.requestPermission_thankYou,
                             Snackbar.LENGTH_LONG).show();
-
                     startScanner();
-
                 } else {
                     //If the User deny the access to the Camera he get two Chance to accept the Request
                     //The Counter count from 0 to 2. If the Counter 2 user is pushed to CalendarActivity
                     //The Default is to push the User to CalendarActivity
                     switch (counter) {
                         case 0:
-                            Snackbar.make(getActivity().findViewById(R.id.scanner_result_relativeLayout_buttonFrame),
-                                    "Wir brauchen den Kamerazugriff um den QR-Code einzuscannen.",
-                                    Snackbar.LENGTH_INDEFINITE).setAction("Nochmal", new View.OnClickListener() {
+                            Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(R.id.scanner_result_relativeLayout_buttonFrame),
+                                    R.string.requestPermission_askForPermission,
+                                    Snackbar.LENGTH_INDEFINITE).setAction(R.string.requestPermission_againButton, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     counter++;
@@ -167,9 +120,9 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
                             break;
 
                         case 1:
-                            Snackbar.make(getActivity().findViewById(R.id.scanner_result_relativeLayout_buttonFrame),
-                                    "Letzer Versuch! Bitte gestatte den Zugriff um Scannen zu können.",
-                                    Snackbar.LENGTH_INDEFINITE).setAction("Nochmal", new View.OnClickListener() {
+                            Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(R.id.scanner_result_relativeLayout_buttonFrame),
+                                    R.string.requestPermission_lastTryRequest,
+                                    Snackbar.LENGTH_INDEFINITE).setAction(R.string.requestPermission_againButton, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     counter++;
@@ -178,29 +131,31 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
                             }).show();
                             break;
                         case 2:
-                            Snackbar.make(getActivity().findViewById(R.id.scanner_result_relativeLayout_buttonFrame),
-                                    "Okay du magst nicht? Vielleicht ein anderes mal :)",
-                                    Snackbar.LENGTH_INDEFINITE).setAction("Zum Kalender", new View.OnClickListener() {
+                            Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(R.id.scanner_result_relativeLayout_buttonFrame),
+                                    R.string.requestPermission_userDontLike,
+                                    Snackbar.LENGTH_INDEFINITE).setAction(getString(R.string.toCalender), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                                    fragmentTransaction.replace(R.id.scanner_result_realtiveLayout_CalendarFragment, new CalendarActivity());
-                                    fragmentTransaction.addToBackStack(null);
-                                    fragmentTransaction.commit();
-                                    mScannerResult_RelativeLayout_ButtonFrame.setVisibility(View.GONE);
-                                    mScannerResult_RelativeLayout_Main.setVisibility(View.GONE);
-                                    mScannerResult_RelativeLayout_goTo_CalendarFragment.setVisibility(View.VISIBLE);
+                                    Intent intent = getActivity().getIntent();
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK
+                                            | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    getActivity().overridePendingTransition(0, 0);
+                                    getActivity().finish();
+
+                                    getActivity().overridePendingTransition(0, 0);
+                                    startActivity(intent);
                                 }
                             }).show();
                             break;
                         default:
-                            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                            fragmentTransaction.replace(R.id.scanner_result_realtiveLayout_CalendarFragment, new CalendarActivity());
-                            fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                            mScannerResult_RelativeLayout_ButtonFrame.setVisibility(View.GONE);
-                            mScannerResult_RelativeLayout_Main.setVisibility(View.GONE);
-                            mScannerResult_RelativeLayout_goTo_CalendarFragment.setVisibility(View.VISIBLE);
+                            Intent intent = Objects.requireNonNull(getActivity()).getIntent();
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK
+                                    | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            getActivity().overridePendingTransition(0, 0);
+                            getActivity().finish();
+
+                            getActivity().overridePendingTransition(0, 0);
+                            startActivity(intent);
                     }
                 }
             }
@@ -218,130 +173,15 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
             codeContent = scanningResult.getContents();
             codeFormat = scanningResult.getFormatName();
             // send received data
-            parentActivity.scanResultData(codeFormat, codeContent);
+            Objects.requireNonNull(parentActivity).scanResultData(codeFormat, codeContent);
 
         } else {
             // send exception
-            parentActivity.scanResultData(new NoScanResultExceptionController(noResultErrorMsg));
+            Objects.requireNonNull(parentActivity).scanResultData(new NoScanResultExceptionController(noResultErrorMsg));
         }
-
-
-        //displayQRResult();
 
     }
 
 
-    @SuppressLint({"SetTextI18n", "LongLogTag"})
-    private void displayQRResult() {
-        if (getActivity() != null && qrResult != null) {
-            mScannerResult_TextureView_Description.setVisibility(View.VISIBLE);
-
-            if (qrResult.equals("Canceled")) {
-                mScannerResult_TextureView_Description.setText("Du hast das Scannen abgebrochen, " +
-                        "bitte starte den Scanner neu");
-            } else {
-                try {
-                    //If the Scan wasn't Canceled the GUI elements set to Visible
-                    mScannerResult_TextureView_Headline.setVisibility(View.VISIBLE);
-                    mScannerResult_Button_addEvent.setVisibility(View.VISIBLE);
-                    mScannerResult_Button_saveWithoutassent.setVisibility(View.VISIBLE);
-                    mScannerResult_Button_rejectEvent.setVisibility(View.VISIBLE);
-
-                    //Put StringBufffer in an Array and split the Values to new String Variables
-                    //Index: 0 = CreatorID; 1 = StartDate; 2 = EndDate; 3 = StartTime; 4 = EndTime;
-                    //       5 = Repetition; 6 = ShortTitle; 7 = Place; 8 = Descriptoin;  9 = EventCreatorName
-                    String[] eventStringBufferArray = qrResult.split("\\|");
-                    String startDate = eventStringBufferArray[1].trim();
-                    String endDate = eventStringBufferArray[2].trim();
-                    String startTime = eventStringBufferArray[3].trim();
-                    String endTime = eventStringBufferArray[4].trim();
-                    String repetition = eventStringBufferArray[5].toUpperCase().trim();
-                    String shortTitle = eventStringBufferArray[6].trim();
-                    String place = eventStringBufferArray[7].trim();
-                    String eventCreatorName = eventStringBufferArray[9].trim();
-
-                    // Change the DataBase Repetition Information in a German String for the Repetition Element
-                    // like "Daily" into "täglich" and so on
-                    switch (repetition) {
-                        case "YEARLY":
-                            repetition = "jährlich";
-                            break;
-                        case "MONTHLY":
-                            repetition = "monatlich";
-                            break;
-                        case "WEEKLY":
-                            repetition = "wöchentlich";
-                            break;
-                        case "DAILY":
-                            repetition = "täglisch";
-                            break;
-                        case "NONE":
-                            repetition = "";
-                            break;
-                        default:
-                            repetition = "ohne Wiederholung";
-                    }
-
-                    // Event shortTitle in Headline with StartDate
-                    mScannerResult_TextureView_Headline.setText(shortTitle);
-                    // Check for a Repetition Event and Change the Description Output with and without
-                    // Repetition Element inside.
-                    if (repetition.equals("")) {
-                        mScannerResult_TextureView_Description.setText(startDate + "\n" + place + "\n" + eventCreatorName);
-                    } else {
-                        mScannerResult_TextureView_Description.setText(startDate + "-" + endDate + "\n" + repetition + "\n" + startTime + " Uhr - "
-                                + endTime + " Uhr \n" + "Raum " + place + "\n" + "Organisator: " + eventCreatorName);
-                    }
-                    // In the CatchBlock the User see a Snackbar Information and was pushed to CalendarActivity
-                } catch (NullPointerException e) {
-                    Log.d(TAG, "QRSharingFragmentActivity:" + e.getMessage());
-                    mScannerResult_Button_addEvent.setVisibility(View.GONE);
-                    mScannerResult_Button_saveWithoutassent.setVisibility(View.GONE);
-                    mScannerResult_Button_rejectEvent.setVisibility(View.GONE);
-                    mScannerResult_TextureView_Headline.setVisibility(View.GONE);
-
-                    Snackbar.make(getActivity().findViewById(R.id.scanner_result_relativeLayout_buttonFrame),
-                            "Ups! Fehler Aufgetreten!",
-                            Snackbar.LENGTH_INDEFINITE).setAction("Zum Kalender", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                            fragmentTransaction.replace(R.id.scanner_result_realtiveLayout_CalendarFragment, new CalendarActivity());
-                            fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                            mScannerResult_RelativeLayout_ButtonFrame.setVisibility(View.GONE);
-                            mScannerResult_RelativeLayout_Main.setVisibility(View.GONE);
-                            mScannerResult_RelativeLayout_goTo_CalendarFragment.setVisibility(View.VISIBLE);
-                        }
-                    }).show();
-
-                } catch (ArrayIndexOutOfBoundsException z) {
-                    Log.d(TAG, "QRScanFragmentActivity:" + z.getMessage());
-                    mScannerResult_Button_addEvent.setVisibility(View.GONE);
-                    mScannerResult_Button_saveWithoutassent.setVisibility(View.GONE);
-                    mScannerResult_Button_rejectEvent.setVisibility(View.GONE);
-                    mScannerResult_TextureView_Headline.setVisibility(View.GONE);
-                    mScannerResult_TextureView_Description.setText("Das ist der Inhalt vom QR Code: " + "\n" + qrResult +
-                            "\n" + "Das können wir leider nicht als Termin speichern!");
-
-                    Snackbar.make(getActivity().findViewById(R.id.scanner_result_relativeLayout_buttonFrame),
-                            "Ups! Falscher QR-Code!",
-                            Snackbar.LENGTH_INDEFINITE).setAction("Zum Kalender", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                            fragmentTransaction.replace(R.id.scanner_result_realtiveLayout_CalendarFragment, new CalendarActivity());
-                            fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                            mScannerResult_RelativeLayout_ButtonFrame.setVisibility(View.GONE);
-                            mScannerResult_RelativeLayout_Main.setVisibility(View.GONE);
-                            mScannerResult_RelativeLayout_goTo_CalendarFragment.setVisibility(View.VISIBLE);
-                        }
-                    }).show();
-                }
-            }
-            qrResult = null;
-        }
-    }
 }
 
