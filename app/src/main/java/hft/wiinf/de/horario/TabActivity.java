@@ -63,9 +63,9 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         tabLayout.setupWithViewPager(mViewPager);
 
         //TODO Change Picture (DesignTeam)
-        Objects.requireNonNull(tabLayout.getTabAt(0)).setIcon(R.drawable.ic_android_black_24dp);
-        Objects.requireNonNull(tabLayout.getTabAt(1)).setIcon(R.drawable.ic_android_black2_24dp);
-        Objects.requireNonNull(tabLayout.getTabAt(2)).setIcon(R.drawable.ic_android_black3_24dp);
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_dateview);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_calendarview);
+        tabLayout.getTabAt(2).setIcon(R.drawable.ic_settings);
 
         if (PersonController.getPersonWhoIam() == null) {
             openDialogAskForUsername();
