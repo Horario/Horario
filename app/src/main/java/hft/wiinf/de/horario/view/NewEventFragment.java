@@ -1,6 +1,5 @@
 package hft.wiinf.de.horario.view;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
@@ -573,6 +572,7 @@ public class NewEventFragment extends Fragment {
 
     // method to read the phone number of the user + save user name
     public void concatenateAndSavePersonalData() {
+        me.setName(edittext_userName.getText().toString());
         //if phone number is set read only the user name
         if (me.getPhoneNumber() == null || me.getPhoneNumber().equalsIgnoreCase("")) {
             if (checkSelfPermission(getActivity(), READ_SMS) != PackageManager.PERMISSION_GRANTED)
@@ -589,12 +589,11 @@ public class NewEventFragment extends Fragment {
                 }
             }
 
-        }
-        saveEvent();
+        } else saveEvent();
     }
 
     private void requestPermission() {
-        requestPermissions(new String[]{Manifest.permission.SEND_SMS}, PERMISSION_REQUEST_SEND_SMS);
+        requestPermissions(new String[]{READ_SMS}, PERMISSION_REQUEST_SEND_SMS);
     }
 
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
