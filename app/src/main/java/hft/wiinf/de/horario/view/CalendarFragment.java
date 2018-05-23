@@ -65,7 +65,6 @@ public class CalendarFragment extends Fragment {
         ActionButtonRotateLeft = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonrotateleft);
 
 
-
         calendarFcQrScan.hide();
         calendarFcNewEvent.hide();
 
@@ -87,7 +86,7 @@ public class CalendarFragment extends Fragment {
             public void onClick(View v) {
                 NewEventFragment newEventFragment = new NewEventFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("fragment","Calendar");
+                bundle.putString("fragment", "Calendar");
                 newEventFragment.setArguments(bundle);
 
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
@@ -103,7 +102,7 @@ public class CalendarFragment extends Fragment {
             public void onClick(View v) {
                 QRScanFragment qrScanFragment = new QRScanFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("fragment","Calendar");
+                bundle.putString("fragment", "Calendar");
                 qrScanFragment.setArguments(bundle);
 
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
@@ -200,12 +199,10 @@ public class CalendarFragment extends Fragment {
     }
 
     public void closeFABMenu() {
-        if(calendarIsFloatMenuOpen.getText().equals("true")) {
+        if (calendarIsFloatMenuOpen.getText().equals("true")) {
             calendarFcQrScan.startAnimation(ActionButtonClose);
             calendarFcNewEvent.startAnimation(ActionButtonClose);
             calendarFcMenu.startAnimation(ActionButtonRotateLeft);
-            //calendarFcNewEvent.setVisibility(View.VISIBLE);
-            //calendarFcQrScan.setVisibility(View.VISIBLE);
             calendarFcQrScan.setClickable(false);
             calendarFcNewEvent.setClickable(false);
             calendarIsFloatMenuOpen.setText("false");

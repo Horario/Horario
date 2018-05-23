@@ -33,7 +33,6 @@ import hft.wiinf.de.horario.view.CalendarActivity;
 import hft.wiinf.de.horario.view.CalendarFragment;
 import hft.wiinf.de.horario.view.EventOverviewActivity;
 import hft.wiinf.de.horario.view.EventOverviewFragment;
-import hft.wiinf.de.horario.view.NewEventFragment;
 import hft.wiinf.de.horario.view.SettingsActivity;
 
 public class TabActivity extends AppCompatActivity implements ScanResultReceiverController {
