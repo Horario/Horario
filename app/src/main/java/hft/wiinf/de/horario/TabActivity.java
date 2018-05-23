@@ -268,7 +268,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         openActionDialogAfterScanning(codeContent);
     }
 
-    // Give some Errormessage if the Code have not Data inside
+    // Give some error Message if the Code have not Data inside
     @Override
     public void scanResultData(NoScanResultExceptionController noScanData) {
         Toast toast = Toast.makeText(this, noScanData.getMessage(), Toast.LENGTH_SHORT);
@@ -325,7 +325,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         });
     }
 
-    // Add the Fragments to the VageViewer
+    // Add the Fragments to the PageViewer
     private void setupViewPager(ViewPager viewPager) {
         SectionsPageAdapterActivity adapter = mSectionsPageAdapter;
         adapter.addFragment(new EventOverviewActivity(), "");
