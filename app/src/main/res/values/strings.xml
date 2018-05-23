@@ -2,7 +2,7 @@
     <string name="app_name">Horario</string>
     <string name="Test">Test</string>
     <string name="title_activity_test">Test</string>
-    <string name="title_activity_tab">TabActivity</string>
+    <string name="title_activity_tab">Horario</string>
     <string name="newEventTabText">Tab_1</string>
     <string name="calendarTabText">Tab_2</string>
     <string name="settingTabText">Tab_3</string>
@@ -13,10 +13,6 @@
     <string name="setting">Setting</string>
     <string name="newEvent">Termin anlegen</string>
     <string name="calendar">calendar</string>
-    <string name="settings_text">Einstellungen</string>
-    <string name="support_text">Support</string>
-    <string name="copyright_text">Impressum</string>
-    <string name="feedback_zur_app_text">Feedback zur App</string>
     <string name="username_text">Benutzername :</string>
     <string name="username_hint">Benutzername</string>
     <string name="allowpush_text">Push Nachrichten erlauben :</string>
@@ -102,6 +98,13 @@
     <string name="qrCode_content">Das ist der Inhalt vom QR Code:\u0020</string>
     <string name="cannot_be_saved_as_event">Das können wir leider nicht als Termin speichern!</string>
     <string name="show_QRCode">QR Code anzeigen</string>
+
+   <!-- Settings & SettingsChilds -->
+    <string name="settings_headline_privacyPolicy">Privacy Policy</string>
+    <string name="settings_text">Einstellungen</string>
+    <string name="support_text">Support</string>
+    <string name="copyright_text">Impressum</string>
+    <string name="feedback_zur_app_text">Feedback zur App</string>
 
 
 </resources>
