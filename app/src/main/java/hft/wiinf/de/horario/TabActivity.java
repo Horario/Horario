@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -297,10 +298,12 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                     FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
                     fr.replace(R.id.calendar_frameLayout, new CalendarFragment());
                     fr.commit();
+                    getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 } else if (tab.getPosition() == 0) {
                     FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
                     fr.replace(R.id.eventOverview_frameLayout, new EventOverviewFragment());
                     fr.commit();
+                    getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 }
             }
 
@@ -313,13 +316,13 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 } else if (tab.getPosition() == 1) {
                     FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
                     fr.replace(R.id.calendar_frameLayout, new CalendarFragment());
-                    fr.addToBackStack(null);
                     fr.commit();
+                    getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 } else if (tab.getPosition() == 0) {
                     FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
                     fr.replace(R.id.eventOverview_frameLayout, new EventOverviewFragment());
-                    fr.addToBackStack(null);
                     fr.commit();
+                    getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 }
             }
         });
