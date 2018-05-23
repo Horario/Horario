@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.FileProvider;
@@ -29,17 +30,20 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Objects;
 
 import hft.wiinf.de.horario.R;
+import hft.wiinf.de.horario.TabActivity;
 import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.controller.PersonController;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class QRSharingActivity extends Fragment {
+public class QRSharingFragment extends Fragment {
     private static final String TAG = "QRSharingFragmentActivity";
-    private RelativeLayout mQRSharing_relativeLayout_buttonFrame, mQRSharing_reativeLayout_textViewFrame, mQRSharing_relativeLayout_calendarActivity;
+    private RelativeLayout mQRSharing_relativeLayout_buttonFrame, mQRSharing_relativeLayout_textViewFrame,
+            mQRSharing_relativeLayout_calendarActivity;
     private TextView mQRSharing_textView_headline, mQRSharing_textView_description;
     private Button mQRSharing_button_shareWith, mQRSharing_button_showInCalendar;
     private ImageView mQRSharing_imageView_qrCode;
@@ -47,7 +51,7 @@ public class QRSharingActivity extends Fragment {
     private Bitmap mBitmapOfQRCode;
     private Person mPerson;
 
-    public QRSharingActivity() {
+    public QRSharingFragment() {
         // Required empty public constructor
     }
 
@@ -69,7 +73,7 @@ public class QRSharingActivity extends Fragment {
     public String eventStringResultDescription() {
 
         Bundle qrDescription = getArguments();
-        String qrStringBufferResult = qrDescription.getString("qrStringBufferDescription");
+        String qrStringBufferResult = Objects.requireNonNull(qrDescription).getString("qrStringBufferDescription");
         return qrStringBufferResult;
     }
 
@@ -78,11 +82,11 @@ public class QRSharingActivity extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.activity_qrsharing, container, false);
+        View view = inflater.inflate(R.layout.fragment_qrsharing, container, false);
 
         //GUI initial
         mQRSharing_relativeLayout_buttonFrame = view.findViewById(R.id.qrSharing_relativeLayout_buttonFrame);
-        mQRSharing_reativeLayout_textViewFrame = view.findViewById(R.id.qrSharing_relativeLayout_textViewFrame);
+        mQRSharing_relativeLayout_textViewFrame = view.findViewById(R.id.qrSharing_relativeLayout_textViewFrame);
         mQRSharing_relativeLayout_calendarActivity = view.findViewById(R.id.qrSharing_relativeLayout_calendarActivity);
         mQRSharing_textView_headline = view.findViewById(R.id.qrSharing_textView_headline);
         mQRSharing_textView_description = view.findViewById(R.id.qrSharing_textView_description);
@@ -90,15 +94,14 @@ public class QRSharingActivity extends Fragment {
         mQRSharing_button_showInCalendar = view.findViewById(R.id.qrSharing_button_showInCalendar);
         mQRSharing_imageView_qrCode = view.findViewById(R.id.qrSharing_imageView_qrCode);
 
-        //Start the QR Code GeneratorMethod and Show all Even Informations
+        //Start the QR Code GeneratorMethod and Show all Even Information
         qrBitMapGenerator();
 
-        //Put StringBufffer in an Array an split the Values to new String Variables
-        //Index: 0 = StartDate; 1 = StartTime; 2= EndTime; 3=Descriptoin; 4=Location; 5=EventCreator
+        //Put StringBuffer in an Array an split the Values to new String Variables
         try {
             String[] eventStringBufferResultAsArray = eventStringResultDescription().split("\\| ");
             //Index: 0 = CreatorID; 1 = StartDate; 2 = EndDate; 3 = StartTime; 4 = EndTime;
-            //       5 = Repetition; 6 = ShortTitle; 7 = Place; 8 = Descriptoin;  9 = EventCreatorName 10 = PhoneNumber
+            //       5 = Repetition; 6 = ShortTitle; 7 = Place; 8 = Description;  9 = EventCreatorName 10 = PhoneNumber
             String startDate = eventStringBufferResultAsArray[1].trim();
             String endDate = eventStringBufferResultAsArray[2].trim();
             String repetition = eventStringBufferResultAsArray[5].toUpperCase().trim();
@@ -121,7 +124,7 @@ public class QRSharingActivity extends Fragment {
                     repetition = getString(R.string.weekly);
                     break;
                 case "DAILY":
-                    repetition = getString(R.string.daylie);
+                    repetition = getString(R.string.daily);
                     break;
                 case "NONE":
                     repetition = "";
@@ -130,24 +133,24 @@ public class QRSharingActivity extends Fragment {
                     repetition = getString(R.string.without_repetition);
             }
 
-            // Check the EventCreatorName and is it itself Change the eventCreaterName to "Your Self"
+            // Check the EventCreatorName and is it itself Change the eventCreatorName to "Your Self"
             mPerson = PersonController.getPersonWhoIam();
             if (eventCreatorName.equals(mPerson.getName())) {
                 eventCreatorName = getString(R.string.yourself);
             }
 
-            // Event shortTitel in Headline with StartDate
+            // Event shortTitle in Headline with StartDate
             mQRSharing_textView_headline.setText(shortTitle);
 
             // Check for a Repetition Event and Change the Description Output with and without
             // Repetition Element inside.
             if (repetition.equals("")) {
                 mQRSharing_textView_description.setText(startDate + "\n" + getString(R.string.room) + place + "\n"
-                        + getString(R.string.organisator) + eventCreatorName
+                        + getString(R.string.organizer) + eventCreatorName
                 );
             } else {
                 mQRSharing_textView_description.setText(startDate + getString(R.string.until) + endDate + "\n"
-                        + repetition + "\n" + place + "\n" + getString(R.string.organisator) + eventCreatorName);
+                        + repetition + "\n" + place + "\n" + getString(R.string.organizer) + eventCreatorName);
             }
 
         } catch (NullPointerException e) {
@@ -158,22 +161,21 @@ public class QRSharingActivity extends Fragment {
             mQRSharing_textView_description.setVisibility(View.GONE);
             mQRSharing_imageView_qrCode.setVisibility(View.GONE);
 
-            Snackbar.make(getActivity().findViewById(R.id.generator_button_frame),
+            Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(R.id.generator_button_frame),
                     getString(R.string.ups_an_error),
                     Snackbar.LENGTH_INDEFINITE).setAction(getString(R.string.toCalender), new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.generator_realtivLayout_show_qrSharingFragment, new CalendarActivity());
-                    fragmentTransaction.addToBackStack(null);
+                    FragmentTransaction fragmentTransaction = Objects.requireNonNull(getFragmentManager()).beginTransaction();
+                    fragmentTransaction.replace(R.id.calendar_frameLayout, new CalendarActivity());
                     fragmentTransaction.commit();
-                    mQRSharing_relativeLayout_buttonFrame.setVisibility(View.GONE);
-                    mQRSharing_relativeLayout_calendarActivity.setVisibility(View.VISIBLE);
+                    TabLayout tabLayout = getActivity().findViewById(R.id.tabBarLayout);
+                    tabLayout.getTabAt(1).select();
                 }
             }).show();
 
         } catch (ArrayIndexOutOfBoundsException z) {
-            //If there an Exeption the Views are Invisible and Snackbar tell that's anything wrong
+            //If there an Exception the Views are Invisible and SnackBar tell that's anything wrong
             // and Push him back to the CalendarActivity
             Log.d(TAG, "QRGeneratorFragmentActivity:" + z.getMessage());
             mQRSharing_button_showInCalendar.setVisibility(View.GONE);
@@ -181,20 +183,19 @@ public class QRSharingActivity extends Fragment {
             mQRSharing_textView_headline.setVisibility(View.GONE);
             mQRSharing_textView_description.setVisibility(View.GONE);
             mQRSharing_imageView_qrCode.setVisibility(View.GONE);
-            mQRSharing_textView_description.setText(getString(R.string.qrCode_content) + "\n" + eventStringResultDescription() +
-                    "\n" + getString(R.string.cannot_be_saved_as_event));
+            mQRSharing_textView_description.setText(getString(R.string.wrongQRCodeResult) + "\n" + eventStringResultDescription() +
+                    "\n" + getString(R.string.notAsEventSaveable));
 
-            Snackbar.make(getActivity().findViewById(R.id.generator_button_frame),
+            Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(R.id.generator_button_frame),
                     getString(R.string.ups_an_error),
                     Snackbar.LENGTH_INDEFINITE).setAction(getString(R.string.toCalender), new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.generator_realtivLayout_show_qrSharingFragment, new CalendarActivity());
-                    fragmentTransaction.addToBackStack(null);
+                    FragmentTransaction fragmentTransaction = Objects.requireNonNull(getFragmentManager()).beginTransaction();
+                    fragmentTransaction.replace(R.id.calendar_frameLayout, new CalendarActivity());
                     fragmentTransaction.commit();
-                    mQRSharing_relativeLayout_buttonFrame.setVisibility(View.GONE);
-                    mQRSharing_relativeLayout_calendarActivity.setVisibility(View.VISIBLE);
+                    TabLayout tabLayout = getActivity().findViewById(R.id.tabBarLayout);
+                    tabLayout.getTabAt(1).select();
                 }
             }).show();
         }
@@ -212,18 +213,15 @@ public class QRSharingActivity extends Fragment {
             @SuppressLint("LongLogTag")
             @Override
             public void onClick(View v) {
-              try{
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.qrSharing_relativeLayout_calendarActivity, new CalendarActivity());
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-                mQRSharing_relativeLayout_buttonFrame.setVisibility(View.GONE);
-                mQRSharing_imageView_qrCode.setVisibility(View.GONE);
-                mQRSharing_reativeLayout_textViewFrame.setVisibility(View.GONE);
-                mQRSharing_relativeLayout_calendarActivity.setVisibility(View.VISIBLE);
-            }catch(NullPointerException mNullPointerException){
-                  Log.d(TAG, "QRGeneratorFragmentActivity:" + mNullPointerException.getMessage());
-            }
+                try {
+                    FragmentTransaction fragmentTransaction = Objects.requireNonNull(getFragmentManager()).beginTransaction();
+                    fragmentTransaction.replace(R.id.calendar_frameLayout, new CalendarActivity());
+                    fragmentTransaction.commit();
+                    TabLayout tabLayout = getActivity().findViewById(R.id.tabBarLayout);
+                    tabLayout.getTabAt(1).select();
+                } catch (NullPointerException mNullPointerException) {
+                    Log.d(TAG, "QRGeneratorFragmentActivity:" + mNullPointerException.getMessage());
+                }
             }
         });
 
@@ -233,7 +231,7 @@ public class QRSharingActivity extends Fragment {
             @Override
             public void onClick(View v) {
                 try {
-                    File cachePath = new File(getContext().getCacheDir(), "images");
+                    File cachePath = new File(Objects.requireNonNull(getContext()).getCacheDir(), "images");
                     cachePath.mkdirs(); // don't forget to make the directory
                     FileOutputStream stream = new FileOutputStream(cachePath + "/image.png"); // overwrites this image every time
                     mBitmapOfQRCode.compress(Bitmap.CompressFormat.PNG, 100, stream);

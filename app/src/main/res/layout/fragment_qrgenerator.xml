@@ -64,7 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:text="@string/r_ckmeldungen_anzeigen"
+            android:text="@string/show_Response"
             tools:layout_editor_absoluteX="85dp"
             tools:layout_editor_absoluteY="137dp" />
 
