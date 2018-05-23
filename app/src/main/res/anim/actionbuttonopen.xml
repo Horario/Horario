@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <set xmlns:android="http://schemas.android.com/apk/res/android"
     android:fillAfter="true">
-<scale
-    android:duration="300"
-    android:fromXScale="0dp"
-    android:fromYScale="0dp"
-    android:toXScale="45dp"
-    android:toYScale="45dp"
-    android:interpolator="@android:anim/linear_interpolator"
-    android:pivotX="50%"
-    android:pivotY="50%"
-    />
+    <scale
+        android:duration="300"
+        android:fromXScale="0dp"
+        android:fromYScale="0dp"
+        android:interpolator="@android:anim/linear_interpolator"
+        android:pivotX="50%"
+        android:pivotY="50%"
+        android:toXScale="45dp"
+        android:toYScale="45dp" />
     <alpha
         android:duration="300"
         android:fromAlpha="0.0"
-        android:toAlpha="10"
         android:interpolator="@android:anim/accelerate_interpolator"
-        />
+        android:toAlpha="10" />
 </set>
