@@ -222,12 +222,12 @@ public class QRGeneratorFragment extends Fragment {
 
                 Bundle whichFragment = getArguments();
 
-                if(whichFragment.get("fragment").equals("EventOverview")) {
+                if (whichFragment.get("fragment").equals("EventOverview")) {
                     FragmentTransaction fragmentTransaction = Objects.requireNonNull(getFragmentManager()).beginTransaction();
-                    fragmentTransaction.replace(R.id.eventOverview_frameLayout, qrSharingBundle,"");
+                    fragmentTransaction.replace(R.id.eventOverview_frameLayout, qrSharingBundle, "");
                     fragmentTransaction.addToBackStack("QrShareCA");
                     fragmentTransaction.commit();
-                } else{
+                } else {
                     FragmentTransaction fragmentTransaction = Objects.requireNonNull(getFragmentManager()).beginTransaction();
                     fragmentTransaction.replace(R.id.calendar_frameLayout, qrSharingBundle, "QrShareCA");
                     fragmentTransaction.addToBackStack("QrShareCA");
