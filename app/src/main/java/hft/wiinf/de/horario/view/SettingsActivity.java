@@ -23,7 +23,7 @@ public class SettingsActivity extends Fragment {
 
         FragmentTransaction fr = getFragmentManager().beginTransaction();
         //settings_relativeLayout_helper: in this Layout all other layouts will be uploaded
-        fr.replace(R.id.settings_frameLayout, new SettingsFragment(),"Settings");
+        fr.replace(R.id.settings_frameLayout, new SettingsFragment(), "Settings");
         fr.commit();
 
         return view;
