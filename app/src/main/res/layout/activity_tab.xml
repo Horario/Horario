@@ -10,6 +10,7 @@
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/zentea_darkgreyblue"
         android:paddingTop="@dimen/appbar_padding_top"
         android:theme="@style/AppTheme.AppBarOverlay">
 
@@ -17,13 +18,18 @@
             android:id="@+id/tabBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="visible">
+            android:background="@color/zentea_darkgreyblue"
+            android:visibility="visible"
+            app:tabGravity="fill"
+            app:tabIndicatorColor="@android:color/white"
+            app:tabMaxWidth="0dp"
+            app:tabMode="fixed">
 
             <android.support.design.widget.TabItem
                 android:id="@+id/newEventTab"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/newEventTabText" />
+                android:visibility="visible" />
 
             <android.support.design.widget.TabItem
                 android:id="@+id/calendarTab"
