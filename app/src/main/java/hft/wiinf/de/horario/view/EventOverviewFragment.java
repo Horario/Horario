@@ -2,6 +2,7 @@ package hft.wiinf.de.horario.view;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -18,7 +19,7 @@ public class EventOverviewFragment extends Fragment {
 
     FloatingActionButton eventOverviewFcMenu, eventOverviewFcQrScan, eventOverviewFcNewEvent;
     TextView eventOverview_HiddenIsFloatingMenuOpen;
-
+    ConstraintLayout fragment_event_overview;
     Animation ActionButtonOpen, ActionButtonClose, ActionButtonRotateRight, ActionButtonRotateLeft;
 
 
@@ -32,6 +33,7 @@ public class EventOverviewFragment extends Fragment {
         eventOverviewFcNewEvent = view.findViewById(R.id.eventOverview_floatingActionButtonNewEvent);
         eventOverviewFcQrScan = view.findViewById(R.id.eventOverview_floatingActionButtonScan);
         eventOverview_HiddenIsFloatingMenuOpen = view.findViewById(R.id.eventOverviewFabClosed);
+        fragment_event_overview = view.findViewById(R.id.fragment_event_overview);
 
         ActionButtonOpen = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonopen);
         ActionButtonClose = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonclose);
@@ -84,6 +86,13 @@ public class EventOverviewFragment extends Fragment {
                 fr.replace(R.id.eventOverview_frameLayout, qrScanFragment, "QrScan");
                 fr.addToBackStack("QrScan");
                 fr.commit();
+                closeFABMenu();
+            }
+        });
+
+        fragment_event_overview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 closeFABMenu();
             }
         });
