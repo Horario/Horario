@@ -98,10 +98,13 @@ public class SettingsSettingsFragment extends Fragment {
                         person.setEnablePush(isChecked);
                         pushNotificationVisibility();
                         PersonController.savePerson(person);
-                        if (!isChecked)
+                        if (!isChecked) {
                             Toast.makeText(getContext(), R.string.pushDisabled, Toast.LENGTH_SHORT).show();
-                        else
+                            deleteAllAlarms();
+                        } else {
                             Toast.makeText(getContext(), getString(R.string.pushMinutesSet, person.getNotificationTime()), Toast.LENGTH_SHORT).show();
+                            startAlarmForAllEvents();
+                        }
                     }
 
                 });
@@ -201,6 +204,7 @@ public class SettingsSettingsFragment extends Fragment {
                         person.setNotificationTime(minutes);
                         PersonController.savePerson(person);
                         Toast.makeText(getContext(), getString(R.string.pushMinutesSet, minutes), Toast.LENGTH_SHORT).show();
+                        startAlarmForAllEvents();
                     }
 
                     @Override
