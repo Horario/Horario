@@ -42,7 +42,7 @@ import hft.wiinf.de.horario.service.NotificationReceiver;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SettingsSettingsFragment extends Fragment{
+public class SettingsSettingsFragment extends Fragment {
     private static final String TAG = "SettingFragmentActivity";
     EditText editTextUsername;
     Person person;
