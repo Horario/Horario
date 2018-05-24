@@ -169,7 +169,7 @@ public class CalendarFragment extends Fragment {
         return view;
     }
 
-    public static void update(Date date){
+    public static void update(Date date) {
         calendarTvDay.setText(dayFormat.format(date));
         calendarLvList.setAdapter(getAdapter(date));
         calendarTvMonth.setText(monthFormat.format(date));
@@ -178,9 +178,9 @@ public class CalendarFragment extends Fragment {
 
 
     //is marking the day in the calendar for the parameter date
-    public static void updateCompactCalendar(){
+    public static void updateCompactCalendar() {
         List<hft.wiinf.de.horario.model.Event> acceptedEvents = EventController.findMyEvents();
-        for (int i = 0; i<acceptedEvents.size(); i++) {
+        for (int i = 0; i < acceptedEvents.size(); i++) {
             if (calendarCvCalendar.getEvents(acceptedEvents.get(i).getStartTime().getTime()).size() == 0 && acceptedEvents.get(i).getAccepted() != AcceptedState.REJECTED) {
                 Event event = new Event(Color.BLUE, acceptedEvents.get(i).getStartTime().getTime());
                 calendarCvCalendar.addEvent(event, true);
@@ -188,27 +188,27 @@ public class CalendarFragment extends Fragment {
         }
     }
 
-    public static ArrayAdapter getAdapter(Date date){
+    public static ArrayAdapter getAdapter(Date date) {
         ArrayList<String> eventsAsString = new ArrayList<>();
         Calendar endOfDay = Calendar.getInstance();
         endOfDay.setTime(date);
         endOfDay.add(Calendar.DAY_OF_MONTH, 1);
         final List<hft.wiinf.de.horario.model.Event> eventList = EventController.findEventsByTimePeriod(date, endOfDay.getTime());
-        for (int i = 0; i<eventList.size(); i++){
-            if(eventList.get(i).getAccepted() != AcceptedState.REJECTED) {
+        for (int i = 0; i < eventList.size(); i++) {
+            if (eventList.get(i).getAccepted() != AcceptedState.REJECTED) {
                 eventsAsString.add(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle());
             }
         }
-        final ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1, eventsAsString){
+        final ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1, eventsAsString) {
             @NonNull
             @Override
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
-                if (eventList.get(position).getAccepted().equals(AcceptedState.ACCEPTED)){
+                if (eventList.get(position).getAccepted().equals(AcceptedState.ACCEPTED)) {
                     textView.setBackgroundColor(Color.GREEN);
-                }else if(eventList.get(position).getAccepted().equals(AcceptedState.WAITING)){
+                } else if (eventList.get(position).getAccepted().equals(AcceptedState.WAITING)) {
                     textView.setBackgroundColor(Color.RED);
-                }else{
+                } else {
                     textView.setBackgroundColor(Color.WHITE);
                 }
                 return textView;

@@ -1,7 +1,6 @@
 package hft.wiinf.de.horario.view;
 
 
-
 import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
@@ -10,8 +9,6 @@ import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +17,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import android.view.animation.Animation;
@@ -173,13 +169,13 @@ public class EventOverviewFragment extends Fragment {
         return view;
     }
 
-    public static void update(){
+    public static void update() {
         overviewTvMonth.setText(CalendarFragment.monthFormat.format(selectedMonth));
         overviewLvList.setAdapter(iterateOverMonth(selectedMonth));
     }
 
     //get all events for the selected month and save them in a adapter
-    public static ArrayAdapter iterateOverMonth(Date date){
+    public static ArrayAdapter iterateOverMonth(Date date) {
         final ArrayList<Appointment> eventArray = new ArrayList<>();
         Calendar helper = Calendar.getInstance();
         helper.setTime(date);
@@ -187,40 +183,40 @@ public class EventOverviewFragment extends Fragment {
         helper.set(Calendar.HOUR_OF_DAY, 0);
         helper.set(Calendar.MINUTE, 0);
         int endDate = helper.get(Calendar.MONTH);
-        while (helper.get(Calendar.MONTH) == endDate){
+        while (helper.get(Calendar.MONTH) == endDate) {
             Calendar endOfDay = Calendar.getInstance();
             endOfDay.setTime(helper.getTime());
             endOfDay.add(Calendar.DAY_OF_MONTH, 1);
             List<hft.wiinf.de.horario.model.Event> eventList = EventController.findEventsByTimePeriod(helper.getTime(), endOfDay.getTime());
-            if (eventList.size()>0){
+            if (eventList.size() > 0) {
                 eventArray.add(new Appointment(CalendarFragment.dayFormat.format(helper.getTime()), 0));
             }
-            for (int i = 0; i<eventList.size(); i++){
-                if(eventList.get(i).getAccepted().equals(AcceptedState.ACCEPTED)){
+            for (int i = 0; i < eventList.size(); i++) {
+                if (eventList.get(i).getAccepted().equals(AcceptedState.ACCEPTED)) {
                     eventArray.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 1));
-                }else if(eventList.get(i).getAccepted().equals(AcceptedState.WAITING)){
+                } else if (eventList.get(i).getAccepted().equals(AcceptedState.WAITING)) {
                     eventArray.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 2));
-                }else{
+                } else {
                     eventArray.clear();
                 }
             }
             helper.setTime(endOfDay.getTime());
         }
-        if(eventArray.size() < 1){ //when no events this month do stuff
+        if (eventArray.size() < 1) { //when no events this month do stuff
             eventArray.add(new Appointment("Du hast keine Termine diesen Monat", 0));
         }
-        final ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1, eventArray){
+        final ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1, eventArray) {
             @NonNull
             @Override
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
-                if (eventArray.get(position).getType() == 1){
+                if (eventArray.get(position).getType() == 1) {
                     textView.setBackgroundColor(Color.GREEN);
-                }else if(eventArray.get(position).getType() == 2){
+                } else if (eventArray.get(position).getType() == 2) {
                     textView.setBackgroundColor(Color.RED);
-                }else if(eventArray.get(position).getType() == 3){
+                } else if (eventArray.get(position).getType() == 3) {
                     textView.setBackgroundColor(Color.BLUE);
-                }else if(eventArray.get(position).getType() == 0){
+                } else if (eventArray.get(position).getType() == 0) {
                     textView.setBackgroundColor(Color.WHITE);
                     textView.setFocusable(false);
                 }
@@ -261,16 +257,18 @@ public class EventOverviewFragment extends Fragment {
 
 }
 
-class Appointment{
+class Appointment {
     private String description;
     private int type;
 
-    Appointment(String description, int type){
+    Appointment(String description, int type) {
         this.description = description;
         this.type = type;
     }
 
-    /** 0 = date, 1 = accepted, 2 = waiting, 3 = own */
+    /**
+     * 0 = date, 1 = accepted, 2 = waiting, 3 = own
+     */
     public String getDescription() {
         return description;
     }
