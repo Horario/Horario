@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -24,6 +25,7 @@ import android.widget.TextView;
 
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -44,11 +46,9 @@ public class EventOverviewFragment extends Fragment {
     Button overviewBtPrevious;
     public static Date selectedMonth = new Date();
     FloatingActionButton eventOverviewFcMenu, eventOverviewFcQrScan, eventOverviewFcNewEvent;
-    RelativeLayout rLayout_eventOverview_helper;
     ConstraintLayout layout_eventOverview_main;
     TextView eventOverview_HiddenIsFloatingMenuOpen;
     ConstraintLayout layoutOverview;
-    ConstraintLayout layoutHelper;
     Animation ActionButtonOpen, ActionButtonClose, ActionButtonRotateRight, ActionButtonRotateLeft;
     static Context context = null;
     static DateFormat timeFormat = new SimpleDateFormat("HH:mm");
@@ -66,14 +66,12 @@ public class EventOverviewFragment extends Fragment {
         overviewBtNext = view.findViewById(R.id.overviewBtNext);
         overviewBtPrevious = view.findViewById(R.id.overviewBtPrevious);
         layoutOverview = view.findViewById(R.id.layoutOverview);
-        layoutHelper = view.findViewById(R.id.layoutHelper);
         context = this.getActivity();
 
         //Floating Button
         eventOverviewFcMenu = view.findViewById(R.id.eventOverview_floatingActionButtonMenu);
         eventOverviewFcNewEvent = view.findViewById(R.id.eventOverview_floatingActionButtonNewEvent);
         eventOverviewFcQrScan = view.findViewById(R.id.eventOverview_floatingActionButtonScan);
-        rLayout_eventOverview_helper = view.findViewById(R.id.eventOverview_relativeLayout_helper);
         layout_eventOverview_main = view.findViewById(R.id.eventOverview_Layout_main);
         eventOverview_HiddenIsFloatingMenuOpen = view.findViewById(R.id.eventOverviewFabClosed);
         ActionButtonOpen = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonopen);
@@ -92,7 +90,6 @@ public class EventOverviewFragment extends Fragment {
                 calendar.setTime(selectedMonth);
                 calendar.add(Calendar.MONTH, 1);
                 selectedMonth.setTime(calendar.getTimeInMillis());
-                //selectedMonth.setMonth(selectedMonth.getMonth()+1); //TODO delete
                 update();
             }
         });
@@ -104,8 +101,17 @@ public class EventOverviewFragment extends Fragment {
                 calendar.setTime(selectedMonth);
                 calendar.add(Calendar.MONTH, -1);
                 selectedMonth.setTime(calendar.getTimeInMillis());
-                //selectedMonth.setMonth(selectedMonth.getMonth()-1); //TODO delete
                 update();
+            }
+        });
+
+        //handle actions after a event entry get clicked
+        overviewLvList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Appointment selectedItem = (Appointment) parent.getItemAtPosition(position);
+                Toast.makeText(getActivity(), selectedItem.getDescription(), Toast.LENGTH_SHORT).show(); //TODO just for testing, delete
+                closeFABMenu();
             }
         });
 
@@ -132,14 +138,10 @@ public class EventOverviewFragment extends Fragment {
                 newEventFragment.setArguments(bundle);
 
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
-                fr.replace(R.id.eventOverview_relativeLayout_helper, new NewEventFragment());
+                fr.replace(R.id.eventOverview_frameLayout, new NewEventFragment());
                 fr.addToBackStack(null);
                 fr.commit();
-                rLayout_eventOverview_helper.setVisibility(View.VISIBLE);
-                layoutHelper.setVisibility(View.VISIBLE);
-                layoutOverview.setVisibility(View.GONE);
                 closeFABMenu();
-                eventOverviewFcMenu.setVisibility(View.GONE);
             }
         });
 
@@ -153,14 +155,10 @@ public class EventOverviewFragment extends Fragment {
                 qrScanFragment.setArguments(bundle);
 
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
-                fr.replace(R.id.eventOverview_relativeLayout_helper, new QRScanFragment());
+                fr.replace(R.id.eventOverview_frameLayout, new QRScanFragment());
                 fr.addToBackStack(null);
                 fr.commit();
-                rLayout_eventOverview_helper.setVisibility(View.VISIBLE);
-                layoutHelper.setVisibility(View.VISIBLE);
-                layoutOverview.setVisibility(View.GONE);
                 closeFABMenu();
-                eventOverviewFcMenu.setVisibility(View.GONE);
             }
         });
 
@@ -187,29 +185,25 @@ public class EventOverviewFragment extends Fragment {
         helper.set(Calendar.DAY_OF_MONTH, 1);
         helper.set(Calendar.HOUR_OF_DAY, 0);
         helper.set(Calendar.MINUTE, 0);
-        Date day = helper.getTime();
-        System.out.println(day.toString());
         int endDate = helper.get(Calendar.MONTH);
-        while (day.getMonth() == endDate){
+        while (helper.get(Calendar.MONTH) == endDate){
             Calendar endOfDay = Calendar.getInstance();
-            endOfDay.setTime(day);
+            endOfDay.setTime(helper.getTime());
             endOfDay.add(Calendar.DAY_OF_MONTH, 1);
-            List<hft.wiinf.de.horario.model.Event> eventList = EventController.findEventsByTimePeriod(day, endOfDay.getTime());
+            List<hft.wiinf.de.horario.model.Event> eventList = EventController.findEventsByTimePeriod(helper.getTime(), endOfDay.getTime());
             if (eventList.size()>0){
-                eventArray.add(new Appointment(CalendarFragment.dayFormat.format(day), 0));
+                eventArray.add(new Appointment(CalendarFragment.dayFormat.format(helper.getTime()), 0));
             }
             for (int i = 0; i<eventList.size(); i++){
                 if(eventList.get(i).getAccepted().equals(AcceptedState.ACCEPTED)){
                     eventArray.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 1));
                 }else if(eventList.get(i).getAccepted().equals(AcceptedState.WAITING)){
                     eventArray.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 2));
-                //}else if(eventList.get(i).getCreator().isItMe()){ //TODO testing
-                  //  eventArray.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 3));
                 }else{
                     eventArray.clear();
                 }
             }
-            day.setTime(endOfDay.getTimeInMillis());
+            helper.setTime(endOfDay.getTime());
         }
         if(eventArray.size() < 1){ //when no events this month do stuff
             eventArray.add(new Appointment("Du hast keine Termine diesen Monat", 0));

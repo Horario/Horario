@@ -17,7 +17,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -189,9 +188,7 @@ public class CalendarFragment extends Fragment {
         }
     }
 
-    /** TODO need a description */
     public static ArrayAdapter getAdapter(Date date){
-        //TODO Testing
         ArrayList<String> eventsAsString = new ArrayList<>();
         Calendar endOfDay = Calendar.getInstance();
         endOfDay.setTime(date);

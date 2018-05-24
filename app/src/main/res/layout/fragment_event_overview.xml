@@ -133,17 +133,4 @@
             app:srcCompat="@android:drawable/ic_menu_camera" />
     </android.support.constraint.ConstraintLayout>
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/layoutHelper"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone">
-
-        <RelativeLayout
-            android:id="@+id/eventOverview_relativeLayout_helper"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone" />
-    </android.support.constraint.ConstraintLayout>
-
 </android.support.constraint.ConstraintLayout>
