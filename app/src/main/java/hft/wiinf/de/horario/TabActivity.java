@@ -35,8 +35,8 @@ public class TabActivity extends AppCompatActivity {
     private SectionsPageAdapterActivity mSectionsPageAdapter;
     private ViewPager mViewPager;
     TabLayout tabLayout;
-    Person personMe;
-    public static int startTab;
+    private static int startTab;
+    private Person personMe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,10 +47,10 @@ public class TabActivity extends AppCompatActivity {
         ActiveAndroid.initialize(this);
         Stetho.initializeWithDefaults(this);
         //read startTab out of db, default=1(calendar tab)
-        Person person = PersonController.getPersonWhoIam();
-        if (person == null)
-            startTab = 1;
-        else startTab = person.getStartTab();
+        personMe = PersonController.getPersonWhoIam();
+        if (personMe == null)
+            personMe = new Person(true, "", "");
+        startTab = personMe.getStartTab();
 
         mSectionsPageAdapter = new SectionsPageAdapterActivity(getSupportFragmentManager());
 

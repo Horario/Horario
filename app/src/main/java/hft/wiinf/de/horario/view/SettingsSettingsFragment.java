@@ -25,7 +25,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import hft.wiinf.de.horario.R;
-import hft.wiinf.de.horario.TabActivity;
 import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.Person;
 
@@ -99,7 +98,7 @@ public class SettingsSettingsFragment extends Fragment {
 
 
         spinner_notificationTime.setSelection(getItemPositionPushMinutes());
-        spinner_startTab.setSelection(TabActivity.startTab);
+        spinner_startTab.setSelection(person.getStartTab());
         // if the start tab spinenr was touched, add a SelectionListener and remove the touch listener
         spinner_startTab.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -109,7 +108,6 @@ public class SettingsSettingsFragment extends Fragment {
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         person.setStartTab(position);
                         PersonController.savePerson(person);
-                        TabActivity.startTab = position;
                         Toast.makeText(getContext(), getString(R.string.startTabChanged, parent.getSelectedItem()), Toast.LENGTH_SHORT).show();
                     }
 
