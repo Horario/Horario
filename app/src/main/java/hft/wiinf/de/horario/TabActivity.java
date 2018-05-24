@@ -21,14 +21,19 @@ import android.widget.Toast;
 import com.activeandroid.ActiveAndroid;
 import com.facebook.stetho.Stetho;
 
+import java.util.Calendar;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import hft.wiinf.de.horario.controller.EventController;
 import hft.wiinf.de.horario.controller.NoScanResultExceptionController;
 import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.controller.ScanResultReceiverController;
+import hft.wiinf.de.horario.model.AcceptedState;
+import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
+import hft.wiinf.de.horario.model.Repetition;
 import hft.wiinf.de.horario.view.CalendarActivity;
 import hft.wiinf.de.horario.view.CalendarFragment;
 import hft.wiinf.de.horario.view.EventOverviewActivity;
@@ -43,6 +48,16 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     private ViewPager mViewPager;
     TabLayout tabLayout;
     Person personMe;
+
+    Person person;
+    //Index: 0 = CreatorID; 1 = StartDate; 2 = EndDate; 3 = StartTime; 4 = EndTime;
+    //       5 = Repetition; 6 = ShortTitle; 7 = Place; 8 = Descriptoin;  9 = EventCreatorName
+    private String creatorID, startDate, endDate, startTime, endTime, repetition, shortTitle, place, description, eventCreatorName, creatorPhoneNumber;
+    private String hourOfDay, minutesOfDay, year, month, day;
+
+    Calendar myStartTime = Calendar.getInstance();
+    Calendar myEndTime = Calendar.getInstance();
+    Calendar myEndDate = Calendar.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +92,14 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     //After Scanning it was opened a Dialog where the user can choose what to do next
     @SuppressLint("ResourceType")
     private void openActionDialogAfterScanning(final String qrScannContentResult) {
-
+        myStartTime.set(Calendar.SECOND, 0);
+        myStartTime.set(Calendar.MILLISECOND, 0);
+        myEndTime.set(Calendar.SECOND, 0);
+        myEndTime.set(Calendar.MILLISECOND, 0);
+        myEndDate.set(Calendar.SECOND, 0);
+        myEndDate.set(Calendar.MILLISECOND, 0);
         //Create the Dialog with the GUI Elements initial
+        final Dialog afterScanningDialogDecission = new Dialog(this);
         final Dialog afterScanningDialogAction = new Dialog(this);
         afterScanningDialogAction.setContentView(R.layout.dialog_afterscanning);
         afterScanningDialogAction.setCancelable(true);
@@ -92,6 +113,9 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         Button qrScanner_result_toCalender = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_toCalender);
         Button qrScanner_result_eventSave_without_assign = afterScanningDialogAction.findViewById((R.id.dialog_qrScanner_button_eventSaveOnly));
 
+        TextView qrScanner_result_final_question = afterScanningDialogDecission.findViewById(R.id.dialog_qrScanner_textView_question);
+        Button qrScanner_final_question_save = afterScanningDialogDecission.findViewById(R.id.dialog_qrScanner_button_accept);
+        Button qrScanner_final_question_reject = afterScanningDialogDecission.findViewById(R.id.dialog_qrScanner_button_eventSave);
 
         //Set the Cancel and BackToCalenderButtons to Invisible
         qrScanner_result_abort.setVisibility(View.GONE);
@@ -104,13 +128,45 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                     .setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            afterScanningDialogDecission.setContentView(R.layout.dialog_afterscanningbuttonclick);
+                            afterScanningDialogDecission.setCancelable(true);
+                            afterScanningDialogDecission.show();
                             //ToDo Dennis hier kommt dein Code rein.
+                            afterScanningDialogDecission.findViewById(R.id.dialog_qrScanner_button_accept)
+                                    .setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            person = PersonController.getPersonWhoIam();
 
+                                            Person person = new Person();
+                                            person.setName(eventCreatorName);
+                                            person.setPhoneNumber(creatorPhoneNumber);
+                                            person.save();
 
-                            //Restart the TabActivity an Reload all Views
-                            Intent intent = getIntent();
-                            finish();
-                            startActivity(intent);
+                                            Event event = new Event(person);
+                                            event.setAccepted(AcceptedState.ACCEPTED);
+                                            event.setCreatorEventId(Long.parseLong(creatorID.toString()));
+                                            event.setStartTime(getStartTime().getTime());
+                                            event.setEndTime(getEndTime().getTime());
+                                            event.setRepetition(getRepetition());
+                                            event.setShortTitle(shortTitle);
+                                            event.setPlace(place);
+                                            event.setDescription(description);
+
+                                            if (event.getRepetition() != Repetition.NONE) {
+                                                event.setEndDate(getEndDate().getTime());
+                                                EventController.saveSerialevent(event);
+                                            } else {
+                                                EventController.saveEvent(event);
+                                            }
+
+                                            //Restart the TabActivity an Reload all Views
+                                            Intent intent = getIntent();
+                                            finish();
+                                            startActivity(intent);
+                                        }
+                                    });
+
                         }
                     });
 
@@ -119,7 +175,29 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 @Override
                 public void onClick(View v) {
                     //ToDo Dennis hier kommt dein Code rein.
+                    person = PersonController.getPersonWhoIam();
 
+                    Person person = new Person();
+                    person.setName(eventCreatorName);
+                    person.setPhoneNumber(creatorPhoneNumber);
+                    person.save();
+
+                    Event event = new Event(person);
+                    event.setAccepted(AcceptedState.WAITING);
+                    event.setCreatorEventId(Long.parseLong(creatorID.toString()));
+                    event.setStartTime(getStartTime().getTime());
+                    event.setEndTime(getEndTime().getTime());
+                    event.setRepetition(getRepetition());
+                    event.setShortTitle(shortTitle);
+                    event.setPlace(place);
+                    event.setDescription(description);
+
+                    if (event.getRepetition() != Repetition.NONE) {
+                        event.setEndDate(getEndDate().getTime());
+                        EventController.saveSerialevent(event);
+                    } else {
+                        EventController.saveEvent(event);
+                    }
 
                     //Restart the TabActivity an Reload all Views
                     Intent intent = getIntent();
@@ -133,6 +211,29 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 @Override
                 public void onClick(View v) {
                     //ToDo Dennis hier kommt dein Code rein.
+                    person = PersonController.getPersonWhoIam();
+
+                    Person person = new Person();
+                    person.setName(eventCreatorName);
+                    person.setPhoneNumber(creatorPhoneNumber);
+                    person.save();
+
+                    Event event = new Event(person);
+                    event.setAccepted(AcceptedState.REJECTED);
+                    event.setCreatorEventId(Long.parseLong(creatorID.toString()));
+                    event.setStartTime(getStartTime().getTime());
+                    event.setEndTime(getEndTime().getTime());
+                    event.setRepetition(getRepetition());
+                    event.setShortTitle(shortTitle);
+                    event.setPlace(place);
+                    event.setDescription(description);
+
+                    if (event.getRepetition() != Repetition.NONE) {
+                        event.setEndDate(getEndDate().getTime());
+                        EventController.saveSerialevent(event);
+                    } else {
+                        EventController.saveEvent(event);
+                    }
 
                     //Restart the TabActivity an Reload all Views
                     Intent intent = getIntent();
@@ -145,15 +246,17 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             //Index: 0 = CreatorID; 1 = StartDate; 2 = EndDate; 3 = StartTime; 4 = EndTime;
             //       5 = Repetition; 6 = ShortTitle; 7 = Place; 8 = Description;  9 = EventCreatorName; 10 = phoneNumber;
             String[] eventStringBufferArray = qrScannContentResult.split("\\|");
-            String startDate = eventStringBufferArray[1].trim();
-            String endDate = eventStringBufferArray[2].trim();
-            String startTime = eventStringBufferArray[3].trim();
-            String endTime = eventStringBufferArray[4].trim();
-            String repetition = eventStringBufferArray[5].toUpperCase().trim();
-            String shortTitle = eventStringBufferArray[6].trim();
-            String place = eventStringBufferArray[7].trim();
-            String description = eventStringBufferArray[8].trim();
-            String eventCreatorName = eventStringBufferArray[9].trim();
+            creatorID = eventStringBufferArray[0].trim();
+            startDate = eventStringBufferArray[1].trim();
+            endDate = eventStringBufferArray[2].trim();
+            startTime = eventStringBufferArray[3].trim();
+            endTime = eventStringBufferArray[4].trim();
+            repetition = eventStringBufferArray[5].toUpperCase().trim();
+            shortTitle = eventStringBufferArray[6].trim();
+            place = eventStringBufferArray[7].trim();
+            description = eventStringBufferArray[8].trim();
+            eventCreatorName = eventStringBufferArray[9].trim();
+            creatorPhoneNumber = eventStringBufferArray[10].trim();
 
             // There are two SecurityQuery
             // - First this two (unused) Variables are checked to Create an Exception if the Array isn't in the correct Form
@@ -402,6 +505,59 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             super.onBackPressed();
         } else {
             getSupportFragmentManager().popBackStack();
+        }
+    }
+
+    private Calendar getStartTime() {
+        String[] startDateStringBufferArray = startDate.split("\\.");
+        day = startDateStringBufferArray[0].trim();
+        month = startDateStringBufferArray[1].trim();
+        year = startDateStringBufferArray[2].trim();
+
+        String[] startTimeStringBufferArray = startTime.split(":");
+        hourOfDay = startTimeStringBufferArray[0].trim();
+        minutesOfDay = startTimeStringBufferArray[1].trim();
+
+        myStartTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hourOfDay));
+        myStartTime.set(Calendar.MINUTE, Integer.parseInt(minutesOfDay));
+        myStartTime.set(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day));
+
+        return myStartTime;
+    }
+
+    private Calendar getEndTime() {
+        String[] endTimeStringBufferArray = endTime.split(":");
+        hourOfDay = endTimeStringBufferArray[0].trim();
+        minutesOfDay = endTimeStringBufferArray[1].trim();
+
+        myEndTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hourOfDay));
+        myEndTime.set(Calendar.MINUTE, Integer.parseInt(minutesOfDay));
+
+        return myEndTime;
+    }
+
+    private Calendar getEndDate() {
+        String[] endDateStringBufferArray = endDate.split("\\.");
+        day = endDateStringBufferArray[0].trim();
+        month = endDateStringBufferArray[1].trim();
+        year = endDateStringBufferArray[2].trim();
+        myEndTime.set(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day));
+
+        return myEndDate;
+    }
+
+    private Repetition getRepetition() {
+        switch (repetition) {
+            case "jährlich":
+                return Repetition.YEARLY;
+            case "monatlich":
+                return Repetition.MONTHLY;
+            case "wöchentlich":
+                return Repetition.WEEKLY;
+            case "täglich":
+                return Repetition.DAILY;
+            default:
+                return Repetition.NONE;
         }
     }
 }

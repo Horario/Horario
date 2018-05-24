@@ -113,6 +113,6 @@
     <string name="requestPermission_lastTryRequest">Letzer Versuch! Bitte gestatte den Zugriff um Scannen zu können.</string>
     <string name="requestPermission_userDontLike">Okay du magst nicht? Vielleicht ein anderes mal :)</string>
     <string name="abort">ABBRUCH</string>
-
-
+    <string name="accept">Ja!</string>
+    <string name="reject">Nein!</string>
 </resources>
