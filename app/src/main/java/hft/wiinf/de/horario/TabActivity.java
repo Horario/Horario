@@ -86,11 +86,14 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_dateview);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_calendarview);
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_settings);
-
-        if (PersonController.getPersonWhoIam() == null) {
+        person = PersonController.getPersonWhoIam();
+        //create a new person if it is null
+        if (person == null)
+            person = new Person(true, "", "");
+        if (person.getName().isEmpty()) {
             openDialogAskForUsername();
-        } else if (PersonController.getPersonWhoIam().getName().isEmpty()) {
-            openDialogAskForUsername();
+        } else if (person.getPhoneNumber() == null || person.getPhoneNumber().isEmpty()) {
+            readOwnPhoneNumber();
         }
     }
 
@@ -385,9 +388,12 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 Matcher matcher_username = pattern_username.matcher(dialog_inputUsername);
 
                 if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches()) {
-                    person = new Person(true, "", dialog_inputUsername);
+                    person.setName(dialog_inputUsername);
+                    if (person.getPhoneNumber() == null || person.getPhoneNumber().isEmpty())
                         readOwnPhoneNumber();
                     alertDialogAskForUsername.dismiss();
+                    PersonController.savePerson(person);
+                    Toast.makeText(getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT);
                     return false;
                 } else {
                     Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
@@ -480,7 +486,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 String input = v.getText().toString().replaceAll(" ", "");
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     //regex: perhaps + at beginning, then numbers
-                    if (input.matches("\\+?[0-9]+")) {
+                    if (input.matches("(0|\\+|00)[1-9][0-9]*")) {
                         alertDialog.dismiss();
                         person.setPhoneNumber(input);
                         PersonController.addPersonMe(person);
@@ -495,10 +501,11 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 return false;
             }
         });
+        //if the dialog is canceled save only the person (user name)
         alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
-                Toast toast = Toast.makeText(getContext(), R.string.UsernameNotSaved, Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(getContext(), R.string.PhoneNumberNotSaved, Toast.LENGTH_SHORT);
                 toast.show();
             }
         });

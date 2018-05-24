@@ -606,12 +606,12 @@ public class NewEventFragment extends Fragment {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 String input = v.getText().toString().replaceAll(" ", "");
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    if (input.matches("\\+?[0-9]+")) {
+                    if (input.matches("(\\+|0|00)[1-9][0-9]+")) {
                         alertDialog.dismiss();
                         me.setPhoneNumber(input);
                         saveEvent();
                         return false;
-                        //number does not begin with + or 0 show a toast
+                        //number does not begin with + or 0 or 00 show a toast
                     } else {
                         Toast.makeText(getContext(), R.string.wrongNumberFormat, Toast.LENGTH_SHORT).show();
                         return true;
