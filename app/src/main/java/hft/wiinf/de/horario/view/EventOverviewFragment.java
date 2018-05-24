@@ -80,7 +80,8 @@ public class EventOverviewFragment extends Fragment {
         ActionButtonRotateLeft = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonrotateleft);
         eventOverviewFcQrScan.hide();
         eventOverviewFcNewEvent.hide();
-        selectedMonth = CalendarFragment.selectedMonth;
+        //selectedMonth = CalendarFragment.selectedMonth; TODO connect selectedMonth of Calendar and Overview
+        selectedMonth = Calendar.getInstance().getTime();
         update();
 
         overviewBtNext.setOnClickListener(new View.OnClickListener() {
