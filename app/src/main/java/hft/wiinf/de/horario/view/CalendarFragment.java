@@ -46,6 +46,16 @@ public class CalendarFragment extends Fragment {
 
     Animation ActionButtonOpen, ActionButtonClose, ActionButtonRotateRight, ActionButtonRotateLeft;
 
+    //TODO just a placeholder, maybe need a rework (1523318400000L)
+    public static void addEvent(Date date) {
+        Event event = new Event(Color.BLUE, date.getTime());
+        calendarCvCalendar.addEvent(event);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+    }
 
     @Nullable
     @Override
@@ -162,17 +172,6 @@ public class CalendarFragment extends Fragment {
         });
 
         return view;
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-    }
-
-    //TODO just a placeholder, maybe need a rework (1523318400000L)
-    public static void addEvent(Date date) {
-        Event event = new Event(Color.BLUE, date.getTime());
-        calendarCvCalendar.addEvent(event);
     }
 
     /**
