@@ -365,15 +365,15 @@ public class NewEventFragment extends Fragment {
                 QRGeneratorFragment qrFrag = new QRGeneratorFragment();
                 Bundle bundle = new Bundle();
                 bundle.putLong("eventId", eventId);
-                bundle.putString("fragment",whichFragment.getString("fragment"));
+                bundle.putString("fragment", whichFragment.getString("fragment"));
                 qrFrag.setArguments(bundle);
 
-                if(whichFragment.getString("fragment").equals("EventOverview")){
+                if (whichFragment.getString("fragment").equals("EventOverview")) {
                     getActivity().getSupportFragmentManager().beginTransaction()
                             .replace(R.id.eventOverview_frameLayout, qrFrag, "QrGeneratorEO")
                             .addToBackStack("QrGeneratorEO")
                             .commit();
-                }else {
+                } else {
                     getActivity().getSupportFragmentManager().beginTransaction()
                             .replace(R.id.calendar_frameLayout, qrFrag, "QrGeneratorCA")
                             .addToBackStack("QrGeneratorCA")
