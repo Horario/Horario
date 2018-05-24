@@ -2,6 +2,10 @@ package hft.wiinf.de.horario.view;
 
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -21,12 +25,19 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import hft.wiinf.de.horario.R;
+import hft.wiinf.de.horario.controller.EventController;
 import hft.wiinf.de.horario.controller.PersonController;
+import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
+import hft.wiinf.de.horario.service.NotificationReceiver;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -84,12 +95,14 @@ public class SettingsSettingsFragment extends Fragment {
                         person.setEnablePush(isChecked);
                         pushNotificationVisibility();
                         PersonController.savePerson(person);
-                        if (!isChecked)
+                        if (!isChecked) {
                             Toast.makeText(getContext(), R.string.pushDisabled, Toast.LENGTH_SHORT).show();
-                        else
+                            deleteAllAlarms();
+                        } else {
                             Toast.makeText(getContext(), getString(R.string.pushMinutesSet, person.getNotificationTime()), Toast.LENGTH_SHORT).show();
+                            startAlarmForAllEvents();
+                        }
                     }
-
                 });
                 switch_enablePush.setOnTouchListener(null);
                 return false;
@@ -122,7 +135,7 @@ public class SettingsSettingsFragment extends Fragment {
         });
 
 
-// set the user name of the person (empty string if no person set)
+        // set the user name of the person (empty string if no person set)
         editTextUsername.setText(person.getName());
 
         //Make EditText-Field editable
@@ -164,7 +177,7 @@ public class SettingsSettingsFragment extends Fragment {
             }
         });
 
-// set the choice posibilities of the push minutes dropdown
+        // set the choice possibilities of the push minutes dropdown
         ArrayAdapter minutesAdapter = ArrayAdapter.createFromResource(getContext(), R.array.push_times, android.R.layout.simple_spinner_item);
         minutesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_notificationTime.setAdapter(minutesAdapter);
@@ -181,6 +194,7 @@ public class SettingsSettingsFragment extends Fragment {
                         int minutes = Integer.parseInt(s);
                         person.setNotificationTime(minutes);
                         PersonController.savePerson(person);
+                        startAlarmForAllEvents();
                         Toast.makeText(getContext(), getString(R.string.pushMinutesSet, minutes), Toast.LENGTH_SHORT).show();
                     }
 
@@ -229,7 +243,54 @@ public class SettingsSettingsFragment extends Fragment {
                 return 0;
 
         }
+    }
 
+    public void deleteAllAlarms() {
+        //Get all events that are in the future to set the alarm
+        List<Event> allEvents = EventController.findMyAcceptedEventsInTheFuture();
+        for (Event event : allEvents) {
+            Intent alarmIntent = new Intent(getContext(), NotificationReceiver.class);
+
+            alarmIntent.putExtra("ID", event.getId().intValue());
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), event.getId().intValue(), alarmIntent, 0);
+
+            //Set AlarmManager --> NotificationReceiver will be called
+            AlarmManager manager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+            manager.cancel(pendingIntent);
+        }
+    }
+
+    public void startAlarmForAllEvents() {
+        //Get all events that are in the future to set the alarm
+        List<Event> allEvents = EventController.findMyAcceptedEventsInTheFuture();
+        for (Event event : allEvents) {
+            Intent alarmIntent = new Intent(getContext(), NotificationReceiver.class);
+
+            //Get startTime an convert into a Calender to use it
+            Date date = event.getStartTime();
+            Calendar calendar = GregorianCalendar.getInstance();
+            calendar.setTime(date);
+
+            //Put extra Data which is needed for the Notification
+            alarmIntent.putExtra("Event", event.getDescription());
+            alarmIntent.putExtra("Hour", calendar.get(Calendar.HOUR_OF_DAY));
+            if (calendar.get(Calendar.MINUTE) <= 10) {
+                alarmIntent.putExtra("Minute", "0" + String.valueOf(calendar.get(Calendar.MINUTE)));
+            } else {
+                alarmIntent.putExtra("Minute", String.valueOf(calendar.get(Calendar.MINUTE)));
+            }
+            alarmIntent.putExtra("ID", event.getId().intValue());
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), event.getId().intValue(), alarmIntent, 0);
+
+            //Set AlarmManager --> NotificationReceiver will be called
+            AlarmManager manager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+            manager.set(AlarmManager.RTC_WAKEUP, calcNotificationTime(calendar, person), pendingIntent);
+        }
+    }
+
+    public long calcNotificationTime(Calendar cal, Person person) {
+        cal.add(Calendar.MINUTE, ((-1) * person.getNotificationTime()));
+        return cal.getTimeInMillis();
     }
 
 }
