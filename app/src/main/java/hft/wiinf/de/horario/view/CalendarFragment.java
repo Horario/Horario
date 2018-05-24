@@ -12,10 +12,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,6 +53,8 @@ public class CalendarFragment extends Fragment {
     static DateFormat timeFormat = new SimpleDateFormat("HH:mm");
     public static Date selectedMonth;
 
+    Animation ActionButtonOpen, ActionButtonClose, ActionButtonRotateRight, ActionButtonRotateLeft;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -69,6 +72,12 @@ public class CalendarFragment extends Fragment {
         calendarFcQrScan = view.findViewById(R.id.calendar_floatingActionButtonScan);
         cLayout_calendar_main = view.findViewById(R.id.calendar_constrainLayout_main);
         calendarIsFloatMenuOpen = view.findViewById(R.id.calendar_hiddenField);
+
+        ActionButtonOpen = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonopen);
+        ActionButtonClose = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonclose);
+        ActionButtonRotateRight = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonrotateright);
+        ActionButtonRotateLeft = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonrotateleft);
+
         calendarFcQrScan.hide();
         calendarFcNewEvent.hide();
 
@@ -124,7 +133,7 @@ public class CalendarFragment extends Fragment {
             public void onClick(View v) {
                 NewEventFragment newEventFragment = new NewEventFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("fragment","Calendar");
+                bundle.putString("fragment", "Calendar");
                 newEventFragment.setArguments(bundle);
 
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
@@ -140,7 +149,7 @@ public class CalendarFragment extends Fragment {
             public void onClick(View v) {
                 QRScanFragment qrScanFragment = new QRScanFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("fragment","Calendar");
+                bundle.putString("fragment", "Calendar");
                 qrScanFragment.setArguments(bundle);
 
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
@@ -160,7 +169,7 @@ public class CalendarFragment extends Fragment {
         return view;
     }
 
-    public static void update(Date date){
+    public static void update(Date date) {
         calendarTvDay.setText(dayFormat.format(date));
         calendarLvList.setAdapter(getAdapter(date));
         calendarTvMonth.setText(monthFormat.format(date));
@@ -186,16 +195,22 @@ public class CalendarFragment extends Fragment {
         endOfDay.setTime(date);
         endOfDay.add(Calendar.DAY_OF_MONTH, 1);
         final List<hft.wiinf.de.horario.model.Event> eventList = EventController.findEventsByTimePeriod(date, endOfDay.getTime());
-        for (int i = 0; i<eventList.size(); i++){
-            if(eventList.get(i).getAccepted() != AcceptedState.REJECTED) {
+        for (int i = 0; i < eventList.size(); i++) {
+            if (eventList.get(i).getAccepted() != AcceptedState.REJECTED) {
                 eventsAsString.add(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle());
             }
         }
-        final ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1, eventsAsString){
+        final ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1, eventsAsString) {
             @NonNull
             @Override
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
+                if (eventList.get(position).getAccepted().equals(AcceptedState.ACCEPTED)) {
+                    textView.setBackgroundColor(Color.GREEN);
+                } else if (eventList.get(position).getAccepted().equals(AcceptedState.WAITING)) {
+                    textView.setBackgroundColor(Color.RED);
+                } else {
+                    textView.setBackgroundColor(Color.WHITE);
                 //change the color of the ListView Items
                 if(eventList.get(position).getCreator().equals(PersonController.getPersonWhoIam())) {
                     textView.setBackgroundColor(Color.BLUE);
@@ -215,18 +230,29 @@ public class CalendarFragment extends Fragment {
     }
 
     public void showFABMenu() {
+        calendarFcQrScan.startAnimation(ActionButtonOpen);
+        calendarFcNewEvent.startAnimation(ActionButtonOpen);
+        calendarFcMenu.startAnimation(ActionButtonRotateRight);
+        calendarFcQrScan.setClickable(true);
+        calendarFcNewEvent.setClickable(true);
         calendarIsFloatMenuOpen.setText("true");
         calendarFcQrScan.show();
         calendarFcNewEvent.show();
-        calendarFcMenu.setImageResource(R.drawable.ic_android_black_24dp);
-
+        calendarFcMenu.setImageResource(R.drawable.ic_plusmenu);
     }
 
     public void closeFABMenu() {
-        calendarIsFloatMenuOpen.setText("false");
-        calendarFcQrScan.hide();
-        calendarFcNewEvent.hide();
-        calendarFcMenu.setImageResource(R.drawable.ic_android_black2_24dp);
+        if (calendarIsFloatMenuOpen.getText().equals("true")) {
+            calendarFcQrScan.startAnimation(ActionButtonClose);
+            calendarFcNewEvent.startAnimation(ActionButtonClose);
+            calendarFcMenu.startAnimation(ActionButtonRotateLeft);
+            calendarFcQrScan.setClickable(false);
+            calendarFcNewEvent.setClickable(false);
+            calendarIsFloatMenuOpen.setText("false");
+            calendarFcQrScan.hide();
+            calendarFcNewEvent.hide();
+            calendarFcMenu.setImageResource(R.drawable.ic_plusmenu);
+        }
     }
 
 }

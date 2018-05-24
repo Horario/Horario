@@ -1,5 +1,6 @@
 package hft.wiinf.de.horario.view;
 
+
 import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
@@ -8,17 +9,19 @@ import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -40,11 +43,10 @@ public class EventOverviewFragment extends Fragment {
     Button overviewBtPrevious;
     public static Date selectedMonth = new Date();
     FloatingActionButton eventOverviewFcMenu, eventOverviewFcQrScan, eventOverviewFcNewEvent;
-    RelativeLayout rLayout_eventOverview_helper;
     ConstraintLayout layout_eventOverview_main;
     TextView eventOverview_HiddenIsFloatingMenuOpen;
     ConstraintLayout layoutOverview;
-    ConstraintLayout layoutHelper;
+    Animation ActionButtonOpen, ActionButtonClose, ActionButtonRotateRight, ActionButtonRotateLeft;
     static Context context = null;
     static DateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
@@ -61,19 +63,22 @@ public class EventOverviewFragment extends Fragment {
         overviewBtNext = view.findViewById(R.id.overviewBtNext);
         overviewBtPrevious = view.findViewById(R.id.overviewBtPrevious);
         layoutOverview = view.findViewById(R.id.layoutOverview);
-        layoutHelper = view.findViewById(R.id.layoutHelper);
         context = this.getActivity();
 
         //Floating Button
         eventOverviewFcMenu = view.findViewById(R.id.eventOverview_floatingActionButtonMenu);
         eventOverviewFcNewEvent = view.findViewById(R.id.eventOverview_floatingActionButtonNewEvent);
         eventOverviewFcQrScan = view.findViewById(R.id.eventOverview_floatingActionButtonScan);
-        rLayout_eventOverview_helper = view.findViewById(R.id.eventOverview_relativeLayout_helper);
         layout_eventOverview_main = view.findViewById(R.id.eventOverview_Layout_main);
         eventOverview_HiddenIsFloatingMenuOpen = view.findViewById(R.id.eventOverviewFabClosed);
+        ActionButtonOpen = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonopen);
+        ActionButtonClose = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonclose);
+        ActionButtonRotateRight = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonrotateright);
+        ActionButtonRotateLeft = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonrotateleft);
         eventOverviewFcQrScan.hide();
         eventOverviewFcNewEvent.hide();
-        selectedMonth = CalendarFragment.selectedMonth;
+        //selectedMonth = CalendarFragment.selectedMonth; TODO connect selectedMonth of Calendar and Overview
+        selectedMonth = Calendar.getInstance().getTime();
         update();
 
         overviewBtNext.setOnClickListener(new View.OnClickListener() {
@@ -83,7 +88,6 @@ public class EventOverviewFragment extends Fragment {
                 calendar.setTime(selectedMonth);
                 calendar.add(Calendar.MONTH, 1);
                 selectedMonth.setTime(calendar.getTimeInMillis());
-                //selectedMonth.setMonth(selectedMonth.getMonth()+1); //TODO delete
                 update();
             }
         });
@@ -95,8 +99,17 @@ public class EventOverviewFragment extends Fragment {
                 calendar.setTime(selectedMonth);
                 calendar.add(Calendar.MONTH, -1);
                 selectedMonth.setTime(calendar.getTimeInMillis());
-                //selectedMonth.setMonth(selectedMonth.getMonth()-1); //TODO delete
                 update();
+            }
+        });
+
+        //handle actions after a event entry get clicked
+        overviewLvList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Appointment selectedItem = (Appointment) parent.getItemAtPosition(position);
+                Toast.makeText(getActivity(), selectedItem.getDescription(), Toast.LENGTH_SHORT).show(); //TODO just for testing, delete
+                closeFABMenu();
             }
         });
 
@@ -117,15 +130,16 @@ public class EventOverviewFragment extends Fragment {
         eventOverviewFcNewEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                NewEventFragment newEventFragment = new NewEventFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("fragment", "EventOverview");
+                newEventFragment.setArguments(bundle);
+
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
-                fr.replace(R.id.eventOverview_relativeLayout_helper, new NewEventFragment());
+                fr.replace(R.id.eventOverview_frameLayout, new NewEventFragment());
                 fr.addToBackStack(null);
                 fr.commit();
-                rLayout_eventOverview_helper.setVisibility(View.VISIBLE);
-                layoutHelper.setVisibility(View.VISIBLE);
-                layoutOverview.setVisibility(View.GONE);
                 closeFABMenu();
-                eventOverviewFcMenu.setVisibility(View.GONE);
             }
         });
 
@@ -133,22 +147,30 @@ public class EventOverviewFragment extends Fragment {
         eventOverviewFcQrScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                QRScanFragment qrScanFragment = new QRScanFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("fragment", "EventOverview");
+                qrScanFragment.setArguments(bundle);
+
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
-                fr.replace(R.id.eventOverview_relativeLayout_helper, new QRScanFragment());
+                fr.replace(R.id.eventOverview_frameLayout, new QRScanFragment());
                 fr.addToBackStack(null);
                 fr.commit();
-                rLayout_eventOverview_helper.setVisibility(View.VISIBLE);
-                layoutHelper.setVisibility(View.VISIBLE);
-                layoutOverview.setVisibility(View.GONE);
                 closeFABMenu();
-                eventOverviewFcMenu.setVisibility(View.GONE);
+            }
+        });
+
+        layoutOverview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeFABMenu();
             }
         });
 
         return view;
     }
 
-    public static void update(){
+    public static void update() {
         overviewTvMonth.setText(CalendarFragment.monthFormat.format(selectedMonth));
         overviewLvList.setAdapter(iterateOverMonth(selectedMonth));
     }
@@ -156,19 +178,21 @@ public class EventOverviewFragment extends Fragment {
     //load entries from database and return an adapter for ListView
     public static ArrayAdapter iterateOverMonth(Date date){
         final ArrayList<Appointment> eventArray = new ArrayList<>();
-        Date day = new Date(date.getTime());
-        int endDate = date.getMonth();
-        //iterate over month
-        while (day.getMonth() <= endDate){
+        Calendar helper = Calendar.getInstance();
+        helper.setTime(date);
+        helper.set(Calendar.DAY_OF_MONTH, 1);
+        helper.set(Calendar.HOUR_OF_DAY, 0);
+        helper.set(Calendar.MINUTE, 0);
+        int endDate = helper.get(Calendar.MONTH);
+        while (helper.get(Calendar.MONTH) == endDate) {
             Calendar endOfDay = Calendar.getInstance();
-            endOfDay.setTime(day);
+            endOfDay.setTime(helper.getTime());
             endOfDay.add(Calendar.DAY_OF_MONTH, 1);
-            List<hft.wiinf.de.horario.model.Event> eventList = EventController.findEventsByTimePeriod(day, endOfDay.getTime());
-            if (eventList.size()>0){
-                eventArray.add(new Appointment(CalendarFragment.dayFormat.format(day), 0));
+            List<hft.wiinf.de.horario.model.Event> eventList = EventController.findEventsByTimePeriod(helper.getTime(), endOfDay.getTime());
+            if (eventList.size() > 0) {
+                eventArray.add(new Appointment(CalendarFragment.dayFormat.format(helper.getTime()), 0));
             }
             for (int i = 0; i<eventList.size(); i++){
-                System.out.println(eventList.get(i).getCreator().getName());
                 if(eventList.get(i).getCreator().equals(PersonController.getPersonWhoIam())){
                     eventArray.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 3));
                 }else{
@@ -181,23 +205,23 @@ public class EventOverviewFragment extends Fragment {
                     }
                 }
             }
-            day.setTime(endOfDay.getTimeInMillis());
+            helper.setTime(endOfDay.getTime());
         }
-        if(eventArray.size() < 1){ //when no events this month do stuff
+        if (eventArray.size() < 1) { //when no events this month do stuff
             eventArray.add(new Appointment("Du hast keine Termine diesen Monat", 0));
         }
-        final ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1, eventArray){
+        final ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1, eventArray) {
             @NonNull
             @Override
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
-                if (eventArray.get(position).getType() == 1){
+                if (eventArray.get(position).getType() == 1) {
                     textView.setBackgroundColor(Color.GREEN);
-                }else if(eventArray.get(position).getType() == 2){
+                } else if (eventArray.get(position).getType() == 2) {
                     textView.setBackgroundColor(Color.RED);
-                }else if(eventArray.get(position).getType() == 3){
+                } else if (eventArray.get(position).getType() == 3) {
                     textView.setBackgroundColor(Color.BLUE);
-                }else if(eventArray.get(position).getType() == 0){
+                } else if (eventArray.get(position).getType() == 0) {
                     textView.setBackgroundColor(Color.WHITE);
                     textView.setFocusable(false);
                 }
@@ -213,7 +237,12 @@ public class EventOverviewFragment extends Fragment {
         eventOverview_HiddenIsFloatingMenuOpen.setText("true");
         eventOverviewFcQrScan.show();
         eventOverviewFcNewEvent.show();
-        eventOverviewFcMenu.setImageResource(R.drawable.ic_android_black_24dp);
+        eventOverviewFcQrScan.startAnimation(ActionButtonOpen);
+        eventOverviewFcNewEvent.startAnimation(ActionButtonOpen);
+        eventOverviewFcMenu.startAnimation(ActionButtonRotateRight);
+        eventOverviewFcQrScan.setClickable(true);
+        eventOverviewFcNewEvent.setClickable(true);
+        eventOverviewFcMenu.setImageResource(R.drawable.ic_plusmenu);
     }
 
     //Hide the menu Buttons
@@ -221,22 +250,30 @@ public class EventOverviewFragment extends Fragment {
         eventOverview_HiddenIsFloatingMenuOpen.setText("false");
         eventOverviewFcQrScan.hide();
         eventOverviewFcNewEvent.hide();
-        eventOverviewFcMenu.setImageResource(R.drawable.ic_android_black2_24dp);
+        if (eventOverviewFcNewEvent.isClickable()) {
+            eventOverviewFcQrScan.startAnimation(ActionButtonClose);
+            eventOverviewFcNewEvent.startAnimation(ActionButtonClose);
+            eventOverviewFcMenu.startAnimation(ActionButtonRotateLeft);
+            eventOverviewFcQrScan.setClickable(false);
+            eventOverviewFcNewEvent.setClickable(false);
+            eventOverviewFcMenu.setImageResource(R.drawable.ic_plusmenu);
+        }
     }
-
 
 }
 
-class Appointment{
+class Appointment {
     private String description;
     private int type;
 
-    Appointment(String description, int type){
+    Appointment(String description, int type) {
         this.description = description;
         this.type = type;
     }
 
-    /** 0 = date, 1 = accepted, 2 = waiting, 3 = own */
+    /**
+     * 0 = date, 1 = accepted, 2 = waiting, 3 = own
+     */
     public String getDescription() {
         return description;
     }

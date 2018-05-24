@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -32,7 +33,6 @@ import hft.wiinf.de.horario.view.CalendarActivity;
 import hft.wiinf.de.horario.view.CalendarFragment;
 import hft.wiinf.de.horario.view.EventOverviewActivity;
 import hft.wiinf.de.horario.view.EventOverviewFragment;
-import hft.wiinf.de.horario.view.NewEventFragment;
 import hft.wiinf.de.horario.view.SettingsActivity;
 
 public class TabActivity extends AppCompatActivity implements ScanResultReceiverController {
@@ -63,9 +63,9 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         tabLayout.setupWithViewPager(mViewPager);
 
         //TODO Change Picture (DesignTeam)
-        Objects.requireNonNull(tabLayout.getTabAt(0)).setIcon(R.drawable.ic_android_black_24dp);
-        Objects.requireNonNull(tabLayout.getTabAt(1)).setIcon(R.drawable.ic_android_black2_24dp);
-        Objects.requireNonNull(tabLayout.getTabAt(2)).setIcon(R.drawable.ic_android_black3_24dp);
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_dateview);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_calendarview);
+        tabLayout.getTabAt(2).setIcon(R.drawable.ic_settings);
 
         if (PersonController.getPersonWhoIam() == null) {
             openDialogAskForUsername();
@@ -294,10 +294,12 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 if (tab.getPosition() == 2) {
                     getSupportFragmentManager().popBackStack();
                 } else if (tab.getPosition() == 1) {
+                    getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
                     fr.replace(R.id.calendar_frameLayout, new CalendarFragment());
                     fr.commit();
                 } else if (tab.getPosition() == 0) {
+                    getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
                     fr.replace(R.id.eventOverview_frameLayout, new EventOverviewFragment());
                     fr.commit();
@@ -311,15 +313,16 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 if (tab.getPosition() == 2) {
                     getSupportFragmentManager().popBackStack();
                 } else if (tab.getPosition() == 1) {
+                    getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
                     fr.replace(R.id.calendar_frameLayout, new CalendarFragment());
-                    fr.addToBackStack(null);
                     fr.commit();
                 } else if (tab.getPosition() == 0) {
+                    getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
                     fr.replace(R.id.eventOverview_frameLayout, new EventOverviewFragment());
-                    fr.addToBackStack(null);
                     fr.commit();
+
                 }
             }
         });
