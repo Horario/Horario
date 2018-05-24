@@ -11,6 +11,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -42,11 +44,8 @@ public class CalendarFragment extends Fragment {
     DateFormat monthFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
     DateFormat dayFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
 
-    //TODO just a placeholder, maybe need a rework (1523318400000L)
-    public static void addEvent(Date date) {
-        Event event = new Event(Color.BLUE, date.getTime());
-        calendarCvCalendar.addEvent(event);
-    }
+    Animation ActionButtonOpen, ActionButtonClose, ActionButtonRotateRight, ActionButtonRotateLeft;
+
 
     @Nullable
     @Override
@@ -59,6 +58,12 @@ public class CalendarFragment extends Fragment {
         calendarFcQrScan = view.findViewById(R.id.calendar_floatingActionButtonScan);
         cLayout_calendar_main = view.findViewById(R.id.calendar_constrainLayout_main);
         calendarIsFloatMenuOpen = view.findViewById(R.id.calendar_hiddenField);
+
+        ActionButtonOpen = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonopen);
+        ActionButtonClose = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonclose);
+        ActionButtonRotateRight = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonrotateright);
+        ActionButtonRotateLeft = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonrotateleft);
+
 
         calendarFcQrScan.hide();
         calendarFcNewEvent.hide();
@@ -164,6 +169,12 @@ public class CalendarFragment extends Fragment {
 
     }
 
+    //TODO just a placeholder, maybe need a rework (1523318400000L)
+    public static void addEvent(Date date) {
+        Event event = new Event(Color.BLUE, date.getTime());
+        calendarCvCalendar.addEvent(event);
+    }
+
     /**
      * TODO need a description
      */
@@ -176,17 +187,28 @@ public class CalendarFragment extends Fragment {
     }
 
     public void showFABMenu() {
+        calendarFcQrScan.startAnimation(ActionButtonOpen);
+        calendarFcNewEvent.startAnimation(ActionButtonOpen);
+        calendarFcMenu.startAnimation(ActionButtonRotateRight);
+        calendarFcQrScan.setClickable(true);
+        calendarFcNewEvent.setClickable(true);
         calendarIsFloatMenuOpen.setText("true");
         calendarFcQrScan.show();
         calendarFcNewEvent.show();
-        calendarFcMenu.setImageResource(R.drawable.ic_android_black_24dp);
-
+        calendarFcMenu.setImageResource(R.drawable.ic_plusmenu);
     }
 
     public void closeFABMenu() {
-        calendarIsFloatMenuOpen.setText("false");
-        calendarFcQrScan.hide();
-        calendarFcNewEvent.hide();
-        calendarFcMenu.setImageResource(R.drawable.ic_android_black2_24dp);
+        if (calendarIsFloatMenuOpen.getText().equals("true")) {
+            calendarFcQrScan.startAnimation(ActionButtonClose);
+            calendarFcNewEvent.startAnimation(ActionButtonClose);
+            calendarFcMenu.startAnimation(ActionButtonRotateLeft);
+            calendarFcQrScan.setClickable(false);
+            calendarFcNewEvent.setClickable(false);
+            calendarIsFloatMenuOpen.setText("false");
+            calendarFcQrScan.hide();
+            calendarFcNewEvent.hide();
+            calendarFcMenu.setImageResource(R.drawable.ic_plusmenu);
+        }
     }
 }

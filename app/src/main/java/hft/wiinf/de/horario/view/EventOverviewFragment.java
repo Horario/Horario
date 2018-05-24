@@ -2,12 +2,15 @@ package hft.wiinf.de.horario.view;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import hft.wiinf.de.horario.R;
@@ -16,6 +19,9 @@ public class EventOverviewFragment extends Fragment {
 
     FloatingActionButton eventOverviewFcMenu, eventOverviewFcQrScan, eventOverviewFcNewEvent;
     TextView eventOverview_HiddenIsFloatingMenuOpen;
+    ConstraintLayout fragment_event_overview;
+    Animation ActionButtonOpen, ActionButtonClose, ActionButtonRotateRight, ActionButtonRotateLeft;
+
 
     @Nullable
     @Override
@@ -27,6 +33,12 @@ public class EventOverviewFragment extends Fragment {
         eventOverviewFcNewEvent = view.findViewById(R.id.eventOverview_floatingActionButtonNewEvent);
         eventOverviewFcQrScan = view.findViewById(R.id.eventOverview_floatingActionButtonScan);
         eventOverview_HiddenIsFloatingMenuOpen = view.findViewById(R.id.eventOverviewFabClosed);
+        fragment_event_overview = view.findViewById(R.id.fragment_event_overview);
+
+        ActionButtonOpen = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonopen);
+        ActionButtonClose = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonclose);
+        ActionButtonRotateRight = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonrotateright);
+        ActionButtonRotateLeft = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonrotateleft);
 
         eventOverviewFcQrScan.hide();
         eventOverviewFcNewEvent.hide();
@@ -78,6 +90,13 @@ public class EventOverviewFragment extends Fragment {
             }
         });
 
+        fragment_event_overview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeFABMenu();
+            }
+        });
+
         return view;
     }
 
@@ -86,7 +105,12 @@ public class EventOverviewFragment extends Fragment {
         eventOverview_HiddenIsFloatingMenuOpen.setText("true");
         eventOverviewFcQrScan.show();
         eventOverviewFcNewEvent.show();
-        eventOverviewFcMenu.setImageResource(R.drawable.ic_android_black_24dp);
+        eventOverviewFcQrScan.startAnimation(ActionButtonOpen);
+        eventOverviewFcNewEvent.startAnimation(ActionButtonOpen);
+        eventOverviewFcMenu.startAnimation(ActionButtonRotateRight);
+        eventOverviewFcQrScan.setClickable(true);
+        eventOverviewFcNewEvent.setClickable(true);
+        eventOverviewFcMenu.setImageResource(R.drawable.ic_plusmenu);
     }
 
     //Hide the menu Buttons
@@ -94,6 +118,13 @@ public class EventOverviewFragment extends Fragment {
         eventOverview_HiddenIsFloatingMenuOpen.setText("false");
         eventOverviewFcQrScan.hide();
         eventOverviewFcNewEvent.hide();
-        eventOverviewFcMenu.setImageResource(R.drawable.ic_android_black2_24dp);
+        if (eventOverviewFcNewEvent.isClickable()) {
+            eventOverviewFcQrScan.startAnimation(ActionButtonClose);
+            eventOverviewFcNewEvent.startAnimation(ActionButtonClose);
+            eventOverviewFcMenu.startAnimation(ActionButtonRotateLeft);
+            eventOverviewFcQrScan.setClickable(false);
+            eventOverviewFcNewEvent.setClickable(false);
+            eventOverviewFcMenu.setImageResource(R.drawable.ic_plusmenu);
+        }
     }
 }

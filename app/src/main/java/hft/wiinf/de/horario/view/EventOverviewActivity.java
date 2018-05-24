@@ -13,7 +13,6 @@ import hft.wiinf.de.horario.R;
 public class EventOverviewActivity extends Fragment {
 
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
