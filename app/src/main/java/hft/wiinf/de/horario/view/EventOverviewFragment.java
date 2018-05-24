@@ -1,5 +1,7 @@
 package hft.wiinf.de.horario.view;
 
+
+
 import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
@@ -18,9 +20,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.TextView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -161,7 +164,7 @@ public class EventOverviewFragment extends Fragment {
             }
         });
 
-        fragment_event_overview.setOnClickListener(new View.OnClickListener() {
+        layoutOverview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 closeFABMenu();
