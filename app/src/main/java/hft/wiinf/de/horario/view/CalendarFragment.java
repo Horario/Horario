@@ -200,17 +200,11 @@ public class CalendarFragment extends Fragment {
                 eventsAsString.add(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle());
             }
         }
-        final ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1, eventsAsString) {
+        final ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1, eventsAsString){
             @NonNull
             @Override
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
-                if (eventList.get(position).getAccepted().equals(AcceptedState.ACCEPTED)) {
-                    textView.setBackgroundColor(Color.GREEN);
-                } else if (eventList.get(position).getAccepted().equals(AcceptedState.WAITING)) {
-                    textView.setBackgroundColor(Color.RED);
-                } else {
-                    textView.setBackgroundColor(Color.WHITE);
                 //change the color of the ListView Items
                 if(eventList.get(position).getCreator().equals(PersonController.getPersonWhoIam())) {
                     textView.setBackgroundColor(Color.BLUE);
