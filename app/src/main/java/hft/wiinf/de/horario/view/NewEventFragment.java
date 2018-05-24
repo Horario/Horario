@@ -217,10 +217,6 @@ public class NewEventFragment extends Fragment {
                 onButtonClickSave();
             }
         });
-        if (getArguments() != null) {
-            Long eventId = getArguments().getLong("eventId");
-            readGivenEvent(eventId);
-        }
         //get the user, if it is saved in the db, the user name is read
         me = PersonController.getPersonWhoIam();
         if (me == null)
@@ -499,46 +495,6 @@ public class NewEventFragment extends Fragment {
         }
     }
 
-    //read the event of the given eventId and set the correct texts of the edit texts
-    public void readGivenEvent(long eventId) {
-        Event event = EventController.getEventById(eventId);
-        if (event != null) {
-            edittext_shortTitle.setText(event.getShortTitle());
-            editText_description.setText(event.getDescription());
-            startTime.setTime(event.getStartTime());
-            DateFormat format = new SimpleDateFormat("dd.MM.YYYY");
-            edittext_date.setText(format.format(event.getStartTime()));
-            format = new SimpleDateFormat("HH:mm");
-            edittext_startTime.setText(format.format(event.getStartTime()));
-            endTime.setTime(event.getEndTime());
-            editText_endTime.setText(format.format(event.getEndTime()));
-            edittext_room.setText(event.getPlace());
-            checkBox_serialEvent.setChecked(event.getRepetition() != Repetition.NONE);
-            checkSerialEvent();
-            switch (event.getRepetition()) {
-                case YEARLY:
-                    spinner_repetition.setSelection(0);
-                    break;
-                case MONTHLY:
-                    spinner_repetition.setSelection(1);
-                    break;
-                case WEEKLY:
-                    spinner_repetition.setSelection(2);
-                    break;
-                case DAILY:
-                    spinner_repetition.setSelection(3);
-                    break;
-                default:
-                    spinner_repetition.setSelected(false);
-            }
-            endOfRepetition.setTime(event.getEndDate());
-            if (endOfRepetition != null) {
-                format = new SimpleDateFormat("dd.MM.YYYY");
-                editText_endOfRepetition.setText(format.format(endOfRepetition));
-            }
-        }
-    }
-
     public long calcNotificationTime(Calendar cal, Person person) {
         cal.add(Calendar.MINUTE, ((-1) * person.getNotificationTime()));
         return cal.getTimeInMillis();
@@ -654,11 +610,11 @@ public class NewEventFragment extends Fragment {
                         alertDialog.dismiss();
                         me.setPhoneNumber(input);
                         saveEvent();
-                        return true;
+                        return false;
                         //number does not begin with + or 0 show a toast
                     } else {
                         Toast.makeText(getContext(), R.string.wrongNumberFormat, Toast.LENGTH_SHORT).show();
-                        return false;
+                        return true;
                     }
                 }
                 return false;

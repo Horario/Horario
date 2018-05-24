@@ -388,11 +388,11 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                     person = new Person(true, "", dialog_inputUsername);
                         readOwnPhoneNumber();
                     alertDialogAskForUsername.dismiss();
-                    return true;
+                    return false;
                 } else {
                     Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
                     toast.show();
-                    return false;
+                    return true;
                 }
             }
 
@@ -489,7 +489,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                     } else {
                         Toast toast = Toast.makeText(v.getContext(), R.string.wrongNumberFormat, Toast.LENGTH_SHORT);
                         toast.show();
-                        return false;
+                        return true;
                     }
                 }
                 return false;

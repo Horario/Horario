@@ -16,7 +16,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
@@ -25,6 +24,9 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.PersonController;
@@ -131,20 +133,21 @@ public class SettingsSettingsFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 String inputText = v.getText().toString();
-                if (actionId == EditorInfo.IME_ACTION_DONE && !inputText.matches(" .*")) {
+                //RegEx: no whitespace at the beginning
+                Pattern pattern_username = Pattern.compile("^([\\S]).*");
+                Matcher matcher_username = pattern_username.matcher(inputText);
+                if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches()) {
                     person.setName(inputText);
                     concatenateAndSavePersonData();
                     editTextUsername.setFocusableInTouchMode(false);
                     editTextUsername.setFocusable(false);
-                    InputMethodManager imm = (InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                    return true;
+                    return false;
                 } else {
                     //if the user name is not valid show a toast
                     Toast toast = Toast.makeText(view.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
                     toast.show();
                     editTextUsername.setText(person.getName());
-                    return false;
+                    return true;
                 }
             }
         });
@@ -161,8 +164,6 @@ public class SettingsSettingsFragment extends Fragment {
                     PersonController.savePerson(person);
                       editText_PhoneNumber.setFocusable(false);
                       editText_PhoneNumber.setFocusableInTouchMode(false);
-                        InputMethodManager imm = (InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                     Toast.makeText(getContext(), R.string.phoneNumberSaved, Toast.LENGTH_SHORT).show();
                 } else {
                     //show a toast if the number doe not atart with 0 or +
