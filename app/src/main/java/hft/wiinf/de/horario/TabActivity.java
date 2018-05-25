@@ -364,7 +364,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 Pattern pattern_username = Pattern.compile("^([\\S]).*");
                 Matcher matcher_username = pattern_username.matcher(dialog_inputUsername);
 
-                if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches()) {
+                if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches() && !dialog_inputUsername.contains("|")) {
                     if (PersonController.getPersonWhoIam() == null) {
                         //ToDo: Flo - PhoneNumber
                         personMe = new Person(true, "007", dialog_inputUsername);
@@ -385,6 +385,10 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         alertDialogAskForUsername.cancel();
                     }
                     return false;
+                } else if (dialog_inputUsername.contains("|")) {
+                    Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername_peek, Toast.LENGTH_SHORT);
+                    toast.show();
+                    return true;
                 } else {
                     Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
                     toast.show();

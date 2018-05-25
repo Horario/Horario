@@ -19,6 +19,7 @@
     <string name="reminder_text">Erinnerungen :</string>
     <string name="minutesBefore_text">Minuten vorher</string>
     <string name="noValidUsername">Benutzername darf nicht mit Leerzeichen anfangen.</string>
+    <string name="noValidUsername_peek">Der Benutzername darf nicht das Zeichen | enthalten.</string>
     <string name="event_Description">Terminbeschreibung :</string>
     <string name="event_date">Datum:</string>
     <string name="event_startTime">Startzeit :</string>

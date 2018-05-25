@@ -134,7 +134,7 @@ public class SettingsSettingsFragment extends Fragment {
                 Pattern pattern_username = Pattern.compile("^([\\S]).*");
                 Matcher matcher_username = pattern_username.matcher(inputText);
 
-                if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches()) {
+                if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches() && !inputText.contains("|")) {
                     //ToDo: get correct phoneNumber
                     person.setName(inputText);
                     PersonController.addPersonMe(person);
@@ -142,6 +142,11 @@ public class SettingsSettingsFragment extends Fragment {
                     toast.show();
                     editTextUsername.setFocusable(false);
                     editTextUsername.setFocusableInTouchMode(false);
+                } else if (inputText.contains("|")) {
+                    Toast toast = Toast.makeText(view.getContext(), R.string.noValidUsername_peek, Toast.LENGTH_SHORT);
+                    toast.show();
+                    editTextUsername.setText(person.getName());
+                    return true;
                 } else {
                     Toast toast = Toast.makeText(view.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
                     toast.show();
@@ -216,7 +221,6 @@ public class SettingsSettingsFragment extends Fragment {
                 return 6;
             default:
                 return 0;
-
         }
     }
 
