@@ -56,9 +56,14 @@ public class EventController {
 
     }
 
+    //get a list of all events
+    public static List<Event> findMyEvents() {
+        return new Select().from(Event.class).orderBy("startTime,endTime,shortTitle").execute();
+    }
+
     //get a list of all events that I accepted
     public static List<Event> findMyAcceptedEvents() {
-        return new Select().from(Event.class).where("accepted=?", true).execute();
+        return new Select().from(Event.class).where("accepted=?", true).orderBy("startTime,endTime,shortTitle").execute();
     }
 
     public static List<Event> findMyAcceptedEventsInTheFuture() {
@@ -67,7 +72,7 @@ public class EventController {
 
     //find all events that point to the given event as an start event
     public static List<Event> findRepeatingEvents(@NonNull Long eventId) {
-        return new Select().from(Event.class).where("startevent=?", eventId).execute();
+        return new Select().from(Event.class).where("startevent=?", eventId).orderBy("startTime,endTime,shortTitle").execute();
     }
 
     // saves a serial event, firstEvent="StartEvent",
