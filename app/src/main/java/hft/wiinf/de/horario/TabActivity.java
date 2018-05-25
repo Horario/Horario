@@ -21,14 +21,19 @@ import android.widget.Toast;
 import com.activeandroid.ActiveAndroid;
 import com.facebook.stetho.Stetho;
 
+import java.util.Date;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import hft.wiinf.de.horario.controller.EventController;
 import hft.wiinf.de.horario.controller.NoScanResultExceptionController;
 import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.controller.ScanResultReceiverController;
+import hft.wiinf.de.horario.model.AcceptedState;
+import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
+import hft.wiinf.de.horario.model.Repetition;
 import hft.wiinf.de.horario.view.CalendarActivity;
 import hft.wiinf.de.horario.view.CalendarFragment;
 import hft.wiinf.de.horario.view.EventOverviewActivity;
@@ -325,7 +330,9 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 }
             }
         });
+
     }
+
 
     // Add the Fragments to the VageViewer
     private void setupViewPager(ViewPager viewPager) {

@@ -52,7 +52,7 @@ public class EventController {
     //find the list of events that start in the given period (enddate is ecluded!)
     //find the list of events that start in the given period (enddate is not included!)
     public static List<Event> findEventsByTimePeriod(Date startDate, Date endDate) {
-        return new Select().from(Event.class).where("starttime between ? AND ?", startDate.getTime(), endDate.getTime() - 1).execute();
+        return new Select().from(Event.class).where("startTime between ? AND ?", startDate.getTime(), endDate.getTime() - 1).execute();
 
     }
 
@@ -115,4 +115,7 @@ public class EventController {
         }
 
     }
+
+
+
 }
