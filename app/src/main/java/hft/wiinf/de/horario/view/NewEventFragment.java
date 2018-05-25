@@ -561,7 +561,7 @@ public class NewEventFragment extends Fragment {
             if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
                 // user rejected the permission
                 boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.SEND_SMS);
-                if (showRationale) {
+                if (!showRationale) {
                     // user also CHECKED "never ask again" - show dialog
                     new android.support.v7.app.AlertDialog.Builder(getActivity())
                             .setTitle(R.string.accessWith_NeverAskAgain_deny)

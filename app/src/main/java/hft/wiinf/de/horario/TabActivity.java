@@ -9,7 +9,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -434,40 +433,68 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case PERMISSION_REQUEST_SEND_SMS: {
-                // If Permission ist Granted User get a SnackbarMessage and the phone number is read
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Snackbar.make(findViewById(R.id.tabBarLayout),
-                            R.string.thanksphoneNumber,
-                            Snackbar.LENGTH_SHORT).show();
-                    readOwnPhoneNumber();
+        if (requestCode == PERMISSION_REQUEST_SEND_SMS) {
+            //check if the user granted/denied them you may want to group the
+            if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                // user rejected the permission
+                boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.SEND_SMS);
+                if (!showRationale) {
+                    // user also CHECKED "never ask again" - show dialog
+                    new android.support.v7.app.AlertDialog.Builder(this)
+                            .setTitle(R.string.accessWith_NeverAskAgain_deny)
+                            .setMessage(R.string.sendSMS_accessDenied_withCheckbox)
+                            .setPositiveButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    openDialogAskForPhoneNumber();
+                                }
+                            })
+                            .create().show();
+                } else if (counter < 1) {
+                    // user did NOT check "never ask again" this is a good place to explain the user
+                    // why you need the permission and ask if he wants // to accept it (the rationale)
+                    new android.support.v7.app.AlertDialog.Builder(this)
+                            .setTitle(R.string.requestPermission_firstTryRequest)
+                            .setMessage(R.string.phoneNumber_explanation)
+                            .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    counter++;
+                                    readOwnPhoneNumber();
+                                }
+                            })
+                            .setNegativeButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    openDialogAskForPhoneNumber();
+                                }
+                            })
+                            .create().show();
+                } else if (counter == 1) {
+                    new android.support.v7.app.AlertDialog.Builder(this)
+                            .setTitle(R.string.sendSMS_lastTry)
+                            .setMessage(R.string.phoneNumber_explanation)
+                            .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    counter++;
+                                    readOwnPhoneNumber();
+                                }
+                            })
+                            .setNegativeButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    openDialogAskForPhoneNumber();
+                                }
+                            })
+                            .create().show();
                 } else {
-                    //If the User denies the access to the phone number he gets two Chance to accept the Request
-                    //The Counter counts from 0 to 2. If the Counter is 2 user a dialog is shown where the user can input the phone number
-                    switch (counter) {
-                        case 0:
-                            Snackbar.make(this.findViewById(R.id.tabBarLayout),
-                                    R.string.phoneNumber_explanation,
-                                    Snackbar.LENGTH_LONG).show();
-                            counter++;
-                            readOwnPhoneNumber();
-                            break;
-
-                        case 1:
-                            Snackbar.make(this.findViewById(R.id.tabBarLayout),
-                                    R.string.lastTry_phoneNumber,
-                                    Snackbar.LENGTH_LONG)
-                                    .show();
-                            counter++;
-                            readOwnPhoneNumber();
-                            break;
-                        default:
-                            openDialogAskForPhoneNumber();
-                    }
+                    openDialogAskForPhoneNumber();
                 }
+            } else {
+                readOwnPhoneNumber();
             }
+
         }
     }
 
