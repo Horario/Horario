@@ -30,7 +30,10 @@ public class EventOverviewActivity extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_event_overview, container, false);
-
+        FragmentTransaction fr = getFragmentManager().beginTransaction();
+        //settings_relativeLayout_helper: in this Layout all other layouts will be uploaded
+        fr.replace(R.id.eventOverview_frameLayout, new EventOverviewFragment(), "EventOverview");
+        fr.commit();
         eventOverviewFcMenu = view.findViewById(R.id.eventOverview_floatingActionButtonMenu);
         eventOverviewFcNewEvent = view.findViewById(R.id.eventOverview_floatingActionButtonNewEvent);
         eventOverviewFcQrScan = view.findViewById(R.id.eventOverview_floatingActionButtonScan);

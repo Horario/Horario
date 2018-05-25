@@ -6,7 +6,10 @@
     android:layout_height="match_parent"
     android:background="?android:windowBackground"
     android:orientation="vertical">
-
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/eventOverview_frameLayout">
 
     <TextView
         android:id="@+id/newEventTab"
@@ -96,5 +99,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
+    </FrameLayout>
 </android.support.constraint.ConstraintLayout>
