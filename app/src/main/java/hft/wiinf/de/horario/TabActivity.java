@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -87,17 +88,19 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         } else if (PersonController.getPersonWhoIam().getName().isEmpty()) {
             openDialogAskForUsername();
         }
-    }
 
-    //After Scanning it was opened a Dialog where the user can choose what to do next
-    @SuppressLint("ResourceType")
-    private void openActionDialogAfterScanning(final String qrScannContentResult) {
         myStartTime.set(Calendar.SECOND, 0);
         myStartTime.set(Calendar.MILLISECOND, 0);
         myEndTime.set(Calendar.SECOND, 0);
         myEndTime.set(Calendar.MILLISECOND, 0);
         myEndDate.set(Calendar.SECOND, 0);
         myEndDate.set(Calendar.MILLISECOND, 0);
+    }
+
+    //After Scanning it was opened a Dialog where the user can choose what to do next
+    @SuppressLint("ResourceType")
+    private void openActionDialogAfterScanning(final String qrScannContentResult) {
+
         //Create the Dialog with the GUI Elements initial
         final Dialog afterScanningDialogDecission = new Dialog(this);
         final Dialog afterScanningDialogAction = new Dialog(this);
@@ -166,7 +169,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                                             startActivity(intent);
                                         }
                                     });
-
                         }
                     });
 
@@ -526,12 +528,19 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     }
 
     private Calendar getEndTime() {
+        String[] startDateStringBufferArray = startDate.split("\\.");
+        day = startDateStringBufferArray[0].trim();
+        month = startDateStringBufferArray[1].trim();
+        year = startDateStringBufferArray[2].trim();
+
         String[] endTimeStringBufferArray = endTime.split(":");
         hourOfDay = endTimeStringBufferArray[0].trim();
         minutesOfDay = endTimeStringBufferArray[1].trim();
 
         myEndTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hourOfDay));
         myEndTime.set(Calendar.MINUTE, Integer.parseInt(minutesOfDay));
+        myEndTime.set(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day));
+
 
         return myEndTime;
     }
