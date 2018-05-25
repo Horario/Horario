@@ -24,7 +24,7 @@
     <string name="event_startTime">Startzeit :</string>
     <string name="event_endtime">Endzeit :</string>
     <string name="event_serialEvent">Serientermin</string>
-    <string name="event_endOfRepetition">wiederholen bis :</string>
+    <string name="event_endOfRepetition">Wiederholen bis :</string>
     <string name="event_save">Termin speichern</string>
     <string name="event_room">Raum :</string>
     <string name="event_shortTitle">Kurztitel :</string>
