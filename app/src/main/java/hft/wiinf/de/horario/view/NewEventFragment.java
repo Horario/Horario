@@ -87,7 +87,7 @@ public class NewEventFragment extends Fragment {
         spinner_repetition = view.findViewById(R.id.newEvent_spinner_repetition);
         editText_endOfRepetition = view.findViewById(R.id.newEvent_textEdit_endOfRepetition);
         textView_endofRepetiton = view.findViewById(R.id.newEvent_textView_endOfRepetiton);
-        textView_repetition = view.findViewById(R.id.newEvent_textView_repetition);
+
         button_save = view.findViewById(R.id.newEvent_button_save);
         // when the keyboard is closed after the text edit room, there should be no focus
         edittext_room.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -208,6 +208,7 @@ public class NewEventFragment extends Fragment {
                 CalendarFragment.updateCompactCalendar();
             }
         });
+
         if (getArguments() != null) {
             Long eventId = getArguments().getLong("eventId");
             readGivenEvent(eventId);
@@ -225,12 +226,12 @@ public class NewEventFragment extends Fragment {
             textView_endofRepetiton.setVisibility(View.VISIBLE);
             editText_endOfRepetition.setVisibility(View.VISIBLE);
             spinner_repetition.setVisibility(View.VISIBLE);
-            textView_repetition.setVisibility(View.VISIBLE);
+
         } else {
             textView_endofRepetiton.setVisibility(View.GONE);
             editText_endOfRepetition.setVisibility(View.GONE);
             spinner_repetition.setVisibility(View.GONE);
-            textView_repetition.setVisibility(View.GONE);
+
         }
     }
 
