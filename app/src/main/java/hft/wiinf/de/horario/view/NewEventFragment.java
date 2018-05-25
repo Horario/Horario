@@ -50,7 +50,7 @@ public class NewEventFragment extends Fragment {
     Calendar endOfRepetition = Calendar.getInstance();
     // elements of the gui
     private EditText editText_description, edittext_shortTitle, edittext_room, edittext_date, edittext_startTime, editText_endTime, edittext_userName, editText_endOfRepetition;
-    private TextView textView_endofRepetiton, textView_repetition;
+    private TextView textView_endofRepetiton;
     private Spinner spinner_repetition;
     private CheckBox checkBox_serialEvent;
     private Button button_save;
