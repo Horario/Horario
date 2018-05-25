@@ -545,9 +545,9 @@ public class NewEventFragment extends Fragment {
                 Calendar calendar = GregorianCalendar.getInstance();
                 calendar.setTime(date);
 
-                alarmIntent.putExtra("Event", event.getDescription());
+                alarmIntent.putExtra("Event", event.getShortTitle());
                 alarmIntent.putExtra("Hour", calendar.get(Calendar.HOUR_OF_DAY));
-                if (calendar.get(Calendar.MINUTE) <= 10) {
+                if (calendar.get(Calendar.MINUTE) < 10) {
                     alarmIntent.putExtra("Minute", "0" + String.valueOf(calendar.get(Calendar.MINUTE)));
                 } else {
                     alarmIntent.putExtra("Minute", String.valueOf(calendar.get(Calendar.MINUTE)));

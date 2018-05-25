@@ -322,7 +322,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                     FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
                     fr.replace(R.id.eventOverview_frameLayout, new EventOverviewFragment());
                     fr.commit();
-
                 }
             }
         });
