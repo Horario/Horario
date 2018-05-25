@@ -38,6 +38,7 @@
     <string name="save_text">speichern</string>
     <string name="later_text">Später</string>
     <string name="thanksForUsername">Benutzername wurde gespeichert. </string>
+    <string name="titleDialogFinalDecission">Sind Sie sich sicher?</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="description_too_long">Die Beschreibung darf nicht länger als 500 Zeichen sein.</string>
     <string name="shortTitle_too_long">Der Kurztitel darf nicht länger als 100 Zeichen sein.</string>

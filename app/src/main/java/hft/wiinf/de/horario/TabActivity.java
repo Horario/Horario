@@ -51,6 +51,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     Person personMe;
 
     Person person;
+    Person personEventCreator;
     //Index: 0 = CreatorID; 1 = StartDate; 2 = EndDate; 3 = StartTime; 4 = EndTime;
     //       5 = Repetition; 6 = ShortTitle; 7 = Place; 8 = Descriptoin;  9 = EventCreatorName
     private String creatorID, startDate, endDate, startTime, endTime, repetition, shortTitle, place, description, eventCreatorName, creatorPhoneNumber;
@@ -116,9 +117,17 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         Button qrScanner_result_toCalender = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_toCalender);
         Button qrScanner_result_eventSave_without_assign = afterScanningDialogAction.findViewById((R.id.dialog_qrScanner_button_eventSaveOnly));
 
-        TextView qrScanner_result_final_question = afterScanningDialogDecission.findViewById(R.id.dialog_qrScanner_textView_question);
-        Button qrScanner_final_question_save = afterScanningDialogDecission.findViewById(R.id.dialog_qrScanner_button_accept);
-        Button qrScanner_final_question_reject = afterScanningDialogDecission.findViewById(R.id.dialog_qrScanner_button_eventSave);
+
+        final AlertDialog.Builder dialogAskForFinalDecission = new AlertDialog.Builder(this);
+        dialogAskForFinalDecission.setView(R.layout.dialog_afterscanningbuttonclick);
+        dialogAskForFinalDecission.setTitle(R.string.titleDialogFinalDecission);
+        dialogAskForFinalDecission.setCancelable(true);
+
+        final AlertDialog alertDialogAskForFinalDecission = dialogAskForFinalDecission.create();
+
+        TextView qrScanner_result_final_question = alertDialogAskForFinalDecission.findViewById(R.id.dialog_qrScanner_textView_question);
+        Button qrScanner_final_question_save = alertDialogAskForFinalDecission.findViewById(R.id.dialog_qrScanner_button_accept);
+        Button qrScanner_final_question_reject = alertDialogAskForFinalDecission.findViewById(R.id.dialog_qrScanner_button_eventSave);
 
         //Set the Cancel and BackToCalenderButtons to Invisible
         qrScanner_result_abort.setVisibility(View.GONE);
@@ -131,22 +140,24 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                     .setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            afterScanningDialogDecission.setContentView(R.layout.dialog_afterscanningbuttonclick);
-                            afterScanningDialogDecission.setCancelable(true);
-                            afterScanningDialogDecission.show();
+                            alertDialogAskForFinalDecission.show();
                             //ToDo Dennis hier kommt dein Code rein.
-                            afterScanningDialogDecission.findViewById(R.id.dialog_qrScanner_button_accept)
+                            alertDialogAskForFinalDecission.findViewById(R.id.dialog_qrScanner_button_accept)
                                     .setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
                                             person = PersonController.getPersonWhoIam();
 
                                             Person person = new Person();
-                                            person.setName(eventCreatorName);
-                                            person.setPhoneNumber(creatorPhoneNumber);
-                                            person.save();
-
+                                            personEventCreator = PersonController.checkforPhoneNumber(creatorPhoneNumber);
                                             Event event = new Event(person);
+                                            if (personEventCreator != null) {
+                                                event.setCreator(personEventCreator);
+                                            } else {
+                                                person.setName(eventCreatorName);
+                                                person.setPhoneNumber(creatorPhoneNumber);
+                                                person.save();
+                                            }
                                             event.setAccepted(AcceptedState.ACCEPTED);
                                             event.setCreatorEventId(Long.parseLong(creatorID.toString()));
                                             event.setStartTime(getStartTime().getTime());
@@ -173,76 +184,98 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                     });
 
             //Button to Save the Event but don't send for assent the Event a SMS to the EventCreator
-            afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_eventSaveOnly).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //ToDo Dennis hier kommt dein Code rein.
-                    person = PersonController.getPersonWhoIam();
+            afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_eventSaveOnly)
+                    .setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertDialogAskForFinalDecission.show();
+                            alertDialogAskForFinalDecission.findViewById(R.id.dialog_qrScanner_button_accept)
+                                    .setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            person = PersonController.getPersonWhoIam();
 
-                    Person person = new Person();
-                    person.setName(eventCreatorName);
-                    person.setPhoneNumber(creatorPhoneNumber);
-                    person.save();
+                                            Person person = new Person();
+                                            personEventCreator = PersonController.checkforPhoneNumber(creatorPhoneNumber);
+                                            Event event = new Event(person);
+                                            if (personEventCreator != null) {
+                                                event.setCreator(personEventCreator);
+                                            } else {
+                                                person.setName(eventCreatorName);
+                                                person.setPhoneNumber(creatorPhoneNumber);
+                                                person.save();
+                                            }
+                                            event.setAccepted(AcceptedState.WAITING);
+                                            event.setCreatorEventId(Long.parseLong(creatorID.toString()));
+                                            event.setStartTime(getStartTime().getTime());
+                                            event.setEndTime(getEndTime().getTime());
+                                            event.setRepetition(getRepetition());
+                                            event.setShortTitle(shortTitle);
+                                            event.setPlace(place);
+                                            event.setDescription(description);
 
-                    Event event = new Event(person);
-                    event.setAccepted(AcceptedState.WAITING);
-                    event.setCreatorEventId(Long.parseLong(creatorID.toString()));
-                    event.setStartTime(getStartTime().getTime());
-                    event.setEndTime(getEndTime().getTime());
-                    event.setRepetition(getRepetition());
-                    event.setShortTitle(shortTitle);
-                    event.setPlace(place);
-                    event.setDescription(description);
+                                            if (event.getRepetition() != Repetition.NONE) {
+                                                event.setEndDate(getEndDate().getTime());
+                                                EventController.saveSerialevent(event);
+                                            } else {
+                                                EventController.saveEvent(event);
+                                            }
 
-                    if (event.getRepetition() != Repetition.NONE) {
-                        event.setEndDate(getEndDate().getTime());
-                        EventController.saveSerialevent(event);
-                    } else {
-                        EventController.saveEvent(event);
-                    }
-
-                    //Restart the TabActivity an Reload all Views
-                    Intent intent = getIntent();
-                    finish();
-                    startActivity(intent);
-                }
-            });
+                                            //Restart the TabActivity an Reload all Views
+                                            Intent intent = getIntent();
+                                            finish();
+                                            startActivity(intent);
+                                        }
+                                    });
+                        }
+                    });
 
             //Button to Reject the Event und send a Reject SMS to the EventCreator
-            afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_eventRecject).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //ToDo Dennis hier kommt dein Code rein.
-                    person = PersonController.getPersonWhoIam();
+            afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_eventRecject)
+                    .setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertDialogAskForFinalDecission.show();
+                            alertDialogAskForFinalDecission.findViewById(R.id.dialog_qrScanner_button_accept)
+                                    .setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            person = PersonController.getPersonWhoIam();
 
-                    Person person = new Person();
-                    person.setName(eventCreatorName);
-                    person.setPhoneNumber(creatorPhoneNumber);
-                    person.save();
+                                            Person person = new Person();
+                                            personEventCreator = PersonController.checkforPhoneNumber(creatorPhoneNumber);
+                                            Event event = new Event(person);
+                                            if (personEventCreator != null) {
+                                                event.setCreator(personEventCreator);
+                                            } else {
+                                                person.setName(eventCreatorName);
+                                                person.setPhoneNumber(creatorPhoneNumber);
+                                                person.save();
+                                            }
+                                            event.setAccepted(AcceptedState.REJECTED);
+                                            event.setCreatorEventId(Long.parseLong(creatorID.toString()));
+                                            event.setStartTime(getStartTime().getTime());
+                                            event.setEndTime(getEndTime().getTime());
+                                            event.setRepetition(getRepetition());
+                                            event.setShortTitle(shortTitle);
+                                            event.setPlace(place);
+                                            event.setDescription(description);
 
-                    Event event = new Event(person);
-                    event.setAccepted(AcceptedState.REJECTED);
-                    event.setCreatorEventId(Long.parseLong(creatorID.toString()));
-                    event.setStartTime(getStartTime().getTime());
-                    event.setEndTime(getEndTime().getTime());
-                    event.setRepetition(getRepetition());
-                    event.setShortTitle(shortTitle);
-                    event.setPlace(place);
-                    event.setDescription(description);
+                                            if (event.getRepetition() != Repetition.NONE) {
+                                                event.setEndDate(getEndDate().getTime());
+                                                EventController.saveSerialevent(event);
+                                            } else {
+                                                EventController.saveEvent(event);
+                                            }
 
-                    if (event.getRepetition() != Repetition.NONE) {
-                        event.setEndDate(getEndDate().getTime());
-                        EventController.saveSerialevent(event);
-                    } else {
-                        EventController.saveEvent(event);
-                    }
-
-                    //Restart the TabActivity an Reload all Views
-                    Intent intent = getIntent();
-                    finish();
-                    startActivity(intent);
-                }
-            });
+                                            //Restart the TabActivity an Reload all Views
+                                            Intent intent = getIntent();
+                                            finish();
+                                            startActivity(intent);
+                                        }
+                                    });
+                        }
+                    });
 
             //Put StringBuffer in an Array and split the Values to new String Variables
             //Index: 0 = CreatorID; 1 = StartDate; 2 = EndDate; 3 = StartTime; 4 = EndTime;
@@ -541,7 +574,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         myEndTime.set(Calendar.MINUTE, Integer.parseInt(minutesOfDay));
         myEndTime.set(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day));
 
-
         return myEndTime;
     }
 
@@ -550,8 +582,14 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         day = endDateStringBufferArray[0].trim();
         month = endDateStringBufferArray[1].trim();
         year = endDateStringBufferArray[2].trim();
-        myEndTime.set(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day));
 
+        String[] endTimeStringBufferArray = endTime.split(":");
+        hourOfDay = endTimeStringBufferArray[0].trim();
+        minutesOfDay = endTimeStringBufferArray[1].trim();
+
+        myEndDate.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hourOfDay));
+        myEndDate.set(Calendar.MINUTE, Integer.parseInt(minutesOfDay));
+        myEndDate.set(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day));
         return myEndDate;
     }
 

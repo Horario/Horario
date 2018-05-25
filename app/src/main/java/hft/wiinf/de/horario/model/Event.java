@@ -56,6 +56,10 @@ public class Event extends Model {
         return creator;
     }
 
+    public void setCreator(@NonNull Person creator) {
+        this.creator = creator;
+    }
+
     public String getShortTitle() {
         return shortTitle;
     }
