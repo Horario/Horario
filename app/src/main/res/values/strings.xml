@@ -63,7 +63,7 @@
         <item name="event_repetition_daily">täglich</item>
     </string-array>
     <string name="thanksphoneNumber">Danke für den Zugriff auf deine Telefonnummer</string>
-    <string name="phoneNumber_explanation">Wir brauchen deine Telefonnummer, um Rückmeldungen versenden können</string>
+    <string name="phoneNumber_explanation">Wir brauchen deine Telefonnummer, um Rückmeldungen versenden können. Wir verwenden deine Telefonnummer nicht für andere Zwecke. Alternativ kannst du deine Telefonnummer auch selbst eingeben.</string>
     <string name="lastTry_phoneNumber">Ohne deine Telefonnummer kannnst du keine Rückmeldungen versenden und empfangen.</string>
     <string name="oneMoreTime">Nochmal</string>
     <string name="telephonenumerNotRead">Die Telefonnummer konnte nicht ausgelesen werden. Bitte geben Sie Ihre Telefonnummer manuell ein.</string>
@@ -128,9 +128,13 @@
     <string name="requestPermission_thankYou">Danke für die Zugriffsrechte auf die Kamera!</string>
     <string name="requestPermission_askForPermission">Wir brauchen den Kamerazugriff um den QR-Code einzuscannen.</string>
     <string name="requestPermission_againButton">Nochmal</string>
-    <string name="requestPermission_lastTryRequest">Letzer Versuch! Bitte gestatte den Zugriff um Scannen zu können.</string>
-    <string name="requestPermission_userDontLike">Okay du magst nicht? Vielleicht ein anderes mal :)</string>
+    <string name="requestPermission_lastTryRequest">Letzer Versuch!</string>
     <string name="abort">ABBRUCH</string>
-
-
+    <string name="accessWith_NeverAskAgain_deny">Zugriff Verweigert</string>
+    <string name="requestPermission_accessDenied_withCheckbox">Du hast mit den Haken bei \"Nicht mehr fragen\"  dauerhaft den Zugiff zum Kalender verweigert. Um den QR Scanner zu nutzen aktiviere bitte den Kamerazugriff über deine Rechteverwaltung</string>
+    <string name="requestPermission_firstTryRequest">Erster von zwei Versuchen</string>
+    <string name="sendSMS_accessDenied_withCheckbox">Du hast mit den Haken bei \"Nicht mehr fragen\"  dauerhaft den Zugiff auf deine Telefonnummer verweigert. Um Rückmeldungen zu nutzen, gibt bitte nun deine Telefonnummer selbst ein. Alternativ kannst du Horario schließen und über deine Rechteverwaltung Horario das Senden von SMS erlauben. Dann musst du die Termindetails neu eingeben.</string>
+    <string name="sendSMS_manual">manuell eingeben</string>
+    <string name="sendSMS_lastTry">Letzter Versuch! Bitte gestatte uns den Zugriff auf deine Telefonnummer.</string>
+    <string name="requestPermission_userDontLike">TEST</string>
 </resources>
