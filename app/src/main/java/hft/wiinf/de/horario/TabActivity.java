@@ -294,15 +294,15 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 if (tab.getPosition() == 2) {
                     getSupportFragmentManager().popBackStack();
                 } else if (tab.getPosition() == 1) {
+                    getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
                     fr.replace(R.id.calendar_frameLayout, new CalendarFragment());
                     fr.commit();
-                    getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 } else if (tab.getPosition() == 0) {
+                    getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
                     fr.replace(R.id.eventOverview_frameLayout, new EventOverviewFragment());
                     fr.commit();
-                    getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 }
             }
 
@@ -313,15 +313,16 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 if (tab.getPosition() == 2) {
                     getSupportFragmentManager().popBackStack();
                 } else if (tab.getPosition() == 1) {
+                    getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
                     fr.replace(R.id.calendar_frameLayout, new CalendarFragment());
                     fr.commit();
-                    getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 } else if (tab.getPosition() == 0) {
+                    getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
                     fr.replace(R.id.eventOverview_frameLayout, new EventOverviewFragment());
                     fr.commit();
-                    getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
                 }
             }
         });

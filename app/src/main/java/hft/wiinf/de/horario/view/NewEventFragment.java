@@ -204,6 +204,8 @@ public class NewEventFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 onButtonClickSave();
+                EventOverviewFragment.update();
+                CalendarFragment.updateCompactCalendar();
             }
         });
         if (getArguments() != null) {
