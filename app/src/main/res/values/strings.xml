@@ -15,7 +15,7 @@
     <string name="feedback_zur_app_text">Feedback zur App</string>
     <string name="username_text">Benutzername :</string>
     <string name="username_hint">Benutzername</string>
-    <string name="allowpush_text">Push Nachrichten erlauben :</string>
+    <string name="allowpush_text">Erinnerungen erlauben :</string>
     <string name="reminder_text">Erinnerungen :</string>
     <string name="minutesBefore_text">Minuten vorher</string>
     <string name="noValidUsername">Benutzername darf nicht mit Leerzeichen anfangen.</string>
@@ -28,13 +28,13 @@
     <string name="event_save">Termin speichern</string>
     <string name="event_room">Raum :</string>
     <string name="event_shortTitle">Kurztitel :</string>
-    <string name="empty_fields">Bitte füllen Sie alle Felder aus.</string>
+    <string name="empty_fields">Bitte fülle alle Felder aus.</string>
     <string name="endTime_before_startTime">Die Endzeit darf nicht vor der Startzeit liegen.</string>
     <string name="endOfRepetition_before_endTime">Das Enddatum der Wiederholung darf nicht vor der Endzeit liegen.</string>
-    <string name="event_saving_successful">Der Termin wurde erfolgreich gespeichert. Was möchten Sie nun tun?</string>
+    <string name="event_saving_successful">Der Termin wurde gespeichert. Was möchtest du nun tun?</string>
     <string name="savingSuccessful_new">neuen Termin erstellen</string>
     <string name="savingSuccessful_qrcode">QRCode anzeigen</string>
-    <string name="titleDialogUsername">Bitte vergeben Sie einen Benutzernamen :)</string>
+    <string name="titleDialogUsername">Bitte vergib einen Benutzernamen! </string>
     <string name="save_text">speichern</string>
     <string name="later_text">Später</string>
     <string name="thanksForUsername">Benutzername wurde gespeichert. </string>
@@ -51,8 +51,8 @@
     <string name="shortTitle_peek">Der Kurztitel darf nicht das Zeichen | enthalten.</string>
     <string name="description_peek">Die Beschreibung darf nicht das Zeichen | enthalten.</string>
     <string name="room_peek">Das Feld Raum darf nicht das Zeichen | enthalten.</string>
-    <string name="pushEnabled">Die Push-Nachrichten wurden eingeschaltet.</string>
-    <string name="pushDisabled">Die Push-Nachrichten wurden ausgeschaltet.</string>
+    <string name="pushEnabled">Die Erinnerungen wurden eingeschaltet.</string>
+    <string name="pushDisabled">Die Erinnerungen wurden ausgeschaltet.</string>
 
     <string name="pushMinutesSet" formatted="true">Die Push-Nachrichten erscheinen nun %1$d Minuten vor Ihrem Termin.</string>
 
