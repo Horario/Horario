@@ -50,7 +50,7 @@ public class NewEventFragment extends Fragment {
     Calendar endOfRepetition = Calendar.getInstance();
     // elements of the gui
     private EditText editText_description, edittext_shortTitle, edittext_room, edittext_date, edittext_startTime, editText_endTime, edittext_userName, editText_endOfRepetition;
-    private TextView textView_endofRepetiton, textView_repetition;
+    private TextView textView_endofRepetiton;
     private Spinner spinner_repetition;
     private CheckBox checkBox_serialEvent;
     private Button button_save;
@@ -87,7 +87,7 @@ public class NewEventFragment extends Fragment {
         spinner_repetition = view.findViewById(R.id.newEvent_spinner_repetition);
         editText_endOfRepetition = view.findViewById(R.id.newEvent_textEdit_endOfRepetition);
         textView_endofRepetiton = view.findViewById(R.id.newEvent_textView_endOfRepetiton);
-        textView_repetition = view.findViewById(R.id.newEvent_textView_repetition);
+
         button_save = view.findViewById(R.id.newEvent_button_save);
         // when the keyboard is closed after the text edit room, there should be no focus
         edittext_room.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -204,8 +204,11 @@ public class NewEventFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 onButtonClickSave();
+                EventOverviewFragment.update();
+                CalendarFragment.updateCompactCalendar();
             }
         });
+
         if (getArguments() != null) {
             Long eventId = getArguments().getLong("eventId");
             readGivenEvent(eventId);
@@ -223,12 +226,12 @@ public class NewEventFragment extends Fragment {
             textView_endofRepetiton.setVisibility(View.VISIBLE);
             editText_endOfRepetition.setVisibility(View.VISIBLE);
             spinner_repetition.setVisibility(View.VISIBLE);
-            textView_repetition.setVisibility(View.VISIBLE);
+
         } else {
             textView_endofRepetiton.setVisibility(View.GONE);
             editText_endOfRepetition.setVisibility(View.GONE);
             spinner_repetition.setVisibility(View.GONE);
-            textView_repetition.setVisibility(View.GONE);
+
         }
     }
 
@@ -543,9 +546,9 @@ public class NewEventFragment extends Fragment {
                 Calendar calendar = GregorianCalendar.getInstance();
                 calendar.setTime(date);
 
-                alarmIntent.putExtra("Event", event.getDescription());
+                alarmIntent.putExtra("Event", event.getShortTitle());
                 alarmIntent.putExtra("Hour", calendar.get(Calendar.HOUR_OF_DAY));
-                if (calendar.get(Calendar.MINUTE) <= 10) {
+                if (calendar.get(Calendar.MINUTE) < 10) {
                     alarmIntent.putExtra("Minute", "0" + String.valueOf(calendar.get(Calendar.MINUTE)));
                 } else {
                     alarmIntent.putExtra("Minute", String.valueOf(calendar.get(Calendar.MINUTE)));

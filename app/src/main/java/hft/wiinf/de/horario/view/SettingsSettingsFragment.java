@@ -159,7 +159,7 @@ public class SettingsSettingsFragment extends Fragment {
                 Pattern pattern_username = Pattern.compile("^([\\S]).*");
                 Matcher matcher_username = pattern_username.matcher(inputText);
 
-                if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches()) {
+                if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches() && !inputText.contains("|")) {
                     //ToDo: get correct phoneNumber
                     person.setName(inputText);
                     PersonController.addPersonMe(person);
@@ -167,6 +167,11 @@ public class SettingsSettingsFragment extends Fragment {
                     toast.show();
                     editTextUsername.setFocusable(false);
                     editTextUsername.setFocusableInTouchMode(false);
+                } else if (inputText.contains("|")) {
+                    Toast toast = Toast.makeText(view.getContext(), R.string.noValidUsername_peek, Toast.LENGTH_SHORT);
+                    toast.show();
+                    editTextUsername.setText(person.getName());
+                    return true;
                 } else {
                     Toast toast = Toast.makeText(view.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
                     toast.show();
@@ -241,7 +246,6 @@ public class SettingsSettingsFragment extends Fragment {
                 return 6;
             default:
                 return 0;
-
         }
     }
 
@@ -272,9 +276,9 @@ public class SettingsSettingsFragment extends Fragment {
             calendar.setTime(date);
 
             //Put extra Data which is needed for the Notification
-            alarmIntent.putExtra("Event", event.getDescription());
+            alarmIntent.putExtra("Event", event.getShortTitle());
             alarmIntent.putExtra("Hour", calendar.get(Calendar.HOUR_OF_DAY));
-            if (calendar.get(Calendar.MINUTE) <= 10) {
+            if (calendar.get(Calendar.MINUTE) < 10) {
                 alarmIntent.putExtra("Minute", "0" + String.valueOf(calendar.get(Calendar.MINUTE)));
             } else {
                 alarmIntent.putExtra("Minute", String.valueOf(calendar.get(Calendar.MINUTE)));
