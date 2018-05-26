@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
@@ -560,7 +561,7 @@ public class NewEventFragment extends Fragment {
             //check if the user granted/denied them you may want to group the
             if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
                 // user rejected the permission
-                boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.SEND_SMS);
+                boolean showRationale = ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.SEND_SMS);
                 if (!showRationale) {
                     // user also CHECKED "never ask again" - show dialog
                     new android.support.v7.app.AlertDialog.Builder(getActivity())

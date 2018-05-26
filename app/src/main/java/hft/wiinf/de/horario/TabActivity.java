@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
@@ -437,8 +438,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             //check if the user granted/denied them you may want to group the
             if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
                 // user rejected the permission
-                boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.SEND_SMS);
-                if (!showRationale) {
+                boolean showRationale = ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.SEND_SMS);
+                if (showRationale) {
                     // user also CHECKED "never ask again" - show dialog
                     new android.support.v7.app.AlertDialog.Builder(this)
                             .setTitle(R.string.accessWith_NeverAskAgain_deny)
