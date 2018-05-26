@@ -4,6 +4,7 @@ package hft.wiinf.de.horario.view;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,6 +12,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
@@ -48,7 +50,7 @@ import static android.support.v4.content.PermissionChecker.checkSelfPermission;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SettingsSettingsFragment extends Fragment {
+public class SettingsSettingsFragment extends Fragment implements ActivityCompat.OnRequestPermissionsResultCallback {
     private static final String TAG = "SettingFragmentActivity";
     EditText editTextUsername,editText_PhoneNumber;
     Person person;
@@ -296,9 +298,9 @@ public class SettingsSettingsFragment extends Fragment {
             if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
                 // user rejected the permission
                 boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.SEND_SMS);
-                if (showRationale) {
+                if (!showRationale) {
                     // user also CHECKED "never ask again" - show dialog
-                    new android.support.v7.app.AlertDialog.Builder(getActivity())
+                    new AlertDialog.Builder(getActivity())
                             .setTitle(R.string.accessWith_NeverAskAgain_deny)
                             .setMessage(R.string.sendSMS_accessDenied_withCheckbox)
                             .setPositiveButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
