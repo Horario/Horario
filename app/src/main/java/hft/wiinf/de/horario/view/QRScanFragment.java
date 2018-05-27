@@ -22,24 +22,22 @@ import android.view.ViewGroup;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-
 import java.util.Objects;
 import java.util.logging.Logger;
 
 import hft.wiinf.de.horario.CaptureActivityPortrait;
 import hft.wiinf.de.horario.R;
-import hft.wiinf.de.horario.controller.*;
+import hft.wiinf.de.horario.controller.NoScanResultExceptionController;
+import hft.wiinf.de.horario.controller.ScanResultReceiverController;
 
 
 public class QRScanFragment extends Fragment implements ActivityCompat.OnRequestPermissionsResultCallback {
     private static final String TAG = "QRScanFragmentActivity";
     private static final int PERMISSION_REQUEST_CAMERA = 1;
-
+    private final String noResultErrorMsg = "No scan data received!";
     //Counter for the Loop of PermissionChecks
     private int counter = 0;
     private String codeFormat, codeContent;
-    private final String noResultErrorMsg = "No scan data received!";
-
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
