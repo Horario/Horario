@@ -136,6 +136,8 @@ public class Event extends Model {
     public void setCreatorEventId(long creatorEventId) {
         this.creatorEventId = creatorEventId;
     }
+
+
 }
 
 

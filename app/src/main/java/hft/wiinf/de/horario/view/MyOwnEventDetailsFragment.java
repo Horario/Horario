@@ -37,9 +37,9 @@ public class MyOwnEventDetailsFragment extends Fragment {
 
     // Get the EventIdResultBundle (Long) from the newEventActivity to Start later a DB Request
     @SuppressLint("LongLogTag")
-    public Long getCreatorEventID() {
+    public Long getEventID() {
         Bundle MYEventIdBundle = getArguments();
-        Long MYEventIdLongResult = MYEventIdBundle.getLong("creatorEventId");
+        Long MYEventIdLongResult = MYEventIdBundle.getLong("EventId");
         return MYEventIdLongResult;
     }
 
@@ -54,8 +54,8 @@ public class MyOwnEventDetailsFragment extends Fragment {
         myOwnEventeventDescription = view.findViewById(R.id.myOwnEventeventDescription);
         myOwnEventYourAppointment = view.findViewById(R.id.myOwnEventyourAppointmentText);
         myOwnEventDetails_constraintLayout = view.findViewById(R.id.myOwnEventDetails_constraintLayout);
-        setSelectedEvent(EventController.getEventByCreatorEventId(getCreatorEventID()));
-        buildDescriptionEvent(EventController.getEventByCreatorEventId(getCreatorEventID()));
+        setSelectedEvent(EventController.getEventById(getEventID()));
+        buildDescriptionEvent(EventController.getEventById(getEventID()));
 
 
 
@@ -65,7 +65,7 @@ public class MyOwnEventDetailsFragment extends Fragment {
 
                 ParticipantsListFragment participantsFragment = new ParticipantsListFragment();
                 Bundle bundleparticipants = new Bundle();
-                bundleparticipants.putLong("creatorEventId", getCreatorEventID());
+                bundleparticipants.putLong("EventId", getEventID());
                 participantsFragment.setArguments(bundleparticipants);
                 FragmentTransaction fr1 = getFragmentManager().beginTransaction();
                 fr1.replace(R.id.myOwnEvent_relativeLayout_helper,participantsFragment);

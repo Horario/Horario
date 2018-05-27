@@ -17,42 +17,27 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
-
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
 
 import hft.wiinf.de.horario.R;
-import hft.wiinf.de.horario.TabActivity;
 import hft.wiinf.de.horario.controller.EventController;
 import hft.wiinf.de.horario.controller.LazyAdapter;
 import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.model.ReceivedHorarioSMS;
-
-import static android.content.Context.MODE_PRIVATE;
 
 
 public class ParticipantsListFragment extends Fragment {
@@ -63,6 +48,7 @@ public class ParticipantsListFragment extends Fragment {
     TextView textViewEventData;
     int refusalCounter = 0;
     Event selectedEvent;
+
     public ParticipantsListFragment() {
         // Required empty public constructor
     }
@@ -70,21 +56,22 @@ public class ParticipantsListFragment extends Fragment {
 
     // Get the EventIdResultBundle (Long) from the newEventActivity to Start later a DB Request
     @SuppressLint("LongLogTag")
-    public Long getCreatorEventID() {
+    public Long getEventId() {
         Bundle MYEventIdBundle = getArguments();
-        Long MYEventIdLongResult = MYEventIdBundle.getLong("creatorEventId");
+        Long MYEventIdLongResult = MYEventIdBundle.getLong("EventId");
         return MYEventIdLongResult;
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_participants_list, container, false);
         textViewEventData = view.findViewById(R.id.textViewEventData);
-        setSelectedEvent(EventController.getEventByCreatorEventId(getCreatorEventID()));
+        setSelectedEvent(EventController.getEventById(getEventId()));
         ListView participantsListView = (ListView) view.findViewById(R.id.ParticipantsList);
         participants = new ArrayList<String>();
-        getParticipants(getCreatorEventID());
+        getParticipants(getEventId());
         // Set The Adapter
         adapter = new LazyAdapter(this.getActivity(), participants);
         participantsListView.setAdapter(adapter);
@@ -105,38 +92,19 @@ public class ParticipantsListFragment extends Fragment {
         return view;
     }
 
-    private void getParticipants(long creatorEventId) {
-        //TODO: replace method body with functional code
+    private void getParticipants(long eventId) {
 
-        participants.add("Y:Lucas Toulon");
-        participants.add("Y:Florian Rietz");
-        participants.add("N:Daniel Zeller");
-        participants.add("N:Dennis Rößner");
-        participants.add("Y:Tanja Fraenz");
-        participants.add("N:Christine Weissenberger");
-        participants.add("Y:Melanie Strauss");
-        participants.add("N:Frank Garbe");
-        participants.add("Y:Henri Unruh");
-        participants.add("Y:Benedikt Burger");
-        participants.add("N:Mario Hermann");
-        participants.add("N:Mariam Baramidze");
-        participants.add("Y:Benedikt Burger");
-        participants.add("N:Mario Hermann");
-        participants.add("N:Mariam Baramidze");
-
-        //following block is the official code, doesnt work yet because of the missing events
-
-
-//        List<Person> allAcceptances = PersonController.getEventAcceptedPersons(EventController.getEventByCreatorEventId(creatorEventId));
-//        for (Person personAccepted : allAcceptances) {
-//            String nameToSave = "Y:" + personAccepted.getName();
-//            participants.add(nameToSave);
-//        }
-//        List<Person> allCancellations = PersonController.getEventCancelledPersons(EventController.getEventByCreatorEventId(creatorEventId));
-//        for (Person personCancelled : allCancellations) {
-//            String nameToSave = "N:" + personCancelled.getName();
-//            participants.add(nameToSave);
-//        }
+        participants.clear();
+        List<Person> allAcceptances = PersonController.getEventAcceptedPersons(EventController.getEventById(eventId));
+        for (Person personAccepted : allAcceptances) {
+            String nameToSave = "Y:" + personAccepted.getName();
+            participants.add(nameToSave);
+        }
+        List<Person> allCancellations = PersonController.getEventCancelledPersons(EventController.getEventById(eventId));
+        for (Person personCancelled : allCancellations) {
+            String nameToSave = "N:" + personCancelled.getName();
+            participants.add(nameToSave);
+        }
     }
 
 
@@ -148,7 +116,7 @@ public class ParticipantsListFragment extends Fragment {
             unreadSMS = getUnreadHorarioSMS(getContext());
             if (unreadSMS.size() > 0) {
                 parseHorarioSMSAndUpdate(unreadSMS);
-                getParticipants(getCreatorEventID());
+                getParticipants(getEventId());
                 adapter.notifyDataSetChanged();
             }
         } else {
@@ -161,7 +129,7 @@ public class ParticipantsListFragment extends Fragment {
                     refusalCounter++;
                     requestPermissions();
                     break;
-               default:
+                default:
                     Snackbar snackbar = Snackbar
                             .make(getView(), R.string.begForAcceptanceReadSMSAndContacts, Snackbar.LENGTH_INDEFINITE)
                             .setAction(R.string.okayIWillAccept, new View.OnClickListener() {
@@ -190,29 +158,26 @@ public class ParticipantsListFragment extends Fragment {
                 person.setName(savedContactExisting);
 
             }
-            //TODO: uncomment as soon as Event DB is filled is available
-
-            //USE THIS   selectedEvent
-//            /*Check if acceptance or cancellation*/
-//            if (singleUnreadSMS.isAcceptance()) {
-//                person.setAcceptedEvent(EventController.getEventByCreatorEventId(Long.valueOf(singleUnreadSMS.getCreatorEventId())));
-//                PersonController.savePerson(person);
-//            } else {
-//                //cancellation: look for possible preceding acceptance. If yes, then delete person and create new. Else just save the person
-//                List<Person> allAcceptances = PersonController.getEventAcceptedPersons(EventController.getEventByCreatorEventId(Long.valueOf(singleUnreadSMS.getCreatorEventId())));
-//                for (Person personAccepted : allAcceptances) {
-//                    personAccepted.setPhoneNumber(shortifyPhoneNumber(personAccepted.getPhoneNumber()));
-//                    person.setPhoneNumber(shortifyPhoneNumber(person.getPhoneNumber()));
-//                    if (personAccepted.getPhoneNumber().equals(person.getPhoneNumber())) {
-//                        PersonController.deletePerson(personAccepted);
-//                        person.setCanceledEvent(EventController.getEventByCreatorEventId(Long.valueOf(singleUnreadSMS.getCreatorEventId())));
-//                        PersonController.savePerson(person);
-//                    } else {
-//                        person.setCanceledEvent(EventController.getEventByCreatorEventId(Long.valueOf(singleUnreadSMS.getCreatorEventId())));
-//                        PersonController.savePerson(person);
-//                    }
-//                }
-//            }
+            /*Check if acceptance or cancellation*/
+            if (singleUnreadSMS.isAcceptance()) {
+                person.setAcceptedEvent(EventController.getEventById(Long.valueOf(singleUnreadSMS.getCreatorEventId())));
+                PersonController.savePerson(person);
+            } else {
+                //cancellation: look for possible preceding acceptance. If yes, then delete person and create new. Else just save the person
+                List<Person> allAcceptances = PersonController.getEventAcceptedPersons(EventController.getEventById(Long.valueOf(singleUnreadSMS.getCreatorEventId())));
+                for (Person personAccepted : allAcceptances) {
+                    personAccepted.setPhoneNumber(shortifyPhoneNumber(personAccepted.getPhoneNumber()));
+                    person.setPhoneNumber(shortifyPhoneNumber(person.getPhoneNumber()));
+                    if (personAccepted.getPhoneNumber().equals(person.getPhoneNumber())) {
+                        PersonController.deletePerson(personAccepted);
+                        person.setCanceledEvent(EventController.getEventById(Long.valueOf(singleUnreadSMS.getCreatorEventId())));
+                        PersonController.savePerson(person);
+                    } else {
+                        person.setCanceledEvent(EventController.getEventById(Long.valueOf(singleUnreadSMS.getCreatorEventId())));
+                        PersonController.savePerson(person);
+                    }
+                }
+            }
         }
     }
 
@@ -386,7 +351,6 @@ public class ParticipantsListFragment extends Fragment {
     public void setSelectedEvent(Event selectedEvent) {
         this.selectedEvent = selectedEvent;
     }
-
 
 
 }

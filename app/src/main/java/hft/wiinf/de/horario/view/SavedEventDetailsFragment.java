@@ -29,9 +29,9 @@ public class SavedEventDetailsFragment extends Fragment {
 
     // Get the EventIdResultBundle (Long) from the newEventActivity to Start later a DB Request
     @SuppressLint("LongLogTag")
-    public Long getCreatorEventID() {
+    public Long getEventID() {
         Bundle MYEventIdBundle = getArguments();
-        Long MYEventIdLongResult = MYEventIdBundle.getLong("creatorEventId");
+        Long MYEventIdLongResult = MYEventIdBundle.getLong("EventId");
         return MYEventIdLongResult;
     }
     @Override
@@ -45,8 +45,8 @@ public class SavedEventDetailsFragment extends Fragment {
         savedEventDetailsOrganisatorText = view.findViewById(R.id.savedEventDetailsOrganisatorText);
         savedEventphNumberText = view.findViewById(R.id.savedEventphNumberText);
         savedEventeventDescription = view.findViewById(R.id.savedEventeventDescription);
-        setSelectedEvent(EventController.getEventByCreatorEventId(getCreatorEventID()));
-        buildDescriptionEvent(EventController.getEventByCreatorEventId(getCreatorEventID()));
+        setSelectedEvent(EventController.getEventById(getEventID()));
+        buildDescriptionEvent(EventController.getEventById(getEventID()));
 
         savedEventDetailsButtonRefuseAppointment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,7 +141,7 @@ public class SavedEventDetailsFragment extends Fragment {
         // CreatorID (not EventID!!), StartDate, EndDate, StartTime, EndTime, Repetition, ShortTitle
         // Place, Description and Name of EventCreator
         eventToStringBuffer = new StringBuffer();
-        eventToStringBuffer.append(selectedEvent.getCreatorEventId() + stringSplitSymbol);
+        eventToStringBuffer.append(selectedEvent.getId() + stringSplitSymbol);
         eventToStringBuffer.append(simpleDateFormat.format(selectedEvent.getStartTime()) + stringSplitSymbol);
         eventToStringBuffer.append(simpleDateFormat.format(selectedEvent.getEndDate()) + stringSplitSymbol);
         eventToStringBuffer.append(simpleTimeFormat.format(selectedEvent.getStartTime()) + stringSplitSymbol);

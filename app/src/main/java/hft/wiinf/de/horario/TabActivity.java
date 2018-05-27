@@ -335,6 +335,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     }
 
 
+
     // Add the Fragments to the VageViewer
     private void setupViewPager(ViewPager viewPager) {
         SectionsPageAdapterActivity adapter = mSectionsPageAdapter;

@@ -48,7 +48,6 @@ public class EventController {
         return resultSet.get(0);
     }
 
-
     //find the list of events that start in the given period (enddate is ecluded!)
     //find the list of events that start in the given period (enddate is not included!)
     public static List<Event> findEventsByTimePeriod(Date startDate, Date endDate) {
