@@ -13,6 +13,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,7 @@ import com.google.zxing.integration.android.IntentResult;
 
 
 import java.util.Objects;
+import java.util.logging.Logger;
 
 import hft.wiinf.de.horario.CaptureActivityPortrait;
 import hft.wiinf.de.horario.R;
@@ -108,6 +111,16 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
                         // permission and directing to the app setting
 
                         new AlertDialog.Builder(getActivity())
+                                .setOnKeyListener(new DialogInterface.OnKeyListener() {
+                                    @Override
+                                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                                        if(keyCode == KeyEvent.KEYCODE_BACK){
+                                            restartApp();
+                                            return true;
+                                        }
+                                        return false;
+                                    }
+                                })
                                 .setTitle(R.string.accessWith_NeverAskAgain_deny)
                                 .setMessage(R.string.requestPermission_accessDenied_withCheckbox)
                                 .setPositiveButton(R.string.toCalender, new DialogInterface.OnClickListener() {
@@ -121,6 +134,16 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
                         // user did NOT check "never ask again" this is a good place to explain the user
                         // why you need the permission and ask if he wants // to accept it (the rationale)
                         new AlertDialog.Builder(getActivity())
+                                .setOnKeyListener(new DialogInterface.OnKeyListener() {
+                                    @Override
+                                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                                        if(keyCode == KeyEvent.KEYCODE_BACK){
+                                            restartApp();
+                                            return true;
+                                        }
+                                        return false;
+                                    }
+                                })
                                 .setTitle(R.string.requestPermission_firstTryRequest)
                                 .setMessage(R.string.requestPermission_askForPermission)
                                 .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {
@@ -139,6 +162,16 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
                                 .create().show();
                     } else if (counter == 1) {
                         new AlertDialog.Builder(getActivity())
+                                .setOnKeyListener(new DialogInterface.OnKeyListener() {
+                                    @Override
+                                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                                        if(keyCode == KeyEvent.KEYCODE_BACK){
+                                            restartApp();
+                                            return true;
+                                        }
+                                        return false;
+                                    }
+                                })
                                 .setTitle(R.string.requestPermission_lastTryRequest)
                                 .setMessage(R.string.requestPermission_askForPermission)
                                 .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {

@@ -74,6 +74,11 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         }
     }
 
+    private void restartApp(){
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
+    }
     //After Scanning it was opened a Dialog where the user can choose what to do next
     @SuppressLint("ResourceType")
     private void openActionDialogAfterScanning(final String qrScannContentResult) {
@@ -108,9 +113,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
 
                             //Restart the TabActivity an Reload all Views
-                            Intent intent = getIntent();
-                            finish();
-                            startActivity(intent);
+                            restartApp();
                         }
                     });
 
@@ -122,9 +125,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
 
                     //Restart the TabActivity an Reload all Views
-                    Intent intent = getIntent();
-                    finish();
-                    startActivity(intent);
+                    restartApp();
                 }
             });
 
@@ -135,9 +136,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                     //ToDo Dennis hier kommt dein Code rein.
 
                     //Restart the TabActivity an Reload all Views
-                    Intent intent = getIntent();
-                    finish();
-                    startActivity(intent);
+                    restartApp();
                 }
             });
 
@@ -192,9 +191,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                     qrScanner_result_toCalender.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent intent = getIntent();
-                            finish();
-                            startActivity(intent);
+                            restartApp();
                         }
                     });
 
@@ -234,9 +231,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             qrScanner_result_toCalender.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = getIntent();
-                    finish();
-                    startActivity(intent);
+                    restartApp();
                 }
             });
 
@@ -253,9 +248,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             qrScanner_result_abort.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = getIntent();
-                    finish();
-                    startActivity(intent);
+                    restartApp();
                 }
             });
         }
