@@ -1,5 +1,6 @@
 package hft.wiinf.de.horario.view;
 
+import android.app.Application;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -33,7 +34,9 @@ import java.util.Locale;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
+import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.AcceptedState;
+import hft.wiinf.de.horario.model.Person;
 
 public class CalendarFragment extends Fragment {
     private static final String TAG = "CalendarFragmentActivity";
@@ -147,15 +150,41 @@ public class CalendarFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 QRScanFragment qrScanFragment = new QRScanFragment();
+                SettingsSettingsFragment settingsFragment = new SettingsSettingsFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("fragment", "Calendar");
                 qrScanFragment.setArguments(bundle);
 
-                FragmentTransaction fr = getFragmentManager().beginTransaction();
-                fr.replace(R.id.calendar_frameLayout, qrScanFragment, "QrScan");
-                fr.addToBackStack("QrScan");
-                fr.commit();
-                closeFABMenu();
+                Person person = new Person();
+                person = PersonController.getPersonWhoIam();
+                if(person != null){
+                    if(person.getPhoneNumber() == "") {
+                        FragmentTransaction fr = getFragmentManager().beginTransaction();
+                        //settings_relativeLayout_helper: in this Layout all other layouts will be uploaded
+                        fr.replace(R.id.calendar_frameLayout, new SettingsSettingsFragment(), "SettingsSettings");
+                        fr.addToBackStack("SettingsSettings");
+                        fr.commit();
+                        closeFABMenu();
+
+                        Toast toast = Toast.makeText(getActivity(), "Bitte einen Namen vergeben" , Toast.LENGTH_SHORT);
+                        toast.show();
+                    } else{
+                        FragmentTransaction fr = getFragmentManager().beginTransaction();
+                        fr.replace(R.id.calendar_frameLayout, qrScanFragment, "QrScan");
+                        fr.addToBackStack("QrScan");
+                        fr.commit();
+                        closeFABMenu();
+                    }
+                } else {
+                    FragmentTransaction fr = getFragmentManager().beginTransaction();
+                    //settings_relativeLayout_helper: in this Layout all other layouts will be uploaded
+                    fr.replace(R.id.calendar_frameLayout, new SettingsSettingsFragment(), "SettingsSettings");
+                    fr.addToBackStack("SettingsSettings");
+                    fr.commit();
+                    closeFABMenu();
+                    Toast toast = Toast.makeText(getActivity(), "Bitte einen Namen vergeben" , Toast.LENGTH_SHORT);
+                    toast.show();
+                }
             }
         });
 
