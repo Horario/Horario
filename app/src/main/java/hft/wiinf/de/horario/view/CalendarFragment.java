@@ -88,11 +88,12 @@ public class CalendarFragment extends Fragment {
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
                 if (eventList.get(position).getAccepted().equals(AcceptedState.ACCEPTED)) {
-                    textView.setBackgroundColor(Color.GREEN);
+                    textView.setTextColor(Color.DKGRAY);
+                    textView.setCompoundDrawablesWithIntrinsicBounds(0,0, R.drawable.ic_mydate,0);
                 } else if (eventList.get(position).getAccepted().equals(AcceptedState.WAITING)) {
-                    textView.setBackgroundColor(Color.RED);
+                    textView.setTextColor(Color.DKGRAY);
                 } else {
-                    textView.setBackgroundColor(Color.WHITE);
+                    textView.setTextColor(Color.DKGRAY);
                 }
                 return textView;
             }

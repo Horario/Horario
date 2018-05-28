@@ -4,6 +4,7 @@ package hft.wiinf.de.horario.view;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
@@ -90,13 +91,15 @@ public class EventOverviewFragment extends Fragment {
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
                 if (eventArray.get(position).getType() == 1) {
-                    textView.setBackgroundColor(Color.GREEN);
-                } else if (eventArray.get(position).getType() == 2) {
-                    textView.setBackgroundColor(Color.RED);
-                } else if (eventArray.get(position).getType() == 3) {
-                    textView.setBackgroundColor(Color.BLUE);
-                } else if (eventArray.get(position).getType() == 0) {
+                    textView.setTextColor(Color.DKGRAY);
                     textView.setBackgroundColor(Color.WHITE);
+                    textView.setCompoundDrawablesWithIntrinsicBounds(0,0, R.drawable.ic_mydate,0);
+                } else if (eventArray.get(position).getType() == 2) {
+                    textView.setTextColor(Color.DKGRAY);
+                } else if (eventArray.get(position).getType() == 3) {
+                    textView.setTextColor(Color.DKGRAY);
+                } else if (eventArray.get(position).getType() == 0) {
+                    textView.setTextColor(Color.DKGRAY);
                     textView.setFocusable(false);
                 }
                 textView.setText(eventArray.get(position).getDescription());
