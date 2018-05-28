@@ -51,7 +51,7 @@ import hft.wiinf.de.horario.service.NotificationReceiver;
 
 //TODO JAVA DOC
 public class NewEventFragment extends Fragment {
-    private static final int PERMISSION_REQUEST_SEND_SMS = 0;
+    private static final int PERMISSION_REQUEST_READ_PHONE_STATE = 0;
     // calendar objects to save the startTime / end Time / endOfRepetition, default: values - today
     Calendar startTime = Calendar.getInstance();
     Calendar endTime = Calendar.getInstance();
@@ -541,13 +541,13 @@ public class NewEventFragment extends Fragment {
     private void requestPhonePermission() {
         //For Fragment: requestPermissions(permissionsList,REQUEST_CODE);
         //For Activity: ActivityCompat.requestPermissions(this,permissionsList,REQUEST_CODE);
-        requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, PERMISSION_REQUEST_SEND_SMS);
+        requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, PERMISSION_REQUEST_READ_PHONE_STATE);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
 
-        if (requestCode == PERMISSION_REQUEST_SEND_SMS) {
+        if (requestCode == PERMISSION_REQUEST_READ_PHONE_STATE) {
             // for each permission check if the user granted/denied them you may want to group the
             // rationale in a single dialog,this is just an example
             for (int i = 0, len = permissions.length; i < len; i++) {

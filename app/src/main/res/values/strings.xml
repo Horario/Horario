@@ -62,7 +62,7 @@
         <item name="event_repetition_weekly">wöchentlich</item>
         <item name="event_repetition_daily">täglich</item>
     </string-array>
-    <string name="thanksphoneNumber">Danke für den Zugriff auf deine Telefonnummer</string>
+    <string name="thanksphoneNumber">Die Telefonnummer wurde gespeichert.</string>
     <string name="phoneNumber_explanation">Wir brauchen deine Telefonnummer, um Rückmeldungen versenden können. Wir verwenden deine Telefonnummer nicht für andere Zwecke. Alternativ kannst du deine Telefonnummer auch selbst eingeben.</string>
     <string name="lastTry_phoneNumber">Ohne deine Telefonnummer kannnst du keine Rückmeldungen versenden und empfangen.</string>
     <string name="oneMoreTime">Nochmal</string>

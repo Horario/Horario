@@ -151,6 +151,8 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
                 Matcher matcher_username = pattern_username.matcher(inputText);
                 if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches()) {
                     person.setName(inputText);
+                    PersonController.savePerson(person);
+                    Toast.makeText(getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT).show();
                     if (editText_PhoneNumber.getText().toString().isEmpty())
                         checkPhonePermission();
                     editTextUsername.setFocusableInTouchMode(false);
@@ -160,7 +162,6 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
                     //if the user name is not valid show a toast
                     Toast toast = Toast.makeText(view.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
                     toast.show();
-                    editTextUsername.setText(person.getName());
                     return true;
                 }
             }

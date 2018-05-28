@@ -48,7 +48,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
     //TODO Kommentieren und Java Doc Info Schreiben
     private static final String TAG = "TabActivity";
-    private static final int PERMISSION_REQUEST_SEND_SMS = 0;
+    private static final int PERMISSION_REQUEST_REQUEST_PHONE_STATE = 0;
     TabLayout tabLayout;
     Person person;
     private SectionsPageAdapterActivity mSectionsPageAdapter;
@@ -392,7 +392,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
                     alertDialogAskForUsername.dismiss();
                     PersonController.savePerson(person);
-                    Toast.makeText(getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT);
+                    Toast.makeText(getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT).show();
                     if (person.getPhoneNumber() == null || person.getPhoneNumber().isEmpty())
                         checkPhonePermission();
                     return false;
@@ -422,13 +422,13 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     private void requestPhonePermission() {
         //For Fragment: requestPermissions(permissionsList,REQUEST_CODE);
         //For Activity: ActivityCompat.requestPermissions(this,permissionsList,REQUEST_CODE);
-        requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, PERMISSION_REQUEST_SEND_SMS);
+        requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, PERMISSION_REQUEST_REQUEST_PHONE_STATE);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PERMISSION_REQUEST_SEND_SMS) {
+        if (requestCode == PERMISSION_REQUEST_REQUEST_PHONE_STATE) {
             // for each permission check if the user granted/denied them you may want to group the
             // rationale in a single dialog,this is just an example
             for (int i = 0, len = permissions.length; i < len; i++) {
@@ -515,7 +515,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         person.setPhoneNumber(phoneNumber);
         //if the number could not been read, open a dialog
         if (person.getPhoneNumber() == null || !person.getPhoneNumber().matches("(00|0|\\+)[1-9][0-9]+"))
-            Toast.makeText(getContext(), R.string.PhoneNumberCouldNotBeenRead, Toast.LENGTH_SHORT);
+            Toast.makeText(getContext(), R.string.PhoneNumberCouldNotBeenRead, Toast.LENGTH_SHORT).show();
         else {
             PersonController.addPersonMe(person);
             Toast.makeText(getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT).show();
@@ -542,7 +542,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         alertDialog.dismiss();
                         person.setPhoneNumber(input);
                         PersonController.addPersonMe(person);
-                        Toast.makeText(v.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(v.getContext(), R.string.thanksphoneNumber, Toast.LENGTH_SHORT).show();
                         return false;
                     } else {
                         Toast toast = Toast.makeText(v.getContext(), R.string.wrongNumberFormat, Toast.LENGTH_SHORT);
