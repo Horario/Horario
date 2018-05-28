@@ -204,7 +204,7 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
     // Restart the App
     private void restartApp(){
         Bundle whichFragment = getArguments();
-        getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        
         if (whichFragment.getString("fragment").equals("EventOverview")) {
             getActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.eventOverview_frameLayout, new EventOverviewFragment(), "")
