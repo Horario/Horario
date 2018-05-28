@@ -290,7 +290,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     public void scanResultData(String codeFormat, String codeContent) {
         openActionDialogAfterScanning(codeContent);
     }
-
     // Give some Errormessage if the Code have not Data inside
     @Override
     public void scanResultData(NoScanResultExceptionController noScanData) {
@@ -518,7 +517,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             Toast.makeText(getContext(), R.string.PhoneNumberCouldNotBeenRead, Toast.LENGTH_SHORT).show();
         else {
             PersonController.addPersonMe(person);
-            Toast.makeText(getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.thanksphoneNumber, Toast.LENGTH_SHORT).show();
         }
     }
 

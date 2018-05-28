@@ -320,7 +320,11 @@ public class NewEventFragment extends Fragment {
     //if the save button is clicked check the entrys and save the event if everything is ok
     public void onButtonClickSave() {
         if (checkValidity()) {
-            checkPhonePermission();
+            if (me.getPhoneNumber() == null || !me.getPhoneNumber().matches("(\\+|0|00)[1-9][0-9]+"))
+                checkPhonePermission();
+            else
+                saveEvent();
+
         }
     }
 
@@ -657,8 +661,8 @@ public class NewEventFragment extends Fragment {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 String input = v.getText().toString().replaceAll(" ", "");
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    //regex: perhaps + at beginning, then numbers
-                    if (input.matches("(0|\\+|00)[1-9][0-9]*")) {
+                    //regex: perhaps 0 + or 00 then 1-9 then numbers
+                    if (input.matches("(0|\\+|00)[1-9][0-9]+")) {
                         alertDialog.dismiss();
                         me.setPhoneNumber(input);
                         Toast.makeText(v.getContext(), R.string.thanksphoneNumber, Toast.LENGTH_SHORT).show();
