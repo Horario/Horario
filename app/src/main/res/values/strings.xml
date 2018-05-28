@@ -15,29 +15,32 @@
     <string name="feedback_zur_app_text">Feedback zur App</string>
     <string name="username_text">Benutzername :</string>
     <string name="username_hint">Benutzername</string>
-    <string name="allowpush_text">Push Nachrichten erlauben :</string>
+    <string name="allowpush_text">Erinnerungen erlauben :</string>
     <string name="reminder_text">Erinnerungen :</string>
     <string name="minutesBefore_text">Minuten vorher</string>
     <string name="noValidUsername">Benutzername darf nicht mit Leerzeichen anfangen.</string>
-    <string name="event_Description">Terminbeschreibung :</string>
+    <string name="event_Description">Beschreibung :</string>
+    <string name="noValidUsername_peek">Der Benutzername darf nicht das Zeichen | enthalten.</string>
     <string name="event_date">Datum:</string>
     <string name="event_startTime">Startzeit :</string>
     <string name="event_endtime">Endzeit :</string>
     <string name="event_serialEvent">Serientermin</string>
-    <string name="event_endOfRepetition">wiederholen bis :</string>
+    <string name="event_endOfRepetition">Wiederholen bis :</string>
     <string name="event_save">Termin speichern</string>
     <string name="event_room">Raum :</string>
     <string name="event_shortTitle">Kurztitel :</string>
-    <string name="empty_fields">Bitte füllen Sie alle Felder aus.</string>
+    <string name="empty_fields">Bitte fülle alle Felder aus.</string>
     <string name="endTime_before_startTime">Die Endzeit darf nicht vor der Startzeit liegen.</string>
     <string name="endOfRepetition_before_endTime">Das Enddatum der Wiederholung darf nicht vor der Endzeit liegen.</string>
-    <string name="event_saving_successful">Der Termin wurde erfolgreich gespeichert. Was möchten Sie nun tun?</string>
+    <string name="event_saving_successful">Der Termin wurde gespeichert. Was möchtest du nun tun?</string>
     <string name="savingSuccessful_new">neuen Termin erstellen</string>
     <string name="savingSuccessful_qrcode">QRCode anzeigen</string>
-    <string name="titleDialogUsername">Bitte vergeben Sie einen Benutzernamen :)</string>
+    <string name="titleDialogUsername">Bitte vergib einen Benutzernamen! </string>
     <string name="save_text">speichern</string>
     <string name="later_text">Später</string>
     <string name="thanksForUsername">Benutzername wurde gespeichert. </string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="description_too_long">Die Beschreibung darf nicht länger als 500 Zeichen sein.</string>
     <string name="shortTitle_too_long">Der Kurztitel darf nicht länger als 100 Zeichen sein.</string>
@@ -51,10 +54,11 @@
     <string name="room_peek">Das Feld Raum darf nicht das Zeichen | enthalten.</string>
     <string name="username_peek">Der Benutzername darf nicht das Symbol | enthalten.</string>
 
-    <string name="pushEnabled">Die Push-Nachrichten wurden eingeschaltet.</string>
-    <string name="pushDisabled">Die Push-Nachrichten wurden ausgeschaltet.</string>
-
-    <string name="pushMinutesSet" formatted="true">Die Push-Nachrichten erscheinen nun %1$d Minuten vor Ihrem Termin.</string>
+    <string name="pushEnabled">Die Erinnerungen wurden eingeschaltet.</string>
+    <string name="pushDisabled">Die Erinnerungen wurden ausgeschaltet.</string>
+    <string formatted="true" name="pushMinutesSet">Die Push-Nachrichten erscheinen nun %1$d Minuten vor Ihrem Termin.</string>
+    <string name="startTab">Start-Tab :</string>
+    <string name="startTabChanged" formatted="true">Beim nächsten Start zeigt Horario nun den Tab %1$s.</string>
 
     <string-array name="event_repetitions">
         <item name="event_repetition_yearly">jährlich</item>
@@ -78,6 +82,11 @@
         <item name="push_time_60">60</item>
         <item name="push_time_90">90</item>
         <item name="push_time_120">120</item>
+    </string-array>
+    <string-array name="start_tab">
+        <item name="overview">Terminübersicht</item>
+        <item name="calendar">Kalenderansicht</item>
+        <item name="settings">Einstellungen</item>
     </string-array>
 
 

@@ -49,7 +49,7 @@ import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.model.Repetition;
 import hft.wiinf.de.horario.service.NotificationReceiver;
 
-//TODO JAVA DOC
+//TODO Kommentieren und Java Doc Info Schreiben
 public class NewEventFragment extends Fragment {
     private static final int PERMISSION_REQUEST_READ_PHONE_STATE = 0;
     // calendar objects to save the startTime / end Time / endOfRepetition, default: values - today
@@ -214,6 +214,8 @@ public class NewEventFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 onButtonClickSave();
+                EventOverviewFragment.update();
+                CalendarFragment.updateCompactCalendar();
             }
         });
         //get the user, if it is saved in the db, the user name is read
@@ -513,9 +515,9 @@ public class NewEventFragment extends Fragment {
                 Calendar calendar = GregorianCalendar.getInstance();
                 calendar.setTime(date);
 
-                alarmIntent.putExtra("Event", event.getDescription());
+                alarmIntent.putExtra("Event", event.getShortTitle());
                 alarmIntent.putExtra("Hour", calendar.get(Calendar.HOUR_OF_DAY));
-                if (calendar.get(Calendar.MINUTE) <= 10) {
+                if (calendar.get(Calendar.MINUTE) < 10) {
                     alarmIntent.putExtra("Minute", "0" + String.valueOf(calendar.get(Calendar.MINUTE)));
                 } else {
                     alarmIntent.putExtra("Minute", String.valueOf(calendar.get(Calendar.MINUTE)));
