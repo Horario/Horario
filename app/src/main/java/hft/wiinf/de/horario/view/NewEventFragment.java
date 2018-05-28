@@ -1,9 +1,9 @@
 package hft.wiinf.de.horario.view;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlarmManager;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
@@ -13,9 +13,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -47,9 +48,6 @@ import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.model.Repetition;
 import hft.wiinf.de.horario.service.NotificationReceiver;
-
-import static android.Manifest.permission.READ_SMS;
-import static android.support.v4.content.PermissionChecker.checkSelfPermission;
 
 //TODO JAVA DOC
 public class NewEventFragment extends Fragment {
@@ -322,7 +320,7 @@ public class NewEventFragment extends Fragment {
     //if the save button is clicked check the entrys and save the event if everything is ok
     public void onButtonClickSave() {
         if (checkValidity()) {
-            concatenateAndSavePersonalData();
+            checkPhonePermission();
         }
     }
 
@@ -527,133 +525,160 @@ public class NewEventFragment extends Fragment {
         }
     }
 
-    // method to read the phone number of the user + save user name
-    public void concatenateAndSavePersonalData() {
-        me.setName(edittext_userName.getText().toString());
-        //if phone number is set read only the user name
-        if (me.getPhoneNumber() == null || me.getPhoneNumber().equalsIgnoreCase("")) {
-            if (checkSelfPermission(getActivity(), READ_SMS) != PackageManager.PERMISSION_GRANTED)
-                requestPermission();
-            else {
-                //if permission is granted read the phone number
-                TelephonyManager telephonyManager = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
-                String phoneNumber = telephonyManager.getLine1Number();
-                if (phoneNumber != null)
-                    phoneNumber.replaceAll(" ", "");
-                me.setPhoneNumber(phoneNumber);
-                //if the number could not been read, open a dialog
-                if (me.getPhoneNumber() == null || !me.getPhoneNumber().matches("\\+?[0-9]+"))
-                    openDialogAskForPhoneNumber();
-                else {
-                    saveEvent();
-                }
-            }
-
-        } else saveEvent();
+    private void checkPhonePermission() {
+        //Check if User has permission to start to scan, if not it's start a RequestLoop
+        if (!isPhonePermissionGranted()) {
+            requestPhonePermission();
+        } else {
+            readPhoneNumber();
+        }
     }
 
-    private void requestPermission() {
-        requestPermissions(new String[]{READ_SMS}, PERMISSION_REQUEST_SEND_SMS);
+    public boolean isPhonePermissionGranted() {
+        return ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED;
     }
 
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    private void requestPhonePermission() {
+        //For Fragment: requestPermissions(permissionsList,REQUEST_CODE);
+        //For Activity: ActivityCompat.requestPermissions(this,permissionsList,REQUEST_CODE);
+        requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, PERMISSION_REQUEST_SEND_SMS);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+
         if (requestCode == PERMISSION_REQUEST_SEND_SMS) {
-            //check if the user granted/denied them you may want to group the
-            if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
-                // user rejected the permission
-                boolean showRationale = ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.SEND_SMS);
-                if (!showRationale) {
-                    // user also CHECKED "never ask again" - show dialog
-                    new android.support.v7.app.AlertDialog.Builder(getActivity())
-                            .setTitle(R.string.accessWith_NeverAskAgain_deny)
-                            .setMessage(R.string.sendSMS_accessDenied_withCheckbox)
-                            .setPositiveButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    openDialogAskForPhoneNumber();
-                                }
-                            })
-                            .create().show();
-                } else if (counter < 1) {
-                    // user did NOT check "never ask again" this is a good place to explain the user
-                    // why you need the permission and ask if he wants // to accept it (the rationale)
-                    new android.support.v7.app.AlertDialog.Builder(getActivity())
-                            .setTitle(R.string.requestPermission_firstTryRequest)
-                            .setMessage(R.string.phoneNumber_explanation)
-                            .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    counter++;
-                                    concatenateAndSavePersonalData();
-                                }
-                            })
-                            .setNegativeButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    openDialogAskForPhoneNumber();
-                                }
-                            })
-                            .create().show();
-                } else if (counter == 1) {
-                    new android.support.v7.app.AlertDialog.Builder(getActivity())
-                            .setTitle(R.string.sendSMS_lastTry)
-                            .setMessage(R.string.phoneNumber_explanation)
-                            .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    counter++;
-                                    concatenateAndSavePersonalData();
-                                }
-                            })
-                            .setNegativeButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    openDialogAskForPhoneNumber();
-                                }
-                            })
-                            .create().show();
+            // for each permission check if the user granted/denied them you may want to group the
+            // rationale in a single dialog,this is just an example
+            for (int i = 0, len = permissions.length; i < len; i++) {
+
+                if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
+                    // user rejected the permission
+                    boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.READ_PHONE_STATE);
+                    if (!showRationale) {
+                        // user also CHECKED "never ask again" you can either enable some fall back,
+                        // disable features of your app or open another dialog explaining again the
+                        // permission and directing to the app setting
+
+                        new android.support.v7.app.AlertDialog.Builder(getActivity())
+                                .setTitle(R.string.accessWith_NeverAskAgain_deny)
+                                .setMessage(R.string.sendSMS_accessDenied_withCheckbox)
+                                .setPositiveButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        openDialogAskForPhoneNumber();
+                                    }
+                                })
+                                .create().show();
+                    } else if (counter < 1) {
+                        // user did NOT check "never ask again" this is a good place to explain the user
+                        // why you need the permission and ask if he wants // to accept it (the rationale)
+                        new android.support.v7.app.AlertDialog.Builder(getActivity())
+                                .setTitle(R.string.requestPermission_firstTryRequest)
+                                .setMessage(R.string.phoneNumber_explanation)
+                                .setPositiveButton(R.string.oneMoreTime, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        counter++;
+                                        checkPhonePermission();
+                                    }
+                                })
+                                .setNegativeButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        openDialogAskForPhoneNumber();
+                                    }
+                                })
+                                .create().show();
+                    } else if (counter == 1) {
+                        new android.support.v7.app.AlertDialog.Builder(getActivity())
+                                .setTitle(R.string.sendSMS_lastTry)
+                                .setMessage(R.string.lastTry_phoneNumber_event)
+                                .setPositiveButton(R.string.oneMoreTime, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        counter++;
+                                        checkPhonePermission();
+                                    }
+                                })
+                                .setNegativeButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        openDialogAskForPhoneNumber();
+                                    }
+                                })
+                                .create().show();
+                    } else {
+                        openDialogAskForPhoneNumber();
+                    }
                 } else {
-                    openDialogAskForPhoneNumber();
+                    readPhoneNumber();
                 }
-            } else {
-                concatenateAndSavePersonalData();
             }
-            }
+
+        }
+
 
     }
 
-    //open a dialog to ask for the phone number
+    // }
+
+
+    // method to read the phone number of the user
+    public void readPhoneNumber() {
+        //if permission is granted read the phone number
+        TelephonyManager telephonyManager = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
+        @SuppressLint("MissingPermission") String phoneNumber = telephonyManager.getLine1Number();
+        if (phoneNumber != null)
+            phoneNumber.replaceAll(" ", "");
+        me.setPhoneNumber(phoneNumber);
+        //if the number could not been read, open a dialog
+        if (me.getPhoneNumber() == null || !me.getPhoneNumber().matches("(00|0|\\+)[1-9][0-9]+"))
+            Toast.makeText(getContext(), R.string.PhoneNumberCouldNotBeenRead, Toast.LENGTH_SHORT);
+        else {
+            Toast.makeText(getContext(), R.string.thanksphoneNumber, Toast.LENGTH_SHORT).show();
+            saveEvent();
+
+        }
+    }
+
+
     public void openDialogAskForPhoneNumber() {
-        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+        final android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder(getActivity());
         dialogBuilder.setView(R.layout.dialog_askingfortelephonenumber);
         dialogBuilder.setCancelable(true);
-        final AlertDialog alertDialog = dialogBuilder.show();
+        final android.app.AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
         EditText phoneNumber = alertDialog.findViewById(R.id.dialog_EditText_telephonNumber);
-        //on enter: check and save the number
+        if (me.getPhoneNumber() != null)
+            phoneNumber.setText(me.getPhoneNumber());
         phoneNumber.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 String input = v.getText().toString().replaceAll(" ", "");
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    if (input.matches("(\\+|0|00)[1-9][0-9]+")) {
+                    //regex: perhaps + at beginning, then numbers
+                    if (input.matches("(0|\\+|00)[1-9][0-9]*")) {
                         alertDialog.dismiss();
                         me.setPhoneNumber(input);
+                        Toast.makeText(v.getContext(), R.string.thanksphoneNumber, Toast.LENGTH_SHORT).show();
                         saveEvent();
                         return false;
-                        //number does not begin with + or 0 or 00 show a toast
                     } else {
-                        Toast.makeText(getContext(), R.string.wrongNumberFormat, Toast.LENGTH_SHORT).show();
+                        Toast toast = Toast.makeText(v.getContext(), R.string.wrongNumberFormat, Toast.LENGTH_SHORT);
+                        toast.show();
                         return true;
                     }
                 }
                 return false;
             }
         });
-        //dont save the event if the dialog is cancellled
+        //if the dialog is canceled save only the person (user name)
         alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
-                Toast.makeText(getContext(), R.string.EventNotSaved, Toast.LENGTH_SHORT).show();
+                Toast toast = Toast.makeText(getContext(), R.string.event_save_notSuccessful, Toast.LENGTH_SHORT);
+                toast.show();
             }
         });
 

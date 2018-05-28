@@ -4,16 +4,17 @@ package hft.wiinf.de.horario.view;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
-import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -44,15 +45,12 @@ import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.service.NotificationReceiver;
 
-import static android.Manifest.permission.READ_SMS;
-import static android.support.v4.content.PermissionChecker.checkSelfPermission;
-
 /**
  * A simple {@link Fragment} subclass.
  */
 public class SettingsSettingsFragment extends Fragment implements ActivityCompat.OnRequestPermissionsResultCallback {
     private static final String TAG = "SettingFragmentActivity";
-    EditText editTextUsername,editText_PhoneNumber;
+    EditText editTextUsername, editText_PhoneNumber;
     Person person;
     Spinner spinner_pushMinutes;
     Switch switch_enablePush;
@@ -153,7 +151,8 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
                 Matcher matcher_username = pattern_username.matcher(inputText);
                 if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches()) {
                     person.setName(inputText);
-                    concatenateAndSavePersonData();
+                    if (editText_PhoneNumber.getText().toString().isEmpty())
+                        checkPhonePermission();
                     editTextUsername.setFocusableInTouchMode(false);
                     editTextUsername.setFocusable(false);
                     return false;
@@ -177,8 +176,8 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
                     person.setPhoneNumber(editText_PhoneNumber.getText().toString().replaceAll(" ", ""));
                     editText_PhoneNumber.setText(person.getPhoneNumber());
                     PersonController.savePerson(person);
-                      editText_PhoneNumber.setFocusable(false);
-                      editText_PhoneNumber.setFocusableInTouchMode(false);
+                    editText_PhoneNumber.setFocusable(false);
+                    editText_PhoneNumber.setFocusableInTouchMode(false);
                     Toast.makeText(getContext(), R.string.phoneNumberSaved, Toast.LENGTH_SHORT).show();
                 } else {
                     //show a toast if the number doe not atart with 0 or +
@@ -220,6 +219,7 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
         });
 
     }
+
     //if the switch is not selected dont show the minutes textview and textedit
     private void pushNotificationVisibility() {
         if (person.isEnablePush()) {
@@ -257,16 +257,111 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
 
     }
 
-    // method to read the phone number of the user
-    public void concatenateAndSavePersonData() {
 
-        if (person.getPhoneNumber() == null || person.getPhoneNumber().equalsIgnoreCase("")) {
-            if (checkSelfPermission(getActivity(), READ_SMS) != PackageManager.PERMISSION_GRANTED)
-                requestPermission();
-            else {
-                //if permission is granted read the phone number
-                TelephonyManager telephonyManager = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
-                String phoneNumber = telephonyManager.getLine1Number();
+    private void checkPhonePermission() {
+        //Check if User has permission to start to scan, if not it's start a RequestLoop
+        if (!isPhonePermissionGranted()) {
+            requestPhonePermission();
+        } else {
+            readPhoneNumber();
+        }
+    }
+
+    public boolean isPhonePermissionGranted() {
+        return ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestPhonePermission() {
+        //For Fragment: requestPermissions(permissionsList,REQUEST_CODE);
+        //For Activity: ActivityCompat.requestPermissions(this,permissionsList,REQUEST_CODE);
+        requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, PERMISSION_REQUEST_SEND_SMS);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+
+        if (requestCode == PERMISSION_REQUEST_SEND_SMS) {
+            // for each permission check if the user granted/denied them you may want to group the
+            // rationale in a single dialog,this is just an example
+            for (int i = 0, len = permissions.length; i < len; i++) {
+
+                if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
+                    // user rejected the permission
+                    boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.READ_PHONE_STATE);
+                    if (!showRationale) {
+                        // user also CHECKED "never ask again" you can either enable some fall back,
+                        // disable features of your app or open another dialog explaining again the
+                        // permission and directing to the app setting
+
+                        new android.support.v7.app.AlertDialog.Builder(getActivity())
+                                .setTitle(R.string.accessWith_NeverAskAgain_deny)
+                                .setMessage(R.string.sendSMS_accessDenied_withCheckbox)
+                                .setPositiveButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        editText_PhoneNumber.requestFocusFromTouch();
+                                    }
+                                })
+                                .create().show();
+                    } else if (counter < 1) {
+                        // user did NOT check "never ask again" this is a good place to explain the user
+                        // why you need the permission and ask if he wants // to accept it (the rationale)
+                        new android.support.v7.app.AlertDialog.Builder(getActivity())
+                                .setTitle(R.string.requestPermission_firstTryRequest)
+                                .setMessage(R.string.phoneNumber_explanation)
+                                .setPositiveButton(R.string.oneMoreTime, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        counter++;
+                                        checkPhonePermission();
+                                    }
+                                })
+                                .setNegativeButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        editText_PhoneNumber.requestFocusFromTouch();
+                                    }
+                                })
+                                .create().show();
+                    } else if (counter == 1) {
+                        new android.support.v7.app.AlertDialog.Builder(getActivity())
+                                .setTitle(R.string.sendSMS_lastTry)
+                                .setMessage(R.string.phoneNumber_explanation)
+                                .setPositiveButton(R.string.oneMoreTime, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        counter++;
+                                        checkPhonePermission();
+                                    }
+                                })
+                                .setNegativeButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        editText_PhoneNumber.requestFocusFromTouch();
+                                    }
+                                })
+                                .create().show();
+                    } else {
+                        editText_PhoneNumber.requestFocusFromTouch();
+                    }
+                } else {
+                    readPhoneNumber();
+                }
+            }
+
+        }
+
+
+    }
+
+    // }
+
+
+    // method to read the phone number of the user
+    public void readPhoneNumber() {
+        //if permission is granted read the phone number
+        TelephonyManager telephonyManager = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
+        @SuppressLint("MissingPermission") String phoneNumber = telephonyManager.getLine1Number();
                 if (phoneNumber != null)
                     phoneNumber.replaceAll(" ", "");
                 person.setPhoneNumber(phoneNumber);
@@ -278,86 +373,75 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
                     Toast.makeText(getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT).show();
                 }
             }
-        } else {
-            PersonController.addPersonMe(person);
-            Toast.makeText(getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT).show();
 
-        }
-    }
-
-    //request permission send sms
-    private void requestPermission() {
-        requestPermissions(new String[]{Manifest.permission.READ_SMS}, PERMISSION_REQUEST_SEND_SMS);
-    }
-
-    //react on accept or deny of permission
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == PERMISSION_REQUEST_SEND_SMS) {
-            //check if the user granted/denied them you may want to group the
-            if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
-                // user rejected the permission
-                boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.SEND_SMS);
-                if (!showRationale) {
-                    // user also CHECKED "never ask again" - show dialog
-                    new AlertDialog.Builder(getActivity())
-                            .setTitle(R.string.accessWith_NeverAskAgain_deny)
-                            .setMessage(R.string.sendSMS_accessDenied_withCheckbox)
-                            .setPositiveButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    editText_PhoneNumber.requestFocusFromTouch();
-                                }
-                            })
-                            .create().show();
-                } else if (counter < 1) {
-                    // user did NOT check "never ask again" this is a good place to explain the user
-                    // why you need the permission and ask if he wants // to accept it (the rationale)
-                    new android.support.v7.app.AlertDialog.Builder(getActivity())
-                            .setTitle(R.string.requestPermission_firstTryRequest)
-                            .setMessage(R.string.phoneNumber_explanation)
-                            .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    counter++;
-                                    concatenateAndSavePersonData();
-                                }
-                            })
-                            .setNegativeButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    editText_PhoneNumber.requestFocusFromTouch();
-                                }
-                            })
-                            .create().show();
-                } else if (counter == 1) {
-                    new android.support.v7.app.AlertDialog.Builder(getActivity())
-                            .setTitle(R.string.sendSMS_lastTry)
-                            .setMessage(R.string.phoneNumber_explanation)
-                            .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    counter++;
-                                    concatenateAndSavePersonData();
-                                }
-                            })
-                            .setNegativeButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    editText_PhoneNumber.requestFocusFromTouch();
-                                }
-                            })
-                            .create().show();
+    /*    //react on accept or deny of permission
+        @Override
+        public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+            if (requestCode == PERMISSION_REQUEST_SEND_SMS) {
+                //check if the user granted/denied them you may want to group the
+                if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                    // user rejected the permission
+                    boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.SEND_SMS);
+                    if (!showRationale) {
+                        // user also CHECKED "never ask again" - show dialog
+                        new AlertDialog.Builder(getActivity())
+                                .setTitle(R.string.accessWith_NeverAskAgain_deny)
+                                .setMessage(R.string.sendSMS_accessDenied_withCheckbox)
+                                .setPositiveButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        editText_PhoneNumber.requestFocusFromTouch();
+                                    }
+                                })
+                                .create().show();
+                    } else if (counter < 1) {
+                        // user did NOT check "never ask again" this is a good place to explain the user
+                        // why you need the permission and ask if he wants // to accept it (the rationale)
+                        new android.support.v7.app.AlertDialog.Builder(getActivity())
+                                .setTitle(R.string.requestPermission_firstTryRequest)
+                                .setMessage(R.string.phoneNumber_explanation)
+                                .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        counter++;
+                                        concatenateAndSavePersonData();
+                                    }
+                                })
+                                .setNegativeButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        editText_PhoneNumber.requestFocusFromTouch();
+                                    }
+                                })
+                                .create().show();
+                    } else if (counter == 1) {
+                        new android.support.v7.app.AlertDialog.Builder(getActivity())
+                                .setTitle(R.string.sendSMS_lastTry)
+                                .setMessage(R.string.phoneNumber_explanation)
+                                .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        counter++;
+                                        concatenateAndSavePersonData();
+                                    }
+                                })
+                                .setNegativeButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        editText_PhoneNumber.requestFocusFromTouch();
+                                    }
+                                })
+                                .create().show();
+                    } else {
+                        editText_PhoneNumber.requestFocusFromTouch();
+                    }
                 } else {
-                    editText_PhoneNumber.requestFocusFromTouch();
+                    concatenateAndSavePersonData();
                 }
-            } else {
-                concatenateAndSavePersonData();
+
             }
-
         }
-    }
-
+    */
     public void deleteAllAlarms() {
         //Get all events that are in the future to set the alarm
         List<Event> allEvents = EventController.findMyAcceptedEventsInTheFuture();

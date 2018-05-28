@@ -133,8 +133,9 @@
     <string name="accessWith_NeverAskAgain_deny">Zugriff Verweigert</string>
     <string name="requestPermission_accessDenied_withCheckbox">Du hast mit den Haken bei \"Nicht mehr fragen\"  dauerhaft den Zugiff zum Kalender verweigert. Um den QR Scanner zu nutzen aktiviere bitte den Kamerazugriff über deine Rechteverwaltung</string>
     <string name="requestPermission_firstTryRequest">Erster von zwei Versuchen</string>
-    <string name="sendSMS_accessDenied_withCheckbox">Du hast mit den Haken bei \"Nicht mehr fragen\"  dauerhaft den Zugiff auf deine Telefonnummer verweigert. Um Rückmeldungen zu nutzen, gibt bitte nun deine Telefonnummer selbst ein. Alternativ kannst du Horario schließen und über deine Rechteverwaltung Horario das Senden von SMS erlauben. Dann musst du die Termindetails neu eingeben.</string>
+    <string name="sendSMS_accessDenied_withCheckbox">Du hast mit den Haken bei \"Nicht mehr fragen\"  dauerhaft den Zugiff auf deine Telefonnummer verweigert. Um Rückmeldungen zu nutzen, gibt bitte nun deine Telefonnummer selbst ein. Alternativ kannst du Horario schließen und über deine Rechteverwaltung Horario das Senden von SMS erlauben. Dann gehen allerdings alle nicht gespeicherten Eingaben verloren.</string>
     <string name="sendSMS_manual">manuell eingeben</string>
     <string name="sendSMS_lastTry">Letzter Versuch! Bitte gestatte uns den Zugriff auf deine Telefonnummer.</string>
     <string name="requestPermission_userDontLike">TEST</string>
+    <string name="event_save_notSuccessful">Der Termin wurde nicht gespeichert.</string>
 </resources>
