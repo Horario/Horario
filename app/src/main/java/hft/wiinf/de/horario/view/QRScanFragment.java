@@ -11,6 +11,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -121,7 +123,7 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
                                 })
                                 .setTitle(R.string.accessWith_NeverAskAgain_deny)
                                 .setMessage(R.string.requestPermission_accessDenied_withCheckbox)
-                                .setPositiveButton(R.string.toCalender, new DialogInterface.OnClickListener() {
+                                .setPositiveButton(R.string.back, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                        restartApp();
@@ -151,7 +153,7 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
                                         showCameraPreview();
                                     }
                                 })
-                                .setNegativeButton(R.string.toCalender, new DialogInterface.OnClickListener() {
+                                .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         restartApp();
@@ -179,7 +181,7 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
                                         showCameraPreview();
                                     }
                                 })
-                                .setNegativeButton(R.string.toCalender, new DialogInterface.OnClickListener() {
+                                .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         restartApp();
@@ -195,23 +197,23 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
                 }
 
             }
-
-
         }
-
    // }
 
 
     // Restart the App
     private void restartApp(){
-        Intent intent = getActivity().getIntent();
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK
-                | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        getActivity().overridePendingTransition(0, 0);
-        getActivity().finish();
-
-        getActivity().overridePendingTransition(0, 0);
-        startActivity(intent);
+        Bundle whichFragment = getArguments();
+        getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        if (whichFragment.getString("fragment").equals("EventOverview")) {
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.eventOverview_frameLayout, new EventOverviewFragment(), "")
+                    .commit();
+        } else {
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.calendar_frameLayout, new CalendarFragment(), "")
+                    .commit();
+        }
     }
 
 

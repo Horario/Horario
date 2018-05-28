@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Horario</string>
+    <string name="back">Zurück</string>
     <string name="title_activity_tab">TabActivity</string>
     <string name="newEventTabText">Tab_1</string>
     <string name="calendarTabText">Tab_2</string>
