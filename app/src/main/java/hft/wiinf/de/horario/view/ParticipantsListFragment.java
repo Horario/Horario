@@ -93,7 +93,7 @@ public class ParticipantsListFragment extends Fragment {
     }
 
     private void getParticipants(long eventId) {
-
+/*Look into the DB and get all the participants of an event, then place them in an array with a prefix depending on the acceptance*/
         participants.clear();
         List<Person> allAcceptances = PersonController.getEventAcceptedPersons(EventController.getEventById(eventId));
         for (Person personAccepted : allAcceptances) {
@@ -110,6 +110,7 @@ public class ParticipantsListFragment extends Fragment {
 
     private void refreshConfirmationsAndCancellations() {
         if (checkPermissions()) {
+            /*Do the update*/
             Toast toast = Toast.makeText(getContext(), R.string.notificationParticipantsBeingFetched, Toast.LENGTH_SHORT);
             toast.show();
             List<ReceivedHorarioSMS> unreadSMS;
@@ -120,6 +121,7 @@ public class ParticipantsListFragment extends Fragment {
                 adapter.notifyDataSetChanged();
             }
         } else {
+            /*Make the user accept*/
             switch (refusalCounter) {
                 case 0:
                     refusalCounter++;
@@ -147,7 +149,6 @@ public class ParticipantsListFragment extends Fragment {
     }
 
     private void parseHorarioSMSAndUpdate(List<ReceivedHorarioSMS> unreadSMS) {
-
         for (ReceivedHorarioSMS singleUnreadSMS : unreadSMS) {
             Person person = new Person(singleUnreadSMS.getPhonenumber(), singleUnreadSMS.getName());
             String savedContactExisting = null;
@@ -183,6 +184,7 @@ public class ParticipantsListFragment extends Fragment {
 
 
     private String lookForSavedContact(String address, Context context) {
+        /*Get all the contacts, see if number is identical after "shortifying" it, if identical, replace the name*/
         ContentResolver cr = context.getContentResolver();
         Cursor c = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
         if ((c != null ? c.getCount() : 0) > 0) {
@@ -212,6 +214,7 @@ public class ParticipantsListFragment extends Fragment {
     }
 
     private String shortifyPhoneNumber(String number) {
+        /*Take out all the chars not being numbers and return the numbers after "1" (German mobile number!!!)*/
         number = number.replace("(", "");
         number = number.replace(")", "");
         number = number.replace("+", "");
@@ -222,6 +225,7 @@ public class ParticipantsListFragment extends Fragment {
     }
 
     private List<ReceivedHorarioSMS> getUnreadHorarioSMS(Context context) {
+        /*Get all the SMS, for each SMS, check if is in Inbox, check the date received (for knowing which ones are new), check if contains Horario prefix, then split the content*/
         ArrayList<ReceivedHorarioSMS> unreadHorarioSMS = new ArrayList<ReceivedHorarioSMS>();
         ContentResolver cr = context.getContentResolver();
         Cursor c = cr.query(Telephony.Sms.CONTENT_URI, null, null, null, null);
