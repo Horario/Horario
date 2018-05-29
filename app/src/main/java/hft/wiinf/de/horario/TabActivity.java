@@ -87,6 +87,11 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         }
     }
 
+    private void restartApp(){
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
+    }
     //After Scanning it was opened a Dialog where the user can choose what to do next
     @SuppressLint("ResourceType")
     private void openActionDialogAfterScanning(final String qrScannContentResult) {
@@ -121,9 +126,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
 
                             //Restart the TabActivity an Reload all Views
-                            Intent intent = getIntent();
-                            finish();
-                            startActivity(intent);
+                            restartApp();
                         }
                     });
 
@@ -135,9 +138,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
 
                     //Restart the TabActivity an Reload all Views
-                    Intent intent = getIntent();
-                    finish();
-                    startActivity(intent);
+                    restartApp();
                 }
             });
 
@@ -148,9 +149,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                     //ToDo Dennis hier kommt dein Code rein.
 
                     //Restart the TabActivity an Reload all Views
-                    Intent intent = getIntent();
-                    finish();
-                    startActivity(intent);
+                    restartApp();
                 }
             });
 
@@ -205,9 +204,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                     qrScanner_result_toCalender.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent intent = getIntent();
-                            finish();
-                            startActivity(intent);
+                            restartApp();
                         }
                     });
 
@@ -247,9 +244,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             qrScanner_result_toCalender.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = getIntent();
-                    finish();
-                    startActivity(intent);
+                    restartApp();
                 }
             });
 
@@ -266,9 +261,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             qrScanner_result_abort.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = getIntent();
-                    finish();
-                    startActivity(intent);
+                    restartApp();
                 }
             });
         }
@@ -281,7 +274,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         openActionDialogAfterScanning(codeContent);
     }
 
-    // Give some Errormessage if the Code have not Data inside
+    // Give some error Message if the Code have not Data inside
     @Override
     public void scanResultData(NoScanResultExceptionController noScanData) {
         Toast toast = Toast.makeText(this, noScanData.getMessage(), Toast.LENGTH_SHORT);
@@ -298,6 +291,9 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             //Do something if Tab is selected. Parameters: selected Tab.--- Info: tab.getPosition() == x for check which Tab
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                if (tab.getPosition() == 1) {
+                    CalendarFragment.update(CalendarFragment.selectedMonth);
+                }
             }
 
             //Do something if Tab is unselected. Parameters: selected Tab.--- Info: tab.getPosition() == x for check which Tab
@@ -349,7 +345,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
 
 
-    // Add the Fragments to the VageViewer
+    // Add the Fragments to the PageViewer
     private void setupViewPager(ViewPager viewPager) {
         SectionsPageAdapterActivity adapter = mSectionsPageAdapter;
         adapter.addFragment(new EventOverviewActivity(), "");

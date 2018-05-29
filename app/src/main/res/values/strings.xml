@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Horario</string>
+    <string name="back">Zurück</string>
     <string name="title_activity_tab">TabActivity</string>
     <string name="newEventTabText">Tab_1</string>
     <string name="calendarTabText">Tab_2</string>
@@ -134,9 +135,12 @@
     <string name="requestPermission_thankYou">Danke für die Zugriffsrechte auf die Kamera!</string>
     <string name="requestPermission_askForPermission">Wir brauchen den Kamerazugriff um den QR-Code einzuscannen.</string>
     <string name="requestPermission_againButton">Nochmal</string>
-    <string name="requestPermission_lastTryRequest">Letzer Versuch! Bitte gestatte den Zugriff um Scannen zu können.</string>
-    <string name="requestPermission_userDontLike">Okay du magst nicht? Vielleicht ein anderes mal :)</string>
+    <string name="requestPermission_lastTryRequest">Letzer Versuch!</string>
     <string name="abort">ABBRUCH</string>
+    <string name="setting_copyright_privacyPolicy">Privacy Policy</string>
+    <string name="accessWith_NeverAskAgain_deny">Zugriff Verweigert</string>
+    <string name="requestPermission_accessDenied_withCheckbox">Du hast mit den Hacken bei \"Nicht mehr fragen\"  dauerhaft den Zugiff zum Kalender verweigert. Um den QR Scanner zu nutzen aktiviere bitte den Kamerazugriff über deine Rechteverwaltung</string>
+    <string name="requestPermission_firstTryRequest">Erster von zwei Versuchen</string>
 
 
 </resources>

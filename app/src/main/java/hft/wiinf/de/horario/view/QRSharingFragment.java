@@ -22,14 +22,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import hft.wiinf.de.horario.R;
@@ -56,10 +60,15 @@ public class QRSharingFragment extends Fragment {
 
     //Create the QR Code from StringBuffer Data and Show it as a Bitmap
     public void qrBitMapGenerator() {
+        //Create a CorrectionLevelHashMap for the QRCode
+        // Level of Correction: L = 7%, M = 15%, Q = 25%, H = 30% (max!)
+        Map<EncodeHintType, Object> correctionLevel = new HashMap<>();
+        correctionLevel.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
+
         //Change the StringBuffer to a String for Output in the ImageView
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
         try {
-            mBitmatrix = multiFormatWriter.encode(eventStringResultDescription(), BarcodeFormat.QR_CODE, 200, 200);
+            mBitmatrix = multiFormatWriter.encode(eventStringResultDescription(), BarcodeFormat.QR_CODE, 200, 200, correctionLevel);
             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
             mBitmapOfQRCode = barcodeEncoder.createBitmap(mBitmatrix);
             mQRSharing_imageView_qrCode.setImageBitmap(mBitmapOfQRCode);

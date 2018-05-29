@@ -22,7 +22,7 @@ android {
     }
     sourceSets {
         main {
-            manifest.srcFile 'src/main/AndroidManifest.xml';
+            manifest.srcFile 'src/main/AndroidManifest.xml'
 
         }
     }
@@ -31,10 +31,6 @@ android {
             includeAndroidResources = true
         }
     }
-}
-repositories {
-    mavenCentral()
-    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 }
 repositories {
     mavenCentral()
