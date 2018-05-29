@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.Objects;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
@@ -67,12 +68,22 @@ public class MyOwnEventDetailsFragment extends Fragment {
                 Bundle bundleparticipants = new Bundle();
                 bundleparticipants.putLong("EventId", getEventID());
                 participantsFragment.setArguments(bundleparticipants);
-                FragmentTransaction fr1 = getFragmentManager().beginTransaction();
-                fr1.replace(R.id.myOwnEvent_relativeLayout_helper,participantsFragment);
-                fr1.addToBackStack(null);
-                fr1.commit();
-                rLayout_myOwnEvent_helper.setVisibility(View.VISIBLE);
-                myOwnEventDetails_constraintLayout.setVisibility(View.GONE);
+
+                Bundle whichFragment = getArguments();
+
+                if (whichFragment.get("fragment").equals("EventOverview")) {
+                    FragmentTransaction fragmentTransaction = Objects.requireNonNull(getFragmentManager()).beginTransaction();
+                    fragmentTransaction.replace(R.id.eventOverview_frameLayout, participantsFragment, "MyOwnEventDetails");
+                    fragmentTransaction.addToBackStack("MyOwnEventDetails");
+                    fragmentTransaction.commit();
+                } else {
+                    FragmentTransaction fragmentTransaction = Objects.requireNonNull(getFragmentManager()).beginTransaction();
+                    fragmentTransaction.replace(R.id.calendar_frameLayout, participantsFragment, "MyOwnEventDetails");
+                    fragmentTransaction.addToBackStack("MyOwnEventDetails");
+                    fragmentTransaction.commit();
+                }
+//                rLayout_myOwnEvent_helper.setVisibility(View.VISIBLE);
+//                myOwnEventDetails_constraintLayout.setVisibility(View.GONE);
             }
         });
         myOwnEventDetailsButtonShowQR.setOnClickListener(new View.OnClickListener() {

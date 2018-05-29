@@ -118,37 +118,34 @@ public class CalendarFragment extends Fragment {
                         AcceptedEventDetailsFragment acceptedEventDetailsFragment = new AcceptedEventDetailsFragment();
                         Bundle bundleAcceptedEventId = new Bundle();
                         bundleAcceptedEventId.putLong("EventId", selectedItem.getId());
+                        bundleAcceptedEventId.putString("fragment", "Calendar");
                         acceptedEventDetailsFragment.setArguments(bundleAcceptedEventId);
                         FragmentTransaction fr1 = getFragmentManager().beginTransaction();
-                        fr1.replace(R.id.fragmentCalendar_relativeLayout_helper, acceptedEventDetailsFragment);
-                        fr1.addToBackStack(null);
+                        fr1.replace(R.id.calendar_frameLayout, acceptedEventDetailsFragment, "CalendarFragment");
+                        fr1.addToBackStack("CalendarFragment");
                         fr1.commit();
-                        fragmentCalendar_rLayout_helper.setVisibility(View.VISIBLE);
-                        cLayoutCalendar_helper.setVisibility(View.GONE);
                         break;
                     case 2:
                         SavedEventDetailsFragment savedEventDetailsFragment = new SavedEventDetailsFragment();
                         Bundle bundleSavedEventId = new Bundle();
                         bundleSavedEventId.putLong("EventId", selectedItem.getId());
+                        bundleSavedEventId.putString("fragment", "Calendar");
                         savedEventDetailsFragment.setArguments(bundleSavedEventId);
                         FragmentTransaction fr2 = getFragmentManager().beginTransaction();
-                        fr2.replace(R.id.fragmentCalendar_relativeLayout_helper, savedEventDetailsFragment);
-                        fr2.addToBackStack(null);
+                        fr2.replace(R.id.calendar_frameLayout, savedEventDetailsFragment,"CalendarFragment");
+                        fr2.addToBackStack("CalendarFragment");
                         fr2.commit();
-                        fragmentCalendar_rLayout_helper.setVisibility(View.VISIBLE);
-                        cLayoutCalendar_helper.setVisibility(View.GONE);
                         break;
                     case 3:
                         MyOwnEventDetailsFragment myOwnEventDetailsFragment = new MyOwnEventDetailsFragment();
                         Bundle bundleMyOwnEventId = new Bundle();
                         bundleMyOwnEventId.putLong("EventId", selectedItem.getId());
+                        bundleMyOwnEventId.putString("fragment", "Calendar");
                         myOwnEventDetailsFragment.setArguments(bundleMyOwnEventId);
                         FragmentTransaction fr3 = getFragmentManager().beginTransaction();
-                        fr3.replace(R.id.fragmentCalendar_relativeLayout_helper, myOwnEventDetailsFragment);
-                        fr3.addToBackStack(null);
+                        fr3.replace(R.id.calendar_frameLayout, myOwnEventDetailsFragment,"CalendarFragment");
+                        fr3.addToBackStack("CalendarFragment");
                         fr3.commit();
-                        fragmentCalendar_rLayout_helper.setVisibility(View.VISIBLE);
-                        cLayoutCalendar_helper.setVisibility(View.GONE);
                         break;
                     default:
                         break;

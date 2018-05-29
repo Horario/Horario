@@ -118,37 +118,34 @@ public class EventOverviewFragment extends Fragment {
                         AcceptedEventDetailsFragment acceptedEventDetailsFragment = new AcceptedEventDetailsFragment();
                         Bundle bundleAcceptedEventId = new Bundle();
                         bundleAcceptedEventId.putLong("EventId", selectedItem.getId());
+                        bundleAcceptedEventId.putString("fragment", "EventOverview");
                         acceptedEventDetailsFragment.setArguments(bundleAcceptedEventId);
                         FragmentTransaction fr1 = getFragmentManager().beginTransaction();
-                        fr1.replace(R.id.eventOverview_relativeLayout_helper, acceptedEventDetailsFragment);
-                        fr1.addToBackStack(null);
+                        fr1.replace(R.id.eventOverview_frameLayout, acceptedEventDetailsFragment, "EventOverview");
+                        fr1.addToBackStack("EventOverview");
                         fr1.commit();
-                        rLayout_EventOverview_helper.setVisibility(View.VISIBLE);
-                        layoutOverview.setVisibility(View.GONE);
                         break;
                     case 2:
                         SavedEventDetailsFragment savedEventDetailsFragment = new SavedEventDetailsFragment();
                         Bundle bundleSavedEventId = new Bundle();
                         bundleSavedEventId.putLong("EventId", selectedItem.getId());
+                        bundleSavedEventId.putString("fragment", "EventOverview");
                         savedEventDetailsFragment.setArguments(bundleSavedEventId);
                         FragmentTransaction fr2 = getFragmentManager().beginTransaction();
-                        fr2.replace(R.id.eventOverview_relativeLayout_helper, savedEventDetailsFragment);
-                        fr2.addToBackStack(null);
+                        fr2.replace(R.id.eventOverview_frameLayout, savedEventDetailsFragment, "EventOverview");
+                        fr2.addToBackStack("EventOverview");
                         fr2.commit();
-                        rLayout_EventOverview_helper.setVisibility(View.VISIBLE);
-                        layoutOverview.setVisibility(View.GONE);
                         break;
                     case 3:
                         MyOwnEventDetailsFragment myOwnEventDetailsFragment = new MyOwnEventDetailsFragment();
                         Bundle bundleMyOwnEventId = new Bundle();
                         bundleMyOwnEventId.putLong("EventId", selectedItem.getId());
+                        bundleMyOwnEventId.putString("fragment", "EventOverview");
                         myOwnEventDetailsFragment.setArguments(bundleMyOwnEventId);
                         FragmentTransaction fr3 = getFragmentManager().beginTransaction();
-                        fr3.replace(R.id.eventOverview_relativeLayout_helper, myOwnEventDetailsFragment);
-                        fr3.addToBackStack(null);
+                        fr3.replace(R.id.eventOverview_frameLayout, myOwnEventDetailsFragment, "EventOverview");
+                        fr3.addToBackStack("EventOverview");
                         fr3.commit();
-                        rLayout_EventOverview_helper.setVisibility(View.VISIBLE);
-                        layoutOverview.setVisibility(View.GONE);
                         break;
                     default:
                         break;
