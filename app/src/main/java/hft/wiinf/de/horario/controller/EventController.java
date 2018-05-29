@@ -2,6 +2,7 @@ package hft.wiinf.de.horario.controller;
 
 import android.support.annotation.NonNull;
 
+import com.activeandroid.Model;
 import com.activeandroid.query.Select;
 
 import java.util.Calendar;
@@ -113,5 +114,18 @@ public class EventController {
             saveEvent(repetitionEvent);
         }
 
+    }
+
+    public static Event checkIfEventIsInDatabase(String description, String shortTitle,
+                                                  String place,
+                                                 Calendar startTime, Calendar endTime) {
+        return new Select()
+                .from(Event.class)
+                .where("description = ?", description)
+                .where("shortTitle = ?", shortTitle)
+                .where("place = ?", place)
+                .where("startTime = ?", startTime.getTimeInMillis())
+                .where("endTime = ?", endTime.getTimeInMillis())
+                .executeSingle();
     }
 }

@@ -55,6 +55,10 @@
     <string name="room_peek">Das Feld Raum darf nicht das Zeichen | enthalten.</string>
     <string name="pushEnabled">Die Erinnerungen wurden eingeschaltet.</string>
     <string name="pushDisabled">Die Erinnerungen wurden ausgeschaltet.</string>
+    <string name="acceptEventAfterScan">Wollen Sie wirklich zusagen?</string>
+    <string name="rejectEventAfterScan">Wollen Sie wirklich ablehnen?</string>
+    <string name="saveEventAfterScan">Wollen Sie wirklich speichern ohen zusagen?</string>
+    <string name="eventIsInDatabase">Termin ist schon in der Datenbank vorhanden!</string>
 
     <string name="pushMinutesSet" formatted="true">Die Push-Nachrichten erscheinen nun %1$d Minuten vor Ihrem Termin.</string>
 

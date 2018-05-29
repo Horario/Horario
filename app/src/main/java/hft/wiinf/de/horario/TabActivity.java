@@ -53,6 +53,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
     Person person;
     Person personEventCreator;
+
+    Event singleEvent;
     //Index: 0 = CreatorID; 1 = StartDate; 2 = EndDate; 3 = StartTime; 4 = EndTime;
     //       5 = Repetition; 6 = ShortTitle; 7 = Place; 8 = Descriptoin;  9 = EventCreatorName
     private String creatorID, startDate, endDate, startTime, endTime, repetition, shortTitle, place, description, eventCreatorName, creatorPhoneNumber;
@@ -119,7 +121,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         Button qrScanner_result_toCalender = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_toCalender);
         Button qrScanner_result_eventSave_without_assign = afterScanningDialogAction.findViewById((R.id.dialog_qrScanner_button_eventSaveOnly));
 
-
         final AlertDialog.Builder dialogAskForFinalDecission = new AlertDialog.Builder(this);
         dialogAskForFinalDecission.setView(R.layout.dialog_afterscanningbuttonclick);
         dialogAskForFinalDecission.setTitle(R.string.titleDialogFinalDecission);
@@ -127,7 +128,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
         final AlertDialog alertDialogAskForFinalDecission = dialogAskForFinalDecission.create();
 
-        TextView qrScanner_result_final_question = alertDialogAskForFinalDecission.findViewById(R.id.dialog_qrScanner_textView_question);
+        final TextView qrScanner_result_final_question = alertDialogAskForFinalDecission.findViewById(R.id.dialog_qrScanner_textView_question);
         Button qrScanner_final_question_save = alertDialogAskForFinalDecission.findViewById(R.id.dialog_event_final_decission_accept);
         Button qrScanner_final_question_reject = alertDialogAskForFinalDecission.findViewById(R.id.dialog_event_final_decission_reject);
 
@@ -502,7 +503,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         }
     }
 
-    private void saveEventAndPerson(final AlertDialog alertDialogAskForFinalDecission, final int buttonId){
+    private void saveEventAndPerson(final AlertDialog alertDialogAskForFinalDecission, final int buttonId) {
         alertDialogAskForFinalDecission.show();
         //ToDo Dennis hier kommt dein Code rein.
         alertDialogAskForFinalDecission.findViewById(R.id.dialog_event_final_decission_accept)
@@ -510,46 +511,60 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                     @Override
                     public void onClick(View v) {
                         person = PersonController.getPersonWhoIam();
+                        Calendar checkStartTime = getStartTime();
+                        Calendar checkEndTime = getEndTime();
 
                         Person person = new Person();
-
-                        personEventCreator = PersonController.checkforPhoneNumber(creatorPhoneNumber);
                         Event event = new Event(person);
-                        if (personEventCreator != null) {
-                            event.setCreator(personEventCreator);
+
+                        singleEvent = EventController.checkIfEventIsInDatabase(description,
+                                shortTitle, place, checkStartTime, checkEndTime);
+
+                        if (singleEvent != null) {
+                            Intent intent = getIntent();
+                            finish();
+                            startActivity(intent);
+                            Toast toast = Toast.makeText(v.getContext(), R.string.eventIsInDatabase, Toast.LENGTH_SHORT);
+                            toast.show();
                         } else {
-                            person.setName(eventCreatorName);
-                            person.setPhoneNumber(creatorPhoneNumber);
-                            person.save();
+                            personEventCreator = PersonController.checkforPhoneNumber(creatorPhoneNumber);
+
+                            if (personEventCreator != null) {
+                                event.setCreator(personEventCreator);
+                            } else {
+                                person.setName(eventCreatorName);
+                                person.setPhoneNumber(creatorPhoneNumber);
+                                person.save();
+                            }
+
+                            event.setCreatorEventId(Long.parseLong(creatorID));
+                            event.setStartTime(getStartTime().getTime());
+                            event.setEndTime(getEndTime().getTime());
+                            event.setRepetition(getRepetition());
+                            event.setShortTitle(shortTitle);
+                            event.setPlace(place);
+                            event.setDescription(description);
+
+                            if (buttonId == 1) {
+                                event.setAccepted(AcceptedState.ACCEPTED);
+                            } else if (buttonId == 2) {
+                                event.setAccepted(AcceptedState.WAITING);
+                            } else if (buttonId == 3) {
+                                event.setAccepted(AcceptedState.REJECTED);
+                            }
+
+                            if (event.getRepetition() != Repetition.NONE) {
+                                event.setEndDate(getEndDate().getTime());
+                                EventController.saveSerialevent(event);
+                            } else {
+                                EventController.saveEvent(event);
+                            }
+
+                            //Restart the TabActivity an Reload all Views
+                            Intent intent = getIntent();
+                            finish();
+                            startActivity(intent);
                         }
-
-                        event.setCreatorEventId(Long.parseLong(creatorID));
-                        event.setStartTime(getStartTime().getTime());
-                        event.setEndTime(getEndTime().getTime());
-                        event.setRepetition(getRepetition());
-                        event.setShortTitle(shortTitle);
-                        event.setPlace(place);
-                        event.setDescription(description);
-
-                        if(buttonId == 1){
-                            event.setAccepted(AcceptedState.ACCEPTED);
-                        }else if(buttonId == 2){
-                            event.setAccepted(AcceptedState.WAITING);
-                        }else if(buttonId == 3){
-                            event.setAccepted(AcceptedState.REJECTED);
-                        }
-
-                        if (event.getRepetition() != Repetition.NONE) {
-                            event.setEndDate(getEndDate().getTime());
-                            EventController.saveSerialevent(event);
-                        } else {
-                            EventController.saveEvent(event);
-                        }
-
-                        //Restart the TabActivity an Reload all Views
-                        Intent intent = getIntent();
-                        finish();
-                        startActivity(intent);
                     }
                 });
         alertDialogAskForFinalDecission.findViewById(R.id.dialog_event_final_decission_reject)
