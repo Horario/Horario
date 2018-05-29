@@ -27,6 +27,9 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -341,8 +344,25 @@ public class NewEventFragment extends Fragment {
         //update or save a new person (me)
         me.setName(edittext_userName.getText().toString());
         PersonController.savePerson(me);
+        if(!EventController.createdEventsYet()){
+            Long date = System.currentTimeMillis();
+            saveReadDate(String.valueOf(date));
+        }
         openSavedSuccessfulDialog(event.getId());
         setAlarmForNotification(event);
+    }
+
+    private void saveReadDate(String date) {
+        FileOutputStream outputStream;
+        try {
+            outputStream = getContext().openFileOutput("lastReadDate.txt", Context.MODE_PRIVATE);
+            outputStream.write(date.getBytes());
+            outputStream.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     //clear all entrys and open a dialog where the user can choose what to do next

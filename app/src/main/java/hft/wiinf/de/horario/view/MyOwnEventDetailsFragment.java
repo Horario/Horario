@@ -82,8 +82,6 @@ public class MyOwnEventDetailsFragment extends Fragment {
                     fragmentTransaction.addToBackStack("MyOwnEventDetails");
                     fragmentTransaction.commit();
                 }
-//                rLayout_myOwnEvent_helper.setVisibility(View.VISIBLE);
-//                myOwnEventDetails_constraintLayout.setVisibility(View.GONE);
             }
         });
         myOwnEventDetailsButtonShowQR.setOnClickListener(new View.OnClickListener() {

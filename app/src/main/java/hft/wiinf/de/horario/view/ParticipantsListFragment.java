@@ -27,9 +27,12 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
@@ -48,7 +51,7 @@ public class ParticipantsListFragment extends Fragment {
     TextView textViewEventData;
     int refusalCounter = 0;
     Event selectedEvent;
-
+    SimpleDateFormat dayFormat = new SimpleDateFormat("dd.MM.yyyy");
     public ParticipantsListFragment() {
         // Required empty public constructor
     }
@@ -75,8 +78,7 @@ public class ParticipantsListFragment extends Fragment {
         // Set The Adapter
         adapter = new LazyAdapter(this.getActivity(), participants);
         participantsListView.setAdapter(adapter);
-
-        textViewEventData.setText(selectedEvent.getShortTitle() + " " + selectedEvent.getStartTime());
+        textViewEventData.setText(selectedEvent.getShortTitle() + " " + dayFormat.format(selectedEvent.getStartTime()));
 
         swipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh);
         swipeRefresh.setOnRefreshListener(
@@ -288,7 +290,7 @@ public class ParticipantsListFragment extends Fragment {
                 long dateInMS = Long.parseLong(text);
                 lastReadDate = new Date(dateInMS);
             } else {
-                lastReadDate = new Date(0);
+                lastReadDate = new Date(System.currentTimeMillis()); //theoretically never called but necessary in case.
             }
 
 

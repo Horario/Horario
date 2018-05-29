@@ -44,7 +44,7 @@ public class EventController {
 
     public static Event getEventByCreatorEventId(@NonNull Long creatorEventId) {
         Person myself = PersonController.getPersonWhoIam();
-        List<Event> resultSet = new Select().from(Event.class).where("creatorEventId=? AND creator=?", creatorEventId, 1).execute();
+        List<Event> resultSet = new Select().from(Event.class).where("creatorEventId=? AND creator=?", creatorEventId, myself).execute();
         return resultSet.get(0);
     }
 
@@ -63,6 +63,16 @@ public class EventController {
     //get a list of all events that I accepted
     public static List<Event> findMyAcceptedEvents() {
         return new Select().from(Event.class).where("accepted=?", true).orderBy("startTime,endTime,shortTitle").execute();
+    }
+
+    public static boolean createdEventsYet(){
+        Person myself = PersonController.getPersonWhoIam();
+        List<Event> resultSet = new Select().from(Event.class).where("creator=?",  myself).execute();
+       if (resultSet.size()==0){
+           return false;
+       }else{
+           return true;
+       }
     }
 
     public static List<Event> findMyAcceptedEventsInTheFuture() {
