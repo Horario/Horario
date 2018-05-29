@@ -144,21 +144,21 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         qrScanner_result_abort.setVisibility(View.GONE);
         qrScanner_result_toCalender.setVisibility(View.GONE);
 
-        final Person myPerson = PersonController.getPersonWhoIam();
+
         try {
             // Button to Save the Event and send for assent the Event a SMS  to the EventCreator
             afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_eventSave)
                     .setOnClickListener(new View.OnClickListener() {
+                        final Person myPerson = PersonController.getPersonWhoIam();
                         @Override
                         public void onClick(View v) {
                             buttonId = 1;
-                            //if (myPerson == null) {
-                            openDialogAskForUsernameAndPhoneNumber();
-                            //}
-                            //if(myPerson.getPhoneNumber().isEmpty() || myPerson.getName().isEmpty()){
+                            if (myPerson == null) {
+                                openDialogAskForUsernameAndPhoneNumber();
+                            }else{
+                                saveEventAndPerson(alertDialogAskForFinalDecission, buttonId);
+                            }
 
-                            //}
-                            //saveEventAndPerson(alertDialogAskForFinalDecission, buttonId);
                         }
                     });
 
@@ -606,7 +606,9 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         alertDialogAskForUsernamePhoneNumber.show();
 
         final EditText afterScanning_username = alertDialogAskForUsernamePhoneNumber.findViewById(R.id.dialog_afterScanner_editText_username);
-        final EditText afterScanning_phoneNumber = alertDialogAskForUsernamePhoneNumber.findViewById(R.id.dialog_afterScanner_editText_username);
+        final EditText afterScanning_phoneNumber = alertDialogAskForUsernamePhoneNumber.findViewById(R.id.dialog_afterScanner_editText_phoneNumber);
+        afterScanning_username.setText(personMe.getName());
+        afterScanning_phoneNumber.setText(personMe.getPhoneNumber());
 
         Objects.requireNonNull(afterScanning_phoneNumber).setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -620,23 +622,33 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 Pattern pattern_afterScanning_username = Pattern.compile("^([\\S]).*");
                 Matcher matcher_afterScanning_username = pattern_afterScanning_username.matcher(dialog_afterScanning_inputUsername);
 
+                Person me = PersonController.getPersonWhoIam();
+
                 if (actionId == EditorInfo.IME_ACTION_DONE && matcher_afterScanning_username.matches() && !dialog_afterScanning_inputUsername.contains("|")) {
-                    if (PersonController.getPersonWhoIam() == null) {
+                    if (me == null) {
                         //ToDo: Flo - PhoneNumber
                         personMe = new Person(true, dialog_afterScanning_inputPhoneNumber, dialog_afterScanning_inputUsername);
                         PersonController.addPersonMe(personMe);
 
-                        Toast toast = Toast.makeText(v.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT);
+                        Toast toast = Toast.makeText(v.getContext(), R.string.thanksForUsernameAndPhoneNumber, Toast.LENGTH_SHORT);
                         toast.show();
 
                         alertDialogAskForUsernamePhoneNumber.cancel();
-                    } else {
+                    } else if (me.getName().isEmpty()) {
                         personMe = PersonController.getPersonWhoIam();
                         personMe.setName(dialog_afterScanning_inputUsername);
-                        personMe.setName(dialog_afterScanning_inputPhoneNumber);
                         PersonController.savePerson(personMe);
 
-                        Toast toast = Toast.makeText(v.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT);
+                        Toast toast = Toast.makeText(v.getContext(), R.string.thanksForUsernameAndPhoneNumber, Toast.LENGTH_SHORT);
+                        toast.show();
+
+                        alertDialogAskForUsernamePhoneNumber.cancel();
+                    } else if (me.getPhoneNumber().isEmpty()) {
+                        personMe = PersonController.getPersonWhoIam();
+                        personMe.setPhoneNumber(dialog_afterScanning_inputPhoneNumber);
+                        PersonController.savePerson(personMe);
+
+                        Toast toast = Toast.makeText(v.getContext(), R.string.thanksForUsernameAndPhoneNumber, Toast.LENGTH_SHORT);
                         toast.show();
 
                         alertDialogAskForUsernamePhoneNumber.cancel();
