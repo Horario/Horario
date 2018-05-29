@@ -92,14 +92,15 @@ public class EventOverviewFragment extends Fragment {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
                 if (eventArray.get(position).getType() == 1) {
                     textView.setTextColor(Color.DKGRAY);
-                    textView.setBackgroundColor(Color.WHITE);
+
                     textView.setCompoundDrawablesWithIntrinsicBounds(0,0, R.drawable.ic_mydate,0);
                 } else if (eventArray.get(position).getType() == 2) {
                     textView.setTextColor(Color.DKGRAY);
                 } else if (eventArray.get(position).getType() == 3) {
                     textView.setTextColor(Color.DKGRAY);
                 } else if (eventArray.get(position).getType() == 0) {
-                    textView.setTextColor(Color.DKGRAY);
+                    textView.setTextColor(Color.BLACK);
+                    textView.setBackgroundColor(Color.WHITE);
                     textView.setFocusable(false);
                 }
                 textView.setText(eventArray.get(position).getDescription());
