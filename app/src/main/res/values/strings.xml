@@ -15,6 +15,7 @@
     <string name="feedback_zur_app_text">Feedback zur App</string>
     <string name="username_text">Benutzername :</string>
     <string name="username_hint">Benutzername</string>
+    <string name="phoneNumber_hint">Telefonnummer</string>
     <string name="allowpush_text">Erinnerungen erlauben :</string>
     <string name="reminder_text">Erinnerungen :</string>
     <string name="minutesBefore_text">Minuten vorher</string>
@@ -36,6 +37,7 @@
     <string name="savingSuccessful_new">neuen Termin erstellen</string>
     <string name="savingSuccessful_qrcode">QRCode anzeigen</string>
     <string name="titleDialogUsername">Bitte vergib einen Benutzernamen! </string>
+    <string name="titleDialogUsernamePhoneNumber">Bitte vergib einen Benutzernamen und deine Telefonnummer! </string>
     <string name="save_text">speichern</string>
     <string name="later_text">Später</string>
     <string name="thanksForUsername">Benutzername wurde gespeichert. </string>
@@ -43,6 +45,7 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <!-- TODO: Remove or change this placeholder text -->
+    <string name="thanksForUsernameAndPhoneNumber">Benutzername und Telefonnummer wurde gespeichert. </string>
     <string name="description_too_long">Die Beschreibung darf nicht länger als 500 Zeichen sein.</string>
     <string name="shortTitle_too_long">Der Kurztitel darf nicht länger als 100 Zeichen sein.</string>
     <string name="startTime_past">Der Termin darf nicht in der Vergangenheit beginnen.</string>

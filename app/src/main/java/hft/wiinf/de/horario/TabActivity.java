@@ -144,7 +144,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         qrScanner_result_abort.setVisibility(View.GONE);
         qrScanner_result_toCalender.setVisibility(View.GONE);
 
-
+        final Person myPerson = PersonController.getPersonWhoIam();
         try {
             // Button to Save the Event and send for assent the Event a SMS  to the EventCreator
             afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_eventSave)
@@ -152,7 +152,13 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         @Override
                         public void onClick(View v) {
                             buttonId = 1;
-                            saveEventAndPerson(alertDialogAskForFinalDecission, buttonId);
+                            //if (myPerson == null) {
+                            openDialogAskForUsernameAndPhoneNumber();
+                            //}
+                            //if(myPerson.getPhoneNumber().isEmpty() || myPerson.getName().isEmpty()){
+
+                            //}
+                            //saveEventAndPerson(alertDialogAskForFinalDecission, buttonId);
                         }
                     });
 
@@ -588,5 +594,64 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         alertDialogAskForFinalDecission.cancel();
                     }
                 });
+    }
+
+    private void openDialogAskForUsernameAndPhoneNumber() {
+        final AlertDialog.Builder dialogAskForUsernamePhoneNumber = new AlertDialog.Builder(this);
+        dialogAskForUsernamePhoneNumber.setView(R.layout.dialog_askforphonenumberandusername);
+        dialogAskForUsernamePhoneNumber.setTitle(R.string.titleDialogUsernamePhoneNumber);
+        dialogAskForUsernamePhoneNumber.setCancelable(true);
+
+        final AlertDialog alertDialogAskForUsernamePhoneNumber = dialogAskForUsernamePhoneNumber.create();
+        alertDialogAskForUsernamePhoneNumber.show();
+
+        final EditText afterScanning_username = alertDialogAskForUsernamePhoneNumber.findViewById(R.id.dialog_afterScanner_editText_username);
+        final EditText afterScanning_phoneNumber = alertDialogAskForUsernamePhoneNumber.findViewById(R.id.dialog_afterScanner_editText_username);
+
+        Objects.requireNonNull(afterScanning_phoneNumber).setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                String dialog_afterScanning_inputUsername;
+                dialog_afterScanning_inputUsername = v.getText().toString();
+                String dialog_afterScanning_inputPhoneNumber;
+                dialog_afterScanning_inputPhoneNumber = v.getText().toString();
+
+                //RegEx: no whitespace at the beginning
+                Pattern pattern_afterScanning_username = Pattern.compile("^([\\S]).*");
+                Matcher matcher_afterScanning_username = pattern_afterScanning_username.matcher(dialog_afterScanning_inputUsername);
+
+                if (actionId == EditorInfo.IME_ACTION_DONE && matcher_afterScanning_username.matches() && !dialog_afterScanning_inputUsername.contains("|")) {
+                    if (PersonController.getPersonWhoIam() == null) {
+                        //ToDo: Flo - PhoneNumber
+                        personMe = new Person(true, dialog_afterScanning_inputPhoneNumber, dialog_afterScanning_inputUsername);
+                        PersonController.addPersonMe(personMe);
+
+                        Toast toast = Toast.makeText(v.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT);
+                        toast.show();
+
+                        alertDialogAskForUsernamePhoneNumber.cancel();
+                    } else {
+                        personMe = PersonController.getPersonWhoIam();
+                        personMe.setName(dialog_afterScanning_inputUsername);
+                        personMe.setName(dialog_afterScanning_inputPhoneNumber);
+                        PersonController.savePerson(personMe);
+
+                        Toast toast = Toast.makeText(v.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT);
+                        toast.show();
+
+                        alertDialogAskForUsernamePhoneNumber.cancel();
+                    }
+                    return false;
+                } else if (dialog_afterScanning_inputUsername.contains("|")) {
+                    Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername_peek, Toast.LENGTH_SHORT);
+                    toast.show();
+                    return true;
+                } else {
+                    Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
+                    toast.show();
+                    return true;
+                }
+            }
+        });
     }
 }

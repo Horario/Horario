@@ -201,36 +201,11 @@ public class CalendarFragment extends Fragment {
                 bundle.putString("fragment", "Calendar");
                 qrScanFragment.setArguments(bundle);
 
-                Person person = new Person();
-                person = PersonController.getPersonWhoIam();
-                if(person != null){
-                    if(person.getPhoneNumber() == "") {
-                        FragmentTransaction fr = getFragmentManager().beginTransaction();
-                        //settings_relativeLayout_helper: in this Layout all other layouts will be uploaded
-                        fr.replace(R.id.calendar_frameLayout, new SettingsSettingsFragment(), "SettingsSettings");
-                        fr.addToBackStack("SettingsSettings");
-                        fr.commit();
-                        closeFABMenu();
-
-                        Toast toast = Toast.makeText(getActivity(), "Bitte einen Namen vergeben" , Toast.LENGTH_SHORT);
-                        toast.show();
-                    } else{
-                        FragmentTransaction fr = getFragmentManager().beginTransaction();
-                        fr.replace(R.id.calendar_frameLayout, qrScanFragment, "QrScan");
-                        fr.addToBackStack("QrScan");
-                        fr.commit();
-                        closeFABMenu();
-                    }
-                } else {
-                    FragmentTransaction fr = getFragmentManager().beginTransaction();
-                    //settings_relativeLayout_helper: in this Layout all other layouts will be uploaded
-                    fr.replace(R.id.calendar_frameLayout, new SettingsSettingsFragment(), "SettingsSettings");
-                    fr.addToBackStack("SettingsSettings");
-                    fr.commit();
-                    closeFABMenu();
-                    Toast toast = Toast.makeText(getActivity(), "Bitte einen Namen vergeben" , Toast.LENGTH_SHORT);
-                    toast.show();
-                }
+                FragmentTransaction fr = getFragmentManager().beginTransaction();
+                fr.replace(R.id.calendar_frameLayout, qrScanFragment, "QrScan");
+                fr.addToBackStack("QrScan");
+                fr.commit();
+                closeFABMenu();
             }
         });
 
