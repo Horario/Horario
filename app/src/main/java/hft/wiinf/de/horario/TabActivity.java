@@ -2,6 +2,7 @@ package hft.wiinf.de.horario;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -49,7 +51,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     private SectionsPageAdapterActivity mSectionsPageAdapter;
     private ViewPager mViewPager;
     TabLayout tabLayout;
-    Person personMe;
+    private static int startTab;
+    private Person personMe;
 
     Person person;
     Person personEventCreator;
@@ -74,6 +77,11 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         //Start DB
         ActiveAndroid.initialize(this);
         Stetho.initializeWithDefaults(this);
+        //read startTab out of db, default=1(calendar tab)
+        personMe = PersonController.getPersonWhoIam();
+        if (personMe == null)
+            personMe = new Person(true, "", "");
+        startTab = personMe.getStartTab();
 
         mSectionsPageAdapter = new SectionsPageAdapterActivity(getSupportFragmentManager());
 
@@ -308,7 +316,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     public void onStart() {
         super.onStart();
         //Select calendar by default
-        Objects.requireNonNull(tabLayout.getTabAt(1)).select();
+        Objects.requireNonNull(tabLayout.getTabAt(startTab)).select();
         //Listener that will check when a Tab is selected, unselected and reselected
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             //Do something if Tab is selected. Parameters: selected Tab.--- Info: tab.getPosition() == x for check which Tab
@@ -322,6 +330,9 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 //check if settings Tab is unselected
                 if (tab.getPosition() == 2) {
                     getSupportFragmentManager().popBackStack();
+                    //Close the keyboard on a tab change
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(mSectionsPageAdapter.getItem(2).getView().getApplicationWindowToken(), 0);
                 } else if (tab.getPosition() == 1) {
                     getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
@@ -341,6 +352,9 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 //check if settings Tab is unselected
                 if (tab.getPosition() == 2) {
                     getSupportFragmentManager().popBackStack();
+                    //Close the keyboard on a tab change
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(mSectionsPageAdapter.getItem(2).getView().getApplicationWindowToken(), 0);
                 } else if (tab.getPosition() == 1) {
                     getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     FragmentTransaction fr = getSupportFragmentManager().beginTransaction();

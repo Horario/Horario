@@ -55,12 +55,14 @@
     <string name="room_peek">Das Feld Raum darf nicht das Zeichen | enthalten.</string>
     <string name="pushEnabled">Die Erinnerungen wurden eingeschaltet.</string>
     <string name="pushDisabled">Die Erinnerungen wurden ausgeschaltet.</string>
+    <string formatted="true" name="pushMinutesSet">Die Push-Nachrichten erscheinen nun %1$d Minuten vor Ihrem Termin.</string>
+    <string name="startTab">Start-Tab :</string>
+    <string name="startTabChanged" formatted="true">Beim nächsten Start zeigt Horario nun den Tab %1$s.</string>
     <string name="acceptEventAfterScan">Wollen Sie wirklich zusagen?</string>
     <string name="rejectEventAfterScan">Wollen Sie wirklich ablehnen?</string>
     <string name="saveEventAfterScan">Wollen Sie wirklich speichern ohen zusagen?</string>
     <string name="eventIsInDatabase">Termin ist schon in der Datenbank vorhanden!</string>
 
-    <string name="pushMinutesSet" formatted="true">Die Push-Nachrichten erscheinen nun %1$d Minuten vor Ihrem Termin.</string>
 
     <string-array name="event_repetitions">
         <item name="event_repetition_yearly">jährlich</item>
@@ -77,6 +79,11 @@
         <item name="push_time_60">60</item>
         <item name="push_time_90">90</item>
         <item name="push_time_120">120</item>
+    </string-array>
+    <string-array name="start_tab">
+        <item name="overview">Terminübersicht</item>
+        <item name="calendar">Kalenderansicht</item>
+        <item name="settings">Einstellungen</item>
     </string-array>
 
 

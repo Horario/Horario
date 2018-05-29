@@ -42,20 +42,66 @@ public class CalendarFragment extends Fragment {
     private static final String TAG = "CalendarFragmentActivity";
 
     public static CompactCalendarView calendarCvCalendar;
+    public static Date selectedMonth;
     static ListView calendarLvList;
     static TextView calendarTvMonth;
-    static TextView calendarTvDay;
     TextView calendarIsFloatMenuOpen;
     FloatingActionButton calendarFcMenu, calendarFcQrScan, calendarFcNewEvent;
     ConstraintLayout cLayout_calendar_main;
+    static TextView calendarTvDay;
     static Context context = null;
-
     static DateFormat monthFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
     static DateFormat dayFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
     static DateFormat timeFormat = new SimpleDateFormat("HH:mm");
-    public static Date selectedMonth;
 
     Animation ActionButtonOpen, ActionButtonClose, ActionButtonRotateRight, ActionButtonRotateLeft;
+
+    public static void update(Date date) {
+        calendarTvDay.setText(dayFormat.format(date));
+        calendarLvList.setAdapter(getAdapter(date));
+        calendarTvMonth.setText(monthFormat.format(date));
+        updateCompactCalendar();
+    }
+
+    //is marking the day in the calendar for the parameter date
+    public static void updateCompactCalendar() {
+        List<hft.wiinf.de.horario.model.Event> acceptedEvents = EventController.findMyEvents();
+        for (int i = 0; i < acceptedEvents.size(); i++) {
+            if (calendarCvCalendar.getEvents(acceptedEvents.get(i).getStartTime().getTime()).size() == 0 && acceptedEvents.get(i).getAccepted() != AcceptedState.REJECTED) {
+                Event event = new Event(Color.BLUE, acceptedEvents.get(i).getStartTime().getTime());
+                calendarCvCalendar.addEvent(event, true);
+            }
+        }
+    }
+
+    public static ArrayAdapter getAdapter(Date date) {
+        ArrayList<String> eventsAsString = new ArrayList<>();
+        Calendar endOfDay = Calendar.getInstance();
+        endOfDay.setTime(date);
+        endOfDay.add(Calendar.DAY_OF_MONTH, 1);
+        final List<hft.wiinf.de.horario.model.Event> eventList = EventController.findEventsByTimePeriod(date, endOfDay.getTime());
+        for (int i = 0; i < eventList.size(); i++) {
+            if (eventList.get(i).getAccepted() != AcceptedState.REJECTED) {
+                eventsAsString.add(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle());
+            }
+        }
+        final ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1, eventsAsString) {
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                TextView textView = (TextView) super.getView(position, convertView, parent);
+                if (eventList.get(position).getAccepted().equals(AcceptedState.ACCEPTED)) {
+                    textView.setBackgroundColor(Color.GREEN);
+                } else if (eventList.get(position).getAccepted().equals(AcceptedState.WAITING)) {
+                    textView.setBackgroundColor(Color.RED);
+                } else {
+                    textView.setBackgroundColor(Color.WHITE);
+                }
+                return textView;
+            }
+        };
+        return adapter;
+    }
 
     @Nullable
     @Override
@@ -196,54 +242,6 @@ public class CalendarFragment extends Fragment {
         });
 
         return view;
-    }
-
-    public static void update(Date date) {
-        calendarTvDay.setText(dayFormat.format(date));
-        calendarLvList.setAdapter(getAdapter(date));
-        calendarTvMonth.setText(monthFormat.format(date));
-        updateCompactCalendar();
-    }
-
-
-    //is marking the day in the calendar for the parameter date
-    public static void updateCompactCalendar() {
-        List<hft.wiinf.de.horario.model.Event> acceptedEvents = EventController.findMyEvents();
-        for (int i = 0; i < acceptedEvents.size(); i++) {
-            if (calendarCvCalendar.getEvents(acceptedEvents.get(i).getStartTime().getTime()).size() == 0 && acceptedEvents.get(i).getAccepted() != AcceptedState.REJECTED) {
-                Event event = new Event(Color.BLUE, acceptedEvents.get(i).getStartTime().getTime());
-                calendarCvCalendar.addEvent(event, true);
-            }
-        }
-    }
-
-    public static ArrayAdapter getAdapter(Date date) {
-        ArrayList<String> eventsAsString = new ArrayList<>();
-        Calendar endOfDay = Calendar.getInstance();
-        endOfDay.setTime(date);
-        endOfDay.add(Calendar.DAY_OF_MONTH, 1);
-        final List<hft.wiinf.de.horario.model.Event> eventList = EventController.findEventsByTimePeriod(date, endOfDay.getTime());
-        for (int i = 0; i < eventList.size(); i++) {
-            if (eventList.get(i).getAccepted() != AcceptedState.REJECTED) {
-                eventsAsString.add(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle());
-            }
-        }
-        final ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1, eventsAsString) {
-            @NonNull
-            @Override
-            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-                TextView textView = (TextView) super.getView(position, convertView, parent);
-                if (eventList.get(position).getAccepted().equals(AcceptedState.ACCEPTED)) {
-                    textView.setBackgroundColor(Color.GREEN);
-                } else if (eventList.get(position).getAccepted().equals(AcceptedState.WAITING)) {
-                    textView.setBackgroundColor(Color.RED);
-                } else {
-                    textView.setBackgroundColor(Color.WHITE);
-                }
-                return textView;
-            }
-        };
-        return adapter;
     }
 
     public void showFABMenu() {

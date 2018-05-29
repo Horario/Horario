@@ -21,6 +21,8 @@ public class Person extends Model {
     private boolean enablePush = true;
     @Column
     private int notificationTime = 15;
+    @Column
+    private int startTab = 1;
 
     //Use this constructor for person that using this specific app (owner)
     public Person(boolean isItMe, String phoneNumber, String name) {
@@ -96,5 +98,14 @@ public class Person extends Model {
     public void setEnablePush(boolean enablePush) {
         this.enablePush = enablePush;
     }
+
+    public int getStartTab() {
+        return startTab;
+    }
+
+    public void setStartTab(int startTab) {
+        this.startTab = startTab;
+    }
 }
+
 
