@@ -286,6 +286,9 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             //Do something if Tab is selected. Parameters: selected Tab.--- Info: tab.getPosition() == x for check which Tab
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                if (tab.getPosition() == 1) {
+                    CalendarFragment.update(CalendarFragment.selectedMonth);
+                }
             }
 
             //Do something if Tab is unselected. Parameters: selected Tab.--- Info: tab.getPosition() == x for check which Tab
