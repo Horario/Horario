@@ -19,6 +19,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,9 +43,9 @@ public class EventOverviewFragment extends Fragment {
     static Context context = null;
     static DateFormat timeFormat = new SimpleDateFormat("HH:mm");
     FloatingActionButton eventOverviewFcMenu, eventOverviewFcQrScan, eventOverviewFcNewEvent;
-    Button overviewBtNext;
+    ImageButton overviewBtNext;
     TextView eventOverview_HiddenIsFloatingMenuOpen;
-    Button overviewBtPrevious;
+    ImageButton overviewBtPrevious;
     Animation ActionButtonOpen, ActionButtonClose, ActionButtonRotateRight, ActionButtonRotateLeft;
     ConstraintLayout layout_eventOverview_main;
     ConstraintLayout layoutOverview;
@@ -96,8 +97,10 @@ public class EventOverviewFragment extends Fragment {
                     textView.setCompoundDrawablesWithIntrinsicBounds(0,0, R.drawable.ic_mydate,0);
                 } else if (eventArray.get(position).getType() == 2) {
                     textView.setTextColor(Color.DKGRAY);
+                    textView.setCompoundDrawablesWithIntrinsicBounds(0,0, R.drawable.ic_mydate_questionmark,0);
                 } else if (eventArray.get(position).getType() == 3) {
                     textView.setTextColor(Color.DKGRAY);
+                    textView.setCompoundDrawablesWithIntrinsicBounds(0,0, R.drawable.ic_mydate_approved,0);
                 } else if (eventArray.get(position).getType() == 0) {
                     textView.setTextColor(Color.BLACK);
                     textView.setBackgroundColor(Color.WHITE);
@@ -147,6 +150,7 @@ public class EventOverviewFragment extends Fragment {
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(selectedMonth);
                 calendar.add(Calendar.MONTH, 1);
+
                 selectedMonth.setTime(calendar.getTimeInMillis());
                 update();
             }

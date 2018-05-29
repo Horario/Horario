@@ -65,7 +65,7 @@ public class CalendarFragment extends Fragment {
         List<hft.wiinf.de.horario.model.Event> acceptedEvents = EventController.findMyEvents();
         for (int i = 0; i < acceptedEvents.size(); i++) {
             if (calendarCvCalendar.getEvents(acceptedEvents.get(i).getStartTime().getTime()).size() == 0 && acceptedEvents.get(i).getAccepted() != AcceptedState.REJECTED) {
-                Event event = new Event(Color.BLUE, acceptedEvents.get(i).getStartTime().getTime());
+                Event event = new Event(Color.DKGRAY, acceptedEvents.get(i).getStartTime().getTime());
                 calendarCvCalendar.addEvent(event, true);
             }
         }
