@@ -305,6 +305,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 //check if settings Tab is unselected
                 if (tab.getPosition() == 2) {
                     getSupportFragmentManager().popBackStack();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(mSectionsPageAdapter.getItem(2).getView().getApplicationWindowToken(), 0);
                 } else if (tab.getPosition() == 1) {
                     getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     FragmentTransaction fr = getSupportFragmentManager().beginTransaction();

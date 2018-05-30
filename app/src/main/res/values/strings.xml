@@ -42,13 +42,13 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="description_too_long">Die Beschreibung darf nicht länger als 500 Zeichen sein.</string>
-    <string name="shortTitle_too_long">Der Kurztitel darf nicht länger als 100 Zeichen sein.</string>
+    <string name="description_too_long">Die Beschreibung darf nicht länger als 200 Zeichen sein.</string>
+    <string name="shortTitle_too_long">Der Kurztitel darf nicht länger als 50 Zeichen sein.</string>
     <string name="startTime_past">Der Termin darf nicht in der Vergangenheit beginnen.</string>
     <string name="shortTitle_spaces">Der Kurztitel darf nicht mit Leerzeichen beginnen.</string>
     <string name="description_spaces">Die Beschreibung darf nicht mit Leerzeichen beginnen.</string>
     <string name="place_spaces">Der Raum darf nicht mit Leerzeichen beginnen.</string>
-    <string name="room_too_long">Der Raum darf nicht länger als 100 Zeichen sein.</string>
+    <string name="room_too_long">Der Raum darf nicht länger als 50 Zeichen sein.</string>
     <string name="shortTitle_peek">Der Kurztitel darf nicht das Zeichen | enthalten.</string>
     <string name="description_peek">Die Beschreibung darf nicht das Zeichen | enthalten.</string>
     <string name="room_peek">Das Feld Raum darf nicht das Zeichen | enthalten.</string>
@@ -56,7 +56,7 @@
 
     <string name="pushEnabled">Die Erinnerungen wurden eingeschaltet.</string>
     <string name="pushDisabled">Die Erinnerungen wurden ausgeschaltet.</string>
-    <string name="pushMinutesSet" formatted="true">Die Push-Nachrichten erscheinen nun %1$d Minuten vor Ihrem Termin.</string>
+    <string name="pushMinutesSet" formatted="true">Die Erinnerungen erscheinen nun %1$d Minuten vor Ihrem Termin.</string>
     <string name="startTab">Start-Tab :</string>
     <string name="startTabChanged" formatted="true">Beim nächsten Start zeigt Horario nun den Tab %1$s.</string>
 
@@ -70,7 +70,7 @@
     <string name="phoneNumber_explanation">Wir brauchen deine Telefonnummer, um Rückmeldungen versenden können. Wir verwenden deine Telefonnummer nicht für andere Zwecke. Alternativ kannst du deine Telefonnummer auch selbst eingeben.</string>
     <string name="lastTry_phoneNumber">Ohne deine Telefonnummer kannnst du keine Rückmeldungen versenden und empfangen.</string>
     <string name="oneMoreTime">Nochmal</string>
-    <string name="telephonenumerNotRead">Die Telefonnummer konnte nicht ausgelesen werden. Bitte geben Sie Ihre Telefonnummer manuell ein.</string>
+    <string name="telephonenumerNotRead">Die Telefonnummer konnte nicht ausgelesen werden. Bitte gib deine Telefonnummer manuell ein.</string>
     <string name="wrongNumberFormat">Diese Telefonnummer ist nicht zulässig.</string>
     <string name="PhoneNumberNotSaved">Die Telefonnummer wurde nicht gespeichert. Du kannst sie in den Einstellungen festlegen.</string>
 

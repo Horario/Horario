@@ -445,15 +445,15 @@ public class NewEventFragment extends Fragment {
             return false;
         }
 
-        if (editText_description.getText().length() > 500) {
+        if (editText_description.getText().length() > 200) {
             Toast.makeText(getContext(), R.string.description_too_long, Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (edittext_shortTitle.getText().length() > 100) {
+        if (edittext_shortTitle.getText().length() > 50) {
             Toast.makeText(getContext(), R.string.shortTitle_too_long, Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (edittext_room.getText().length() > 100) {
+        if (edittext_room.getText().length() > 50) {
             Toast.makeText(getContext(), R.string.room_too_long, Toast.LENGTH_SHORT).show();
             return false;
         }
