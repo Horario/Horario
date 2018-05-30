@@ -129,16 +129,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         Button qrScanner_result_toCalender = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_toCalender);
         Button qrScanner_result_eventSave_without_assign = afterScanningDialogAction.findViewById((R.id.dialog_qrScanner_button_eventSaveOnly));
 
-        final AlertDialog.Builder dialogAskForFinalDecission = new AlertDialog.Builder(this);
-        dialogAskForFinalDecission.setView(R.layout.dialog_afterscanningbuttonclick);
-        dialogAskForFinalDecission.setTitle(R.string.titleDialogFinalDecission);
-        dialogAskForFinalDecission.setCancelable(true);
-
-        final AlertDialog alertDialogAskForFinalDecission = dialogAskForFinalDecission.create();
-
-        final TextView qrScanner_result_final_question = alertDialogAskForFinalDecission.findViewById(R.id.dialog_qrScanner_textView_question);
-        Button qrScanner_final_question_save = alertDialogAskForFinalDecission.findViewById(R.id.dialog_event_final_decission_accept);
-        Button qrScanner_final_question_reject = alertDialogAskForFinalDecission.findViewById(R.id.dialog_event_final_decission_reject);
 
         //Set the Cancel and BackToCalenderButtons to Invisible
         qrScanner_result_abort.setVisibility(View.GONE);
@@ -152,18 +142,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         @Override
                         public void onClick(View v) {
                             buttonId = 1;
-                            final Person myPerson = PersonController.getPersonWhoIam();
-                            if (myPerson == null) {
-                                openDialogAskForUsernameAndPhoneNumber();
-                            } else if (myPerson.getPhoneNumber().isEmpty()) {
-                                openDialogAskForUsernameAndPhoneNumber();
-                            } else if (myPerson.getName().isEmpty()) {
-                                openDialogAskForUsernameAndPhoneNumber();
-                            } else {
-                                saveEventAndPerson(alertDialogAskForFinalDecission, buttonId);
-                            }
+                            decideWhatToDo();
                         }
-
                     });
 
             //Button to Save the Event but don't send for assent the Event a SMS to the EventCreator
@@ -172,16 +152,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         @Override
                         public void onClick(View v) {
                             buttonId = 2;
-                            final Person myPerson = PersonController.getPersonWhoIam();
-                            if (myPerson == null) {
-                                openDialogAskForUsernameAndPhoneNumber();
-                            } else if (myPerson.getPhoneNumber().isEmpty()) {
-                                openDialogAskForUsernameAndPhoneNumber();
-                            } else if (myPerson.getName().isEmpty()) {
-                                openDialogAskForUsernameAndPhoneNumber();
-                            } else {
-                                saveEventAndPerson(alertDialogAskForFinalDecission, buttonId);
-                            }
+                            decideWhatToDo();
                         }
                     });
 
@@ -191,16 +162,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         @Override
                         public void onClick(View v) {
                             buttonId = 3;
-                            final Person myPerson = PersonController.getPersonWhoIam();
-                            if (myPerson == null) {
-                                openDialogAskForUsernameAndPhoneNumber();
-                            } else if (myPerson.getPhoneNumber().isEmpty()) {
-                                openDialogAskForUsernameAndPhoneNumber();
-                            } else if (myPerson.getName().isEmpty()) {
-                                openDialogAskForUsernameAndPhoneNumber();
-                            } else {
-                                saveEventAndPerson(alertDialogAskForFinalDecission, buttonId);
-                            }
+                            decideWhatToDo();
                         }
                     });
 
@@ -624,6 +586,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                                 //save the one event
                                 EventController.saveEvent(event);
                             }
+                            Toast.makeText(v.getContext(), R.string.save_event, Toast.LENGTH_SHORT).show();
 
                             //Restart the TabActivity an Reload all Views
                             Intent intent = getIntent();
@@ -732,5 +695,45 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 }
             }
         });
+    }
+
+    private boolean checkIfEventIsInPast (){
+        //read the current date and time to compare if the start time is in the past, set seconds and milliseconds to 0 to ensure a ight compare (seonds and milliseconds doesn't matter)
+        Calendar now = Calendar.getInstance();
+        now.set(Calendar.SECOND, 0);
+        now.set(Calendar.MILLISECOND, 0);
+        if (getStartTimeEvent().before(now)) {
+            Toast.makeText(this, R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    private void decideWhatToDo (){
+        final AlertDialog.Builder dialogAskForFinalDecission = new AlertDialog.Builder(this);
+        dialogAskForFinalDecission.setView(R.layout.dialog_afterscanningbuttonclick);
+        dialogAskForFinalDecission.setTitle(R.string.titleDialogFinalDecission);
+        dialogAskForFinalDecission.setCancelable(true);
+
+        final AlertDialog alertDialogAskForFinalDecission = dialogAskForFinalDecission.create();
+
+        if(!checkIfEventIsInPast()){
+            final Person myPerson = PersonController.getPersonWhoIam();
+            if (myPerson == null) {
+                openDialogAskForUsernameAndPhoneNumber();
+            } else if (myPerson.getPhoneNumber().isEmpty()) {
+                openDialogAskForUsernameAndPhoneNumber();
+            } else if (myPerson.getName().isEmpty()) {
+                openDialogAskForUsernameAndPhoneNumber();
+            } else {
+                saveEventAndPerson(alertDialogAskForFinalDecission, buttonId);
+            }
+        }else{
+            //Restart the TabActivity an Reload all Views
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
+        }
     }
 }
