@@ -89,6 +89,7 @@ public class ParticipantsListFragment extends Fragment {
                         //refreshConfirmationsAndCancellations();
                         Toast toast = Toast.makeText(getContext(), "Funktion wird momentan gewartet", Toast.LENGTH_SHORT);
                         toast.show();
+                        adapter.notifyDataSetChanged();
                         swipeRefresh.setRefreshing(false);
                     }
                 }

@@ -12,10 +12,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +23,6 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.util.Objects;
-import java.util.logging.Logger;
 
 import hft.wiinf.de.horario.CaptureActivityPortrait;
 import hft.wiinf.de.horario.R;
@@ -122,7 +119,7 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
                                     }
                                 })
                                 .setTitle(R.string.accessWith_NeverAskAgain_deny)
-                                .setMessage(R.string.requestPermission_accessDenied_withCheckbox)
+                                .setMessage(R.string.requestQRPermission_accessDenied_withCheckbox)
                                 .setPositiveButton(R.string.back, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -146,7 +143,7 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
                                     }
                                 })
                                 .setTitle(R.string.requestPermission_firstTryRequest)
-                                .setMessage(R.string.requestPermission_askForPermission)
+                                .setMessage(R.string.requestPermission_askForQRPermission)
                                 .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -175,7 +172,7 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
                                     }
                                 })
                                 .setTitle(R.string.requestPermission_lastTryRequest)
-                                .setMessage(R.string.requestPermission_askForPermission)
+                                .setMessage(R.string.requestPermission_askForQRPermission)
                                 .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
