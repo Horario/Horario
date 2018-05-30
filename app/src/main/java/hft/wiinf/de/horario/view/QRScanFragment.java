@@ -12,10 +12,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +23,6 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.util.Objects;
-import java.util.logging.Logger;
 
 import hft.wiinf.de.horario.CaptureActivityPortrait;
 import hft.wiinf.de.horario.R;
@@ -39,7 +36,7 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
     private final String noResultErrorMsg = "No scan data received!";
     //Counter for the Loop of PermissionChecks
     private int counter = 0;
-    private String codeFormat, codeContent;
+    private String whitchFragment, codeContent;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -66,9 +63,9 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
         IntentIntegrator integrator = new IntentIntegrator(this.getActivity()).forSupportFragment(this);
         integrator.setCaptureActivity(CaptureActivityPortrait.class); //Necessary to use the intern Sensor for Orientation
         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
-        integrator.setPrompt(getString(R.string.scanneroverlayer_qrCodeScan) + "\n" +
-                getString(R.string.scanneroverlay_positionYourScanner) + "\n" +
-                getString(R.string.scanneroverlay_toShowTheEvent));
+        integrator.setPrompt(getString(R.string.scannerOverlayer_qrCodeScan) + "\n" +
+                getString(R.string.scannerOverlay_positionYourScanner) + "\n" +
+                getString(R.string.scannerOverlay_toShowTheEvent));
         integrator.setCameraId(0);
         integrator.setBeepEnabled(false);
         integrator.setBarcodeImageEnabled(false);
@@ -115,7 +112,7 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
                                     @Override
                                     public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
                                         if(keyCode == KeyEvent.KEYCODE_BACK){
-                                            restartApp();
+                                            goWhereUserComesFrom();
                                             return true;
                                         }
                                         return false;
@@ -126,7 +123,7 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
                                 .setPositiveButton(R.string.back, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                       restartApp();
+                                       goWhereUserComesFrom();
                                     }
                                 })
                                 .create().show();
@@ -138,7 +135,7 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
                                     @Override
                                     public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
                                         if(keyCode == KeyEvent.KEYCODE_BACK){
-                                            restartApp();
+                                            goWhereUserComesFrom();
                                             dialog.cancel();
                                             return true;
                                         }
@@ -157,7 +154,7 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
                                 .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        restartApp();
+                                        goWhereUserComesFrom();
                                     }
                                 })
                                 .create().show();
@@ -167,7 +164,7 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
                                     @Override
                                     public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
                                         if(keyCode == KeyEvent.KEYCODE_BACK){
-                                            restartApp();
+                                            goWhereUserComesFrom();
                                             dialog.cancel();
                                             return true;
                                         }
@@ -186,12 +183,12 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
                                 .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        restartApp();
+                                        goWhereUserComesFrom();
                                     }
                                 })
                                 .create().show();
                     } else {
-                        restartApp();
+                        goWhereUserComesFrom();
                     }
                 }else {
                     startScanner();
@@ -203,8 +200,8 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
    // }
 
 
-    // Restart the App
-    private void restartApp(){
+    // Push the User where he/she comes from
+    private void goWhereUserComesFrom(){
         Bundle whichFragment = getArguments();
         getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         if (whichFragment.getString("fragment").equals("EventOverview")) {
@@ -225,12 +222,23 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         ScanResultReceiverController parentActivity = (ScanResultReceiverController) this.getActivity();
 
+        // give with the ScanResult where User Comes From
+        String whichFragmentTag;
+        Bundle whichFragment = getArguments();
+        getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        if (whichFragment.getString("fragment").equals("EventOverview")) {
+            whichFragmentTag = "EventOverview";
+        } else {
+            whichFragmentTag = "Calendar";
+        }
+
         if (scanningResult != null) {
             //we have a result
+
             codeContent = scanningResult.getContents();
-            codeFormat = scanningResult.getFormatName();
+            whitchFragment = whichFragmentTag;
             // send received data
-            Objects.requireNonNull(parentActivity).scanResultData(codeFormat, codeContent);
+            Objects.requireNonNull(parentActivity).scanResultData(whitchFragment, codeContent);
 
         } else {
             // send exception

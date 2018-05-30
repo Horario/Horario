@@ -17,6 +17,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -82,14 +83,36 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         }
     }
 
-    private void restartApp(){
-        Intent intent = getIntent();
-        finish();
-        startActivity(intent);
+    private void restartApp(String fragmentResource){
+        //check from which Fragment (EventOverview or Calendar) are the Scanner was called
+        switch (fragmentResource) {
+            case "EventOverview":
+
+                getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                FragmentTransaction frEO = getSupportFragmentManager().beginTransaction();
+                frEO.replace(R.id.eventOverview_frameLayout, new EventOverviewActivity());
+                frEO.commit();
+                break;
+            case "Calendar":
+                getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                FragmentTransaction frCA = getSupportFragmentManager().beginTransaction();
+                frCA.replace(R.id.calendar_frameLayout, new CalendarFragment());
+                frCA.commit();
+                break;
+            default:
+                Toast.makeText(this, R.string.ups_an_error,Toast.LENGTH_SHORT).show();
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
+
+        }
+
     }
+
+
     //After Scanning it was opened a Dialog where the user can choose what to do next
     @SuppressLint("ResourceType")
-    private void openActionDialogAfterScanning(final String qrScannContentResult) {
+    private void openActionDialogAfterScanning(final String qrScannContentResult, final String whichFragmentTag) {
 
         //Create the Dialog with the GUI Elements initial
         final Dialog afterScanningDialogAction = new Dialog(this);
@@ -105,23 +128,21 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         Button qrScanner_result_toCalender = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_toCalender);
         Button qrScanner_result_eventSave_without_assign = afterScanningDialogAction.findViewById((R.id.dialog_qrScanner_button_eventSaveOnly));
 
-
         //Set the Cancel and BackToCalenderButtons to Invisible
         qrScanner_result_abort.setVisibility(View.GONE);
         qrScanner_result_toCalender.setVisibility(View.GONE);
 
-
         try {
             // Button to Save the Event and send for assent the Event a SMS  to the EventCreator
             afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_eventSave)
+
                     .setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             //ToDo Dennis hier kommt dein Code rein.
 
-
                             //Restart the TabActivity an Reload all Views
-                            restartApp();
+                            restartApp(whichFragmentTag);
                         }
                     });
 
@@ -130,10 +151,10 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 @Override
                 public void onClick(View v) {
                     //ToDo Dennis hier kommt dein Code rein.
-
-
+                    
+                    afterScanningDialogAction.dismiss();
                     //Restart the TabActivity an Reload all Views
-                    restartApp();
+                    restartApp(whichFragmentTag);
                 }
             });
 
@@ -143,8 +164,9 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 public void onClick(View v) {
                     //ToDo Dennis hier kommt dein Code rein.
 
+
                     //Restart the TabActivity an Reload all Views
-                    restartApp();
+                    restartApp(whichFragmentTag);
                 }
             });
 
@@ -199,7 +221,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                     qrScanner_result_toCalender.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            restartApp();
+                            restartApp(whichFragmentTag);
                         }
                     });
 
@@ -239,7 +261,12 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             qrScanner_result_toCalender.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    restartApp();
+                    restartApp(whichFragmentTag);
+                    /*
+                    Intent intent = getIntent();
+                    finish();
+                    startActivity(intent);
+                    */
                 }
             });
 
@@ -256,7 +283,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             qrScanner_result_abort.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    restartApp();
+                    restartApp(whichFragmentTag);
                 }
             });
         }
@@ -265,8 +292,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
     // "Catch" the ScanningResult and throw the Content to the processing Method
     @Override
-    public void scanResultData(String codeFormat, String codeContent) {
-        openActionDialogAfterScanning(codeContent);
+    public void scanResultData(String whichFragment, String codeContent) {
+        openActionDialogAfterScanning(codeContent, whichFragment);
     }
 
     // Give some error Message if the Code have not Data inside
@@ -315,6 +342,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
             //Do something if Tab is reselected. Parameters: selected Tab.--- Info: tab.getPosition() == x for check which Tab
             @Override
+
+
             public void onTabReselected(TabLayout.Tab tab) {
                 //check if settings Tab is unselected
                 if (tab.getPosition() == 2) {

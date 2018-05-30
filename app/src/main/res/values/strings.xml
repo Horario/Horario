@@ -82,7 +82,7 @@
     </string-array>
 
 
-    <!-- QR Generator & QRSharing elements -->
+    <!-- QR Generator -->
     <string name="show_Response">Rückmeldungen anzeigen</string>
     <string name="share_with">Teilen via…</string>
     <string name="on">Am\u0020</string>
@@ -108,15 +108,15 @@
     <string name="toCalender">\u0020Zum Kalender\u0020</string>
     <string name="wrongQRCodeResult">Das ist der Inhalt vom QR Code:\u0020</string>
     <string name="notAsEventSaveable">Das können wir leider nicht als Termin speichern!</string>
-    <string name="in_kalender_anzeigen">In Kalender anzeigen</string>
+    <string name="back_where_user_comesFrom">Zurück zur Ursprung</string>
 
     <!-- QR Scanner & Scanner PopUp -->
     <string name="eventSave">Termin zusagen</string>
     <string name="eventSaveWithoutAssign">Termin ohne Zusage speichern</string>
     <string name="eventReject">Termin ablehnen</string>
-    <string name="scanneroverlayer_qrCodeScan">Termincode scannen</string>
-    <string name="scanneroverlay_positionYourScanner">Halte dein Smartphone vor den QR-Code und</string>
-    <string name="scanneroverlay_toShowTheEvent">scanne ihn ab, um den Termin zu öffnen</string>
+    <string name="scannerOverlayer_qrCodeScan">Termincode scannen</string>
+    <string name="scannerOverlay_positionYourScanner">Halte dein Smartphone vor den QR-Code und</string>
+    <string name="scannerOverlay_toShowTheEvent">scanne ihn ab, um den Termin zu öffnen</string>
     <string name="requestPermission_thankYou">Danke für die Zugriffsrechte auf die Kamera!</string>
     <string name="requestPermission_askForPermission">Wir brauchen den Kamerazugriff um den QR-Code einzuscannen.</string>
     <string name="requestPermission_againButton">Nochmal</string>
@@ -124,8 +124,11 @@
     <string name="abort">ABBRUCH</string>
     <string name="setting_copyright_privacyPolicy">Privacy Policy</string>
     <string name="accessWith_NeverAskAgain_deny">Zugriff Verweigert</string>
-    <string name="requestPermission_accessDenied_withCheckbox">Du hast mit den Hacken bei \"Nicht mehr fragen\"  dauerhaft den Zugiff zum Kalender verweigert. Um den QR Scanner zu nutzen aktiviere bitte den Kamerazugriff über deine Rechteverwaltung</string>
+    <string name="requestPermission_accessDenied_withCheckbox">Du hast mit den Hacken bei \"Nicht mehr fragen\"
+        dauerhaft den Zugiff zum Kalender verweigert. Um den QR Scanner zu nutzen aktiviere bitte den
+        Kamerazugriff über deine Rechteverwaltung</string>
     <string name="requestPermission_firstTryRequest">Erster von zwei Versuchen</string>
+    <string name="qrGenerator_button_showInEventOverView">In Terminübersicht anzeigen</string>
 
 
 </resources>
