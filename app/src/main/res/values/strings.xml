@@ -85,6 +85,15 @@
         <item name="push_time_90">90</item>
         <item name="push_time_120">120</item>
     </string-array>
+    <string-array name="reason_for_rejection">
+        <item name="reason_1">Krank</item>
+        <item name="reason_2">Zeitlich verhindert</item>
+        <item name="reason_3">Schlafen</item>
+        <item name="reason_4">bli</item>
+        <item name="reason_5">bla</item>
+        <item name="reason_6">blub</item>
+        <item name="reason_7">Mittagessen</item>
+    </string-array>
     <string-array name="start_tab">
         <item name="overview">Terminübersicht</item>
         <item name="calendar">Kalenderansicht</item>
