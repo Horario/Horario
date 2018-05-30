@@ -51,12 +51,12 @@ import hft.wiinf.de.horario.service.NotificationReceiver;
  */
 public class SettingsSettingsFragment extends Fragment implements ActivityCompat.OnRequestPermissionsResultCallback {
     private static final String TAG = "SettingFragmentActivity";
+    private static final int PERMISSION_REQUEST_SEND_SMS = 0;
     EditText editTextUsername, editText_PhoneNumber;
     Person person;
     Spinner spinner_notificationTime, spinner_startTab;
     Switch switch_enablePush;
     TextView textView_minutesBefore, textView_reminder;
-    private static final int PERMISSION_REQUEST_SEND_SMS = 0;
     private int counter = 0;
 
     public SettingsSettingsFragment() {
@@ -176,32 +176,36 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
                 Matcher matcher_username = pattern_username.matcher(inputText);
                 if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches()) {
 
-                if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches() && !inputText.contains("|")) {
-                    person.setName(inputText);
-                    PersonController.savePerson(person);
-                    InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                    Toast.makeText(getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT).show();
-                    if (editText_PhoneNumber.getText().toString().isEmpty())
-                        checkPhonePermission();
-                    editTextUsername.setFocusableInTouchMode(false);
-                    editTextUsername.setFocusable(false);
-                    return false;
-                } else if (inputText.contains("|")) {
-                    Toast toast = Toast.makeText(view.getContext(), R.string.noValidUsername_peek, Toast.LENGTH_SHORT);
-                    toast.show();
-                    editTextUsername.setText(person.getName());
-                    return true;
-                } else {
-                    //if the user name is not valid show a toast
-                    Toast toast = Toast.makeText(view.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
-                    toast.show();
-                    return true;
+                    if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches() && !inputText.contains("|")) {
+                        person.setName(inputText);
+                        PersonController.savePerson(person);
+                        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                        Toast.makeText(getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT).show();
+                        if (editText_PhoneNumber.getText().toString().isEmpty())
+                            checkPhonePermission();
+                        editTextUsername.setFocusableInTouchMode(false);
+                        editTextUsername.setFocusable(false);
+                        return false;
+                    } else if (inputText.contains("|")) {
+                        Toast toast = Toast.makeText(view.getContext(), R.string.noValidUsername_peek, Toast.LENGTH_SHORT);
+                        toast.show();
+                        editTextUsername.setText(person.getName());
+                        return true;
+                    } else {
+                        //if the user name is not valid show a toast
+                        Toast toast = Toast.makeText(view.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
+                        toast.show();
+                        return true;
+                    }
                 }
+                return false;
             }
         });
         //Everything that needs to happen after phone number was written in the EditText-Field
-        editText_PhoneNumber.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        editText_PhoneNumber.setOnEditorActionListener(new TextView.OnEditorActionListener()
+
+        {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 String inputText = v.getText().toString().replaceAll(" ", "");
@@ -225,6 +229,8 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
                 return false;
             }
         });
+
+
 // set the choice posibilities of the push minutes dropdown
         ArrayAdapter minutesAdapter = ArrayAdapter.createFromResource(getContext(), R.array.push_times, android.R.layout.simple_spinner_item);
         minutesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -255,6 +261,7 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
                 return false;
             }
 
+        });
     }
 
     //if the switch is not selected dont show the minutes textview and textedit
@@ -303,7 +310,7 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
         }
     }
 
-    public boolean isPhonePermissionGranted() {
+    private boolean isPhonePermissionGranted() {
         return ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED;
     }
 

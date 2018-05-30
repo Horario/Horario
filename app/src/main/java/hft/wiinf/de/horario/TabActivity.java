@@ -6,7 +6,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -58,6 +57,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     private int counter;
     private static int startTab;
     private Person personMe;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -289,6 +289,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     public void scanResultData(String codeFormat, String codeContent) {
         openActionDialogAfterScanning(codeContent);
     }
+
     // Give some Errormessage if the Code have not Data inside
     @Override
     public void scanResultData(NoScanResultExceptionController noScanData) {
@@ -393,20 +394,23 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
                 if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches() && !dialog_inputUsername.contains("|")) {
                     person.setName(dialog_inputUsername);
-
                     alertDialogAskForUsername.dismiss();
                     PersonController.savePerson(person);
                     Toast.makeText(getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT).show();
                     if (person.getPhoneNumber() == null || person.getPhoneNumber().isEmpty())
                         checkPhonePermission();
                     return false;
+                } else if (dialog_inputUsername.contains("|")) {
+                    Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername_peek, Toast.LENGTH_SHORT);
+                    toast.show();
+                    return true;
                 } else {
                     Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
                     toast.show();
                     return true;
                 }
-            }
 
+            }
         });
     }
 
@@ -502,22 +506,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             }
 
         }
-
-                        alertDialogAskForUsername.cancel();
-                    }
-                    return false;
-                } else if (dialog_inputUsername.contains("|")) {
-                    Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername_peek, Toast.LENGTH_SHORT);
-                    toast.show();
-                    return true;
-                } else {
-                    Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
-                    toast.show();
-                    return true;
-                }
-            }
-        });
     }
+
 
     @Override
     public void onBackPressed() {
