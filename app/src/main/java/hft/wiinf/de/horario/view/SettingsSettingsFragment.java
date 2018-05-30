@@ -46,6 +46,8 @@ import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.service.NotificationReceiver;
 
+import static android.content.Context.INPUT_METHOD_SERVICE;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -174,16 +176,13 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
                 //RegEx: no whitespace at the beginning
                 Pattern pattern_username = Pattern.compile("^([\\S]).*");
                 Matcher matcher_username = pattern_username.matcher(inputText);
-                if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches()) {
 
                     if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches() && !inputText.contains("|")) {
                         person.setName(inputText);
                         PersonController.savePerson(person);
-                        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                         Toast.makeText(getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT).show();
-                        if (editText_PhoneNumber.getText().toString().isEmpty())
-                            checkPhonePermission();
                         editTextUsername.setFocusableInTouchMode(false);
                         editTextUsername.setFocusable(false);
                         return false;
@@ -199,7 +198,13 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
                         return true;
                     }
                 }
-                return false;
+        });
+        editText_PhoneNumber.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus && (person.getPhoneNumber() == null || !person.getPhoneNumber().matches("(0|00|\\+)[1-9][0-9]+"))) {
+                    checkPhonePermission();
+                }
             }
         });
         //Everything that needs to happen after phone number was written in the EditText-Field
@@ -211,18 +216,18 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
                 String inputText = v.getText().toString().replaceAll(" ", "");
                 //on click: read out the textfield, save the personand close the keyboard
                 //regex: perhaps + then numbers
-                if (actionId == EditorInfo.IME_ACTION_DONE && inputText.matches("\\+?[0-9]+")) {
+                if (actionId == EditorInfo.IME_ACTION_DONE && inputText.matches("(\\+|00|0)[1-9][0-9]+")) {
                     person.setPhoneNumber(editText_PhoneNumber.getText().toString().replaceAll(" ", ""));
                     editText_PhoneNumber.setText(person.getPhoneNumber());
                     PersonController.savePerson(person);
                     editText_PhoneNumber.setFocusable(false);
                     editText_PhoneNumber.setFocusableInTouchMode(false);
-                    InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                     Toast.makeText(getContext(), R.string.phoneNumberSaved, Toast.LENGTH_SHORT).show();
 
                 } else {
-                    //show a toast if the number doe not atart with 0 or +
+                    //show a toast if the number does not fit the regex
                     Toast.makeText(view.getContext(), R.string.wrongNumberFormat, Toast.LENGTH_SHORT).show();
                     return true;
                 }
@@ -362,7 +367,8 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
                                 .setNegativeButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        editText_PhoneNumber.requestFocusFromTouch();
+                                        //open keyboard
+                                        ((InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
                                     }
                                 })
                                 .create().show();
@@ -380,12 +386,12 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
                                 .setNegativeButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        editText_PhoneNumber.requestFocusFromTouch();
+                                        ((InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
                                     }
                                 })
                                 .create().show();
                     } else {
-                        editText_PhoneNumber.requestFocusFromTouch();
+                        ((InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
                     }
                 } else {
                     readPhoneNumber();
@@ -415,6 +421,11 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
         } else {
             Toast.makeText(getContext(), R.string.thanksphoneNumber, Toast.LENGTH_SHORT);
             editText_PhoneNumber.setText(phoneNumber);
+            editText_PhoneNumber.setFocusable(false);
+            editText_PhoneNumber.setFocusableInTouchMode(false);
+            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+            Toast.makeText(getContext(), R.string.phoneNumberSaved, Toast.LENGTH_SHORT).show();
         }
     }
 

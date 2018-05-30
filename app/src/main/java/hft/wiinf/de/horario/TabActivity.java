@@ -290,7 +290,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     //Method will be called after UI-Elements are created
     public void onStart() {
         super.onStart();
-        //Select calendar by default
+        //Select calendar by default, else the selected startTab
         Objects.requireNonNull(tabLayout.getTabAt(startTab)).select();
         //Listener that will check when a Tab is selected, unselected and reselected
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -305,9 +305,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 //check if settings Tab is unselected
                 if (tab.getPosition() == 2) {
                     getSupportFragmentManager().popBackStack();
-                    //Close the keyboard on a tab change
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(mSectionsPageAdapter.getItem(2).getView().getApplicationWindowToken(), 0);
                 } else if (tab.getPosition() == 1) {
                     getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
