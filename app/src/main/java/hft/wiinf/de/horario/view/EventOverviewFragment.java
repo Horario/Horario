@@ -50,13 +50,14 @@ public class EventOverviewFragment extends Fragment {
     ConstraintLayout layout_eventOverview_main;
     ConstraintLayout layoutOverview;
 
+
     public static void update() {
         overviewTvMonth.setText(CalendarFragment.monthFormat.format(selectedMonth));
         overviewLvList.setAdapter(iterateOverMonth(selectedMonth));
     }
 
     //get all events for the selected month and save them in a adapter
-    public static ArrayAdapter iterateOverMonth(Date date) {
+    public static ArrayAdapter iterateOverMonth(final Date date) {
         final ArrayList<Appointment> eventArray = new ArrayList<>();
         Calendar helper = Calendar.getInstance();
         helper.setTime(date);
@@ -89,18 +90,30 @@ public class EventOverviewFragment extends Fragment {
         final ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1, eventArray) {
             @NonNull
             @Override
+
+            public int getViewTypeCount() {
+                return getCount();
+            }
+
+            @Override
+            public int getItemViewType(int position) {
+                return position;
+            }
+
+            @Override
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
-                if (eventArray.get(position).getType() == 1) {
-                    textView.setTextColor(Color.DKGRAY);
 
-                    textView.setCompoundDrawablesWithIntrinsicBounds(0,0, R.drawable.ic_mydate,0);
+                if (eventArray.get(position).getType() == 1) {
+
+                    textView.setTextColor(Color.DKGRAY);
+                    textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_mydate, 0);
                 } else if (eventArray.get(position).getType() == 2) {
                     textView.setTextColor(Color.DKGRAY);
-                    textView.setCompoundDrawablesWithIntrinsicBounds(0,0, R.drawable.ic_mydate_questionmark,0);
+                    textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_mydate_questionmark, 0);
                 } else if (eventArray.get(position).getType() == 3) {
                     textView.setTextColor(Color.DKGRAY);
-                    textView.setCompoundDrawablesWithIntrinsicBounds(0,0, R.drawable.ic_mydate_approved,0);
+                    textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_mydate_approved, 0);
                 } else if (eventArray.get(position).getType() == 0) {
                     textView.setTextColor(Color.BLACK);
                     textView.setBackgroundColor(Color.WHITE);
