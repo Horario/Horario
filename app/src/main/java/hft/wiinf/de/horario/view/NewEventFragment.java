@@ -636,9 +636,9 @@ public class NewEventFragment extends Fragment {
             phoneNumber.replaceAll(" ", "");
         me.setPhoneNumber(phoneNumber);
         //if the number could not been read, open a dialog
-        if (me.getPhoneNumber() == null || !me.getPhoneNumber().matches("(00|0|\\+)[1-9][0-9]+"))
-            Toast.makeText(getContext(), R.string.PhoneNumberCouldNotBeenRead, Toast.LENGTH_SHORT);
-        else {
+        if (me.getPhoneNumber() == null || !me.getPhoneNumber().matches("(00|0|\\+)[1-9][0-9]+")) {
+            openDialogAskForPhoneNumber();
+        } else {
             Toast.makeText(getContext(), R.string.thanksphoneNumber, Toast.LENGTH_SHORT).show();
             saveEvent();
 
