@@ -480,25 +480,28 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         }
     }
 
+    //convert startDate-String from QR-Scanner into Calendar format
     private Calendar getStartTimeEvent() {
+        //startDate from qr scanner
         String[] startDateStringBufferArray = startDate.split("\\.");
         day = startDateStringBufferArray[0].trim();
         month = startDateStringBufferArray[1].trim();
         year = startDateStringBufferArray[2].trim();
 
+        //startTime from qr scanner
         String[] startTimeStringBufferArray = startTime.split(":");
         hourOfDay = startTimeStringBufferArray[0].trim();
         minutesOfDay = startTimeStringBufferArray[1].trim();
 
+        //set startDate and startTime in one variable
         myStartTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hourOfDay));
         myStartTime.set(Calendar.MINUTE, Integer.parseInt(minutesOfDay));
         myStartTime.set(Integer.parseInt(year), Integer.parseInt(month) - 1, Integer.parseInt(day));
 
-        Log.i("Starttermin", myStartTime.getTime().toString());
-
         return myStartTime;
     }
 
+    //convert endDate-String from QR-Scanner into Calendar format
     private Calendar getEndTimeEvent() {
         String[] startDateStringBufferArray = startDate.split("\\.");
         day = startDateStringBufferArray[0].trim();
@@ -516,6 +519,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         return myEndTime;
     }
 
+    //if serialevent
+    //get end of Repetition Date
     private Calendar getEndDateEvent() {
         String[] endDateStringBufferArray = endDate.split("\\.");
         day = endDateStringBufferArray[0].trim();
@@ -532,6 +537,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         return myEndDate;
     }
 
+    //convert Repetition string into Repetition format
     private Repetition getRepetition() {
         switch (repetition) {
             case "jährlich":
@@ -547,40 +553,51 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         }
     }
 
+    //save Event and Person
     private void saveEventAndPerson(final AlertDialog alertDialogAskForFinalDecission, final int buttonId) {
+        //open Dialog with yes or no after button click (accept, save, reject)
         alertDialogAskForFinalDecission.show();
-        //ToDo Dennis hier kommt dein Code rein.
         alertDialogAskForFinalDecission.findViewById(R.id.dialog_event_final_decission_accept)
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         person = PersonController.getPersonWhoIam();
+                        //Calendar variables for checking startTime and endTime
                         Calendar checkStartTime = getStartTimeEvent();
                         Calendar checkEndTime = getEndTimeEvent();
 
                         Person person = new Person();
                         Event event = new Event(person);
 
+                        //check if Event is n Database or not
                         singleEvent = EventController.checkIfEventIsInDatabase(description,
                                 shortTitle, place, checkStartTime, checkEndTime);
 
+                        //if event is in  database
                         if (singleEvent != null) {
+                            //finish and restart the activity
                             Intent intent = getIntent();
                             finish();
                             startActivity(intent);
-                            Toast toast = Toast.makeText(v.getContext(), R.string.eventIsInDatabase, Toast.LENGTH_SHORT);
+                            //write Toast, event is in database
+                            Toast toast = Toast.makeText(v.getContext(), R.string.eventIsInDatabase, Toast.LENGTH_LONG);
                             toast.show();
+                            //if event is not in database
                         } else {
+                            //check if user who published the event is in database
                             personEventCreator = PersonController.checkforPhoneNumber(creatorPhoneNumber);
 
+                            //if publisher is in database
                             if (personEventCreator != null) {
                                 event.setCreator(personEventCreator);
                             } else {
+                                //if publisher is not in database: save a new person
                                 person.setName(eventCreatorName);
                                 person.setPhoneNumber(creatorPhoneNumber);
                                 person.save();
                             }
 
+                            //set all things for event
                             event.setCreatorEventId(Long.parseLong(creatorID));
                             event.setStartTime(getStartTimeEvent().getTime());
                             event.setEndTime(getEndTimeEvent().getTime());
@@ -589,6 +606,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                             event.setPlace(place);
                             event.setDescription(description);
 
+                            //check which button got pressed and set acceptedState
                             if (buttonId == 1) {
                                 event.setAccepted(AcceptedState.ACCEPTED);
                             } else if (buttonId == 2) {
@@ -597,10 +615,13 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                                 event.setAccepted(AcceptedState.REJECTED);
                             }
 
+                            //check if event is serialevent
                             if (event.getRepetition() != Repetition.NONE) {
                                 event.setEndDate(getEndDateEvent().getTime());
+                                //save serialevent
                                 EventController.saveSerialevent(event);
                             } else {
+                                //save the one event
                                 EventController.saveEvent(event);
                             }
 
@@ -611,6 +632,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         }
                     }
                 });
+        //if Button "nein": cancel dialog
         alertDialogAskForFinalDecission.findViewById(R.id.dialog_event_final_decission_reject)
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -620,7 +642,9 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 });
     }
 
+    //check after scan if app has an user with an phonenumber
     private void openDialogAskForUsernameAndPhoneNumber() {
+        //build dialog for username and phoneNumber
         final AlertDialog.Builder dialogAskForUsernamePhoneNumber = new AlertDialog.Builder(this);
         dialogAskForUsernamePhoneNumber.setView(R.layout.dialog_askforphonenumberandusername);
         dialogAskForUsernamePhoneNumber.setTitle(R.string.titleDialogUsernamePhoneNumber);
@@ -629,15 +653,17 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         final AlertDialog alertDialogAskForUsernamePhoneNumber = dialogAskForUsernamePhoneNumber.create();
         alertDialogAskForUsernamePhoneNumber.show();
 
+        //initialize GUI elements
         final EditText afterScanning_username = alertDialogAskForUsernamePhoneNumber.findViewById(R.id.dialog_afterScanner_editText_username);
         final EditText afterScanning_phoneNumber = alertDialogAskForUsernamePhoneNumber.findViewById(R.id.dialog_afterScanner_editText_phoneNumber);
+        //set textfield if user has username/phoneNumber
         afterScanning_username.setText(personMe.getName());
         afterScanning_phoneNumber.setText(personMe.getPhoneNumber());
 
         Objects.requireNonNull(afterScanning_phoneNumber).setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                //TODO: Unter mir liegt der Fehler; Variable überschreibt sich
+                //getText for both variables (phonenUmber and username)
                 String dialog_afterScanning_inputUsername;
                 dialog_afterScanning_inputUsername = afterScanning_username.getText().toString();
                 String dialog_afterScanning_inputPhoneNumber;
@@ -647,21 +673,27 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 Pattern pattern_afterScanning_username = Pattern.compile("^([\\S]).*");
                 Matcher matcher_afterScanning_username = pattern_afterScanning_username.matcher(dialog_afterScanning_inputUsername);
 
+                //check if personwhoiam is in database
                 Person me = PersonController.getPersonWhoIam();
 
+                //check for valid input
                 if (actionId == EditorInfo.IME_ACTION_DONE && matcher_afterScanning_username.matches() && !dialog_afterScanning_inputUsername.contains("|")
                         && dialog_afterScanning_inputPhoneNumber.matches("(00|0|\\+)[1-9][0-9]+")) {
                     if (me == null) {
-                        //ToDo: Flo - PhoneNumber
+                        //if no isitme is in database
+                        //create new person
                         personMe = new Person(true, dialog_afterScanning_inputPhoneNumber, dialog_afterScanning_inputUsername);
                         PersonController.addPersonMe(personMe);
 
                         Toast toast = Toast.makeText(v.getContext(), R.string.thanksForUsernameAndPhoneNumber, Toast.LENGTH_SHORT);
                         toast.show();
 
+                        //close dialog
                         alertDialogAskForUsernamePhoneNumber.cancel();
+                    //if isitme is in database without username
                     } else if (me.getName().isEmpty()) {
                         personMe = PersonController.getPersonWhoIam();
+                        //get username
                         personMe.setName(dialog_afterScanning_inputUsername);
                         PersonController.savePerson(personMe);
 
@@ -669,8 +701,10 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         toast.show();
 
                         alertDialogAskForUsernamePhoneNumber.cancel();
+                    //if isitme is in database without phonenumber
                     } else if (me.getPhoneNumber().isEmpty()) {
                         personMe = PersonController.getPersonWhoIam();
+                        //get phonenumber
                         personMe.setPhoneNumber(dialog_afterScanning_inputPhoneNumber);
                         PersonController.savePerson(personMe);
 
@@ -680,15 +714,18 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         alertDialogAskForUsernamePhoneNumber.cancel();
                     }
                     return false;
+                //check for valid input: username should not contain "|"
                 } else if (dialog_afterScanning_inputUsername.contains("|")) {
                     Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername_peek, Toast.LENGTH_SHORT);
                     toast.show();
                     return true;
+                //check for valid input: phonenumber should start with 0 or 00
                 } else if (!dialog_afterScanning_inputPhoneNumber.matches("(00|0|\\+)[1-9][0-9]+")) {
                     Toast toast = Toast.makeText(v.getContext(), "falsche Nummer", Toast.LENGTH_SHORT);
                     toast.show();
                     return true;
                 } else {
+                //check for valid input: username should not start with blank space
                     Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
                     toast.show();
                     return true;
