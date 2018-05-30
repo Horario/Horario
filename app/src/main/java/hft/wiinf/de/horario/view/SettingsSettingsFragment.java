@@ -203,6 +203,10 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus && (person.getPhoneNumber() == null || !person.getPhoneNumber().matches("(0|00|\\+)[1-9][0-9]+"))) {
+                    if (getActivity().getCurrentFocus() != null) {
+                        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    }
                     checkPhonePermission();
                 }
             }
@@ -416,8 +420,10 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
         person.setPhoneNumber(phoneNumber);
         //if the number could not been read, open a dialog
         if (person.getPhoneNumber() == null || !person.getPhoneNumber().matches("(00|0|\\+)[1-9][0-9]+")) {
-            Toast.makeText(getContext(), R.string.PhoneNumberCouldNotBeenRead, Toast.LENGTH_SHORT);
+            Toast.makeText(getContext(), R.string.PhoneNumberCouldNotBeenRead, Toast.LENGTH_SHORT).show();
             editText_PhoneNumber.requestFocusFromTouch();
+            //open keyboard
+            ((InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
         } else {
             Toast.makeText(getContext(), R.string.thanksphoneNumber, Toast.LENGTH_SHORT);
             editText_PhoneNumber.setText(phoneNumber);
