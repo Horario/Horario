@@ -172,7 +172,16 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         @Override
                         public void onClick(View v) {
                             buttonId = 2;
-                            saveEventAndPerson(alertDialogAskForFinalDecission, buttonId);
+                            final Person myPerson = PersonController.getPersonWhoIam();
+                            if (myPerson == null) {
+                                openDialogAskForUsernameAndPhoneNumber();
+                            } else if (myPerson.getPhoneNumber().isEmpty()) {
+                                openDialogAskForUsernameAndPhoneNumber();
+                            } else if (myPerson.getName().isEmpty()) {
+                                openDialogAskForUsernameAndPhoneNumber();
+                            } else {
+                                saveEventAndPerson(alertDialogAskForFinalDecission, buttonId);
+                            }
                         }
                     });
 
@@ -182,7 +191,16 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         @Override
                         public void onClick(View v) {
                             buttonId = 3;
-                            saveEventAndPerson(alertDialogAskForFinalDecission, buttonId);
+                            final Person myPerson = PersonController.getPersonWhoIam();
+                            if (myPerson == null) {
+                                openDialogAskForUsernameAndPhoneNumber();
+                            } else if (myPerson.getPhoneNumber().isEmpty()) {
+                                openDialogAskForUsernameAndPhoneNumber();
+                            } else if (myPerson.getName().isEmpty()) {
+                                openDialogAskForUsernameAndPhoneNumber();
+                            } else {
+                                saveEventAndPerson(alertDialogAskForFinalDecission, buttonId);
+                            }
                         }
                     });
 
@@ -462,7 +480,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         }
     }
 
-    private Calendar getStartTime() {
+    private Calendar getStartTimeEvent() {
         String[] startDateStringBufferArray = startDate.split("\\.");
         day = startDateStringBufferArray[0].trim();
         month = startDateStringBufferArray[1].trim();
@@ -474,12 +492,14 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
         myStartTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hourOfDay));
         myStartTime.set(Calendar.MINUTE, Integer.parseInt(minutesOfDay));
-        myStartTime.set(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day));
+        myStartTime.set(Integer.parseInt(year), Integer.parseInt(month) - 1, Integer.parseInt(day));
+
+        Log.i("Starttermin", myStartTime.getTime().toString());
 
         return myStartTime;
     }
 
-    private Calendar getEndTime() {
+    private Calendar getEndTimeEvent() {
         String[] startDateStringBufferArray = startDate.split("\\.");
         day = startDateStringBufferArray[0].trim();
         month = startDateStringBufferArray[1].trim();
@@ -491,12 +511,12 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
         myEndTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hourOfDay));
         myEndTime.set(Calendar.MINUTE, Integer.parseInt(minutesOfDay));
-        myEndTime.set(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day));
+        myEndTime.set(Integer.parseInt(year), Integer.parseInt(month) - 1, Integer.parseInt(day));
 
         return myEndTime;
     }
 
-    private Calendar getEndDate() {
+    private Calendar getEndDateEvent() {
         String[] endDateStringBufferArray = endDate.split("\\.");
         day = endDateStringBufferArray[0].trim();
         month = endDateStringBufferArray[1].trim();
@@ -508,7 +528,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
         myEndDate.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hourOfDay));
         myEndDate.set(Calendar.MINUTE, Integer.parseInt(minutesOfDay));
-        myEndDate.set(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day));
+        myEndDate.set(Integer.parseInt(year), Integer.parseInt(month) - 1, Integer.parseInt(day));
         return myEndDate;
     }
 
@@ -535,8 +555,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                     @Override
                     public void onClick(View v) {
                         person = PersonController.getPersonWhoIam();
-                        Calendar checkStartTime = getStartTime();
-                        Calendar checkEndTime = getEndTime();
+                        Calendar checkStartTime = getStartTimeEvent();
+                        Calendar checkEndTime = getEndTimeEvent();
 
                         Person person = new Person();
                         Event event = new Event(person);
@@ -562,8 +582,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                             }
 
                             event.setCreatorEventId(Long.parseLong(creatorID));
-                            event.setStartTime(getStartTime().getTime());
-                            event.setEndTime(getEndTime().getTime());
+                            event.setStartTime(getStartTimeEvent().getTime());
+                            event.setEndTime(getEndTimeEvent().getTime());
                             event.setRepetition(getRepetition());
                             event.setShortTitle(shortTitle);
                             event.setPlace(place);
@@ -578,7 +598,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                             }
 
                             if (event.getRepetition() != Repetition.NONE) {
-                                event.setEndDate(getEndDate().getTime());
+                                event.setEndDate(getEndDateEvent().getTime());
                                 EventController.saveSerialevent(event);
                             } else {
                                 EventController.saveEvent(event);
@@ -664,12 +684,11 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                     Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername_peek, Toast.LENGTH_SHORT);
                     toast.show();
                     return true;
-                }else if(!dialog_afterScanning_inputPhoneNumber.matches("(00|0|\\+)[1-9][0-9]+")){
+                } else if (!dialog_afterScanning_inputPhoneNumber.matches("(00|0|\\+)[1-9][0-9]+")) {
                     Toast toast = Toast.makeText(v.getContext(), "falsche Nummer", Toast.LENGTH_SHORT);
                     toast.show();
                     return true;
-                }
-                else {
+                } else {
                     Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
                     toast.show();
                     return true;
