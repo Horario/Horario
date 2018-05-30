@@ -19,7 +19,6 @@
         android:textSize="15dip"
         android:textStyle="bold"/>
 
-
     <!-- Rightend Arrow -->
     <ImageView
         android:id="@+id/presenceIndicator"

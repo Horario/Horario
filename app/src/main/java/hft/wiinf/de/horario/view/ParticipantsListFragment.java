@@ -86,7 +86,9 @@ public class ParticipantsListFragment extends Fragment {
                     @Override
                     public void onRefresh() {
                         swipeRefresh.setRefreshing(true);
-                        refreshConfirmationsAndCancellations();
+                        //refreshConfirmationsAndCancellations();
+                        Toast toast = Toast.makeText(getContext(), "Funktion wird momentan gewartet", Toast.LENGTH_SHORT);
+                        toast.show();
                         swipeRefresh.setRefreshing(false);
                     }
                 }
