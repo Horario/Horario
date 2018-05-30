@@ -1,22 +1,15 @@
 package hft.wiinf.de.horario;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -75,13 +68,12 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         mSectionsPageAdapter = new SectionsPageAdapterActivity(getSupportFragmentManager());
 
         //Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = findViewById(R.id.container);
         setupViewPager(mViewPager);
 
-        tabLayout = (TabLayout) findViewById(R.id.tabBarLayout);
+        tabLayout = findViewById(R.id.tabBarLayout);
         tabLayout.setupWithViewPager(mViewPager);
 
-        //TODO Change Picture (DesignTeam)
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_dateview);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_calendarview);
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_settings);
@@ -91,13 +83,11 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             person = new Person(true, "", "");
         if (person.getName().isEmpty()) {
             openDialogAskForUsername();
-        } else if (person.getPhoneNumber() == null || person.getPhoneNumber().isEmpty()) {
-            checkPhonePermission();
         }
     }
 
     //After Scanning it was opened a Dialog where the user can choose what to do next
-    @SuppressLint("ResourceType")
+
     private void openActionDialogAfterScanning(final String qrScannContentResult) {
 
         //Create the Dialog with the GUI Elements initial
@@ -342,11 +332,17 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                     imm.hideSoftInputFromWindow(mSectionsPageAdapter.getItem(2).getView().getApplicationWindowToken(), 0);
                 } else if (tab.getPosition() == 1) {
                     getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    //Close the keyboard on a tab change
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(mSectionsPageAdapter.getItem(1).getView().getApplicationWindowToken(), 0);
                     FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
                     fr.replace(R.id.calendar_frameLayout, new CalendarFragment());
                     fr.commit();
                 } else if (tab.getPosition() == 0) {
                     getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    //Close the keyboard on a tab change
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(mSectionsPageAdapter.getItem(0).getView().getApplicationWindowToken(), 0);
                     FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
                     fr.replace(R.id.eventOverview_frameLayout, new EventOverviewFragment());
                     fr.commit();
@@ -397,8 +393,10 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                     alertDialogAskForUsername.dismiss();
                     PersonController.savePerson(person);
                     Toast.makeText(getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT).show();
-                    if (person.getPhoneNumber() == null || person.getPhoneNumber().isEmpty())
-                        checkPhonePermission();
+                    if (person.getPhoneNumber() == null || person.getPhoneNumber().isEmpty()) {
+                        PersonController.addPersonMe(person);
+                        Toast.makeText(getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT).show();
+                    }
                     return false;
                 } else if (dialog_inputUsername.contains("|")) {
                     Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername_peek, Toast.LENGTH_SHORT);
@@ -413,102 +411,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             }
         });
     }
-
-    private void checkPhonePermission() {
-        //Check if User has permission to start to scan, if not it's start a RequestLoop
-        if (!isPhonePermissionGranted()) {
-            requestPhonePermission();
-        } else {
-            readPhoneNumber();
-        }
-    }
-
-    public boolean isPhonePermissionGranted() {
-        return ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED;
-    }
-
-    private void requestPhonePermission() {
-        //For Fragment: requestPermissions(permissionsList,REQUEST_CODE);
-        //For Activity: ActivityCompat.requestPermissions(this,permissionsList,REQUEST_CODE);
-        requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, PERMISSION_REQUEST_REQUEST_PHONE_STATE);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PERMISSION_REQUEST_REQUEST_PHONE_STATE) {
-            // for each permission check if the user granted/denied them you may want to group the
-            // rationale in a single dialog,this is just an example
-            for (int i = 0, len = permissions.length; i < len; i++) {
-
-                if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
-                    // user rejected the permission
-                    boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.READ_PHONE_STATE);
-                    if (!showRationale) {
-                        // user also CHECKED "never ask again" you can either enable some fall back,
-                        // disable features of your app or open another dialog explaining again the
-                        // permission and directing to the app setting
-
-                        new android.support.v7.app.AlertDialog.Builder(this)
-                                .setTitle(R.string.accessWith_NeverAskAgain_deny)
-                                .setMessage(R.string.sendSMS_accessDenied_withCheckbox)
-                                .setPositiveButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        openDialogAskForPhoneNumber();
-                                    }
-                                })
-                                .create().show();
-                    } else if (counter < 1) {
-                        // user did NOT check "never ask again" this is a good place to explain the user
-                        // why you need the permission and ask if he wants // to accept it (the rationale)
-                        new android.support.v7.app.AlertDialog.Builder(this)
-                                .setTitle(R.string.requestPermission_firstTryRequest)
-                                .setMessage(R.string.phoneNumber_explanation)
-                                .setPositiveButton(R.string.oneMoreTime, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        counter++;
-                                        checkPhonePermission();
-                                    }
-                                })
-                                .setNegativeButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        openDialogAskForPhoneNumber();
-                                    }
-                                })
-                                .create().show();
-                    } else if (counter == 1) {
-                        new android.support.v7.app.AlertDialog.Builder(this)
-                                .setTitle(R.string.sendSMS_lastTry)
-                                .setMessage(R.string.phoneNumber_explanation)
-                                .setPositiveButton(R.string.oneMoreTime, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        counter++;
-                                        checkPhonePermission();
-                                    }
-                                })
-                                .setNegativeButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        openDialogAskForPhoneNumber();
-                                    }
-                                })
-                                .create().show();
-                    } else {
-                        openDialogAskForPhoneNumber();
-                    }
-                } else {
-                    readPhoneNumber();
-                }
-            }
-
-        }
-    }
-
-
     @Override
     public void onBackPressed() {
         int count = getSupportFragmentManager().getBackStackEntryCount();
@@ -518,68 +420,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         } else {
             getSupportFragmentManager().popBackStack();
         }
-
-    }
-
-    // }
-
-
-    // method to read the phone number of the user
-    public void readPhoneNumber() {
-        //if permission is granted read the phone number
-        TelephonyManager telephonyManager = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
-        @SuppressLint("MissingPermission") String phoneNumber = telephonyManager.getLine1Number();
-        if (phoneNumber != null)
-            phoneNumber.replaceAll(" ", "");
-        person.setPhoneNumber(phoneNumber);
-        //if the number could not been read, open a dialog
-        if (person.getPhoneNumber() == null || !person.getPhoneNumber().matches("(00|0|\\+)[1-9][0-9]+"))
-            Toast.makeText(getContext(), R.string.PhoneNumberCouldNotBeenRead, Toast.LENGTH_SHORT).show();
-        else {
-            PersonController.addPersonMe(person);
-            Toast.makeText(getContext(), R.string.thanksphoneNumber, Toast.LENGTH_SHORT).show();
-        }
-    }
-
-
-    public void openDialogAskForPhoneNumber() {
-        final android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder(this);
-        dialogBuilder.setView(R.layout.dialog_askingfortelephonenumber);
-        dialogBuilder.setCancelable(true);
-        final android.app.AlertDialog alertDialog = dialogBuilder.create();
-        alertDialog.show();
-        EditText phoneNumber = alertDialog.findViewById(R.id.dialog_EditText_telephonNumber);
-        if (person.getPhoneNumber() != null)
-            phoneNumber.setText(person.getPhoneNumber());
-        phoneNumber.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                String input = v.getText().toString().replaceAll(" ", "");
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    //regex: perhaps + at beginning, then numbers
-                    if (input.matches("(0|\\+|00)[1-9][0-9]*")) {
-                        alertDialog.dismiss();
-                        person.setPhoneNumber(input);
-                        PersonController.addPersonMe(person);
-                        Toast.makeText(v.getContext(), R.string.thanksphoneNumber, Toast.LENGTH_SHORT).show();
-                        return false;
-                    } else {
-                        Toast toast = Toast.makeText(v.getContext(), R.string.wrongNumberFormat, Toast.LENGTH_SHORT);
-                        toast.show();
-                        return true;
-                    }
-                }
-                return false;
-            }
-        });
-        //if the dialog is canceled save only the person (user name)
-        alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                Toast toast = Toast.makeText(getContext(), R.string.PhoneNumberNotSaved, Toast.LENGTH_SHORT);
-                toast.show();
-            }
-        });
 
     }
 }
