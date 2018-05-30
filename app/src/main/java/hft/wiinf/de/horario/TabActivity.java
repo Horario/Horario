@@ -151,7 +151,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 @Override
                 public void onClick(View v) {
                     //ToDo Dennis hier kommt dein Code rein.
-                    
+
                     afterScanningDialogAction.dismiss();
                     //Restart the TabActivity an Reload all Views
                     restartApp(whichFragmentTag);
