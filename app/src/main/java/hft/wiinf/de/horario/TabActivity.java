@@ -149,17 +149,21 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             // Button to Save the Event and send for assent the Event a SMS  to the EventCreator
             afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_eventSave)
                     .setOnClickListener(new View.OnClickListener() {
-                        final Person myPerson = PersonController.getPersonWhoIam();
                         @Override
                         public void onClick(View v) {
                             buttonId = 1;
+                            final Person myPerson = PersonController.getPersonWhoIam();
                             if (myPerson == null) {
                                 openDialogAskForUsernameAndPhoneNumber();
-                            }else{
+                            } else if (myPerson.getPhoneNumber().isEmpty()) {
+                                openDialogAskForUsernameAndPhoneNumber();
+                            } else if (myPerson.getName().isEmpty()) {
+                                openDialogAskForUsernameAndPhoneNumber();
+                            } else {
                                 saveEventAndPerson(alertDialogAskForFinalDecission, buttonId);
                             }
-
                         }
+
                     });
 
             //Button to Save the Event but don't send for assent the Event a SMS to the EventCreator
@@ -613,10 +617,11 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         Objects.requireNonNull(afterScanning_phoneNumber).setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                //TODO: Unter mir liegt der Fehler; Variable überschreibt sich
                 String dialog_afterScanning_inputUsername;
-                dialog_afterScanning_inputUsername = v.getText().toString();
+                dialog_afterScanning_inputUsername = afterScanning_username.getText().toString();
                 String dialog_afterScanning_inputPhoneNumber;
-                dialog_afterScanning_inputPhoneNumber = v.getText().toString();
+                dialog_afterScanning_inputPhoneNumber = afterScanning_phoneNumber.getText().toString();
 
                 //RegEx: no whitespace at the beginning
                 Pattern pattern_afterScanning_username = Pattern.compile("^([\\S]).*");
@@ -624,7 +629,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
                 Person me = PersonController.getPersonWhoIam();
 
-                if (actionId == EditorInfo.IME_ACTION_DONE && matcher_afterScanning_username.matches() && !dialog_afterScanning_inputUsername.contains("|")) {
+                if (actionId == EditorInfo.IME_ACTION_DONE && matcher_afterScanning_username.matches() && !dialog_afterScanning_inputUsername.contains("|")
+                        && dialog_afterScanning_inputPhoneNumber.matches("(00|0|\\+)[1-9][0-9]+")) {
                     if (me == null) {
                         //ToDo: Flo - PhoneNumber
                         personMe = new Person(true, dialog_afterScanning_inputPhoneNumber, dialog_afterScanning_inputUsername);
@@ -658,7 +664,12 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                     Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername_peek, Toast.LENGTH_SHORT);
                     toast.show();
                     return true;
-                } else {
+                }else if(!dialog_afterScanning_inputPhoneNumber.matches("(00|0|\\+)[1-9][0-9]+")){
+                    Toast toast = Toast.makeText(v.getContext(), "falsche Nummer", Toast.LENGTH_SHORT);
+                    toast.show();
+                    return true;
+                }
+                else {
                     Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
                     toast.show();
                     return true;
