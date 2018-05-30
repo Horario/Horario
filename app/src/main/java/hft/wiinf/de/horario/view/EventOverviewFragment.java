@@ -213,7 +213,7 @@ public class EventOverviewFragment extends Fragment {
                 newEventFragment.setArguments(bundle);
 
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
-                fr.replace(R.id.eventOverview_frameLayout, new NewEventFragment());
+                fr.replace(R.id.eventOverview_frameLayout, newEventFragment);
                 fr.addToBackStack(null);
                 fr.commit();
                 closeFABMenu();
@@ -230,7 +230,7 @@ public class EventOverviewFragment extends Fragment {
                 qrScanFragment.setArguments(bundle);
 
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
-                fr.replace(R.id.eventOverview_frameLayout, new QRScanFragment());
+                fr.replace(R.id.eventOverview_frameLayout, qrScanFragment);
                 fr.addToBackStack(null);
                 fr.commit();
                 closeFABMenu();
