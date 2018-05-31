@@ -3,6 +3,7 @@ package hft.wiinf.de.horario;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -134,6 +135,19 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         qrScanner_result_abort.setVisibility(View.GONE);
         qrScanner_result_toCalender.setVisibility(View.GONE);
 
+        afterScanningDialogAction.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if(keyCode == KeyEvent.KEYCODE_BACK){
+                    getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    restartApp(whichFragmentTag);
+                    dialog.cancel();
+                    return true;
+                }
+                return false;
+            }
+        });
+
         try {
             // Button to Save the Event and send for assent the Event a SMS  to the EventCreator
             afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_eventSave)
@@ -251,7 +265,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         } catch (NullPointerException e) {
             restartApp(whichFragmentTag);
             afterScanningDialogAction.dismiss();
-            // Same like the NullPointerException
         } catch (ArrayIndexOutOfBoundsException z) {
             com.activeandroid.util.Log.d(TAG, "TabActivity" + z.getMessage());
             qrScanner_reject.setVisibility(View.GONE);
