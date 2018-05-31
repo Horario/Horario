@@ -392,10 +392,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                     alertDialogAskForUsername.dismiss();
                     PersonController.savePerson(person);
                     Toast.makeText(getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT).show();
-                    if (person.getPhoneNumber() == null || person.getPhoneNumber().isEmpty()) {
-                        PersonController.addPersonMe(person);
-                        Toast.makeText(getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT).show();
-                    }
                     return false;
                 } else if (dialog_inputUsername.contains("|")) {
                     Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername_peek, Toast.LENGTH_SHORT);
