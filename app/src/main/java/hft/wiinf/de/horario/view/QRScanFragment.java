@@ -112,7 +112,9 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
                                     @Override
                                     public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
                                         if(keyCode == KeyEvent.KEYCODE_BACK){
+                                            getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                                             goWhereUserComesFrom();
+                                            dialog.cancel();
                                             return true;
                                         }
                                         return false;
@@ -135,6 +137,7 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
                                     @Override
                                     public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
                                         if(keyCode == KeyEvent.KEYCODE_BACK){
+                                            getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                                             goWhereUserComesFrom();
                                             dialog.cancel();
                                             return true;
@@ -164,6 +167,7 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
                                     @Override
                                     public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
                                         if(keyCode == KeyEvent.KEYCODE_BACK){
+                                            getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                                             goWhereUserComesFrom();
                                             dialog.cancel();
                                             return true;
