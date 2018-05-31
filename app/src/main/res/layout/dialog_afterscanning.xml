@@ -79,8 +79,7 @@
             android:id="@+id/dialog_qrScanner_button_about"
             android:layout_width="308dp"
             android:layout_height="141dp"
-            android:layout_alignTop="@+id/dialog_qrScanner_button_eventSave"
-            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
             android:text="@string/abort"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="16dp" />

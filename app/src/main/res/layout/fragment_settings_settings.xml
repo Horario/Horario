@@ -94,16 +94,15 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignStart="@+id/settings_settings_textView_username"
-        android:layout_marginBottom="256dp"
+        android:layout_marginBottom="180dp"
         android:text="@string/startTab" />
 
     <Spinner
         android:id="@+id/settings_settings_spinner_startTab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/textView"
-        android:layout_marginStart="-14dp"
-        android:layout_toEndOf="@+id/settings_settings_textView_settings"
+        android:layout_alignBottom="@+id/textView"
+        android:layout_toEndOf="@+id/settings_settings_textView_username"
         android:entries="@array/start_tab" />
 
 </RelativeLayout>
