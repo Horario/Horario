@@ -126,7 +126,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         TextView qrScanner_result_headline = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_textView_headline);
         Button qrScanner_reject = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_eventRecject);
         Button qrScanner_result_eventSave = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_eventSave);
-        Button qrScanner_result_abort = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_about);
+        final Button qrScanner_result_abort = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_about);
         Button qrScanner_result_toCalender = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_toCalender);
         Button qrScanner_result_eventSave_without_assign = afterScanningDialogAction.findViewById((R.id.dialog_qrScanner_button_eventSaveOnly));
 
@@ -222,6 +222,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         @Override
                         public void onClick(View v) {
                             restartApp(whichFragmentTag);
+                            afterScanningDialogAction.dismiss();
                         }
                     });
 
@@ -248,28 +249,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             }
             // In the CatchBlock the User see some Error Message and Restart after Clock on Button the TabActivity
         } catch (NullPointerException e) {
-            com.activeandroid.util.Log.d(TAG, "TabActivity" + e.getMessage());
-
-            //Hide the Buttons that's not possible to Save or Reject the Event.
-            qrScanner_reject.setVisibility(View.GONE);
-            qrScanner_result_eventSave_without_assign.setVisibility(View.GONE);
-            qrScanner_result_eventSave.setVisibility(View.GONE);
-
-            // It's show the Cancel Button to Restart the TabActivity
-            qrScanner_result_toCalender.setVisibility(View.VISIBLE);
-            qrScanner_result_description.setText(getString(R.string.ups_an_error));
-            qrScanner_result_toCalender.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    restartApp(whichFragmentTag);
-                    /*
-                    Intent intent = getIntent();
-                    finish();
-                    startActivity(intent);
-                    */
-                }
-            });
-
+            restartApp(whichFragmentTag);
+            afterScanningDialogAction.dismiss();
             // Same like the NullPointerException
         } catch (ArrayIndexOutOfBoundsException z) {
             com.activeandroid.util.Log.d(TAG, "TabActivity" + z.getMessage());
@@ -284,6 +265,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 @Override
                 public void onClick(View v) {
                     restartApp(whichFragmentTag);
+                    afterScanningDialogAction.dismiss();
                 }
             });
         }
