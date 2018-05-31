@@ -3,6 +3,7 @@ package hft.wiinf.de.horario;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -11,12 +12,14 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -87,15 +90,38 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         }
     }
 
-    private void restartApp(){
-        Intent intent = getIntent();
-        finish();
-        startActivity(intent);
+    private void restartApp(String fragmentResource) {
+        //check from which Fragment (EventOverview or Calendar) are the Scanner was called
+        Log.d("TAg", "HALLLLO" + fragmentResource);
+        switch (fragmentResource) {
+            case "EventOverview":
+                getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
+                fr.replace(R.id.eventOverview_frameLayout, new EventOverviewFragment());
+                fr.commit();
+                tabLayout.getTabAt(0).select();
+                break;
+            case "Calendar":
+                getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                FragmentTransaction frCA = getSupportFragmentManager().beginTransaction();
+                frCA.replace(R.id.calendar_frameLayout, new CalendarFragment());
+                frCA.commit();
+                tabLayout.getTabAt(1).select();
+                break;
+            default:
+                Toast.makeText(this, R.string.ups_an_error, Toast.LENGTH_SHORT).show();
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
+        }
+
     }
+
+
     //After Scanning it was opened a Dialog where the user can choose what to do next
     @SuppressLint("ResourceType")
-    private void openActionDialogAfterScanning(final String qrScannContentResult) {
-
+    private void openActionDialogAfterScanning(final String qrScannContentResult, final String whichFragmentTag) {
+        Log.d("TAG", "dedede" + whichFragmentTag);
         //Create the Dialog with the GUI Elements initial
         final Dialog afterScanningDialogAction = new Dialog(this);
         afterScanningDialogAction.setContentView(R.layout.dialog_afterscanning);
@@ -106,27 +132,38 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         TextView qrScanner_result_headline = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_textView_headline);
         Button qrScanner_reject = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_eventRecject);
         Button qrScanner_result_eventSave = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_eventSave);
-        Button qrScanner_result_abort = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_about);
+        final Button qrScanner_result_abort = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_about);
         Button qrScanner_result_toCalender = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_toCalender);
         Button qrScanner_result_eventSave_without_assign = afterScanningDialogAction.findViewById((R.id.dialog_qrScanner_button_eventSaveOnly));
-
 
         //Set the Cancel and BackToCalenderButtons to Invisible
         qrScanner_result_abort.setVisibility(View.GONE);
         qrScanner_result_toCalender.setVisibility(View.GONE);
 
+        afterScanningDialogAction.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if(keyCode == KeyEvent.KEYCODE_BACK){
+                    getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    restartApp(whichFragmentTag);
+                    dialog.cancel();
+                    return true;
+                }
+                return false;
+            }
+        });
 
         try {
             // Button to Save the Event and send for assent the Event a SMS  to the EventCreator
             afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_eventSave)
+
                     .setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             //ToDo Dennis hier kommt dein Code rein.
-
-
                             //Restart the TabActivity an Reload all Views
-                            restartApp();
+                            restartApp(whichFragmentTag);
+                            afterScanningDialogAction.dismiss();
                         }
                     });
 
@@ -135,10 +172,9 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 @Override
                 public void onClick(View v) {
                     //ToDo Dennis hier kommt dein Code rein.
-
-
                     //Restart the TabActivity an Reload all Views
-                    restartApp();
+                    restartApp(whichFragmentTag);
+                    afterScanningDialogAction.dismiss();
                 }
             });
 
@@ -147,9 +183,9 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 @Override
                 public void onClick(View v) {
                     //ToDo Dennis hier kommt dein Code rein.
-
                     //Restart the TabActivity an Reload all Views
-                    restartApp();
+                    restartApp(whichFragmentTag);
+                    afterScanningDialogAction.dismiss();
                 }
             });
 
@@ -204,7 +240,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                     qrScanner_result_toCalender.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            restartApp();
+                            restartApp(whichFragmentTag);
+                            afterScanningDialogAction.dismiss();
                         }
                     });
 
@@ -231,24 +268,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             }
             // In the CatchBlock the User see some Error Message and Restart after Clock on Button the TabActivity
         } catch (NullPointerException e) {
-            com.activeandroid.util.Log.d(TAG, "TabActivity" + e.getMessage());
-
-            //Hide the Buttons that's not possible to Save or Reject the Event.
-            qrScanner_reject.setVisibility(View.GONE);
-            qrScanner_result_eventSave_without_assign.setVisibility(View.GONE);
-            qrScanner_result_eventSave.setVisibility(View.GONE);
-
-            // It's show the Cancel Button to Restart the TabActivity
-            qrScanner_result_toCalender.setVisibility(View.VISIBLE);
-            qrScanner_result_description.setText(getString(R.string.ups_an_error));
-            qrScanner_result_toCalender.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    restartApp();
-                }
-            });
-
-            // Same like the NullPointerException
+            restartApp(whichFragmentTag);
+            afterScanningDialogAction.dismiss();
         } catch (ArrayIndexOutOfBoundsException z) {
             com.activeandroid.util.Log.d(TAG, "TabActivity" + z.getMessage());
             qrScanner_reject.setVisibility(View.GONE);
@@ -261,7 +282,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             qrScanner_result_abort.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    restartApp();
+                    restartApp(whichFragmentTag);
+                    afterScanningDialogAction.dismiss();
                 }
             });
         }
@@ -270,8 +292,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
     // "Catch" the ScanningResult and throw the Content to the processing Method
     @Override
-    public void scanResultData(String codeFormat, String codeContent) {
-        openActionDialogAfterScanning(codeContent);
+    public void scanResultData(String whichFragment, String codeContent) {
+        openActionDialogAfterScanning(codeContent, whichFragment);
     }
 
     // Give some error Message if the Code have not Data inside
@@ -320,6 +342,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
             //Do something if Tab is reselected. Parameters: selected Tab.--- Info: tab.getPosition() == x for check which Tab
             @Override
+
+
             public void onTabReselected(TabLayout.Tab tab) {
                 //check if settings Tab is unselected
                 if (tab.getPosition() == 2) {
