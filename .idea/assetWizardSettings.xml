@@ -34,6 +34,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
+                                                <entry key="fontFamily" value="Bahnschrift" />
                                                 <entry key="text" value="?" />
                                               </map>
                                             </option>
