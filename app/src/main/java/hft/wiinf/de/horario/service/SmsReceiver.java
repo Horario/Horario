@@ -84,9 +84,11 @@ public class SmsReceiver extends BroadcastReceiver {
                     if (personAccepted.getPhoneNumber().equals(person.getPhoneNumber())) {
                         PersonController.deletePerson(personAccepted);
                         person.setCanceledEvent(EventController.getEventById(Long.valueOf(singleUnreadSMS.getCreatorEventId())));
+                        person.setRejectionReason(singleUnreadSMS.getExcuse());
                         PersonController.savePerson(person);
                     } else {
                         person.setCanceledEvent(EventController.getEventById(Long.valueOf(singleUnreadSMS.getCreatorEventId())));
+                        person.setRejectionReason(singleUnreadSMS.getExcuse());
                         PersonController.savePerson(person);
                     }
                 }
