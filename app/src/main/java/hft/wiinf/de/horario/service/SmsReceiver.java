@@ -5,12 +5,9 @@ import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
@@ -21,8 +18,6 @@ import hft.wiinf.de.horario.controller.EventController;
 import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.model.ReceivedHorarioSMS;
-
-import static java.security.AccessController.getContext;
 
 public class SmsReceiver extends BroadcastReceiver {
     private String TAG = SmsReceiver.class.getSimpleName();
@@ -50,6 +45,7 @@ public class SmsReceiver extends BroadcastReceiver {
                 Log.d(TAG, receivedSMSArray[i].getMessageBody().toString());
             }
             for (int i = 0; i < receivedSMSArray.length; i++) {
+                /*collect all the Horario SMS*/
                 if (receivedSMSArray[i].getMessageBody().toString().substring(0, 9).equals(":Horario:")) {
                     String number = (receivedSMSArray[i].getOriginatingAddress());
                     String[] parsedSMS = receivedSMSArray[i].getMessageBody().toString().substring(9).split(",");

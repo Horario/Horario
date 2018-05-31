@@ -58,7 +58,7 @@ import hft.wiinf.de.horario.service.NotificationReceiver;
 
 //TODO Kommentieren und Java Doc Info Schreiben
 public class NewEventFragment extends Fragment implements ActivityCompat.OnRequestPermissionsResultCallback{
-    private String TAG = NewEventFragment.class.getSimpleName();
+    private String TAG = "NewEventFragment";
     // calendar objects to save the startTime / end Time / endOfRepetition, default: values - today
     Calendar startTime = Calendar.getInstance();
     Calendar endTime = Calendar.getInstance();
@@ -72,14 +72,14 @@ public class NewEventFragment extends Fragment implements ActivityCompat.OnReque
     private Button button_save;
     //person object of the user, to get the user name
     private Person me;
-    private static final int PERMISSION_REQUEST_SMS = 1;
+    private static final int PERMISSION_REQUEST_SMS_AND_CONTACTS = 1;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == PERMISSION_REQUEST_SMS) {
+        if (requestCode == PERMISSION_REQUEST_SMS_AND_CONTACTS) {
             // for each permission check if the user granted/denied them you may want to group the
             // rationale in a single dialog,this is just an example
-            for (int i = 0, len = permissions.length; i < len; i++) {
+            for (int i = 0; i < 1; i++) {
 
                 if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
                     // user rejected the permission
@@ -88,7 +88,6 @@ public class NewEventFragment extends Fragment implements ActivityCompat.OnReque
                         // user also CHECKED "never ask again" you can either enable some fall back,
                         // disable features of your app or open another dialog explaining again the
                         // permission and directing to the app setting
-
                         new AlertDialog.Builder(getActivity())
                                 .setOnKeyListener(new DialogInterface.OnKeyListener() {
                                     @Override
@@ -117,8 +116,8 @@ public class NewEventFragment extends Fragment implements ActivityCompat.OnReque
                                     @Override
                                     public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
                                         if(keyCode == KeyEvent.KEYCODE_BACK){
-                                            restartApp();
                                             dialog.cancel();
+                                            restartApp();
                                             return true;
                                         }
                                         return false;
@@ -147,7 +146,6 @@ public class NewEventFragment extends Fragment implements ActivityCompat.OnReque
                                     public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
                                         if(keyCode == KeyEvent.KEYCODE_BACK){
                                             restartApp();
-                                            dialog.cancel();
                                             return true;
                                         }
                                         return false;
@@ -342,8 +340,8 @@ public class NewEventFragment extends Fragment implements ActivityCompat.OnReque
     }
 
     private void requestLoopThenSaveEvent() {
+        /*Same loop as in QRScanFragment*/
         if (!areSMSAndContactsPermissionsGranted()) {
-            Log.d(TAG, "I got notified");
             requestSMSAndContactsPermissions();
         } else {
             onButtonClickSave();
@@ -366,8 +364,7 @@ public class NewEventFragment extends Fragment implements ActivityCompat.OnReque
             listPermissionsNeeded.add(Manifest.permission.READ_CONTACTS);
         }
         if (!listPermissionsNeeded.isEmpty()) {
-            ActivityCompat.requestPermissions(getActivity(), listPermissionsNeeded.toArray(new
-                    String[listPermissionsNeeded.size()]), 1);
+          requestPermissions(listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), PERMISSION_REQUEST_SMS_AND_CONTACTS);
         }
     }
 
@@ -749,7 +746,7 @@ public class NewEventFragment extends Fragment implements ActivityCompat.OnReque
     // Restart the App
     private void restartApp(){
         Bundle whichFragment = getArguments();
-        getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//        getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         if (whichFragment.getString("fragment").equals("EventOverview")) {
             getActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.eventOverview_frameLayout, new EventOverviewFragment(), "")
