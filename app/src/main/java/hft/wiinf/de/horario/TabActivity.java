@@ -184,11 +184,12 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         @Override
                         public void onClick(View v) {
                             //ToDo Dennis hier kommt dein Code rein.
-                            //Restart the TabActivity an Reload all Views
-                            restartApp(whichFragmentTag);
-                            afterScanningDialogAction.dismiss();
                             buttonId = 1;
                             decideWhatToDo();
+//                            //Restart the TabActivity an Reload all Views
+//                            restartApp(whichFragmentTag);
+//                            afterScanningDialogAction.dismiss();
+
                         }
                     });
 
@@ -199,17 +200,12 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         public void onClick(View v) {
                             buttonId = 2;
                             decideWhatToDo();
+//                            //Restart the TabActivity an Reload all Views
+//                            restartApp(whichFragmentTag);
+//                            afterScanningDialogAction.dismiss();
+
                         }
                     });
-            afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_eventSaveOnly).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //ToDo Dennis hier kommt dein Code rein.
-                    //Restart the TabActivity an Reload all Views
-                    restartApp(whichFragmentTag);
-                    afterScanningDialogAction.dismiss();
-                }
-            });
 
             //Button to Reject the Event und send a Reject SMS to the EventCreator
             afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_eventRecject)
@@ -218,17 +214,12 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         public void onClick(View v) {
                             buttonId = 3;
                             decideWhatToDo();
+//                            //Restart the TabActivity an Reload all Views
+//                            restartApp(whichFragmentTag);
+//                            afterScanningDialogAction.dismiss();
                         }
                     });
-            afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_eventRecject).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //ToDo Dennis hier kommt dein Code rein.
-                    //Restart the TabActivity an Reload all Views
-                    restartApp(whichFragmentTag);
-                    afterScanningDialogAction.dismiss();
-                }
-            });
+
 
             //Put StringBuffer in an Array and split the Values to new String Variables
             //Index: 0 = CreatorID; 1 = StartDate; 2 = EndDate; 3 = StartTime; 4 = EndTime;
