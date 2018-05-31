@@ -653,8 +653,6 @@ public class NewEventFragment extends Fragment {
         final android.app.AlertDialog alertDialog = dialogBuilder.create();
         alertDialog.show();
         EditText phoneNumber = alertDialog.findViewById(R.id.dialog_EditText_telephonNumber);
-        if (me.getPhoneNumber() != null)
-            phoneNumber.setText(me.getPhoneNumber());
         phoneNumber.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
