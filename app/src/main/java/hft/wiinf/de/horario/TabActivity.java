@@ -11,14 +11,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,9 +40,7 @@ import hft.wiinf.de.horario.view.CalendarActivity;
 import hft.wiinf.de.horario.view.CalendarFragment;
 import hft.wiinf.de.horario.view.EventOverviewActivity;
 import hft.wiinf.de.horario.view.EventOverviewFragment;
-import hft.wiinf.de.horario.view.EventRejectEvent;
 import hft.wiinf.de.horario.view.SettingsActivity;
-import hft.wiinf.de.horario.view.SettingsCopyrightFragment;
 
 public class TabActivity extends AppCompatActivity implements ScanResultReceiverController {
 

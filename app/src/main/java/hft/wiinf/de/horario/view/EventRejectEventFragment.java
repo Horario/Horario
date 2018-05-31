@@ -14,7 +14,12 @@ import android.widget.TextView;
 
 import hft.wiinf.de.horario.R;
 
-public class EventRejectEvent extends Fragment{
+public class EventRejectEventFragment extends Fragment{
+
+    public EventRejectEventFragment() {
+
+    }
+
     private static final String TAG = "EventRejectEvent";
     EditText reason_for_rejection;
     TextView reject_event_header, reject_event_description;
@@ -41,7 +46,9 @@ public class EventRejectEvent extends Fragment{
         spinner_reason = (Spinner) view.findViewById(R.id.reject_event_spinner_reason);
         button_reject_event = (Button) view.findViewById(R.id.reject_event_button_reject);
 
-        ArrayAdapter reasonAdapter = ArrayAdapter.createFromResource(getContext(), R.array.reason_for_rejection, android.R.layout.simple_spinner_item);
+        ArrayAdapter reasonAdapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.reason_for_rejection, android.R.layout.simple_spinner_item);
         reasonAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_reason.setAdapter(reasonAdapter);
     }
 }
