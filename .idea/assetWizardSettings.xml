@@ -35,7 +35,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="fontFamily" value="Bahnschrift" />
-                                                <entry key="text" value="?" />
+                                                <entry key="text" value="X" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -46,7 +46,8 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="TEXT" />
-                                      <entry key="outputName" value="ic_mydate_questionmark" />
+                                      <entry key="outputName" value="ic_mydate_rejected_white" />
+                                      <entry key="theme" value="HOLO_DARK" />
                                       <entry key="themeColor" value="95ab63" />
                                     </map>
                                   </option>
