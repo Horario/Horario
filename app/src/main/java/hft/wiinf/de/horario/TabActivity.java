@@ -183,7 +183,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                     .setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            //ToDo Dennis hier kommt dein Code rein.
                             buttonId = 1;
                             decideWhatToDo();
 //                            //Restart the TabActivity an Reload all Views

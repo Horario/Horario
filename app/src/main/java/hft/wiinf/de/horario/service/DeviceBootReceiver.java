@@ -27,13 +27,13 @@ public class DeviceBootReceiver extends BroadcastReceiver {
                 Person notificationPerson = PersonController.getPersonWhoIam();
                 //Only set Alarm if Person wants to receive them
                 if (notificationPerson.isEnablePush()) {
-                    startNotification(context, intent, notificationPerson);
+                    startNotification(context, notificationPerson);
                 }
             }
         }
     }
 
-    public void startNotification(Context context, Intent intent, Person notificationPerson) {
+    public void startNotification(Context context, Person notificationPerson) {
         //Get all events that are in the future to set the alarm
         List<Event> allEvents = EventController.findMyAcceptedEventsInTheFuture();
         for (Event event : allEvents) {

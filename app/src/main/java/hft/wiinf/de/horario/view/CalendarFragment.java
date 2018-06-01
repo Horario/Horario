@@ -1,6 +1,6 @@
 package hft.wiinf.de.horario.view;
 
-import android.app.Application;
+
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -34,9 +34,7 @@ import java.util.Locale;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
-import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.AcceptedState;
-import hft.wiinf.de.horario.model.Person;
 
 public class CalendarFragment extends Fragment {
     private static final String TAG = "CalendarFragmentActivity";
@@ -196,7 +194,6 @@ public class CalendarFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 QRScanFragment qrScanFragment = new QRScanFragment();
-                SettingsSettingsFragment settingsFragment = new SettingsSettingsFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("fragment", "Calendar");
                 qrScanFragment.setArguments(bundle);
