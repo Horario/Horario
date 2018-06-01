@@ -216,7 +216,7 @@ public class NewEventFragment extends Fragment {
         //get the user, if it is saved in the db, the user name is read
         me = PersonController.getPersonWhoIam();
         if (me == null)
-            me = new Person(true, "007", "");
+            me = new Person(true, "", "");
         edittext_userName.setText(me.getName());
     }
 
@@ -337,7 +337,7 @@ public class NewEventFragment extends Fragment {
         // if me (the user) is not created (aka null) a new user with typed in the user name is created
         if (me == null)
             //TODO: read the phone number of the user
-            me = new Person(true, "007", "");
+            me = new Person(true, "", "");
         //update or save a new person (me)
         me.setName(edittext_userName.getText().toString());
         PersonController.savePerson(me);
