@@ -43,7 +43,7 @@
 
                 android:layout_alignParentEnd="true"
                 android:layout_below="@+id/newEvent_textEdit_shortTitle"
-                android:ems="9"
+                android:ems="8"
                 android:inputType="textPersonName" />
 
 
@@ -85,7 +85,7 @@
 
                 android:layout_alignParentEnd="true"
                 android:layout_below="@+id/newEvent_textEdit_room"
-                android:ems="9" />
+                android:ems="8" />
 
 
             <TextView
@@ -112,7 +112,7 @@
 
                 android:layout_alignParentEnd="true"
                 android:layout_below="@+id/newEvent_editText_Date"
-                android:ems="9"
+                android:ems="8"
                 android:focusable="true" />
 
 
@@ -141,7 +141,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_below="@+id/newEvent_editText_startTime"
-                android:ems="9"
+                android:ems="8"
                 android:focusable="true" />
 
 
@@ -201,7 +201,7 @@
 
                 android:layout_alignBottom="@id/newEvent_textView_endOfRepetiton"
                 android:layout_alignParentEnd="true"
-                android:ems="9"
+                android:ems="8"
                 android:focusable="false"
                 android:focusableInTouchMode="true"
                 android:visibility="gone" />
@@ -248,7 +248,7 @@
 
                 android:layout_alignParentEnd="true"
                 android:layout_below="@+id/newEvent_editText_description"
-                android:ems="9"
+                android:ems="8"
                 android:imeOptions="actionDone"
                 android:inputType="text" />
 
@@ -259,7 +259,7 @@
 
                 android:layout_alignParentEnd="true"
                 android:layout_below="@+id/newEventTab"
-                android:ems="9"
+                android:ems="8"
                 android:inputType="text" />
 
             <TextView
@@ -286,7 +286,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_below="@+id/newEvent_textEdit_endTime"
-                android:ems="9"
+                android:ems="8"
                 android:inputType="text" />
 
 
