@@ -19,8 +19,6 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
-import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -166,7 +164,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         afterScanningDialogAction.setOnKeyListener(new DialogInterface.OnKeyListener() {
             @Override
             public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                if(keyCode == KeyEvent.KEYCODE_BACK){
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
                     getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     restartApp(whichFragmentTag);
                     dialog.cancel();
@@ -179,7 +177,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         try {
             // Button to Save the Event and send for assent the Event a SMS  to the EventCreator
             afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_eventSave)
-
                     .setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -375,8 +372,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
             //Do something if Tab is reselected. Parameters: selected Tab.--- Info: tab.getPosition() == x for check which Tab
             @Override
-
-
             public void onTabReselected(TabLayout.Tab tab) {
                 //check if settings Tab is unselected
                 if (tab.getPosition() == 2) {
@@ -692,7 +687,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
                         //close dialog
                         alertDialogAskForUsernamePhoneNumber.cancel();
-                    //if isitme is in database without username
+                        //if isitme is in database without username
                     } else if (me.getName().isEmpty()) {
                         personMe = PersonController.getPersonWhoIam();
                         //get username
@@ -703,7 +698,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         toast.show();
 
                         alertDialogAskForUsernamePhoneNumber.cancel();
-                    //if isitme is in database without phonenumber
+                        //if isitme is in database without phonenumber
                     } else if (me.getPhoneNumber().isEmpty()) {
                         personMe = PersonController.getPersonWhoIam();
                         //get phonenumber
@@ -716,18 +711,18 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         alertDialogAskForUsernamePhoneNumber.cancel();
                     }
                     return false;
-                //check for valid input: username should not contain "|"
+                    //check for valid input: username should not contain "|"
                 } else if (dialog_afterScanning_inputUsername.contains("|")) {
                     Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername_peek, Toast.LENGTH_SHORT);
                     toast.show();
                     return true;
-                //check for valid input: phonenumber should start with 0 or 00
+                    //check for valid input: phonenumber should start with 0 or 00
                 } else if (!dialog_afterScanning_inputPhoneNumber.matches("(00|0|\\+)[1-9][0-9]+")) {
                     Toast toast = Toast.makeText(v.getContext(), "falsche Nummer", Toast.LENGTH_SHORT);
                     toast.show();
                     return true;
                 } else {
-                //check for valid input: username should not start with blank space
+                    //check for valid input: username should not start with blank space
                     Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
                     toast.show();
                     return true;
@@ -736,7 +731,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         });
     }
 
-    private boolean checkIfEventIsInPast (){
+    private boolean checkIfEventIsInPast() {
         //read the current date and time to compare if the start time is in the past, set seconds and milliseconds to 0 to ensure a ight compare (seonds and milliseconds doesn't matter)
         Calendar now = Calendar.getInstance();
         now.set(Calendar.SECOND, 0);
@@ -744,12 +739,12 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         if (getStartTimeEvent().before(now)) {
             Toast.makeText(this, R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 
-    private void decideWhatToDo (){
+    private void decideWhatToDo() {
         final AlertDialog.Builder dialogAskForFinalDecission = new AlertDialog.Builder(this);
         dialogAskForFinalDecission.setView(R.layout.dialog_afterscanningbuttonclick);
         dialogAskForFinalDecission.setTitle(R.string.titleDialogFinalDecission);
@@ -757,7 +752,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
         final AlertDialog alertDialogAskForFinalDecission = dialogAskForFinalDecission.create();
 
-        if(!checkIfEventIsInPast()){
+        if (!checkIfEventIsInPast()) {
             final Person myPerson = PersonController.getPersonWhoIam();
             if (myPerson == null) {
                 openDialogAskForUsernameAndPhoneNumber();
@@ -768,7 +763,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             } else {
                 saveEventAndPerson(alertDialogAskForFinalDecission, buttonId);
             }
-        }else{
+        } else {
             //Restart the TabActivity an Reload all Views
             Intent intent = getIntent();
             finish();
