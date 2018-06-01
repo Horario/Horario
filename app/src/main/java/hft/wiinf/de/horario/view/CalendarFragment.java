@@ -93,6 +93,7 @@ public class CalendarFragment extends Fragment {
                     textView.setCompoundDrawablesWithIntrinsicBounds(0,0, R.drawable.ic_mydate,0);
                 } else if (eventList.get(position).getAccepted().equals(AcceptedState.WAITING)) {
                     textView.setTextColor(Color.DKGRAY);
+                    textView.setCompoundDrawablesWithIntrinsicBounds(0,0, R.drawable.ic_mydate_questionmark,0);
                 } else {
                     textView.setTextColor(Color.DKGRAY);
                 }
