@@ -6,12 +6,12 @@
 
 <body>
 <br>
- Wir freuen uns über Deine Unterstützung <br>
+ <p> Wir freuen uns über Deine Unterstützung   <br> </p>
  Da es sich bei dieser App um ein Studienprojekt handelt, werden wir diese Anwendung nicht weiterentwickeln.
     Wenn du lust hast kannst du aber gerne unser GitHub Projekt Forken und weiterentwickeln <br>
 
     Hier gehts zu unserem Branch: <br>
- <b> https://github.com/rietzfl/Horario </b>
+ <b> <br> <a href="https://github.com/rietzfl/Horario"> https://github.com/rietzfl/Horario </a> </b>
 
 </body>
 
