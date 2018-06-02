@@ -34,6 +34,7 @@ import java.util.List;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
+import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.AcceptedState;
 
 public class EventOverviewFragment extends Fragment {
@@ -74,13 +75,17 @@ public class EventOverviewFragment extends Fragment {
             if (eventList.size() > 0) {
                 eventArray.add(new Appointment(CalendarFragment.dayFormat.format(helper.getTime()), 0));
             }
-            for (int i = 0; i < eventList.size(); i++) {
-                if (eventList.get(i).getAccepted().equals(AcceptedState.ACCEPTED)) {
-                    eventArray.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 1));
-                } else if (eventList.get(i).getAccepted().equals(AcceptedState.WAITING)) {
-                    eventArray.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 2));
-                } else {
-                    eventArray.clear();
+            for (int i = 0; i<eventList.size(); i++){
+                if(eventList.get(i).getCreator().equals(PersonController.getPersonWhoIam())){
+                    eventArray.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 3));
+                }else{
+                    if(eventList.get(i).getAccepted().equals(AcceptedState.ACCEPTED)){
+                        eventArray.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 1));
+                    }else if(eventList.get(i).getAccepted().equals(AcceptedState.WAITING)){
+                        eventArray.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 2));
+                    }else{
+                        eventArray.clear();
+                    }
                 }
             }
             helper.setTime(endOfDay.getTime());
@@ -247,6 +252,7 @@ public class EventOverviewFragment extends Fragment {
 
         return view;
     }
+
 
     //Show the menu Buttons
     public void showFABMenu() {
