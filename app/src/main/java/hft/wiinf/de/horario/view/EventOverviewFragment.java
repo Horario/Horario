@@ -20,6 +20,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import java.text.DateFormat;
@@ -31,6 +34,7 @@ import java.util.List;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
+import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.AcceptedState;
 
 public class EventOverviewFragment extends Fragment {
@@ -56,6 +60,7 @@ public class EventOverviewFragment extends Fragment {
 
     //get all events for the selected month and save them in a adapter
     public static ArrayAdapter iterateOverMonth(final Date date) {
+        ArrayList<Appointment> eventArrayDay = new ArrayList<>();
         final ArrayList<Appointment> eventArray = new ArrayList<>();
         Calendar helper = Calendar.getInstance();
         helper.setTime(date);
@@ -69,17 +74,23 @@ public class EventOverviewFragment extends Fragment {
             endOfDay.add(Calendar.DAY_OF_MONTH, 1);
             List<hft.wiinf.de.horario.model.Event> eventList = EventController.findEventsByTimePeriod(helper.getTime(), endOfDay.getTime());
             if (eventList.size() > 0) {
-                eventArray.add(new Appointment(CalendarFragment.dayFormat.format(helper.getTime()), 0));
+                eventArrayDay.add(new Appointment(CalendarFragment.dayFormat.format(helper.getTime()), 0));
             }
-            for (int i = 0; i < eventList.size(); i++) {
-                if (eventList.get(i).getAccepted().equals(AcceptedState.ACCEPTED)) {
-                    eventArray.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 1));
-                } else if (eventList.get(i).getAccepted().equals(AcceptedState.WAITING)) {
-                    eventArray.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 2));
-                } else {
-                    eventArray.remove(i);
+            for (int i = 0; i<eventList.size(); i++){
+                if(eventList.get(i).getCreator().equals(PersonController.getPersonWhoIam())){
+                    eventArrayDay.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 3));
+                }else{
+                    if(eventList.get(i).getAccepted().equals(AcceptedState.ACCEPTED)){
+                        eventArrayDay.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 1));
+                    }else if(eventList.get(i).getAccepted().equals(AcceptedState.WAITING)) {
+                        eventArrayDay.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 2));
+                    }
                 }
             }
+            if (eventArrayDay.size()>1){
+                eventArray.addAll(eventArrayDay);
+            }
+            eventArrayDay.clear();
             helper.setTime(endOfDay.getTime());
         }
         if (eventArray.size() < 1) { //when no events this month do stuff
@@ -103,15 +114,14 @@ public class EventOverviewFragment extends Fragment {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
 
                 if (eventArray.get(position).getType() == 1) {
-
                     textView.setTextColor(Color.DKGRAY);
-                    textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_mydate, 0);
+                    textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_mydate_approved, 0);
                 } else if (eventArray.get(position).getType() == 2) {
                     textView.setTextColor(Color.DKGRAY);
                     textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_mydate_questionmark, 0);
                 } else if (eventArray.get(position).getType() == 3) {
                     textView.setTextColor(Color.DKGRAY);
-                    textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_mydate_approved, 0);
+                    textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_mydate, 0);
                 } else if (eventArray.get(position).getType() == 0) {
                     textView.setTextColor(Color.BLACK);
                     textView.setBackgroundColor(Color.WHITE);
@@ -244,6 +254,7 @@ public class EventOverviewFragment extends Fragment {
 
         return view;
     }
+
 
     //Show the menu Buttons
     public void showFABMenu() {
