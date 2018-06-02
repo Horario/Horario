@@ -87,10 +87,10 @@ public class EventOverviewFragment extends Fragment {
                     }
                 }
             }
-            if (eventArrayDay.size()>0){
+            if (eventArrayDay.size()>1){
                 eventArray.addAll(eventArrayDay);
-                eventArrayDay.clear();
             }
+            eventArrayDay.clear();
             helper.setTime(endOfDay.getTime());
         }
         if (eventArray.size() < 1) { //when no events this month do stuff
