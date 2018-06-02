@@ -16,7 +16,8 @@ import hft.wiinf.de.horario.model.Person;
 public class EventController {
     //saves (update or create)an event
     public static void saveEvent(@NonNull Event event) {
-        event.setCreatorEventId(event.save());
+        if(event.getCreatorEventId() < 0)
+            event.setCreatorEventId(event.save());
         event.save();
     }
 
@@ -113,6 +114,7 @@ public class EventController {
             repetitionEvent.setEndTime(firstEvent.getEndTime());
             repetitionEvent.setShortTitle(firstEvent.getShortTitle());
             repetitionEvent.setStartEvent(firstEvent);
+            repetitionEvent.setCreatorEventId(firstEvent.getCreatorEventId());
             //copy the start and end time of the start event into a temporary variable, add 1 to the corresponding field and save the new value into the next event
             Calendar temporary = new GregorianCalendar();
             temporary.setTime(firstEvent.getStartTime());
@@ -128,6 +130,19 @@ public class EventController {
             saveEvent(repetitionEvent);
         }
 
+    }
+
+    public static Event checkIfEventIsInDatabase(String description, String shortTitle,
+                                                  String place,
+                                                 Calendar startTime, Calendar endTime) {
+        return new Select()
+                .from(Event.class)
+                .where("description = ?", description)
+                .where("shortTitle = ?", shortTitle)
+                .where("place = ?", place)
+                .where("startTime = ?", startTime.getTimeInMillis())
+                .where("endTime = ?", endTime.getTimeInMillis())
+                .executeSingle();
     }
 
 

@@ -17,11 +17,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -43,14 +41,87 @@ public class EventOverviewFragment extends Fragment {
     static Context context = null;
     static DateFormat timeFormat = new SimpleDateFormat("HH:mm");
     FloatingActionButton eventOverviewFcMenu, eventOverviewFcQrScan, eventOverviewFcNewEvent;
-    Button overviewBtNext;
+    ImageButton overviewBtNext;
     TextView eventOverview_HiddenIsFloatingMenuOpen;
-    Button overviewBtPrevious;
+    ImageButton overviewBtPrevious;
     Animation ActionButtonOpen, ActionButtonClose, ActionButtonRotateRight, ActionButtonRotateLeft;
     ConstraintLayout layout_eventOverview_main;
     ConstraintLayout layoutOverview;
-    RelativeLayout rLayout_EventOverview_helper;
 
+    public static void update() {
+        overviewTvMonth.setText(CalendarFragment.monthFormat.format(selectedMonth));
+        overviewLvList.setAdapter(iterateOverMonth(selectedMonth));
+    }
+
+    //get all events for the selected month and save them in a adapter
+    public static ArrayAdapter iterateOverMonth(Date date) {
+        final ArrayList<Appointment> eventArray = new ArrayList<>();
+        Calendar helper = Calendar.getInstance();
+        helper.setTime(date);
+        helper.set(Calendar.DAY_OF_MONTH, 1);
+        helper.set(Calendar.HOUR_OF_DAY, 0);
+        helper.set(Calendar.MINUTE, 0);
+        int endDate = helper.get(Calendar.MONTH);
+        while (helper.get(Calendar.MONTH) == endDate) {
+            Calendar endOfDay = Calendar.getInstance();
+            endOfDay.setTime(helper.getTime());
+            endOfDay.add(Calendar.DAY_OF_MONTH, 1);
+            List<hft.wiinf.de.horario.model.Event> eventList = EventController.findEventsByTimePeriod(helper.getTime(), endOfDay.getTime());
+            if (eventList.size() > 0) {
+                eventArray.add(new Appointment(CalendarFragment.dayFormat.format(helper.getTime()), 0));
+            }
+            for (int i = 0; i < eventList.size(); i++) {
+                if (eventList.get(i).getAccepted().equals(AcceptedState.ACCEPTED)) {
+                    if (eventList.get(i).getCreator().isItMe()) {
+                        eventArray.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 3, eventList.get(i).getId(), eventList.get(i).getCreator()));
+                    } else {
+                        eventArray.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 1, eventList.get(i).getId(), eventList.get(i).getCreator()));
+                    }
+                } else if (eventList.get(i).getAccepted().equals(AcceptedState.WAITING)) {
+                    eventArray.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 2, eventList.get(i).getId(), eventList.get(i).getCreator()));
+                } else {
+                    eventArray.clear();
+                }
+            }
+            helper.setTime(endOfDay.getTime());
+        }
+        if (eventArray.size() < 1) { //when no events this month do stuff
+            eventArray.add(new Appointment("Du hast keine Termine diesen Monat", 0));
+        }
+        final ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1, eventArray) {
+            @NonNull
+            @Override
+            public int getViewTypeCount() {
+                return getCount();
+            }
+
+            @Override
+            public int getItemViewType(int position) {
+                return position;
+            }
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                TextView textView = (TextView) super.getView(position, convertView, parent);
+                if (eventArray.get(position).getType() == 1) {
+                    textView.setTextColor(Color.DKGRAY);
+                    textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_mydate, 0);
+                } else if (eventArray.get(position).getType() == 2) {
+                    textView.setTextColor(Color.DKGRAY);
+                    textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_mydate_questionmark, 0);
+                } else if (eventArray.get(position).getType() == 3) {
+                    textView.setTextColor(Color.DKGRAY);
+                    textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_mydate_approved, 0);
+                } else if (eventArray.get(position).getType() == 0) {
+                    textView.setTextColor(Color.BLACK);
+                    textView.setBackgroundColor(Color.WHITE);
+                    textView.setFocusable(false);
+                }
+                textView.setText(eventArray.get(position).getDescription());
+                return textView;
+            }
+        };
+        return adapter;
+    }
 
     @Nullable
     @Override
@@ -73,7 +144,6 @@ public class EventOverviewFragment extends Fragment {
         eventOverviewFcQrScan = view.findViewById(R.id.eventOverview_floatingActionButtonScan);
         layout_eventOverview_main = view.findViewById(R.id.eventOverview_Layout_main);
         eventOverview_HiddenIsFloatingMenuOpen = view.findViewById(R.id.eventOverviewFabClosed);
-        rLayout_EventOverview_helper = view.findViewById(R.id.eventOverview_relativeLayout_helper);
         ActionButtonOpen = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonopen);
         ActionButtonClose = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonclose);
         ActionButtonRotateRight = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonrotateright);
@@ -210,68 +280,6 @@ public class EventOverviewFragment extends Fragment {
         });
 
         return view;
-    }
-
-    public static void update() {
-        overviewTvMonth.setText(CalendarFragment.monthFormat.format(selectedMonth));
-        overviewLvList.setAdapter(iterateOverMonth(selectedMonth));
-    }
-
-    //get all events for the selected month and save them in a adapter
-    public static ArrayAdapter iterateOverMonth(Date date) {
-        final ArrayList<Appointment> eventArray = new ArrayList<>();
-        Calendar helper = Calendar.getInstance();
-        helper.setTime(date);
-        helper.set(Calendar.DAY_OF_MONTH, 1);
-        helper.set(Calendar.HOUR_OF_DAY, 0);
-        helper.set(Calendar.MINUTE, 0);
-        int endDate = helper.get(Calendar.MONTH);
-        while (helper.get(Calendar.MONTH) == endDate) {
-            Calendar endOfDay = Calendar.getInstance();
-            endOfDay.setTime(helper.getTime());
-            endOfDay.add(Calendar.DAY_OF_MONTH, 1);
-            List<hft.wiinf.de.horario.model.Event> eventList = EventController.findEventsByTimePeriod(helper.getTime(), endOfDay.getTime());
-            if (eventList.size() > 0) {
-                eventArray.add(new Appointment(CalendarFragment.dayFormat.format(helper.getTime()), 0));
-            }
-            for (int i = 0; i < eventList.size(); i++) {
-                if (eventList.get(i).getAccepted().equals(AcceptedState.ACCEPTED)) {
-                    if (eventList.get(i).getCreator().isItMe()) {
-                        eventArray.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 3, eventList.get(i).getId(), eventList.get(i).getCreator()));
-                    } else {
-                        eventArray.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 1, eventList.get(i).getId(), eventList.get(i).getCreator()));
-                    }
-                } else if (eventList.get(i).getAccepted().equals(AcceptedState.WAITING)) {
-                    eventArray.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 2, eventList.get(i).getId(), eventList.get(i).getCreator()));
-                } else {
-                    eventArray.clear();
-                }
-            }
-            helper.setTime(endOfDay.getTime());
-        }
-        if (eventArray.size() < 1) { //when no events this month do stuff
-            eventArray.add(new Appointment("Du hast keine Termine diesen Monat", 0));
-        }
-        final ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1, eventArray) {
-            @NonNull
-            @Override
-            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-                TextView textView = (TextView) super.getView(position, convertView, parent);
-                if (eventArray.get(position).getType() == 1) {
-                    textView.setBackgroundColor(Color.GREEN);
-                } else if (eventArray.get(position).getType() == 2) {
-                    textView.setBackgroundColor(Color.RED);
-                } else if (eventArray.get(position).getType() == 3) {
-                    textView.setBackgroundColor(Color.BLUE);
-                } else if (eventArray.get(position).getType() == 0) {
-                    textView.setBackgroundColor(Color.WHITE);
-                    textView.setFocusable(false);
-                }
-                textView.setText(eventArray.get(position).getDescription());
-                return textView;
-            }
-        };
-        return adapter;
     }
 
     //Show the menu Buttons

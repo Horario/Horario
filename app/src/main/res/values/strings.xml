@@ -16,6 +16,7 @@
     <string name="feedback_zur_app_text">Feedback zur App</string>
     <string name="username_text">Benutzername :</string>
     <string name="username_hint">Benutzername</string>
+    <string name="phoneNumber_hint">Telefonnummer</string>
     <string name="allowpush_text">Erinnerungen erlauben :</string>
     <string name="reminder_text">Erinnerungen :</string>
     <string name="minutesBefore_text">Minuten vorher</string>
@@ -37,9 +38,11 @@
     <string name="savingSuccessful_new">neuen Termin erstellen</string>
     <string name="savingSuccessful_qrcode">QRCode anzeigen</string>
     <string name="titleDialogUsername">Bitte vergib einen Benutzernamen! </string>
+    <string name="titleDialogUsernamePhoneNumber">Bitte vergib einen Benutzernamen und deine Telefonnummer! </string>
     <string name="save_text">speichern</string>
     <string name="later_text">Später</string>
     <string name="thanksForUsername">Benutzername wurde gespeichert. </string>
+    <string name="titleDialogFinalDecission">Sind Sie sich sicher?</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="titleParticipantsEvent">Rückmeldungen</string>
@@ -58,9 +61,12 @@
 
 
     <!-- TODO: Remove or change this placeholder text -->
+    <string name="thanksForUsernameAndPhoneNumber">Benutzername und Telefonnummer wurde gespeichert. </string>
     <string name="description_too_long">Die Beschreibung darf nicht länger als 500 Zeichen sein.</string>
     <string name="shortTitle_too_long">Der Kurztitel darf nicht länger als 100 Zeichen sein.</string>
     <string name="startTime_past">Der Termin darf nicht in der Vergangenheit beginnen.</string>
+    <string name="startTime_afterScanning_past">Der Termin hat schon in der Vergangenheit stattgefunden.</string>
+    <string name="save_event">Der Termin wurde in die Datenbank geschrieben.</string>
     <string name="shortTitle_spaces">Der Kurztitel darf nicht mit Leerzeichen beginnen.</string>
     <string name="description_spaces">Die Beschreibung darf nicht mit Leerzeichen beginnen.</string>
     <string name="place_spaces">Der Raum darf nicht mit Leerzeichen beginnen.</string>
@@ -73,6 +79,11 @@
     <string formatted="true" name="pushMinutesSet">Die Push-Nachrichten erscheinen nun %1$d Minuten vor Ihrem Termin.</string>
     <string name="startTab">Start-Tab :</string>
     <string name="startTabChanged" formatted="true">Beim nächsten Start zeigt Horario nun den Tab %1$s.</string>
+    <string name="acceptEventAfterScan">Wollen Sie wirklich zusagen?</string>
+    <string name="rejectEventAfterScan">Wollen Sie wirklich ablehnen?</string>
+    <string name="saveEventAfterScan">Wollen Sie wirklich speichern ohen zusagen?</string>
+    <string name="eventIsInDatabase">Termin ist schon in der Datenbank vorhanden!</string>
+
 
     <string-array name="event_repetitions">
         <item name="event_repetition_yearly">jährlich</item>
@@ -146,4 +157,6 @@
     <string name="qrGenerator_button_showInEventOverView">In Terminübersicht anzeigen</string>
 
 
+    <string name="accept">Ja!</string>
+    <string name="reject">Nein!</string>
 </resources>

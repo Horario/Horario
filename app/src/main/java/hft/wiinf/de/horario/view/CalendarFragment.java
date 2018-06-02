@@ -1,5 +1,6 @@
 package hft.wiinf.de.horario.view;
 
+
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -45,8 +46,6 @@ public class CalendarFragment extends Fragment {
     TextView calendarIsFloatMenuOpen;
     FloatingActionButton calendarFcMenu, calendarFcQrScan, calendarFcNewEvent;
     ConstraintLayout cLayout_calendar_main;
-    ConstraintLayout cLayoutCalendar_helper;
-    RelativeLayout fragmentCalendar_rLayout_helper;
     static TextView calendarTvDay;
     static Context context = null;
     static DateFormat monthFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
@@ -54,6 +53,14 @@ public class CalendarFragment extends Fragment {
     static DateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
     Animation ActionButtonOpen, ActionButtonClose, ActionButtonRotateRight, ActionButtonRotateLeft;
+
+    public static void update(Date date) {
+        calendarTvDay.setText(dayFormat.format(date));
+        calendarLvList.setAdapter(getAdapter(date));
+        calendarTvMonth.setText(monthFormat.format(date));
+        updateCompactCalendar();
+    }
+
 
     @Nullable
     @Override
@@ -72,8 +79,7 @@ public class CalendarFragment extends Fragment {
         calendarFcQrScan = view.findViewById(R.id.calendar_floatingActionButtonScan);
         cLayout_calendar_main = view.findViewById(R.id.calendar_constrainLayout_main);
         calendarIsFloatMenuOpen = view.findViewById(R.id.calendar_hiddenField);
-        fragmentCalendar_rLayout_helper = view.findViewById(R.id.fragmentCalendar_relativeLayout_helper);
-        cLayoutCalendar_helper = view.findViewById(R.id.cLayoutCalendar_helper);
+
         ActionButtonOpen = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonopen);
         ActionButtonClose = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonclose);
         ActionButtonRotateRight = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonrotateright);
@@ -209,20 +215,13 @@ public class CalendarFragment extends Fragment {
         return view;
     }
 
-    public static void update(Date date) {
-        calendarTvDay.setText(dayFormat.format(date));
-        calendarLvList.setAdapter(getAdapter(date));
-        calendarTvMonth.setText(monthFormat.format(date));
-        updateCompactCalendar();
-    }
-
 
     //is marking the day in the calendar for the parameter date
     public static void updateCompactCalendar() {
         List<hft.wiinf.de.horario.model.Event> acceptedEvents = EventController.findMyEvents();
         for (int i = 0; i < acceptedEvents.size(); i++) {
             if (calendarCvCalendar.getEvents(acceptedEvents.get(i).getStartTime().getTime()).size() == 0 && acceptedEvents.get(i).getAccepted() != AcceptedState.REJECTED) {
-                Event event = new Event(Color.BLUE, acceptedEvents.get(i).getStartTime().getTime());
+                Event event = new Event(Color.DKGRAY, acceptedEvents.get(i).getStartTime().getTime());
                 calendarCvCalendar.addEvent(event, true);
             }
         }
@@ -253,13 +252,16 @@ public class CalendarFragment extends Fragment {
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
                 if (eventsAsAppointments.get(position).getType() == 1) {
-                    textView.setBackgroundColor(Color.GREEN);
+                    textView.setTextColor(Color.DKGRAY);
+                    textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_mydate, 0);
                 } else if (eventsAsAppointments.get(position).getType() == 2) {
-                    textView.setBackgroundColor(Color.RED);
+                    textView.setTextColor(Color.DKGRAY);
+                    textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_mydate_questionmark, 0);
                 } else if (eventsAsAppointments.get(position).getType() == 3) {
-                    textView.setBackgroundColor(Color.BLUE);
+                    textView.setTextColor(Color.DKGRAY);
+                    textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_mydate, 0);
                 } else if (eventsAsAppointments.get(position).getType() == 0) {
-                    textView.setBackgroundColor(Color.WHITE);
+                    textView.setTextColor(Color.DKGRAY);
                     textView.setFocusable(false);
                 }
                 textView.setText(eventsAsAppointments.get(position).getDescription());

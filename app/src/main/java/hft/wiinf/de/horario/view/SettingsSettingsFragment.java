@@ -112,7 +112,7 @@ public class SettingsSettingsFragment extends Fragment {
 
         spinner_notificationTime.setSelection(getItemPositionPushMinutes());
         spinner_startTab.setSelection(person.getStartTab());
-        // if the start tab spinenr was touched, add a SelectionListener and remove the touch listener
+        // if the start tab spinner was touched, add a SelectionListener and remove the touch listener
         spinner_startTab.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
