@@ -27,13 +27,13 @@ public class DeviceBootReceiver extends BroadcastReceiver {
                 Person notificationPerson = PersonController.getPersonWhoIam();
                 //Only set Alarm if Person wants to receive them
                 if (notificationPerson.isEnablePush()) {
-                    startNotification(context, intent, notificationPerson);
+                    startNotification(context, notificationPerson);
                 }
             }
         }
     }
 
-    public void startNotification(Context context, Intent intent, Person notificationPerson) {
+    public void startNotification(Context context, Person notificationPerson) {
         //Get all events that are in the future to set the alarm
         List<Event> allEvents = EventController.findMyAcceptedEventsInTheFuture();
         for (Event event : allEvents) {
@@ -45,9 +45,9 @@ public class DeviceBootReceiver extends BroadcastReceiver {
             calendar.setTime(date);
 
             //Put extra Data which is needed for the Notification
-            alarmIntent.putExtra("Event", event.getDescription());
+            alarmIntent.putExtra("Event", event.getShortTitle());
             alarmIntent.putExtra("Hour", calendar.get(Calendar.HOUR_OF_DAY));
-            if (calendar.get(Calendar.MINUTE) <= 10) {
+            if (calendar.get(Calendar.MINUTE) < 10) {
                 alarmIntent.putExtra("Minute", "0" + String.valueOf(calendar.get(Calendar.MINUTE)));
             } else {
                 alarmIntent.putExtra("Minute", String.valueOf(calendar.get(Calendar.MINUTE)));

@@ -50,7 +50,7 @@ public class NewEventFragment extends Fragment {
     Calendar endOfRepetition = Calendar.getInstance();
     // elements of the gui
     private EditText editText_description, edittext_shortTitle, edittext_room, edittext_date, edittext_startTime, editText_endTime, edittext_userName, editText_endOfRepetition;
-    private TextView textView_endofRepetiton, textView_repetition;
+    private TextView textView_endofRepetiton;
     private Spinner spinner_repetition;
     private CheckBox checkBox_serialEvent;
     private Button button_save;
@@ -87,7 +87,7 @@ public class NewEventFragment extends Fragment {
         spinner_repetition = view.findViewById(R.id.newEvent_spinner_repetition);
         editText_endOfRepetition = view.findViewById(R.id.newEvent_textEdit_endOfRepetition);
         textView_endofRepetiton = view.findViewById(R.id.newEvent_textView_endOfRepetiton);
-        textView_repetition = view.findViewById(R.id.newEvent_textView_repetition);
+
         button_save = view.findViewById(R.id.newEvent_button_save);
         // when the keyboard is closed after the text edit room, there should be no focus
         edittext_room.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -157,19 +157,19 @@ public class NewEventFragment extends Fragment {
                 return false;
             }
         });
-        // on click on serial event checkbox change visibility of the rpetiton and repetiton end field,
+        // on click on serial event checkbox change visibility of the repetition and repetition end field,
         checkBox_serialEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 checkSerialEvent();
             }
         });
-        // sets the choice posibitilites of the repetition spinner (set in string resource-file as array event-repetiton)
+        // sets the choice possibilities of the repetition spinner (set in string resource-file as array event-repetition)
         ArrayAdapter repetitionAdapter = ArrayAdapter.createFromResource(getContext(), R.array.event_repetitions, android.R.layout.simple_spinner_item);
-        //set the appearence of one choice posibility
+        //set the appearance of one choice possibility
         repetitionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_repetition.setAdapter(repetitionAdapter);
-        //set weekly selected until the user selects something different or it is overwriten by the loaded event
+        //set weekly selected until the user selects something different or it is overwritten by the loaded event
         spinner_repetition.setSelection(2);
         //don't open keyboard on focus,
         editText_endOfRepetition.setShowSoftInputOnFocus(false);
@@ -208,6 +208,7 @@ public class NewEventFragment extends Fragment {
                 CalendarFragment.updateCompactCalendar();
             }
         });
+
         if (getArguments() != null) {
             Long eventId = getArguments().getLong("eventId");
             readGivenEvent(eventId);
@@ -219,18 +220,18 @@ public class NewEventFragment extends Fragment {
         edittext_userName.setText(me.getName());
     }
 
-    //if the checkbox serial event is checked, repetiiton posibilities and the endOfrepetition is shown, else not
+    //if the checkbox serial event is checked, repetition possibilities and the endOfrepetition is shown, else not
     private void checkSerialEvent() {
         if (checkBox_serialEvent.isChecked()) {
             textView_endofRepetiton.setVisibility(View.VISIBLE);
             editText_endOfRepetition.setVisibility(View.VISIBLE);
             spinner_repetition.setVisibility(View.VISIBLE);
-            textView_repetition.setVisibility(View.VISIBLE);
+
         } else {
             textView_endofRepetiton.setVisibility(View.GONE);
             editText_endOfRepetition.setVisibility(View.GONE);
             spinner_repetition.setVisibility(View.GONE);
-            textView_repetition.setVisibility(View.GONE);
+
         }
     }
 
@@ -463,7 +464,7 @@ public class NewEventFragment extends Fragment {
             Toast.makeText(getContext(), R.string.endTime_before_startTime, Toast.LENGTH_SHORT).show();
             return false;
         }
-        //if it is and repetaing event and the end of the repetiton is beofre the end time of the first event
+        //if it is and repeating event and the end of the repetition is before the end time of the first event
         if (getRepetition() != Repetition.NONE && endOfRepetition.before(endTime)) {
             Toast.makeText(getContext(), R.string.endOfRepetition_before_endTime, Toast.LENGTH_SHORT).show();
             return false;
@@ -545,9 +546,9 @@ public class NewEventFragment extends Fragment {
                 Calendar calendar = GregorianCalendar.getInstance();
                 calendar.setTime(date);
 
-                alarmIntent.putExtra("Event", event.getDescription());
+                alarmIntent.putExtra("Event", event.getShortTitle());
                 alarmIntent.putExtra("Hour", calendar.get(Calendar.HOUR_OF_DAY));
-                if (calendar.get(Calendar.MINUTE) <= 10) {
+                if (calendar.get(Calendar.MINUTE) < 10) {
                     alarmIntent.putExtra("Minute", "0" + String.valueOf(calendar.get(Calendar.MINUTE)));
                 } else {
                     alarmIntent.putExtra("Minute", String.valueOf(calendar.get(Calendar.MINUTE)));

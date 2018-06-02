@@ -90,7 +90,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/toCalender"
+            android:text="@string/back"
             tools:layout_editor_absoluteX="91dp"
             tools:layout_editor_absoluteY="63dp" />
     </RelativeLayout>

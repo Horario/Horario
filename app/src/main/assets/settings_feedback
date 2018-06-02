@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+<Titel> <FONT SIZE="6"> <b> Feedback </b> </FONT> <br>  </Titel>
+</head>
+
+<body>
+<br>
+ <p> Wir freuen uns über deine Unterstützung!   <br> </p>
+ Da es sich bei dieser App um ein Studienprojekt handelt, werden wir diese Anwendung nicht weiter entwickeln.
+    Wenn du Lust hast, kannst du aber gerne unser GitHub Projekt forken und Horario selbst weiter gestalten!  <br> </p>
+
+    Hier geht's zu unserem Branch: <br>
+ <b> <br> <a href="https://github.com/rietzfl/Horario"> https://github.com/rietzfl/Horario </a> </b>
+
+</body>
+
+</html>

@@ -176,20 +176,19 @@ public class CalendarFragment extends Fragment {
         updateCompactCalendar();
     }
 
-
     //is marking the day in the calendar for the parameter date
-    public static void updateCompactCalendar(){
+    public static void updateCompactCalendar() {
         List<hft.wiinf.de.horario.model.Event> acceptedEvents = EventController.findMyEvents();
-        for (int i = 0; i<acceptedEvents.size(); i++) {
+        for (int i = 0; i < acceptedEvents.size(); i++) {
             if (calendarCvCalendar.getEvents(acceptedEvents.get(i).getStartTime().getTime()).size() == 0 && acceptedEvents.get(i).getAccepted() != AcceptedState.REJECTED) {
-                Event event = new Event(Color.BLUE, acceptedEvents.get(i).getStartTime().getTime());
+                Event event = new Event(Color.DKGRAY, acceptedEvents.get(i).getStartTime().getTime());
                 calendarCvCalendar.addEvent(event, true);
             }
         }
     }
 
     //load entries from database and return an adapter for the ListView
-    public static ArrayAdapter getAdapter(Date date){
+    public static ArrayAdapter getAdapter(Date date) {
         ArrayList<String> eventsAsString = new ArrayList<>();
         Calendar endOfDay = Calendar.getInstance();
         endOfDay.setTime(date);
@@ -200,7 +199,7 @@ public class CalendarFragment extends Fragment {
                 eventsAsString.add(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle());
             }
         }
-        final ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1, eventsAsString){
+        final ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1, eventsAsString) {
             @NonNull
             @Override
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -210,11 +209,13 @@ public class CalendarFragment extends Fragment {
                     textView.setBackgroundColor(Color.BLUE);
                 }else{
                     if (eventList.get(position).getAccepted().equals(AcceptedState.ACCEPTED)) {
-                        textView.setBackgroundColor(Color.GREEN);
+                        textView.setTextColor(Color.DKGRAY);
+                        textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_mydate, 0);
                     } else if (eventList.get(position).getAccepted().equals(AcceptedState.WAITING)) {
-                        textView.setBackgroundColor(Color.RED);
+                        textView.setTextColor(Color.DKGRAY);
+                        textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_mydate_questionmark, 0);
                     } else {
-                        textView.setBackgroundColor(Color.WHITE);
+                        textView.setTextColor(Color.DKGRAY);
                     }
                 }
                 return textView;

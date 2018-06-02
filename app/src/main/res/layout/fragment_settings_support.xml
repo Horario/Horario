@@ -6,9 +6,9 @@
     android:background="?android:windowBackground"
     android:orientation="vertical">
 
-    <TextView
+    <WebView
+        android:id="@+id/settings_support_webView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Support" />
+        android:layout_height="match_parent" />
 
 </RelativeLayout>

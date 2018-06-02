@@ -1,48 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/relativeLayout2"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_height="150dp"
     android:orientation="vertical"
     tools:context=".TabActivity">
 
 
     <TableRow
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
 
         <TextView
             android:id="@+id/savingSuccessful_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/event_saving_successful" />
+            android:layout_marginBottom="8dp"
+            android:padding="5dp"
+            android:paddingTop="5dp"
+            android:text="@string/event_saving_successful"
+            android:textAlignment="center"
+            android:textSize="16sp"
+            android:textStyle="bold" />
     </TableRow>
 
-    <TableRow
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="80dp">
 
-        <Button
-            android:id="@+id/savingSuccessful_button_new"
-            android:layout_width="wrap_content"
+
+        <TableRow
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:visibility="visible">
 
 
-            android:text="@string/savingSuccessful_new"
-            android:visibility="visible" />
-    </TableRow>
+            <Button
+                android:id="@+id/savingSuccessful_button_new"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_weight="0.5"
+                android:background="@color/zentea_darkgreen"
+                android:text="@string/savingSuccessful_new"
+                android:textColor="@color/zxing_status_text"
+                android:visibility="visible" />
 
-    <TableRow>
+            <Button
+                android:id="@+id/savingSuccessful_button_qrcode"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_weight="0.5"
+                android:background="@color/zentea_darkgreen"
+                android:padding="2dp"
+                android:text="@string/savingSuccessful_qrcode"
+                android:textColor="@color/zxing_status_text"
+                android:visibility="visible" />
+        </TableRow>
 
-        <Button
-            android:id="@+id/savingSuccessful_button_qrcode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:text="@string/savingSuccessful_qrcode"
-            android:visibility="visible" />
-    </TableRow>
-
-</TableLayout>
+    </RelativeLayout>
+</RelativeLayout>
