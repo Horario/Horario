@@ -36,7 +36,7 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
     private static final int SEND_SMS_PERMISSION_CODE = 2;
     private final String noResultErrorMsg = "No scan data received!";
     //Counter for the Loop of PermissionChecks
-    private int counter = 0;
+    private int counterSMS = 0, counterCAM = 0;
     private String whitchFragment, codeContent;
 
     @Override
@@ -54,11 +54,17 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
 
     @SuppressLint("ResourceType")
     public void onViewCreated(@NonNull final View view, Bundle savedInstanceState) {
-
         //Call a Method to start at first a permission Check and if this granted it start the Scanner
         //in FullScreenMode
-        showCameraPreview();
+        checkForSMSPermission();
+    }
 
+    public void checkForSMSPermission(){
+        if (!isSendSmsPermissionGranted()) {
+            requestSendSmsPermission();
+        } else {
+            showCameraPreview();
+        }
     }
 
     public void startScanner() {
@@ -76,9 +82,7 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
 
     public void showCameraPreview() {
         //Check if User has permission to start to scan, if not it's start a RequestLoop
-        if (!isCameraPermissionGranted() || !isSendSmsPermissionGranted()) {
-            requestSendSmsPermission();
-            counter = 0;
+        if (!isCameraPermissionGranted()) {
             requestCameraPermission();
         } else {
             startScanner();
@@ -143,7 +147,7 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
                                         }
                                     })
                                     .create().show();
-                        } else if (counter < 1) {
+                        } else if (counterCAM < 1) {
                             // user did NOT check "never ask again" this is a good place to explain the user
                             // why you need the permission and ask if he wants // to accept it (the rationale)
                             new AlertDialog.Builder(getActivity())
@@ -164,7 +168,7 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
                                     .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            counter++;
+                                            counterCAM++;
                                             showCameraPreview();
                                         }
                                     })
@@ -175,7 +179,7 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
                                         }
                                     })
                                     .create().show();
-                        } else if (counter == 1) {
+                        } else if (counterCAM == 1) {
                             new AlertDialog.Builder(getActivity())
                                     .setOnKeyListener(new DialogInterface.OnKeyListener() {
                                         @Override
@@ -194,7 +198,7 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
                                     .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            counter++;
+                                            counterCAM++;
                                             showCameraPreview();
                                         }
                                     })
@@ -224,7 +228,6 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
                             // user also CHECKED "never ask again" you can either enable some fall back,
                             // disable features of your app or open another dialog explaining again the
                             // permission and directing to the app setting
-
                             new AlertDialog.Builder(getActivity())
                                     .setOnKeyListener(new DialogInterface.OnKeyListener() {
                                         @Override
@@ -247,7 +250,7 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
                                         }
                                     })
                                     .create().show();
-                        } else if (counter < 1) {
+                        } else if (counterSMS < 1) {
                             // user did NOT check "never ask again" this is a good place to explain the user
                             // why you need the permission and ask if he wants // to accept it (the rationale)
                             new AlertDialog.Builder(getActivity())
@@ -268,8 +271,8 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
                                     .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            counter++;
-                                            showCameraPreview();
+                                            counterSMS++;
+                                            checkForSMSPermission();
                                         }
                                     })
                                     .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
@@ -279,7 +282,7 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
                                         }
                                     })
                                     .create().show();
-                        } else if (counter == 1) {
+                        } else if (counterSMS == 1) {
                             new AlertDialog.Builder(getActivity())
                                     .setOnKeyListener(new DialogInterface.OnKeyListener() {
                                         @Override
@@ -298,8 +301,8 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
                                     .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            counter++;
-                                            showCameraPreview();
+                                            counterSMS++;
+                                            checkForSMSPermission();
                                         }
                                     })
                                     .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
@@ -313,7 +316,7 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
                             goWhereUserComesFrom();
                         }
                     } else {
-                        startScanner();
+                        showCameraPreview();
                     }
                 }
             }

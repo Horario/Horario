@@ -31,15 +31,14 @@ public class SendSmsController extends BroadcastReceiver {
     public static Context cont;
 
 
-    public static void sendSMS(final Context context, String sms_phoneNumber, String sms_message, boolean sms_accepted, long sms_creatorEventId, String eventShortDesc) {
+    public static void sendSMS(final Context context, String sms_phoneNumber, String sms_rejectMessage, boolean sms_accepted, long sms_creatorEventId, String eventShortDesc) {
         sms_phoneNo = sms_phoneNumber;
-        sms_msg = sms_message;
+        sms_msg = sms_rejectMessage;
         sms_acc = sms_accepted;
         sms_creatorID = sms_creatorEventId;
         sms_eventShortDesc  = eventShortDesc;
         cont = context;
 
-        Log.d("TAG", "sendSMS");
         String msg;
         Person personMe = PersonController.getPersonWhoIam();
         if (sms_accepted) {
@@ -51,7 +50,7 @@ public class SendSmsController extends BroadcastReceiver {
             //(":Horario:" als Kennzeichner, 123 als creatorEventId, 0
             // für Absage, Lucas als Name der Person im Handy, Krankheit als Absagekategorie, !
             // als Kennzeichner (drin lassen!!!), habe die Grippe als persönliche Notiz)
-            msg = ":Horario:" + sms_creatorEventId + ",0," + personMe.getName() + "," + sms_message;
+            msg = ":Horario:" + sms_creatorEventId + ",0," + personMe.getName() + "," + sms_rejectMessage;
         }
 
         try {
@@ -68,13 +67,11 @@ public class SendSmsController extends BroadcastReceiver {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Log.d("TAG", "UnregisterService");
                     cont.unregisterReceiver(smsUtils);
                 }
             }, 10000);
         } catch (Exception e) {
-            Log.d("TAG", "Exception: " + e.getMessage());
-            Toast.makeText(cont, cont.getString(R.string.cannot_send_sms), Toast.LENGTH_SHORT).show();
+            Toast.makeText(cont, cont.getString(R.string.sms_exception), Toast.LENGTH_SHORT).show();
         }
     }
 
