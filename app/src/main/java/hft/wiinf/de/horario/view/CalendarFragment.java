@@ -259,9 +259,10 @@ public class CalendarFragment extends Fragment {
                     textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_mydate_questionmark, 0);
                 } else if (eventsAsAppointments.get(position).getType() == 3) {
                     textView.setTextColor(Color.DKGRAY);
-                    textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_mydate, 0);
+                    textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_mydate_approved, 0);
                 } else if (eventsAsAppointments.get(position).getType() == 0) {
-                    textView.setTextColor(Color.DKGRAY);
+                    textView.setTextColor(Color.BLACK);
+                    textView.setBackgroundColor(Color.WHITE);
                     textView.setFocusable(false);
                 }
                 textView.setText(eventsAsAppointments.get(position).getDescription());
