@@ -196,7 +196,6 @@ public class CalendarFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 QRScanFragment qrScanFragment = new QRScanFragment();
-                SettingsSettingsFragment settingsFragment = new SettingsSettingsFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("fragment", "Calendar");
                 qrScanFragment.setArguments(bundle);

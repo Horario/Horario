@@ -59,7 +59,7 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
         checkForSMSPermission();
     }
 
-    public void checkForSMSPermission(){
+    public void checkForSMSPermission() {
         if (!isSendSmsPermissionGranted()) {
             requestSendSmsPermission();
         } else {
