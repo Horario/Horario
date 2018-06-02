@@ -2,8 +2,6 @@ package hft.wiinf.de.horario;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,7 +15,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -51,14 +48,6 @@ import hft.wiinf.de.horario.view.EventOverviewFragment;
 import hft.wiinf.de.horario.view.SettingsActivity;
 
 public class TabActivity extends AppCompatActivity implements ScanResultReceiverController {
-
-    //Needed for SMS - start
-    int phone_state;
-    String sms_phoneNo;
-    String sms_message;
-    long sms_creatorEventId;
-    boolean sms_accepted;
-    //Needed for SMS - end
 
     //TODO Kommentieren und Java Doc Info Schreiben
     private static final String TAG = "TabActivity";
@@ -123,10 +112,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         myEndTime.set(Calendar.MILLISECOND, 0);
         myEndDate.set(Calendar.SECOND, 0);
         myEndDate.set(Calendar.MILLISECOND, 0);
-
-        //SMS
-        TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        tm.listen(mPhoneListener, PhoneStateListener.LISTEN_SERVICE_STATE);
     }
 
     private void restartApp(String fragmentResource) {
@@ -641,14 +626,17 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
 
                             //SMS
+                            String reject_message;
+                            boolean accepted;
                             if ((event.getAccepted().equals(AcceptedState.ACCEPTED) || (event.getAccepted().equals(AcceptedState.REJECTED)))) {
                                 if (event.getAccepted().equals(AcceptedState.ACCEPTED)) {
-                                    sms_accepted = true;
+                                    accepted = true;
+                                    reject_message = "";
                                 } else {
-                                    sms_accepted = false;
+                                    accepted = false;
+                                    reject_message = "ToDo!ToDO";
                                 }
-                                setAllVariables(event, person);
-                                SendSmsController.sendSMS(getApplicationContext(), sms_phoneNo, sms_message, sms_accepted, sms_creatorEventId);
+                                SendSmsController.sendSMS(getApplicationContext(), event.getCreator().getPhoneNumber(), reject_message, accepted, event.getCreatorEventId(),event.getShortTitle());
                             }
 
                             //Restart the TabActivity an Reload all Views
@@ -666,12 +654,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         alertDialogAskForFinalDecission.cancel();
                     }
                 });
-    }
-
-    private void setAllVariables(Event event, Person person) {
-        sms_message = "ToDo!ToDo";
-        sms_creatorEventId = event.getCreatorEventId();
-        sms_phoneNo = person.getPhoneNumber();
     }
 
     //check after scan if app has an user with an phonenumber
@@ -805,12 +787,4 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             startActivity(intent);
         }
     }
-
-    private PhoneStateListener mPhoneListener = new PhoneStateListener() {
-        @Override
-        public void onServiceStateChanged(ServiceState serviceState) {
-            phone_state = serviceState.getState();
-            super.onServiceStateChanged(serviceState);
-        }
-    };
 }

@@ -74,9 +74,6 @@
             android:name=".controller.SendSmsController"
             android:enabled="true"
             android:exported="true">
-            <intent-filter>
-                <action android:name="SMS_SENT"/>
-            </intent-filter>
         </receiver>
         <service
             android:name=".service.FailedSMSService"

@@ -73,7 +73,7 @@ public class SettingsSettingsFragment extends Fragment {
             person = PersonController.getPersonWhoIam();
             if (person == null)
                 //TODO: read real phone number
-                person = new Person(true, "007", "");
+                person = new Person(true, "01729101821", "Flo");
         } catch (NullPointerException e) {
             Log.d(TAG, "SettingsActivity:" + e.getMessage());
         }

@@ -36,13 +36,13 @@ public class FailedSMSService extends JobService {
 
         if (phone_state == ServiceState.STATE_IN_SERVICE) {
             sms = BundleUtility.toBundle(params.getExtras());
-            FailedSMS failedSMS = new FailedSMS(sms.getString("message"), sms.getString("phoneNo"), sms.getInt("creatorID"), sms.getBoolean("accepted"));
+            FailedSMS failedSMS = new FailedSMS(sms.getString("message"), sms.getString("phoneNo"), sms.getLong("creatorID"), sms.getBoolean("accepted"));
 
             sendSMS(failedSMS);
             FailedSMSController.deleteFailedSMS(failedSMS.getMessage(), failedSMS.getCreatorID(), failedSMS.getPhoneNo());
 
             jobFinished(params, false);
-            addNotification(sms.getString("phoneNo"), sms.getString("message"), sms.getBoolean("accepted"), sms.getInt("id"));
+            addNotification(sms.getString("phoneNo"), sms.getBoolean("accepted"), sms.getInt("id"), sms.getString("eventShortDesc"));
             return true;
         }
         return true;
@@ -83,12 +83,12 @@ public class FailedSMSService extends JobService {
         }
     };
 
-    private void addNotification(String phoneNo, String message, boolean accepted, int id) {
+    private void addNotification(String phoneNo, boolean accepted, int id, String eventShortDesc) {
         String contentText;
         if (accepted) {
-            contentText = "Zusage eines Events an: " + phoneNo;
+            contentText = "Zusage des Events \"" + eventShortDesc + "\" an: " + phoneNo;
         } else {
-            contentText = "Absage eines Events an: " + phoneNo;
+            contentText = "Absage des Events  \"" + eventShortDesc + "\" an: " + phoneNo;
         }
 
         Intent notificationIntent = new Intent(this, TabActivity.class);

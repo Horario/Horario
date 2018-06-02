@@ -148,6 +148,6 @@
     <string name="accept">Ja!</string>
     <string name="reject">Nein!</string>
     <string name="sms_sent">SMS wurde erfolgreich versandt!</string>
-    <string name="sms_fail">SMS senden fehlgeschlagen!</string>
+    <string name="sms_fail">SMS senden fehlgeschlagen! Es wird später automatisch erneut versucht!</string>
     <string name="cannot_send_sms">Bitte in den Einstellungen ändern</string>
 </resources>

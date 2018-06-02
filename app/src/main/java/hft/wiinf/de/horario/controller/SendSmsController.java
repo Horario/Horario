@@ -9,7 +9,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PersistableBundle;
@@ -26,63 +25,62 @@ import hft.wiinf.de.horario.utility.BundleUtility;
 public class SendSmsController extends BroadcastReceiver {
 
     public static final String SENT = "SMS_SENT";
-    public static String sms_phoneNo, sms_msg;
+    public static String sms_phoneNo, sms_msg, sms_eventShortDesc;
     public static boolean sms_acc;
     public static long sms_creatorID;
     public static Context cont;
 
 
-    public static void sendSMS(final Context context, String sms_phoneNumber, String sms_message, boolean sms_accepted, long sms_creatorEventId) {
+    public static void sendSMS(final Context context, String sms_phoneNumber, String sms_message, boolean sms_accepted, long sms_creatorEventId, String eventShortDesc) {
         sms_phoneNo = sms_phoneNumber;
         sms_msg = sms_message;
         sms_acc = sms_accepted;
         sms_creatorID = sms_creatorEventId;
+        sms_eventShortDesc  = eventShortDesc;
         cont = context;
 
-        if (!canSendSMS(context)) {
-            Toast.makeText(context, context.getString(R.string.cannot_send_sms), Toast.LENGTH_SHORT).show();
+        Log.d("TAG", "sendSMS");
+        String msg;
+        Person personMe = PersonController.getPersonWhoIam();
+        if (sms_accepted) {
+            //SMS: :Horario:123,1,Lucas
+            //(":Horario:" als Kennzeichner, 123 als creatorEventId, 1 für Zusage, Lucas als Name der Person im Handy)
+            msg = ":Horario:" + sms_creatorEventId + ",1," + personMe.getName();
         } else {
+            //SMS: :Horario:123,0,Lucas,Krankheit!habe die Grippe
+            //(":Horario:" als Kennzeichner, 123 als creatorEventId, 0
+            // für Absage, Lucas als Name der Person im Handy, Krankheit als Absagekategorie, !
+            // als Kennzeichner (drin lassen!!!), habe die Grippe als persönliche Notiz)
+            msg = ":Horario:" + sms_creatorEventId + ",0," + personMe.getName() + "," + sms_message;
+        }
 
-            String msg;
-            Person personMe = PersonController.getPersonWhoIam();
-            if (sms_accepted) {
-                //SMS: :Horario:123,1,Lucas
-                //(":Horario:" als Kennzeichner, 123 als creatorEventId, 1 für Zusage, Lucas als Name der Person im Handy)
-                msg = ":Horario:" + sms_creatorEventId + ",1," + personMe.getName();
-            } else {
-                //SMS: :Horario:123,0,Lucas,Krankheit!habe die Grippe
-                //(":Horario:" als Kennzeichner, 123 als creatorEventId, 0
-                // für Absage, Lucas als Name der Person im Handy, Krankheit als Absagekategorie, !
-                // als Kennzeichner (drin lassen!!!), habe die Grippe als persönliche Notiz)
-                msg = ":Horario:" + sms_creatorEventId + ",0," + personMe.getName() + "," + sms_message;
-            }
+        try {
+            PendingIntent sentPI = PendingIntent.getBroadcast(cont, 0, new Intent(SENT), 0);
 
-            try {
-                PendingIntent sentPI = PendingIntent.getBroadcast(context, 0, new Intent(SENT), 0);
+            final SendSmsController smsUtils = new SendSmsController();
+            //register for sending and delivery
+            cont.registerReceiver(smsUtils, new IntentFilter(SendSmsController.SENT));
 
-                final SendSmsController smsUtils = new SendSmsController();
-                //register for sending and delivery
-                context.registerReceiver(smsUtils, new IntentFilter(SendSmsController.SENT));
+            SmsManager sms = SmsManager.getDefault();
+            sms.sendTextMessage(sms_phoneNumber, null, msg, sentPI, null);
 
-                SmsManager sms = SmsManager.getDefault();
-                sms.sendTextMessage(sms_phoneNumber, null, msg, sentPI, null);
-
-                //we unsubscribed in 10 seconds
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        context.unregisterReceiver(smsUtils);
-                    }
-                }, 10000);
-            }catch(Exception e){
-                Toast.makeText(context, context.getString(R.string.cannot_send_sms), Toast.LENGTH_SHORT).show();
-            }
+            //we unsubscribed in 10 seconds
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Log.d("TAG", "UnregisterService");
+                    cont.unregisterReceiver(smsUtils);
+                }
+            }, 10000);
+        } catch (Exception e) {
+            Log.d("TAG", "Exception: " + e.getMessage());
+            Toast.makeText(cont, cont.getString(R.string.cannot_send_sms), Toast.LENGTH_SHORT).show();
         }
     }
 
 
     public void startJobSendSMS() {
-        Log.d("Tag","Florian:" + sms_msg + sms_phoneNo + sms_creatorID + sms_acc);
+        Log.d("TAG", "startJobSendSMS");
         FailedSMS failedSMS = new FailedSMS(sms_msg, sms_phoneNo, sms_creatorID, sms_acc);
         saveFailedSMS(failedSMS);
 
@@ -91,10 +89,11 @@ public class SendSmsController extends BroadcastReceiver {
         sms.putString("message", sms_msg);
         sms.putLong("creatorID", sms_creatorID);
         sms.putBoolean("accepted", sms_acc);
+        sms.putString("eventShortDesc", sms_eventShortDesc);
         sms.putInt("id", failedSMS.getId().intValue());
 
         PersistableBundle persBund = BundleUtility.toPersistableBundle(sms);
-        JobScheduler jobScheduler = (JobScheduler) cont.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+        JobScheduler jobScheduler = (JobScheduler) cont.getSystemService(cont.JOB_SCHEDULER_SERVICE);
         jobScheduler.schedule(new JobInfo.Builder(failedSMS.getId().intValue(), new ComponentName(cont, FailedSMSService.class))
                 .setExtras(persBund)
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
@@ -131,10 +130,6 @@ public class SendSmsController extends BroadcastReceiver {
                     break;
             }
         }
-    }
-
-    public static boolean canSendSMS(Context context) {
-        return context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_TELEPHONY);
     }
 }
 
