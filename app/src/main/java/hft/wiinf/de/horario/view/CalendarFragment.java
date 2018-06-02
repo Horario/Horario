@@ -1,6 +1,6 @@
 package hft.wiinf.de.horario.view;
 
-import android.app.Application;
+
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -34,9 +34,7 @@ import java.util.Locale;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
-import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.AcceptedState;
-import hft.wiinf.de.horario.model.Person;
 
 public class CalendarFragment extends Fragment {
     private static final String TAG = "CalendarFragmentActivity";
@@ -68,7 +66,7 @@ public class CalendarFragment extends Fragment {
         List<hft.wiinf.de.horario.model.Event> acceptedEvents = EventController.findMyEvents();
         for (int i = 0; i < acceptedEvents.size(); i++) {
             if (calendarCvCalendar.getEvents(acceptedEvents.get(i).getStartTime().getTime()).size() == 0 && acceptedEvents.get(i).getAccepted() != AcceptedState.REJECTED) {
-                Event event = new Event(Color.BLUE, acceptedEvents.get(i).getStartTime().getTime());
+                Event event = new Event(Color.DKGRAY, acceptedEvents.get(i).getStartTime().getTime());
                 calendarCvCalendar.addEvent(event, true);
             }
         }
@@ -91,11 +89,13 @@ public class CalendarFragment extends Fragment {
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
                 if (eventList.get(position).getAccepted().equals(AcceptedState.ACCEPTED)) {
-                    textView.setBackgroundColor(Color.GREEN);
+                    textView.setTextColor(Color.DKGRAY);
+                    textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_mydate, 0);
                 } else if (eventList.get(position).getAccepted().equals(AcceptedState.WAITING)) {
-                    textView.setBackgroundColor(Color.RED);
+                    textView.setTextColor(Color.DKGRAY);
+                    textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_mydate_questionmark, 0);
                 } else {
-                    textView.setBackgroundColor(Color.WHITE);
+                    textView.setTextColor(Color.DKGRAY);
                 }
                 return textView;
             }

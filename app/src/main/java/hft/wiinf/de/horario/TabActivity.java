@@ -140,66 +140,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
     }
 
-    //Method will be called after UI-Elements are created
-    public void onStart() {
-        super.onStart();
-        //Select calendar by default
-        Objects.requireNonNull(tabLayout.getTabAt(startTab)).select();
-        //Listener that will check when a Tab is selected, unselected and reselected
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            //Do something if Tab is selected. Parameters: selected Tab.--- Info: tab.getPosition() == x for check which Tab
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                if (tab.getPosition() == 1) {
-                    CalendarFragment.update(CalendarFragment.selectedMonth);
-                }
-            }
-
-            //Do something if Tab is unselected. Parameters: selected Tab.--- Info: tab.getPosition() == x for check which Tab
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                //check if settings Tab is unselected
-                if (tab.getPosition() == 2) {
-                    getSupportFragmentManager().popBackStack();
-                    //Close the keyboard on a tab change
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(mSectionsPageAdapter.getItem(2).getView().getApplicationWindowToken(), 0);
-                } else if (tab.getPosition() == 1) {
-                    getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
-                    fr.replace(R.id.calendar_frameLayout, new CalendarFragment());
-                    fr.commit();
-                } else if (tab.getPosition() == 0) {
-                    getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
-                    fr.replace(R.id.eventOverview_frameLayout, new EventOverviewFragment());
-                    fr.commit();
-                }
-            }
-
-            //Do something if Tab is reselected. Parameters: selected Tab.--- Info: tab.getPosition() == x for check which Tab
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-                //check if settings Tab is unselected
-                if (tab.getPosition() == 2) {
-                    getSupportFragmentManager().popBackStack();
-                    //Close the keyboard on a tab change
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(mSectionsPageAdapter.getItem(2).getView().getApplicationWindowToken(), 0);
-                } else if (tab.getPosition() == 1) {
-                    getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
-                    fr.replace(R.id.calendar_frameLayout, new CalendarFragment());
-                    fr.commit();
-                } else if (tab.getPosition() == 0) {
-                    getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
-                    fr.replace(R.id.eventOverview_frameLayout, new EventOverviewFragment());
-                    fr.commit();
-                }
-            }
-        });
-    }
 
     //After Scanning it was opened a Dialog where the user can choose what to do next
     @SuppressLint("ResourceType")
@@ -238,11 +178,9 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         try {
             // Button to Save the Event and send for assent the Event a SMS  to the EventCreator
             afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_eventSave)
-
                     .setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            //ToDo Dennis hier kommt dein Code rein.
                             buttonId = 1;
                             decideWhatToDo();
 //                            //Restart the TabActivity an Reload all Views
@@ -260,8 +198,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                             buttonId = 2;
                             decideWhatToDo();
 //                            //Restart the TabActivity an Reload all Views
-                            //restartApp(whichFragmentTag);
-                            //afterScanningDialogAction.dismiss();
+//                            restartApp(whichFragmentTag);
+//                            afterScanningDialogAction.dismiss();
 
                         }
                     });
@@ -274,8 +212,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                             buttonId = 3;
                             decideWhatToDo();
 //                            //Restart the TabActivity an Reload all Views
-                            //restartApp(whichFragmentTag);
-                            //afterScanningDialogAction.dismiss();
+//                            restartApp(whichFragmentTag);
+//                            afterScanningDialogAction.dismiss();
                         }
                     });
 
@@ -394,6 +332,67 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     public void scanResultData(NoScanResultExceptionController noScanData) {
         Toast toast = Toast.makeText(this, noScanData.getMessage(), Toast.LENGTH_SHORT);
         toast.show();
+    }
+
+    //Method will be called after UI-Elements are created
+    public void onStart() {
+        super.onStart();
+        //Select calendar by default
+        Objects.requireNonNull(tabLayout.getTabAt(startTab)).select();
+        //Listener that will check when a Tab is selected, unselected and reselected
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            //Do something if Tab is selected. Parameters: selected Tab.--- Info: tab.getPosition() == x for check which Tab
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if (tab.getPosition() == 1) {
+                    CalendarFragment.update(CalendarFragment.selectedMonth);
+                }
+            }
+
+            //Do something if Tab is unselected. Parameters: selected Tab.--- Info: tab.getPosition() == x for check which Tab
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                //check if settings Tab is unselected
+                if (tab.getPosition() == 2) {
+                    getSupportFragmentManager().popBackStack();
+                    //Close the keyboard on a tab change
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(mSectionsPageAdapter.getItem(2).getView().getApplicationWindowToken(), 0);
+                } else if (tab.getPosition() == 1) {
+                    getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
+                    fr.replace(R.id.calendar_frameLayout, new CalendarFragment());
+                    fr.commit();
+                } else if (tab.getPosition() == 0) {
+                    getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
+                    fr.replace(R.id.eventOverview_frameLayout, new EventOverviewFragment());
+                    fr.commit();
+                }
+            }
+
+            //Do something if Tab is reselected. Parameters: selected Tab.--- Info: tab.getPosition() == x for check which Tab
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                //check if settings Tab is unselected
+                if (tab.getPosition() == 2) {
+                    getSupportFragmentManager().popBackStack();
+                    //Close the keyboard on a tab change
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(mSectionsPageAdapter.getItem(2).getView().getApplicationWindowToken(), 0);
+                } else if (tab.getPosition() == 1) {
+                    getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
+                    fr.replace(R.id.calendar_frameLayout, new CalendarFragment());
+                    fr.commit();
+                } else if (tab.getPosition() == 0) {
+                    getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
+                    fr.replace(R.id.eventOverview_frameLayout, new EventOverviewFragment());
+                    fr.commit();
+                }
+            }
+        });
     }
 
     // Add the Fragments to the PageViewer
