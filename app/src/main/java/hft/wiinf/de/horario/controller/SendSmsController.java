@@ -63,7 +63,7 @@ public class SendSmsController extends BroadcastReceiver {
             SmsManager sms = SmsManager.getDefault();
             sms.sendTextMessage(sms_phoneNumber, null, msg, sentPI, null);
 
-            //we unsubscribed in 10 seconds
+            //we unregister in 10 seconds
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -76,8 +76,8 @@ public class SendSmsController extends BroadcastReceiver {
     }
 
 
+    //If SMS failed schedule it
     public void startJobSendSMS() {
-        Log.d("TAG", "startJobSendSMS");
         FailedSMS failedSMS = new FailedSMS(sms_msg, sms_phoneNo, sms_creatorID, sms_acc);
         saveFailedSMS(failedSMS);
 
