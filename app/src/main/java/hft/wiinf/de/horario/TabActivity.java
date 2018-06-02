@@ -635,7 +635,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                                     accepted = false;
                                     reject_message = "ToDo!ToDO";
                                 }
-                                SendSmsController.sendSMS(getApplicationContext(), event.getCreator().getPhoneNumber(), reject_message, accepted, event.getCreatorEventId(),event.getShortTitle());
+                                SendSmsController.sendSMS(getApplicationContext(), event.getCreator().getPhoneNumber(), reject_message, accepted, event.getCreatorEventId(), event.getShortTitle());
                             }
 
                             //Restart the TabActivity an Reload all Views
