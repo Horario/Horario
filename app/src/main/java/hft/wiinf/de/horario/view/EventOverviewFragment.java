@@ -77,7 +77,7 @@ public class EventOverviewFragment extends Fragment {
                 } else if (eventList.get(i).getAccepted().equals(AcceptedState.WAITING)) {
                     eventArray.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 2));
                 } else {
-                    eventArray.clear();
+                    eventArray.remove(i);
                 }
             }
             helper.setTime(endOfDay.getTime());
