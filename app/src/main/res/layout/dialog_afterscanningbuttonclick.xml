@@ -10,12 +10,12 @@
     <TextView
         android:id="@+id/dialog_qrScanner_textView_question"
         android:layout_width="match_parent"
-        android:layout_height="216dp"
-        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="89dp"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="78dp" />
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="10dp"
+
+        />
 
     <TableRow
         android:layout_width="match_parent"
@@ -28,8 +28,9 @@
             android:id="@+id/dialog_event_final_decission_accept"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-
             android:layout_alignParentStart="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
             android:layout_weight="1"
             android:backgroundTint="@color/zentea_darkgreen"
             android:text="@string/accept"
@@ -44,6 +45,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
             android:layout_weight="1"
             android:backgroundTint="@color/zentea_darkgreen"
             android:text="@string/reject"
