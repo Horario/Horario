@@ -35,6 +35,7 @@ import java.util.GregorianCalendar;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
+import hft.wiinf.de.horario.controller.NotificationController;
 import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.AcceptedState;
 import hft.wiinf.de.horario.model.Event;
@@ -342,7 +343,7 @@ public class NewEventFragment extends Fragment {
         me.setName(edittext_userName.getText().toString());
         PersonController.savePerson(me);
         openSavedSuccessfulDialog(event.getId());
-        setAlarmForNotification(event);
+        NotificationController.setAlarmForNotification(getContext(),event);
     }
 
     //clear all entrys and open a dialog where the user can choose what to do next
@@ -527,37 +528,6 @@ public class NewEventFragment extends Fragment {
             if (endOfRepetition != null) {
                 format = new SimpleDateFormat("dd.MM.YYYY");
                 editText_endOfRepetition.setText(format.format(endOfRepetition));
-            }
-        }
-    }
-
-    public long calcNotificationTime(Calendar cal, Person person) {
-        cal.add(Calendar.MINUTE, ((-1) * person.getNotificationTime()));
-        return cal.getTimeInMillis();
-    }
-
-    //Method is going to set the alarm x minutes before the event
-    public void setAlarmForNotification(Event event) {
-        if (PersonController.getPersonWhoIam() != null) {
-            Person notificationPerson = PersonController.getPersonWhoIam();
-            if (notificationPerson.isEnablePush()) {
-                Intent alarmIntent = new Intent(getContext(), NotificationReceiver.class);
-                Date date = event.getStartTime();
-                Calendar calendar = GregorianCalendar.getInstance();
-                calendar.setTime(date);
-
-                alarmIntent.putExtra("Event", event.getShortTitle());
-                alarmIntent.putExtra("Hour", calendar.get(Calendar.HOUR_OF_DAY));
-                if (calendar.get(Calendar.MINUTE) < 10) {
-                    alarmIntent.putExtra("Minute", "0" + String.valueOf(calendar.get(Calendar.MINUTE)));
-                } else {
-                    alarmIntent.putExtra("Minute", String.valueOf(calendar.get(Calendar.MINUTE)));
-                }
-                alarmIntent.putExtra("ID", event.getId().intValue());
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), event.getId().intValue(), alarmIntent, 0);
-
-                AlarmManager manager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
-                manager.set(AlarmManager.RTC_WAKEUP, calcNotificationTime(calendar, notificationPerson), pendingIntent);
             }
         }
     }

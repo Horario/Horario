@@ -34,6 +34,7 @@ import java.util.regex.Pattern;
 
 import hft.wiinf.de.horario.controller.EventController;
 import hft.wiinf.de.horario.controller.NoScanResultExceptionController;
+import hft.wiinf.de.horario.controller.NotificationController;
 import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.controller.ScanResultReceiverController;
 import hft.wiinf.de.horario.controller.SendSmsController;
@@ -619,6 +620,10 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                             } else {
                                 //save the one event
                                 EventController.saveEvent(event);
+                            }
+
+                            if(event.getAccepted().equals(AcceptedState.ACCEPTED)){
+                                NotificationController.setAlarmForNotification(getApplicationContext(),event);
                             }
                             Toast.makeText(v.getContext(), R.string.save_event, Toast.LENGTH_SHORT).show();
                             alertDialogAskForFinalDecission.dismiss();
