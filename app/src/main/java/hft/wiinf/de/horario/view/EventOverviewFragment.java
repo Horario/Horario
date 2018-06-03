@@ -74,15 +74,15 @@ public class EventOverviewFragment extends Fragment {
             if (eventList.size() > 0) {
                 eventArrayDay.add(new Appointment(CalendarFragment.dayFormat.format(helper.getTime()), 0));
             }
-            for (int i = 0; i < eventList.size(); i++) {
-                if (eventList.get(i).getAccepted().equals(AcceptedState.ACCEPTED)) {
-                    if (eventList.get(i).getCreator().isItMe()) {
-                        eventArrayDay.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 3, eventList.get(i).getId(), eventList.get(i).getCreator()));
-                    } else {
-                        eventArrayDay.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 1, eventList.get(i).getId(), eventList.get(i).getCreator()));
+            for (int i = 0; i<eventList.size(); i++){
+                if(eventList.get(i).getCreator().equals(PersonController.getPersonWhoIam())){
+                    eventArrayDay.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 3));
+                }else{
+                    if(eventList.get(i).getAccepted().equals(AcceptedState.ACCEPTED)){
+                        eventArrayDay.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 1));
+                    }else if(eventList.get(i).getAccepted().equals(AcceptedState.WAITING)) {
+                        eventArrayDay.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 2));
                     }
-                } else if (eventList.get(i).getAccepted().equals(AcceptedState.WAITING)) {
-                    eventArrayDay.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 2, eventList.get(i).getId(), eventList.get(i).getCreator()));
                 }
             }
             if (eventArrayDay.size()>1){
@@ -110,7 +110,7 @@ public class EventOverviewFragment extends Fragment {
             @Override
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
-                // 0 = date, 1 = accepted, 2 = waiting, 3 = own
+
                 if (eventArray.get(position).getType() == 1) {
                     textView.setTextColor(Color.DKGRAY);
                     textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_mydate_approved, 0);
