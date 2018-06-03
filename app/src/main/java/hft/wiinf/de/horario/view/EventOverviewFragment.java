@@ -110,6 +110,7 @@ public class EventOverviewFragment extends Fragment {
             @Override
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
+                // 0 = date, 1 = accepted, 2 = waiting, 3 = own
                 if (eventArray.get(position).getType() == 1) {
                     textView.setTextColor(Color.DKGRAY);
                     textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_mydate_approved, 0);

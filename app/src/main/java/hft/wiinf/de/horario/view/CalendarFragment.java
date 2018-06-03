@@ -251,15 +251,16 @@ public class CalendarFragment extends Fragment {
             @Override
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
+                            // 0 = date, 1 = accepted, 2 = waiting, 3 = own
                 if (eventsAsAppointments.get(position).getType() == 1) {
                     textView.setTextColor(Color.DKGRAY);
-                    textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_mydate, 0);
+                    textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_mydate_approved, 0);
                 } else if (eventsAsAppointments.get(position).getType() == 2) {
                     textView.setTextColor(Color.DKGRAY);
                     textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_mydate_questionmark, 0);
                 } else if (eventsAsAppointments.get(position).getType() == 3) {
                     textView.setTextColor(Color.DKGRAY);
-                    textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_mydate_approved, 0);
+                    textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_mydate, 0);
                 } else if (eventsAsAppointments.get(position).getType() == 0) {
                     textView.setTextColor(Color.BLACK);
                     textView.setBackgroundColor(Color.WHITE);
