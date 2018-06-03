@@ -1,6 +1,5 @@
 package hft.wiinf.de.horario.view;
 
-
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -18,8 +17,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
@@ -34,23 +33,25 @@ import java.util.Locale;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
+import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.AcceptedState;
 
 public class CalendarFragment extends Fragment {
     private static final String TAG = "CalendarFragmentActivity";
 
     public static CompactCalendarView calendarCvCalendar;
-    public static Date selectedMonth;
     static ListView calendarLvList;
     static TextView calendarTvMonth;
+    static TextView calendarTvDay;
     TextView calendarIsFloatMenuOpen;
     FloatingActionButton calendarFcMenu, calendarFcQrScan, calendarFcNewEvent;
     ConstraintLayout cLayout_calendar_main;
-    static TextView calendarTvDay;
     static Context context = null;
+
     static DateFormat monthFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
     static DateFormat dayFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
     static DateFormat timeFormat = new SimpleDateFormat("HH:mm");
+    public static Date selectedMonth;
 
     Animation ActionButtonOpen, ActionButtonClose, ActionButtonRotateRight, ActionButtonRotateLeft;
 
@@ -211,7 +212,6 @@ public class CalendarFragment extends Fragment {
                 closeFABMenu();
             }
         });
-
         return view;
     }
 
