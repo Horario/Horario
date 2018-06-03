@@ -2,10 +2,6 @@ package hft.wiinf.de.horario.view;
 
 
 import android.annotation.SuppressLint;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -25,20 +21,13 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import hft.wiinf.de.horario.R;
-import hft.wiinf.de.horario.controller.EventController;
 import hft.wiinf.de.horario.controller.NotificationController;
 import hft.wiinf.de.horario.controller.PersonController;
-import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
-import hft.wiinf.de.horario.service.NotificationReceiver;
 
 /**
  * A simple {@link Fragment} subclass.

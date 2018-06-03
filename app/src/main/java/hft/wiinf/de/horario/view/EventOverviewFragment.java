@@ -21,8 +21,6 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import java.text.DateFormat;

@@ -1,13 +1,9 @@
 package hft.wiinf.de.horario.view;
 
 import android.app.Activity;
-import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.PendingIntent;
 import android.app.TimePickerDialog;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -30,8 +26,6 @@ import android.widget.Toast;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
@@ -41,7 +35,7 @@ import hft.wiinf.de.horario.model.AcceptedState;
 import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.model.Repetition;
-import hft.wiinf.de.horario.service.NotificationReceiver;
+
 
 //TODO Kommentieren und Java Doc Info Schreiben
 public class NewEventFragment extends Fragment {
@@ -343,7 +337,7 @@ public class NewEventFragment extends Fragment {
         me.setName(edittext_userName.getText().toString());
         PersonController.savePerson(me);
         openSavedSuccessfulDialog(event.getId());
-        NotificationController.setAlarmForNotification(getContext(),event);
+        NotificationController.setAlarmForNotification(getContext(), event);
     }
 
     //clear all entrys and open a dialog where the user can choose what to do next

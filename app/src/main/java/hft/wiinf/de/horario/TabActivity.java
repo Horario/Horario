@@ -12,9 +12,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.telephony.PhoneStateListener;
-import android.telephony.ServiceState;
-import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -622,8 +619,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                                 EventController.saveEvent(event);
                             }
 
-                            if(event.getAccepted().equals(AcceptedState.ACCEPTED)){
-                                NotificationController.setAlarmForNotification(getApplicationContext(),event);
+                            if (event.getAccepted().equals(AcceptedState.ACCEPTED)) {
+                                NotificationController.setAlarmForNotification(getApplicationContext(), event);
                             }
                             Toast.makeText(v.getContext(), R.string.save_event, Toast.LENGTH_SHORT).show();
                             alertDialogAskForFinalDecission.dismiss();

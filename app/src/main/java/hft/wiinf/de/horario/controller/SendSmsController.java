@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.PersistableBundle;
 import android.telephony.SmsManager;
-import android.util.Log;
 import android.widget.Toast;
 
 import hft.wiinf.de.horario.R;
@@ -36,7 +35,7 @@ public class SendSmsController extends BroadcastReceiver {
         sms_msg = sms_rejectMessage;
         sms_acc = sms_accepted;
         sms_creatorID = sms_creatorEventId;
-        sms_eventShortDesc  = eventShortDesc;
+        sms_eventShortDesc = eventShortDesc;
         cont = context;
 
         String msg;

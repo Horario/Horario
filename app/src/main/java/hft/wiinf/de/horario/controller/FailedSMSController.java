@@ -26,12 +26,12 @@ public class FailedSMSController {
     }
 
     public static void deleteFailedSMS(String message, long creatorID, String phoneNo) {
-        try{
+        try {
             new Delete()
                     .from(FailedSMS.class)
-                    .where("message = ? AND creatorID = ? AND phoneNo = ?",message,creatorID,phoneNo)
+                    .where("message = ? AND creatorID = ? AND phoneNo = ?", message, creatorID, phoneNo)
                     .execute();
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.d("FailedSMSController", "deleteFailedSMS:" + e.getMessage());
         }
     }
