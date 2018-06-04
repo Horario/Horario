@@ -217,7 +217,7 @@ public class QRGeneratorFragment extends Fragment {
                         + getString(R.string.until) + endDate + getString(R.string.find)
                         + repetition + getString(R.string.at) + startTime + getString(R.string.clock_to)
                         + endTime + getString(R.string.clock_at_room) + place + " " + shortTitle
-                        + getString(R.string.instead_of) + "\n" + getString(R.string.eventDetails) + description +
+                        + getString(R.string.instead_of) + "\n"+ "\n" + getString(R.string.eventDetails) + description +
                         "\n" + "\n" + getString(R.string.organizer) + eventCreatorName);
             }
             // In the CatchBlock the User see a SnackBar Information and was pushed where the User Comes From

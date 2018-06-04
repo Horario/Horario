@@ -99,14 +99,14 @@
     <string name="on">Am\u0020</string>
     <string name="find">\u0020findet\u0020</string>
     <string name="from">von\u0020</string>
-    <string name="clock_at_room">Uhr in Raum\u0020</string>
+    <string name="clock_at_room">\u0020Uhr in Raum\u0020</string>
     <string name="organizer">Organisator:\u0020</string>
     <string name="eventDetails">Termindetails sind:\u0020</string>
     <string name="at">\u0020um\u0020</string>
     <string name="instead_of">\u0020statt.</string>
     <string name="as_of">Vom\u0020</string>
-    <string name="until">\u0020bis\u0020</string>
-    <string name="clock_to">Uhr bis\u0020</string>
+    <string name="until">\u0020 Uhr bis\u0020</string>
+    <string name="clock_to">\u0020Uhr bis\u0020</string>
     <string name="your_Event">Dein Termin</string>
     <string name="room">Raum:\u0020</string>
     <string name="yourself">Du selber</string>
@@ -119,7 +119,7 @@
     <string name="toCalender">\u0020Zum Kalender\u0020</string>
     <string name="wrongQRCodeResult">Das ist der Inhalt vom QR Code:\u0020</string>
     <string name="notAsEventSaveable">Das können wir leider nicht als Termin speichern!</string>
-    <string name="back_where_user_comesFrom">Zurück zur Ursprung</string>
+    <string name="back_where_user_comesFrom">Zurück zum Ursprung</string>
 
     <!-- QR Scanner & Scanner PopUp -->
     <string name="eventSave">Termin zusagen</string>

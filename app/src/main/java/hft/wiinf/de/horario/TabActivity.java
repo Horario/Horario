@@ -284,14 +284,14 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 qrScanner_result_description.setText(getString(R.string.on) + startDate
                         + getString(R.string.find) + getString(R.string.from) + startTime + getString(R.string.until)
                         + endTime + getString(R.string.clock_at_room) + place + " " + shortTitle
-                        + getString(R.string.instead_of) + "\n" + getString(R.string.eventDetails)
+                        + getString(R.string.instead_of) + "\n" + "\n"+ getString(R.string.eventDetails)
                         + description + "\n" + "\n" + getString(R.string.organizer) + eventCreatorName);
             } else {
                 qrScanner_result_description.setText(getString(R.string.as_of) + startDate
                         + getString(R.string.until) + endDate + getString(R.string.find)
                         + repetition + getString(R.string.at) + startTime + getString(R.string.clock_to)
                         + endTime + getString(R.string.clock_at_room) + place + " " + shortTitle
-                        + getString(R.string.instead_of) + "\n" + getString(R.string.eventDetails) + description +
+                        + getString(R.string.instead_of) + "\n" + "\n" + getString(R.string.eventDetails) + description +
                         "\n" + "\n" + getString(R.string.organizer) + eventCreatorName);
 
             }
