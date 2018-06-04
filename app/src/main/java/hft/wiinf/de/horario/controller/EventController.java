@@ -2,7 +2,6 @@ package hft.wiinf.de.horario.controller;
 
 import android.support.annotation.NonNull;
 
-import com.activeandroid.Model;
 import com.activeandroid.query.Select;
 
 import java.util.Calendar;

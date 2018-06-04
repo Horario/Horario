@@ -1,13 +1,9 @@
 package hft.wiinf.de.horario.view;
 
 import android.app.Activity;
-import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.PendingIntent;
 import android.app.TimePickerDialog;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -30,17 +26,16 @@ import android.widget.Toast;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
+import hft.wiinf.de.horario.controller.NotificationController;
 import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.AcceptedState;
 import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.model.Repetition;
-import hft.wiinf.de.horario.service.NotificationReceiver;
+
 
 //TODO Kommentieren und Java Doc Info Schreiben
 public class NewEventFragment extends Fragment {
@@ -157,19 +152,19 @@ public class NewEventFragment extends Fragment {
                 return false;
             }
         });
-        // on click on serial event checkbox change visibility of the rpetiton and repetiton end field,
+        // on click on serial event checkbox change visibility of the repetition and repetition end field,
         checkBox_serialEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 checkSerialEvent();
             }
         });
-        // sets the choice posibitilites of the repetition spinner (set in string resource-file as array event-repetiton)
+        // sets the choice possibilities of the repetition spinner (set in string resource-file as array event-repetition)
         ArrayAdapter repetitionAdapter = ArrayAdapter.createFromResource(getContext(), R.array.event_repetitions, android.R.layout.simple_spinner_item);
-        //set the appearence of one choice posibility
+        //set the appearance of one choice possibility
         repetitionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_repetition.setAdapter(repetitionAdapter);
-        //set weekly selected until the user selects something different or it is overwriten by the loaded event
+        //set weekly selected until the user selects something different or it is overwritten by the loaded event
         spinner_repetition.setSelection(2);
         //don't open keyboard on focus,
         editText_endOfRepetition.setShowSoftInputOnFocus(false);
@@ -216,11 +211,11 @@ public class NewEventFragment extends Fragment {
         //get the user, if it is saved in the db, the user name is read
         me = PersonController.getPersonWhoIam();
         if (me == null)
-            me = new Person(true, "007", "");
+            me = new Person(true, "", "");
         edittext_userName.setText(me.getName());
     }
 
-    //if the checkbox serial event is checked, repetiiton posibilities and the endOfrepetition is shown, else not
+    //if the checkbox serial event is checked, repetition possibilities and the endOfrepetition is shown, else not
     private void checkSerialEvent() {
         if (checkBox_serialEvent.isChecked()) {
             textView_endofRepetiton.setVisibility(View.VISIBLE);
@@ -337,12 +332,12 @@ public class NewEventFragment extends Fragment {
         // if me (the user) is not created (aka null) a new user with typed in the user name is created
         if (me == null)
             //TODO: read the phone number of the user
-            me = new Person(true, "007", "");
+            me = new Person(true, "", "");
         //update or save a new person (me)
         me.setName(edittext_userName.getText().toString());
         PersonController.savePerson(me);
         openSavedSuccessfulDialog(event.getId());
-        setAlarmForNotification(event);
+        NotificationController.setAlarmForNotification(getContext(), event);
     }
 
     //clear all entrys and open a dialog where the user can choose what to do next
@@ -464,7 +459,7 @@ public class NewEventFragment extends Fragment {
             Toast.makeText(getContext(), R.string.endTime_before_startTime, Toast.LENGTH_SHORT).show();
             return false;
         }
-        //if it is and repetaing event and the end of the repetiton is beofre the end time of the first event
+        //if it is and repeating event and the end of the repetition is before the end time of the first event
         if (getRepetition() != Repetition.NONE && endOfRepetition.before(endTime)) {
             Toast.makeText(getContext(), R.string.endOfRepetition_before_endTime, Toast.LENGTH_SHORT).show();
             return false;
@@ -527,37 +522,6 @@ public class NewEventFragment extends Fragment {
             if (endOfRepetition != null) {
                 format = new SimpleDateFormat("dd.MM.YYYY");
                 editText_endOfRepetition.setText(format.format(endOfRepetition));
-            }
-        }
-    }
-
-    public long calcNotificationTime(Calendar cal, Person person) {
-        cal.add(Calendar.MINUTE, ((-1) * person.getNotificationTime()));
-        return cal.getTimeInMillis();
-    }
-
-    //Method is going to set the alarm x minutes before the event
-    public void setAlarmForNotification(Event event) {
-        if (PersonController.getPersonWhoIam() != null) {
-            Person notificationPerson = PersonController.getPersonWhoIam();
-            if (notificationPerson.isEnablePush()) {
-                Intent alarmIntent = new Intent(getContext(), NotificationReceiver.class);
-                Date date = event.getStartTime();
-                Calendar calendar = GregorianCalendar.getInstance();
-                calendar.setTime(date);
-
-                alarmIntent.putExtra("Event", event.getShortTitle());
-                alarmIntent.putExtra("Hour", calendar.get(Calendar.HOUR_OF_DAY));
-                if (calendar.get(Calendar.MINUTE) < 10) {
-                    alarmIntent.putExtra("Minute", "0" + String.valueOf(calendar.get(Calendar.MINUTE)));
-                } else {
-                    alarmIntent.putExtra("Minute", String.valueOf(calendar.get(Calendar.MINUTE)));
-                }
-                alarmIntent.putExtra("ID", event.getId().intValue());
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), event.getId().intValue(), alarmIntent, 0);
-
-                AlarmManager manager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
-                manager.set(AlarmManager.RTC_WAKEUP, calcNotificationTime(calendar, notificationPerson), pendingIntent);
             }
         }
     }

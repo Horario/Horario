@@ -29,12 +29,12 @@
         <ImageButton
             android:id="@+id/overviewBtNext"
             android:layout_width="149dp"
-            android:src="@drawable/ic_next"
             android:layout_height="39dp"
             android:layout_marginStart="40dp"
-
             android:background="@color/zxing_transparent"
+
             android:drawableTop="@drawable/ic_next"
+            android:src="@drawable/ic_next"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/overviewTvMonth"
             app:layout_constraintTop_toTopOf="parent" />
@@ -108,14 +108,14 @@
             app:layout_constraintTop_toBottomOf="@+id/overviewTvMonth" />
 
         <ImageButton
-            android:src="@drawable/ic_previous"
             android:id="@+id/overviewBtPrevious"
             android:layout_width="150dp"
             android:layout_height="39dp"
             android:layout_marginEnd="40dp"
-
             android:background="@color/zxing_transparent"
+
             android:drawableTop="@drawable/ic_previous"
+            android:src="@drawable/ic_previous"
             app:layout_constraintEnd_toStartOf="@+id/overviewTvMonth"
             app:layout_constraintStart_toStartOf="parent"
 
