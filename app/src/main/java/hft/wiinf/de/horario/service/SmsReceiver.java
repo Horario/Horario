@@ -29,7 +29,6 @@ public class SmsReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         // Get the data (SMS data) bound to intent
         Bundle bundle = intent.getExtras();
-        Log.d(TAG, "I got notified");
         SmsMessage[] receivedSMSArray = null;
         ArrayList<ReceivedHorarioSMS> unreadHorarioSMS = new ArrayList<ReceivedHorarioSMS>();
 
@@ -42,7 +41,6 @@ public class SmsReceiver extends BroadcastReceiver {
             for (int i = 0; i < receivedSMSArray.length; i++) {
                 // Convert Object array
                 receivedSMSArray[i] = SmsMessage.createFromPdu((byte[]) pdus[i], "3gpp");
-                Log.d(TAG, receivedSMSArray[i].getMessageBody().toString());
             }
             for (int i = 0; i < receivedSMSArray.length; i++) {
                 /*collect all the Horario SMS*/
