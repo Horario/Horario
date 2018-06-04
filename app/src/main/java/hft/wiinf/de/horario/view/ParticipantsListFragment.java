@@ -27,12 +27,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
@@ -52,6 +50,7 @@ public class ParticipantsListFragment extends Fragment {
     int refusalCounter = 0;
     Event selectedEvent;
     SimpleDateFormat dayFormat = new SimpleDateFormat("dd.MM.yyyy");
+
     public ParticipantsListFragment() {
         // Required empty public constructor
     }
@@ -97,7 +96,7 @@ public class ParticipantsListFragment extends Fragment {
     }
 
     private void getParticipants(long eventId) {
-/*Look into the DB and get all the participants of an event, then place them in an array with a prefix depending on the acceptance*/
+        /*Look into the DB and get all the participants of an event, then place them in an array with a prefix depending on the acceptance*/
         participants.clear();
         List<Person> allAcceptances = PersonController.getEventAcceptedPersons(EventController.getEventById(eventId));
         for (Person personAccepted : allAcceptances) {

@@ -8,7 +8,7 @@ public class ReceivedHorarioSMS {
     String excuse;
     String name;
 
-    public ReceivedHorarioSMS (String phonenumber, boolean acceptance, int creatorEventId, String excuse, String name){
+    public ReceivedHorarioSMS(String phonenumber, boolean acceptance, int creatorEventId, String excuse, String name) {
         this.phonenumber = phonenumber;
         this.acceptance = acceptance;
         this.creatorEventId = creatorEventId;

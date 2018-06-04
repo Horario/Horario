@@ -26,10 +26,10 @@ public class PersonController {
                 .executeSingle();
     }
 
-    public static Person checkforPhoneNumber(String phoneNumber){
+    public static Person checkforPhoneNumber(String phoneNumber) {
         return new Select()
                 .from(Person.class)
-                .where("phoneNumber = ?",phoneNumber)
+                .where("phoneNumber = ?", phoneNumber)
                 .executeSingle();
     }
 
