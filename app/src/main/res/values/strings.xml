@@ -47,26 +47,26 @@
     <string name="previous">Previous</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="thanksForUsernameAndPhoneNumber">Benutzername und Telefonnummer wurde gespeichert. </string>
-    <string name="description_too_long">Die Beschreibung darf nicht länger als 500 Zeichen sein.</string>
-    <string name="shortTitle_too_long">Der Kurztitel darf nicht länger als 100 Zeichen sein.</string>
+    <string name="description_too_long">Die Beschreibung darf nicht länger als 200 Zeichen sein.</string>
+    <string name="shortTitle_too_long">Der Kurztitel darf nicht länger als 50 Zeichen sein.</string>
     <string name="startTime_past">Der Termin darf nicht in der Vergangenheit beginnen.</string>
     <string name="startTime_afterScanning_past">Der Termin hat schon in der Vergangenheit stattgefunden.</string>
     <string name="save_event">Der Termin wurde in die Datenbank geschrieben.</string>
     <string name="shortTitle_spaces">Der Kurztitel darf nicht mit Leerzeichen beginnen.</string>
     <string name="description_spaces">Die Beschreibung darf nicht mit Leerzeichen beginnen.</string>
     <string name="place_spaces">Der Raum darf nicht mit Leerzeichen beginnen.</string>
-    <string name="room_too_long">Der Raum darf nicht länger als 100 Zeichen sein.</string>
+    <string name="room_too_long">Der Raum darf nicht länger als 50 Zeichen sein.</string>
     <string name="shortTitle_peek">Der Kurztitel darf nicht das Zeichen | enthalten.</string>
     <string name="description_peek">Die Beschreibung darf nicht das Zeichen | enthalten.</string>
     <string name="room_peek">Das Feld Raum darf nicht das Zeichen | enthalten.</string>
     <string name="pushEnabled">Die Erinnerungen wurden eingeschaltet.</string>
     <string name="pushDisabled">Die Erinnerungen wurden ausgeschaltet.</string>
-    <string name="pushMinutesSet" formatted="true">Die Push-Nachrichten erscheinen nun %1$d Minuten vor Ihrem Termin.</string>
+    <string name="pushMinutesSet" formatted="true">Die Erinnerungen erscheinen nun %1$d Minuten vor Ihrem Termin.</string>
     <string name="startTab">Start-Tab :</string>
     <string name="startTabChanged" formatted="true">Beim nächsten Start zeigt Horario nun den Tab %1$s.</string>
     <string name="acceptEventAfterScan">Wollen Sie wirklich zusagen?</string>
     <string name="rejectEventAfterScan">Wollen Sie wirklich ablehnen?</string>
-    <string name="saveEventAfterScan">Wollen Sie wirklich speichern ohen zusagen?</string>
+    <string name="saveEventAfterScan">Wollen Sie wirklich speichern ohne zuzusagen?</string>
     <string name="eventIsInDatabase">Termin ist schon in der Datenbank vorhanden!</string>
 
 
@@ -151,4 +151,18 @@
     <string name="sms_fail">SMS senden fehlgeschlagen! Es wird später automatisch erneut versucht!</string>
     <string name="cannot_send_sms">Bitte in den Einstellungen ändern</string>
     <string name="sms_exception">SMS fehlgeschlagen!</string>
+    <string name="event_save_notSuccessful">Die Daten wurden nicht gespeichert.</string>
+    <string name="telephonenumerNotRead">Deine telefonnummer konnte leider nicht ausgelesen werden. Bitte trage sie hier ein. Bitte achte darauf, dass du die Telefonnummer richtig einträgst, da du sonst keine Rückmeldungen erhältst.</string>
+    <string name="thanksphoneNumber">Deine Telefonnummer wurde gespeichert.</string>
+    <string name="wrongNumberFormat">Diese Telefonnummer ist ungültig.</string>
+    <string name="phoneNumber_explanation">Wir brauchen deine Telefonnummer, um Rückmeldungen versenden können. Wir verwenden deine Telefonnummer nicht für andere Zwecke. Alternativ kannst du deine Telefonnummer auch selbst eingeben.</string>
+    <string name="lastTry_phoneNumber">Ohne deine Telefonnummer kannnst du keine Rückmeldungen versenden und empfangen.</string>
+    <string name="oneMoreTime">Nochmal</string>
+    <string name="PhoneNumberNotSaved">Die Telefonnummer wurde nicht gespeichert. Du kannst sie in den Einstellungen festlegen.</string>
+    <string name="sendSMS_accessDenied_withCheckbox">Du hast mit den Haken bei \"Nicht mehr fragen\"  dauerhaft den Zugiff auf deine Telefonnummer verweigert. Um Rückmeldungen zu nutzen, gibt bitte nun deine Telefonnummer selbst ein. Alternativ kannst du Horario schließen und über deine Rechteverwaltung Horario das Senden von SMS erlauben. Dann gehen allerdings alle nicht gespeicherten Eingaben verloren.</string>
+    <string name="sendSMS_manual">manuell eingeben</string>
+    <string name="sendSMS_lastTry">Letzter Versuch! Bitte gestatte uns den Zugriff auf deine Telefonnummer.</string>
+    <string name="requestPermission_userDontLike">TEST</string>
+    <string name="phoneNumber">Telefonnummer :</string>
+    <string name="phoneNumberHint">Telefonnummer</string>
 </resources>
