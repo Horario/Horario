@@ -12,7 +12,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -33,8 +32,10 @@ import java.util.regex.Pattern;
 
 import hft.wiinf.de.horario.controller.EventController;
 import hft.wiinf.de.horario.controller.NoScanResultExceptionController;
+import hft.wiinf.de.horario.controller.NotificationController;
 import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.controller.ScanResultReceiverController;
+import hft.wiinf.de.horario.controller.SendSmsController;
 import hft.wiinf.de.horario.model.AcceptedState;
 import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
@@ -114,7 +115,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
     private void restartApp(String fragmentResource) {
         //check from which Fragment (EventOverview or Calendar) are the Scanner was called
-        Log.d("TAg", "HALLLLO" + fragmentResource);
         switch (fragmentResource) {
             case "EventOverview":
                 getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
@@ -143,7 +143,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     //After Scanning it was opened a Dialog where the user can choose what to do next
     @SuppressLint("ResourceType")
     private void openActionDialogAfterScanning(final String qrScannContentResult, final String whichFragmentTag) {
-        Log.d("TAG", "dedede" + whichFragmentTag);
         //Create the Dialog with the GUI Elements initial
         final Dialog afterScanningDialogAction = new Dialog(this);
         afterScanningDialogAction.setContentView(R.layout.dialog_afterscanning);
@@ -184,8 +183,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                             buttonId = 1;
                             decideWhatToDo();
 //                            //Restart the TabActivity an Reload all Views
-//                            restartApp(whichFragmentTag);
-//                            afterScanningDialogAction.dismiss();
+                            //restartApp(whichFragmentTag);
+                            //afterScanningDialogAction.dismiss();
 
                         }
                     });
@@ -404,7 +403,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         viewPager.setAdapter(adapter);
     }
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -621,7 +619,27 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                                 //save the one event
                                 EventController.saveEvent(event);
                             }
+
+                            if (event.getAccepted().equals(AcceptedState.ACCEPTED)) {
+                                NotificationController.setAlarmForNotification(getApplicationContext(), event);
+                            }
                             Toast.makeText(v.getContext(), R.string.save_event, Toast.LENGTH_SHORT).show();
+                            alertDialogAskForFinalDecission.dismiss();
+
+
+                            //SMS
+                            String reject_message;
+                            boolean accepted;
+                            if ((event.getAccepted().equals(AcceptedState.ACCEPTED) || (event.getAccepted().equals(AcceptedState.REJECTED)))) {
+                                if (event.getAccepted().equals(AcceptedState.ACCEPTED)) {
+                                    accepted = true;
+                                    reject_message = "";
+                                } else {
+                                    accepted = false;
+                                    reject_message = "ToDo!ToDO";
+                                }
+                                SendSmsController.sendSMS(getApplicationContext(), event.getCreator().getPhoneNumber(), reject_message, accepted, event.getCreatorEventId(), event.getShortTitle());
+                            }
 
                             //Restart the TabActivity an Reload all Views
                             Intent intent = getIntent();
