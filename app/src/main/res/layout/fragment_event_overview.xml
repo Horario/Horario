@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/eventOverview_Layout_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -17,25 +18,31 @@
 
         <TextView
             android:id="@+id/overviewTvMonth"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="37dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="TextView"
+            android:textAlignment="center"
+            android:textColor="@color/zentea_darkgreen"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
+        <ImageButton
             android:id="@+id/overviewBtNext"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:text="@string/next"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            android:layout_width="149dp"
+            android:layout_height="39dp"
+            android:layout_marginStart="40dp"
+            android:background="@color/zxing_transparent"
+
+            android:drawableTop="@drawable/ic_next"
+            android:src="@drawable/ic_next"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/overviewTvMonth"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/eventOverviewFabClosed"
@@ -44,6 +51,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:elevation="0dp"
             android:text="false"
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
@@ -96,25 +104,28 @@
         <ListView
             android:id="@+id/overviewTvList"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginBottom="8dp"
+            android:layout_height="482dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/overviewTvMonth" />
 
-        <Button
+        <ImageButton
             android:id="@+id/overviewBtPrevious"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="8dp"
-            android:text="@string/previous"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:layout_width="150dp"
+            android:layout_height="39dp"
+            android:layout_marginEnd="40dp"
+            android:background="@color/zxing_transparent"
+
+            android:drawableTop="@drawable/ic_previous"
+            android:src="@drawable/ic_previous"
+            app:layout_constraintEnd_toStartOf="@+id/overviewTvMonth"
+            app:layout_constraintStart_toStartOf="parent"
+
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/eventOverview_floatingActionButtonScan"

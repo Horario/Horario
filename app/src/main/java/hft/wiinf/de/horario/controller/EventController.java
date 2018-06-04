@@ -16,7 +16,8 @@ import hft.wiinf.de.horario.model.Person;
 public class EventController {
     //saves (update or create)an event
     public static void saveEvent(@NonNull Event event) {
-        event.setCreatorEventId(event.save());
+        if(event.getCreatorEventId() < 0)
+            event.setCreatorEventId(event.save());
         event.save();
     }
 
@@ -51,8 +52,7 @@ public class EventController {
     //find the list of events that start in the given period (enddate is ecluded!)
     //find the list of events that start in the given period (enddate is not included!)
     public static List<Event> findEventsByTimePeriod(Date startDate, Date endDate) {
-        return new Select().from(Event.class).where("startTime between ? AND ?", startDate.getTime(), endDate.getTime() - 1).execute();
-
+        return new Select().from(Event.class).where("starttime between ? AND ?", startDate.getTime(), endDate.getTime() - 1).orderBy("startTime,endTime,shortTitle").execute();
     }
 
     //get a list of all events
@@ -113,6 +113,7 @@ public class EventController {
             repetitionEvent.setEndTime(firstEvent.getEndTime());
             repetitionEvent.setShortTitle(firstEvent.getShortTitle());
             repetitionEvent.setStartEvent(firstEvent);
+            repetitionEvent.setCreatorEventId(firstEvent.getCreatorEventId());
             //copy the start and end time of the start event into a temporary variable, add 1 to the corresponding field and save the new value into the next event
             Calendar temporary = new GregorianCalendar();
             temporary.setTime(firstEvent.getStartTime());
@@ -128,6 +129,19 @@ public class EventController {
             saveEvent(repetitionEvent);
         }
 
+    }
+
+    public static Event checkIfEventIsInDatabase(String description, String shortTitle,
+                                                  String place,
+                                                 Calendar startTime, Calendar endTime) {
+        return new Select()
+                .from(Event.class)
+                .where("description = ?", description)
+                .where("shortTitle = ?", shortTitle)
+                .where("place = ?", place)
+                .where("startTime = ?", startTime.getTimeInMillis())
+                .where("endTime = ?", endTime.getTimeInMillis())
+                .executeSingle();
     }
 
 

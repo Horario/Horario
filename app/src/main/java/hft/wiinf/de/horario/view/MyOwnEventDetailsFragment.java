@@ -190,7 +190,7 @@ public class MyOwnEventDetailsFragment extends Fragment {
         // CreatorID (not EventID!!), StartDate, EndDate, StartTime, EndTime, Repetition, ShortTitle
         // Place, Description and Name of EventCreator
         eventToStringBuffer = new StringBuffer();
-        eventToStringBuffer.append(selectedEvent.getCreatorEventId() + stringSplitSymbol);
+        eventToStringBuffer.append(getEventID() + stringSplitSymbol);
         eventToStringBuffer.append(simpleDateFormat.format(selectedEvent.getStartTime()) + stringSplitSymbol);
         eventToStringBuffer.append(simpleDateFormat.format(selectedEvent.getEndDate()) + stringSplitSymbol);
         eventToStringBuffer.append(simpleTimeFormat.format(selectedEvent.getStartTime()) + stringSplitSymbol);
