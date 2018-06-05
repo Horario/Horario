@@ -42,7 +42,7 @@
     <string name="save_text">speichern</string>
     <string name="later_text">Später</string>
     <string name="thanksForUsername">Benutzername wurde gespeichert. </string>
-    <string name="titleDialogFinalDecission">Sind Sie sich sicher?</string>
+    <string name="titleDialogFinalDecission">Bist du sicher?</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="titleParticipantsEvent">Rückmeldungen</string>
@@ -74,12 +74,12 @@
     <string name="room_peek">Das Feld Raum darf nicht das Zeichen | enthalten.</string>
     <string name="pushEnabled">Die Erinnerungen wurden eingeschaltet.</string>
     <string name="pushDisabled">Die Erinnerungen wurden ausgeschaltet.</string>
-    <string name="pushMinutesSet" formatted="true">Die Push-Nachrichten erscheinen nun %1$d Minuten vor Ihrem Termin.</string>
+    <string name="pushMinutesSet" formatted="true">Die Push-Nachrichten erscheinen nun %1$d Minuten vor deinem Termin.</string>
     <string name="startTab">Start-Tab :</string>
     <string name="startTabChanged" formatted="true">Beim nächsten Start zeigt Horario nun den Tab %1$s.</string>
-    <string name="acceptEventAfterScan">Wollen Sie wirklich zusagen?</string>
-    <string name="rejectEventAfterScan">Wollen Sie wirklich ablehnen?</string>
-    <string name="saveEventAfterScan">Wollen Sie wirklich speichern ohen zusagen?</string>
+    <string name="acceptEventAfterScan">Willst du wirklich zusagen?</string>
+    <string name="rejectEventAfterScan">Willst du wirklich ablehnen?</string>
+    <string name="saveEventAfterScan">Willst du wirklich speichern ohne zuzusagen?</string>
     <string name="eventIsInDatabase">Termin ist schon in der Datenbank vorhanden!</string>
 
 
@@ -108,7 +108,7 @@
 
     <!-- QR Generator -->
     <string name="show_Response">Rückmeldungen anzeigen</string>
-    <string name="share_with">Teilen via…</string>
+    <string name="share_with">Teilen via</string>
     <string name="on">Am\u0020</string>
     <string name="find">\u0020findet\u0020</string>
     <string name="from">von\u0020</string>
@@ -122,7 +122,7 @@
     <string name="clock_to">Uhr bis\u0020</string>
     <string name="your_Event">Dein Termin</string>
     <string name="room">Raum:\u0020</string>
-    <string name="yourself">Du selber</string>
+    <string name="yourself">Du</string>
     <string name="yearly">jährlich</string>
     <string name="monthly">monatlich</string>
     <string name="weekly">wöchentlich</string>
@@ -130,9 +130,9 @@
     <string name="without_repetition">ohne Wiederholung</string>
     <string name="ups_an_error">\u0020Ups! Fehler Aufgetreten!\u0020</string>
     <string name="toCalender">\u0020Zum Kalender\u0020</string>
-    <string name="wrongQRCodeResult">Das ist der Inhalt vom QR Code:\u0020</string>
-    <string name="notAsEventSaveable">Das können wir leider nicht als Termin speichern!</string>
-    <string name="back_where_user_comesFrom">Zurück zur Ursprung</string>
+    <string name="wrongQRCodeResult">Das ist der Inhalt des QR Codes:\u0020</string>
+    <string name="notAsEventSaveable">Das kann leider nicht als Termin gespeichert werden!</string>
+    <string name="back_where_user_comesFrom">Zurück zum Ursprung</string>
 
     <!-- QR Scanner & Scanner PopUp -->
     <string name="eventSave">Termin zusagen</string>
@@ -140,7 +140,7 @@
     <string name="eventReject">Termin ablehnen</string>
     <string name="scannerOverlayer_qrCodeScan">Termincode scannen</string>
     <string name="scannerOverlay_positionYourScanner">Halte dein Smartphone vor den QR-Code und</string>
-    <string name="scannerOverlay_toShowTheEvent">scanne ihn ab, um den Termin zu öffnen</string>
+    <string name="scannerOverlay_toShowTheEvent">scanne ihn ab um den Termin zu öffnen</string>
     <string name="requestPermission_thankYou">Danke für die Zugriffsrechte auf die Kamera!</string>
     <string name="requestPermission_askForPermission">Wir brauchen den Kamerazugriff um den QR-Code einzuscannen.</string>
     <string name="requestPermission_askForPermission_sendSMS">Wir müssen SMS verschicken, um den Ersteller zu benachrichtigen.</string>
@@ -149,13 +149,13 @@
     <string name="requestPermission_lastTryRequest">Letzer Versuch!</string>
     <string name="abort">ABBRUCH</string>
     <string name="setting_copyright_privacyPolicy">Privacy Policy</string>
-    <string name="accessWith_NeverAskAgain_deny">Zugriff Verweigert</string>
-    <string name="requestPermission_accessDenied_withCheckbox">Du hast mit den Hacken bei \"Nicht mehr fragen\"
+    <string name="accessWith_NeverAskAgain_deny">Zugriff verweigert</string>
+    <string name="requestPermission_accessDenied_withCheckbox">Du hast mit den Haken bei \"Nicht mehr fragen\"
         dauerhaft den Zugriff zum Kalender verweigert. Um den QR Scanner zu nutzen aktiviere bitte den
         Kamerazugriff über deine Rechteverwaltung</string>
-    <string name="requestPermission_accessDenied_withCheckbox_SendSMS">Du hast mit den Hacken bei \"Nicht mehr fragen\"
-        dauerhaft den Zugriff zum Kalender verweigert. Um den QR Scanner zu nutzen aktiviere bitte das SMS Senden über deine Rechteverwaltung</string>
     <string name="requestSMSPermission_accessDenied_withCheckbox">Du hast mit den Hacken bei \"Nicht mehr fragen\"  dauerhaft den Zugiff zu den SMS und Kontakten verweigert. Um Rückmeldungen mit Kontaktnamen zu nutzen aktiviere bitte den Lesezugriff über deine Rechteverwaltung</string>
+    <string name="requestPermission_accessDenied_withCheckbox_SendSMS">Du hast mit den Haken bei \"Nicht mehr fragen\"
+        dauerhaft den Zugriff zum Kalender verweigert. Um den QR Scanner zu nutzen aktiviere bitte das SMS Senden über deine Rechteverwaltung</string>
     <string name="requestPermission_firstTryRequest">Erster von zwei Versuchen</string>
     <string name="qrGenerator_button_showInEventOverView">In Terminübersicht anzeigen</string>
 
@@ -163,7 +163,7 @@
     <string name="accept">Ja!</string>
     <string name="reject">Nein!</string>
     <string name="sms_sent">SMS wurde erfolgreich versandt!</string>
-    <string name="sms_fail">SMS senden fehlgeschlagen! Es wird später automatisch erneut versucht!</string>
+    <string name="sms_fail">SMS Senden fehlgeschlagen! Es wird später automatisch erneut versucht!</string>
     <string name="cannot_send_sms">Bitte in den Einstellungen ändern</string>
     <string name="sms_exception">SMS fehlgeschlagen!</string>
 </resources>
