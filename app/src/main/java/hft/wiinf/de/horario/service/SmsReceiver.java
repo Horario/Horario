@@ -1,6 +1,5 @@
 package hft.wiinf.de.horario.service;
 
-import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -9,7 +8,6 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.telephony.SmsMessage;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
