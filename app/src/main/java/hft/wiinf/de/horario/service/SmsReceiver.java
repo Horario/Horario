@@ -97,8 +97,14 @@ public class SmsReceiver extends BroadcastReceiver {
         number = number.replace("+", "");
         number = number.replace("-", "");
         number = number.replace(" ", "");
-        number = number.substring(number.indexOf("1"));
-        return number;
+        try {
+            number = number.substring(number.indexOf("1"));
+            return number;
+        } catch (StringIndexOutOfBoundsException variablenname) {
+            // Ausländische Nummer
+
+        }
+        return "100000000";
     }
 
     private String lookForSavedContact(String address, Context context) {
