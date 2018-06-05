@@ -233,17 +233,16 @@ public class CalendarFragment extends Fragment {
         endOfDay.setTime(date);
         endOfDay.add(Calendar.DAY_OF_MONTH, 1);
         final List<hft.wiinf.de.horario.model.Event> eventList = EventController.findEventsByTimePeriod(date, endOfDay.getTime());
-        for (int i = 0; i < eventList.size(); i++) {
-            if (eventList.get(i).getAccepted().equals(AcceptedState.ACCEPTED)) {
-                if (eventList.get(i).getCreator().isItMe()) {
-                    eventsAsAppointments.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 3, eventList.get(i).getId(), eventList.get(i).getCreator()));
-                } else {
+
+        for (int i = 0; i<eventList.size(); i++){
+            if(eventList.get(i).getCreator().equals(PersonController.getPersonWhoIam())){
+                eventsAsAppointments.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 3, eventList.get(i).getId(), eventList.get(i).getCreator()));
+            }else{
+                if(eventList.get(i).getAccepted().equals(AcceptedState.ACCEPTED)){
                     eventsAsAppointments.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 1, eventList.get(i).getId(), eventList.get(i).getCreator()));
+                }else if(eventList.get(i).getAccepted().equals(AcceptedState.WAITING)) {
+                    eventsAsAppointments.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 2, eventList.get(i).getId(), eventList.get(i).getCreator()));
                 }
-            } else if (eventList.get(i).getAccepted().equals(AcceptedState.WAITING)) {
-                eventsAsAppointments.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 2, eventList.get(i).getId(), eventList.get(i).getCreator()));
-            } else {
-                eventsAsAppointments.clear();
             }
         }
         final ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1, eventsAsAppointments) {
