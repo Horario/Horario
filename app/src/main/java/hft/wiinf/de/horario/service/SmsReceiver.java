@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.telephony.SmsMessage;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,13 +66,15 @@ public class SmsReceiver extends BroadcastReceiver {
             /*Replace name if saved in contacts*/
             if (savedContactExisting != null) {
                 person.setName(savedContactExisting);
-
+                Log.d("savedContact", "Saved Contact is not null");
             }
             /*Check if acceptance or cancellation*/
             if (singleUnreadSMS.isAcceptance()) {
+                Log.d("SINGLEUNREAD", String.valueOf(singleUnreadSMS.isAcceptance()));
                 person.setAcceptedEvent(EventController.getEventById(Long.valueOf(singleUnreadSMS.getCreatorEventId())));
                 PersonController.savePerson(person);
             } else {
+                Log.d("SINGLEUNREAD", String.valueOf(singleUnreadSMS.isAcceptance()));
                 //cancellation: look for possible preceding acceptance. If yes, then delete person and create new. Else just save the person
                 List<Person> allAcceptances = PersonController.getEventAcceptedPersons(EventController.getEventById(Long.valueOf(singleUnreadSMS.getCreatorEventId())));
                 for (Person personAccepted : allAcceptances) {
@@ -80,9 +83,11 @@ public class SmsReceiver extends BroadcastReceiver {
                     if (personAccepted.getPhoneNumber().equals(person.getPhoneNumber())) {
                         PersonController.deletePerson(personAccepted);
                         person.setCanceledEvent(EventController.getEventById(Long.valueOf(singleUnreadSMS.getCreatorEventId())));
+                        person.setRejectionReason(singleUnreadSMS.getExcuse());
                         PersonController.savePerson(person);
                     } else {
                         person.setCanceledEvent(EventController.getEventById(Long.valueOf(singleUnreadSMS.getCreatorEventId())));
+                        person.setRejectionReason(singleUnreadSMS.getExcuse());
                         PersonController.savePerson(person);
                     }
                 }
@@ -99,6 +104,7 @@ public class SmsReceiver extends BroadcastReceiver {
         number = number.replace(" ", "");
         try {
             number = number.substring(number.indexOf("1"));
+            Log.d("SHORTIFY Nummer", number);
             return number;
         } catch (StringIndexOutOfBoundsException variablenname) {
             // Ausländische Nummer
