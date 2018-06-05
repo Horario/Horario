@@ -1,7 +1,6 @@
 package hft.wiinf.de.horario.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import hft.wiinf.de.horario.R;
-import hft.wiinf.de.horario.view.ParticipantsListFragment;
 
 public class LazyAdapter extends BaseAdapter {
 
