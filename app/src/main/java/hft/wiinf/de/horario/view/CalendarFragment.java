@@ -32,6 +32,7 @@ import java.util.Locale;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
+import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.AcceptedState;
 
 public class CalendarFragment extends Fragment {
