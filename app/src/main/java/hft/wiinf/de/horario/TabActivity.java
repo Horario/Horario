@@ -54,8 +54,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     TabLayout tabLayout;
     private static int startTab;
     private Person personMe;
-
-    Person person;
     Person personEventCreator;
 
     Event singleEvent;
@@ -79,9 +77,9 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         ActiveAndroid.initialize(this);
         Stetho.initializeWithDefaults(this);
         //read startTab out of db, default=1(calendar tab)
-        personMe = PersonController.getPersonWhoIam();
-        if (personMe == null)
-            personMe = new Person(true, "", "");
+        personMe=PersonController.getPersonWhoIam();
+        if (personMe==null)
+            personMe=new Person(true,"","");
         startTab = personMe.getStartTab();
 
         mSectionsPageAdapter = new SectionsPageAdapterActivity(getSupportFragmentManager());
@@ -98,9 +96,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_calendarview);
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_settings);
 
-        if (PersonController.getPersonWhoIam() == null) {
-            openDialogAskForUsername();
-        } else if (PersonController.getPersonWhoIam().getName().isEmpty()) {
+        if (personMe == null||personMe.getName().isEmpty()) {
             openDialogAskForUsername();
         }
 
@@ -276,7 +272,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
             }
 
-            // Event shortTitle in Headline with eventCreatorName
+            // Event shortTitle in Headline with eventCreaftorName
             qrScanner_result_headline.setText(shortTitle + " " + getString(R.string.from) + eventCreatorName);
             // Check for a Repetition Event and Change the Description Output with and without
             // Repetition Element inside.
@@ -430,27 +426,18 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 Matcher matcher_username = pattern_username.matcher(dialog_inputUsername);
 
                 if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches() && !dialog_inputUsername.contains("|")) {
-                    if (PersonController.getPersonWhoIam() == null) {
-                        //ToDo: Flo - PhoneNumber
-                        personMe = new Person(true, "007", dialog_inputUsername);
-                        PersonController.addPersonMe(personMe);
-
-                        Toast toast = Toast.makeText(v.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT);
-                        toast.show();
-
-                        alertDialogAskForUsername.cancel();
-                    } else {
-                        personMe = PersonController.getPersonWhoIam();
-                        personMe.setName(dialog_inputUsername);
+                    personMe=PersonController.getPersonWhoIam();
+                    if (personMe==null)
+                        personMe=new Person(true,"","");
+                    personMe.setName(dialog_inputUsername);
                         PersonController.savePerson(personMe);
-
                         Toast toast = Toast.makeText(v.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT);
                         toast.show();
 
-                        alertDialogAskForUsername.cancel();
+                        alertDialogAskForUsername.dismiss();
+                        return true;
                     }
-                    return false;
-                } else if (dialog_inputUsername.contains("|")) {
+                 else if (dialog_inputUsername.contains("|")) {
                     Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername_peek, Toast.LENGTH_SHORT);
                     toast.show();
                     return true;
@@ -555,7 +542,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        person = PersonController.getPersonWhoIam();
                         //Calendar variables for checking startTime and endTime
                         Calendar checkStartTime = getStartTimeEvent();
                         Calendar checkEndTime = getEndTimeEvent();
@@ -672,6 +658,9 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         final EditText afterScanning_username = alertDialogAskForUsernamePhoneNumber.findViewById(R.id.dialog_afterScanner_editText_username);
         final EditText afterScanning_phoneNumber = alertDialogAskForUsernamePhoneNumber.findViewById(R.id.dialog_afterScanner_editText_phoneNumber);
         //set textfield if user has username/phoneNumber
+        personMe=PersonController.getPersonWhoIam();
+        if (personMe==null)
+            personMe=new Person(true,"","");
         afterScanning_username.setText(personMe.getName());
         afterScanning_phoneNumber.setText(personMe.getPhoneNumber());
 
@@ -689,62 +678,33 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 Matcher matcher_afterScanning_username = pattern_afterScanning_username.matcher(dialog_afterScanning_inputUsername);
 
                 //check if personwhoiam is in database
-                Person me = PersonController.getPersonWhoIam();
+                personMe=PersonController.getPersonWhoIam();
+                if (personMe==null)
+                    personMe=new Person(true,"","");
 
                 //check for valid input
                 if (actionId == EditorInfo.IME_ACTION_DONE && matcher_afterScanning_username.matches() && !dialog_afterScanning_inputUsername.contains("|")
                         && dialog_afterScanning_inputPhoneNumber.matches("(00|0|\\+)[1-9][0-9]+")) {
-                    if (me == null) {
-                        //if no isitme is in database
-                        //create new person
-                        personMe = new Person(true, dialog_afterScanning_inputPhoneNumber, dialog_afterScanning_inputUsername);
-                        PersonController.addPersonMe(personMe);
+                    //get username
+                    personMe.setName(dialog_afterScanning_inputUsername);
+                    PersonController.savePerson(personMe);
 
-                        Toast toast = Toast.makeText(v.getContext(), R.string.thanksForUsernameAndPhoneNumber, Toast.LENGTH_SHORT);
-                        toast.show();
-
-                        //close dialog
-                        alertDialogAskForUsernamePhoneNumber.cancel();
-                        //if isitme is in database without username
-                    } else if (me.getName().isEmpty()) {
-                        personMe = PersonController.getPersonWhoIam();
-                        //get username
-                        personMe.setName(dialog_afterScanning_inputUsername);
-                        PersonController.savePerson(personMe);
-
-                        Toast toast = Toast.makeText(v.getContext(), R.string.thanksForUsernameAndPhoneNumber, Toast.LENGTH_SHORT);
-                        toast.show();
-
-                        alertDialogAskForUsernamePhoneNumber.cancel();
-                        //if isitme is in database without phonenumber
-                    } else if (me.getPhoneNumber().isEmpty()) {
-                        personMe = PersonController.getPersonWhoIam();
-                        //get phonenumber
-                        personMe.setPhoneNumber(dialog_afterScanning_inputPhoneNumber);
-                        PersonController.savePerson(personMe);
-
-                        Toast toast = Toast.makeText(v.getContext(), R.string.thanksForUsernameAndPhoneNumber, Toast.LENGTH_SHORT);
-                        toast.show();
-
-                        alertDialogAskForUsernamePhoneNumber.cancel();
-                    }
-                    return false;
+                    Toast toast = Toast.makeText(v.getContext(),R.string.thanksphoneNumber, Toast.LENGTH_SHORT);
+                    toast.show();
+                    //if isitme is in database without phonenumber
                     //check for valid input: username should not contain "|"
                 } else if (dialog_afterScanning_inputUsername.contains("|")) {
                     Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername_peek, Toast.LENGTH_SHORT);
-                    toast.show();
-                    return true;
-                    //check for valid input: phonenumber should start with 0 or 00
-                } else if (!dialog_afterScanning_inputPhoneNumber.matches("(00|0|\\+)[1-9][0-9]+")) {
-                    Toast toast = Toast.makeText(v.getContext(), "falsche Nummer", Toast.LENGTH_SHORT);
                     toast.show();
                     return true;
                 } else {
                     //check for valid input: username should not start with blank space
                     Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
                     toast.show();
-                    return true;
+                    return false;
                 }
+
+                return false;
             }
         });
     }
@@ -787,5 +747,11 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             finish();
             startActivity(intent);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        personMe = PersonController.getPersonWhoIam();
     }
 }
