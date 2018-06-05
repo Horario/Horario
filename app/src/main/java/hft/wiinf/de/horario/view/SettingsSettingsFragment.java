@@ -236,6 +236,7 @@ public class SettingsSettingsFragment extends Fragment {
                 return 6;
             default:
                 return 0;
+
         }
     }
 }

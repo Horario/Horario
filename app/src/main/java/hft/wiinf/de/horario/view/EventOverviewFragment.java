@@ -21,7 +21,6 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -34,6 +33,7 @@ import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
 import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.AcceptedState;
+import hft.wiinf.de.horario.model.Person;
 
 public class EventOverviewFragment extends Fragment {
 
@@ -74,18 +74,18 @@ public class EventOverviewFragment extends Fragment {
             if (eventList.size() > 0) {
                 eventArrayDay.add(new Appointment(CalendarFragment.dayFormat.format(helper.getTime()), 0));
             }
-            for (int i = 0; i<eventList.size(); i++){
-                if(eventList.get(i).getCreator().equals(PersonController.getPersonWhoIam())){
-                    eventArrayDay.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 3));
-                }else{
-                    if(eventList.get(i).getAccepted().equals(AcceptedState.ACCEPTED)){
-                        eventArrayDay.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 1));
-                    }else if(eventList.get(i).getAccepted().equals(AcceptedState.WAITING)) {
-                        eventArrayDay.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 2));
+            for (int i = 0; i < eventList.size(); i++) {
+                if (eventList.get(i).getCreator().equals(PersonController.getPersonWhoIam())) {
+                    eventArrayDay.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 3, eventList.get(i).getId(), eventList.get(i).getCreator()));
+                } else {
+                    if (eventList.get(i).getAccepted().equals(AcceptedState.ACCEPTED)) {
+                        eventArrayDay.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 1, eventList.get(i).getId(), eventList.get(i).getCreator()));
+                    } else if (eventList.get(i).getAccepted().equals(AcceptedState.WAITING)) {
+                        eventArrayDay.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 2, eventList.get(i).getId(), eventList.get(i).getCreator()));
                     }
                 }
             }
-            if (eventArrayDay.size()>1){
+            if (eventArrayDay.size() > 1) {
                 eventArray.addAll(eventArrayDay);
             }
             eventArrayDay.clear();
@@ -110,7 +110,7 @@ public class EventOverviewFragment extends Fragment {
             @Override
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
-
+                // 0 = date, 1 = accepted, 2 = waiting, 3 = own
                 if (eventArray.get(position).getType() == 1) {
                     textView.setTextColor(Color.DKGRAY);
                     textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_mydate_approved, 0);
@@ -191,8 +191,47 @@ public class EventOverviewFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Appointment selectedItem = (Appointment) parent.getItemAtPosition(position);
-                Toast.makeText(getActivity(), selectedItem.getDescription(), Toast.LENGTH_SHORT).show(); //TODO just for testing, delete
                 closeFABMenu();
+                // 0 = date, 1 = accepted, 2 = waiting, 3 = own
+                switch (selectedItem.getType()) {
+                    case 1:
+                        AcceptedEventDetailsFragment acceptedEventDetailsFragment = new AcceptedEventDetailsFragment();
+                        Bundle bundleAcceptedEventId = new Bundle();
+                        bundleAcceptedEventId.putLong("EventId", selectedItem.getId());
+                        bundleAcceptedEventId.putString("fragment", "EventOverview");
+                        acceptedEventDetailsFragment.setArguments(bundleAcceptedEventId);
+                        FragmentTransaction fr1 = getFragmentManager().beginTransaction();
+                        fr1.replace(R.id.eventOverview_frameLayout, acceptedEventDetailsFragment, "EventOverview");
+                        fr1.addToBackStack("EventOverview");
+                        fr1.commit();
+                        break;
+                    case 2:
+                        SavedEventDetailsFragment savedEventDetailsFragment = new SavedEventDetailsFragment();
+                        Bundle bundleSavedEventId = new Bundle();
+                        bundleSavedEventId.putLong("EventId", selectedItem.getId());
+                        bundleSavedEventId.putString("fragment", "EventOverview");
+                        savedEventDetailsFragment.setArguments(bundleSavedEventId);
+                        FragmentTransaction fr2 = getFragmentManager().beginTransaction();
+                        fr2.replace(R.id.eventOverview_frameLayout, savedEventDetailsFragment, "EventOverview");
+                        fr2.addToBackStack("EventOverview");
+                        fr2.commit();
+                        break;
+                    case 3:
+                        MyOwnEventDetailsFragment myOwnEventDetailsFragment = new MyOwnEventDetailsFragment();
+                        Bundle bundleMyOwnEventId = new Bundle();
+                        bundleMyOwnEventId.putLong("EventId", selectedItem.getId());
+                        bundleMyOwnEventId.putString("fragment", "EventOverview");
+                        myOwnEventDetailsFragment.setArguments(bundleMyOwnEventId);
+                        FragmentTransaction fr3 = getFragmentManager().beginTransaction();
+                        fr3.replace(R.id.eventOverview_frameLayout, myOwnEventDetailsFragment, "EventOverview");
+                        fr3.addToBackStack("EventOverview");
+                        fr3.commit();
+                        break;
+                    default:
+                        break;
+                }
+
+
             }
         });
 
@@ -287,6 +326,15 @@ public class EventOverviewFragment extends Fragment {
 class Appointment {
     private String description;
     private int type;
+    private long id;
+    private Person creator;
+
+    Appointment(String description, int type, long id, Person creator) {
+        this.description = description;
+        this.type = type;
+        this.id = id;
+        this.creator = creator;
+    }
 
     Appointment(String description, int type) {
         this.description = description;
@@ -312,5 +360,12 @@ class Appointment {
         this.type = type;
     }
 
+    public long getId() {
+        return id;
+    }
 
+    public Person getCreator() {
+        return creator;
+
+    }
 }

@@ -15,7 +15,7 @@ import hft.wiinf.de.horario.R;
  */
 
 public class SettingsSupportFragment extends Fragment {
-private WebView settings_webView_support;
+    private WebView settings_webView_support;
 
     public SettingsSupportFragment() {
         // Required empty public constructor
