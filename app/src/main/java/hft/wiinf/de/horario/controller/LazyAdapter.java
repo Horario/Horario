@@ -21,7 +21,7 @@ public class LazyAdapter extends BaseAdapter {
     private ArrayList<String> data;
     private static LayoutInflater inflater;
 
-    public LazyAdapter( Activity a, ArrayList<String> d) {
+    public LazyAdapter(Activity a, ArrayList<String> d) {
         activity = a;
         data = d;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -42,7 +42,7 @@ public class LazyAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
 
-            view = inflater.inflate(R.layout.list_row, null);
+        view = inflater.inflate(R.layout.list_row, null);
 
         TextView participant = (TextView) view.findViewById(R.id.participantName); // participant
         ImageView presenceIndicator = (ImageView) view.findViewById(R.id.presenceIndicator);

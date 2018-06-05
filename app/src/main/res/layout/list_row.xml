@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/list_selector"
     android:orientation="horizontal"
-    android:padding="5dip" >
+    android:padding="5dip">
 
 
     <!-- Name of participant-->
@@ -15,9 +15,9 @@
         android:layout_height="wrap_content"
         android:text=""
         android:textColor="#040404"
-        android:typeface="sans"
         android:textSize="15dip"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:typeface="sans" />
 
     <!-- Rightend Arrow -->
     <ImageView
@@ -25,7 +25,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-         />
+        android:layout_centerVertical="true" />
 
 </RelativeLayout>

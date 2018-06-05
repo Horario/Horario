@@ -507,7 +507,7 @@ public class NewEventFragment extends Fragment implements ActivityCompat.OnReque
         //update or save a new person (me)
         me.setName(edittext_userName.getText().toString());
         PersonController.savePerson(me);
-        if(!EventController.createdEventsYet()){
+        if (!EventController.createdEventsYet()) {
             Long date = System.currentTimeMillis();
             saveReadDate(String.valueOf(date));
         }

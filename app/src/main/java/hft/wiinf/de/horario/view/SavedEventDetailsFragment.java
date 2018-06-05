@@ -23,6 +23,7 @@ public class SavedEventDetailsFragment extends Fragment {
     TextView savedEventDetailsOrganisatorText, savedEventphNumberText, savedEventeventDescription;
     Event selectedEvent;
     StringBuffer eventToStringBuffer;
+
     public SavedEventDetailsFragment() {
         // Required empty public constructor
     }
@@ -34,6 +35,7 @@ public class SavedEventDetailsFragment extends Fragment {
         Long MYEventIdLongResult = MYEventIdBundle.getLong("EventId");
         return MYEventIdLongResult;
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

@@ -25,7 +25,6 @@ import com.activeandroid.ActiveAndroid;
 import com.facebook.stetho.Stetho;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
