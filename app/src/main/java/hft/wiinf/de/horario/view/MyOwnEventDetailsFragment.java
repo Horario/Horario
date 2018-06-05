@@ -2,7 +2,6 @@ package hft.wiinf.de.horario.view;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -10,10 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Objects;
@@ -57,7 +54,6 @@ public class MyOwnEventDetailsFragment extends Fragment {
         myOwnEventDetails_constraintLayout = view.findViewById(R.id.myOwnEventDetails_constraintLayout);
         setSelectedEvent(EventController.getEventById(getEventID()));
         buildDescriptionEvent(EventController.getEventById(getEventID()));
-
 
 
         myOwnEventDetailsButtonShowAcceptances.setOnClickListener(new View.OnClickListener() {
@@ -190,7 +186,7 @@ public class MyOwnEventDetailsFragment extends Fragment {
         // CreatorID (not EventID!!), StartDate, EndDate, StartTime, EndTime, Repetition, ShortTitle
         // Place, Description and Name of EventCreator
         eventToStringBuffer = new StringBuffer();
-        eventToStringBuffer.append(selectedEvent.getCreatorEventId() + stringSplitSymbol);
+        eventToStringBuffer.append(getEventID() + stringSplitSymbol);
         eventToStringBuffer.append(simpleDateFormat.format(selectedEvent.getStartTime()) + stringSplitSymbol);
         eventToStringBuffer.append(simpleDateFormat.format(selectedEvent.getEndDate()) + stringSplitSymbol);
         eventToStringBuffer.append(simpleTimeFormat.format(selectedEvent.getStartTime()) + stringSplitSymbol);

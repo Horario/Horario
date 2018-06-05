@@ -16,6 +16,7 @@
     <string name="feedback_zur_app_text">Feedback zur App</string>
     <string name="username_text">Benutzername :</string>
     <string name="username_hint">Benutzername</string>
+    <string name="phoneNumber_hint">Telefonnummer</string>
     <string name="allowpush_text">Erinnerungen erlauben :</string>
     <string name="reminder_text">Erinnerungen :</string>
     <string name="minutesBefore_text">Minuten vorher</string>
@@ -37,9 +38,11 @@
     <string name="savingSuccessful_new">neuen Termin erstellen</string>
     <string name="savingSuccessful_qrcode">QRCode anzeigen</string>
     <string name="titleDialogUsername">Bitte vergib einen Benutzernamen! </string>
+    <string name="titleDialogUsernamePhoneNumber">Bitte vergib einen Benutzernamen und deine Telefonnummer! </string>
     <string name="save_text">speichern</string>
     <string name="later_text">Später</string>
     <string name="thanksForUsername">Benutzername wurde gespeichert. </string>
+    <string name="titleDialogFinalDecission">Sind Sie sich sicher?</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="titleParticipantsEvent">Rückmeldungen</string>
@@ -55,12 +58,13 @@
     <string name="okayIWillAccept">Nochmal fragen</string>
 
 
-
-
     <!-- TODO: Remove or change this placeholder text -->
+    <string name="thanksForUsernameAndPhoneNumber">Benutzername und Telefonnummer wurde gespeichert. </string>
     <string name="description_too_long">Die Beschreibung darf nicht länger als 500 Zeichen sein.</string>
     <string name="shortTitle_too_long">Der Kurztitel darf nicht länger als 100 Zeichen sein.</string>
     <string name="startTime_past">Der Termin darf nicht in der Vergangenheit beginnen.</string>
+    <string name="startTime_afterScanning_past">Der Termin hat schon in der Vergangenheit stattgefunden.</string>
+    <string name="save_event">Der Termin wurde in die Datenbank geschrieben.</string>
     <string name="shortTitle_spaces">Der Kurztitel darf nicht mit Leerzeichen beginnen.</string>
     <string name="description_spaces">Die Beschreibung darf nicht mit Leerzeichen beginnen.</string>
     <string name="place_spaces">Der Raum darf nicht mit Leerzeichen beginnen.</string>
@@ -70,9 +74,14 @@
     <string name="room_peek">Das Feld Raum darf nicht das Zeichen | enthalten.</string>
     <string name="pushEnabled">Die Erinnerungen wurden eingeschaltet.</string>
     <string name="pushDisabled">Die Erinnerungen wurden ausgeschaltet.</string>
-    <string formatted="true" name="pushMinutesSet">Die Push-Nachrichten erscheinen nun %1$d Minuten vor Ihrem Termin.</string>
+    <string name="pushMinutesSet" formatted="true">Die Push-Nachrichten erscheinen nun %1$d Minuten vor Ihrem Termin.</string>
     <string name="startTab">Start-Tab :</string>
     <string name="startTabChanged" formatted="true">Beim nächsten Start zeigt Horario nun den Tab %1$s.</string>
+    <string name="acceptEventAfterScan">Wollen Sie wirklich zusagen?</string>
+    <string name="rejectEventAfterScan">Wollen Sie wirklich ablehnen?</string>
+    <string name="saveEventAfterScan">Wollen Sie wirklich speichern ohen zusagen?</string>
+    <string name="eventIsInDatabase">Termin ist schon in der Datenbank vorhanden!</string>
+
 
     <string-array name="event_repetitions">
         <item name="event_repetition_yearly">jährlich</item>
@@ -134,19 +143,34 @@
     <string name="scannerOverlay_toShowTheEvent">scanne ihn ab, um den Termin zu öffnen</string>
     <string name="requestPermission_thankYou">Danke für die Zugriffsrechte auf die Kamera!</string>
     <string name="requestPermission_askForQRPermission">Wir brauchen den Kamerazugriff um den QR-Code einzuscannen.</string>
+    <string name="requestPermission_askForPermission">Wir brauchen den Kamerazugriff um den QR-Code einzuscannen.</string>
+    <string name="requestPermission_askForPermission_sendSMS">Wir müssen SMS verschicken, um den Ersteller zu benachrichtigen.</string>
     <string name="requestPermission_askForSMSPermission">Wir brauchen den SMS-Zugriff um die Teilnehmerlisten mit gespeicherten Kontaktnamen zu füllen und aktualisieren.</string>
     <string name="requestPermission_againButton">Nochmal</string>
     <string name="requestPermission_lastTryRequest">Letzer Versuch!</string>
     <string name="abort">ABBRUCH</string>
     <string name="setting_copyright_privacyPolicy">Privacy Policy</string>
     <string name="accessWith_NeverAskAgain_deny">Zugriff Verweigert</string>
+<<<<<<<<< Temporary merge branch 1
+    <string name="requestQRPermission_accessDenied_withCheckbox">Du hast mit den Hacken bei \"Nicht mehr fragen\"  dauerhaft den Zugiff zum Kalender verweigert. Um den QR Scanner zu nutzen aktiviere bitte den Kamerazugriff über deine Rechteverwaltung</string>
+    <string name="requestSMSPermission_accessDenied_withCheckbox">Du hast mit den Hacken bei \"Nicht mehr fragen\"  dauerhaft den Zugiff zu den SMS und Kontakten verweigert. Um Rückmeldungen mit Kontaktnamen zu nutzen aktiviere bitte den Lesezugriff über deine Rechteverwaltung</string>
+    <string name="requestPermission_accessDenied_withCheckbox_SendSMS">Du hast mit den Hacken bei \"Nicht mehr fragen\"
+        dauerhaft den Zugriff zum Kalender verweigert. Um den QR Scanner zu nutzen aktiviere bitte das SMS Senden über deine Rechteverwaltung</string>
+    <string name="requestSMSPermission_accessDenied_withCheckbox">Du hast mit den Hacken bei \"Nicht mehr fragen\"  dauerhaft den Zugiff zu den SMS und Kontakten verweigert. Um Rückmeldungen mit Kontaktnamen zu nutzen aktiviere bitte den Lesezugriff über deine Rechteverwaltung</string>
     <string name="requestPermission_accessDenied_withCheckbox">Du hast mit den Hacken bei \"Nicht mehr fragen\"
         dauerhaft den Zugiff zum Kalender verweigert. Um den QR Scanner zu nutzen aktiviere bitte den
         Kamerazugriff über deine Rechteverwaltung</string>
     <string name="requestQRPermission_accessDenied_withCheckbox">Du hast mit den Hacken bei \"Nicht mehr fragen\"  dauerhaft den Zugiff zum Kalender verweigert. Um den QR Scanner zu nutzen aktiviere bitte den Kamerazugriff über deine Rechteverwaltung</string>
     <string name="requestSMSPermission_accessDenied_withCheckbox">Du hast mit den Hacken bei \"Nicht mehr fragen\"  dauerhaft den Zugiff zu den SMS und Kontakten verweigert. Um Rückmeldungen mit Kontaktnamen zu nutzen aktiviere bitte den Lesezugriff über deine Rechteverwaltung</string>
+>>>>>>>>> Temporary merge branch 2
     <string name="requestPermission_firstTryRequest">Erster von zwei Versuchen</string>
     <string name="qrGenerator_button_showInEventOverView">In Terminübersicht anzeigen</string>
 
 
+    <string name="accept">Ja!</string>
+    <string name="reject">Nein!</string>
+    <string name="sms_sent">SMS wurde erfolgreich versandt!</string>
+    <string name="sms_fail">SMS senden fehlgeschlagen! Es wird später automatisch erneut versucht!</string>
+    <string name="cannot_send_sms">Bitte in den Einstellungen ändern</string>
+    <string name="sms_exception">SMS fehlgeschlagen!</string>
 </resources>

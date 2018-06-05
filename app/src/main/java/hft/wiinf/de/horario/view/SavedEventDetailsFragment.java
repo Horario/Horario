@@ -18,11 +18,12 @@ import hft.wiinf.de.horario.model.Event;
 
 public class SavedEventDetailsFragment extends Fragment {
 
-    Button savedEventDetailsButtonRefuseAppointment, savedEventDetailsButtonAcceptAppointment;
+    Button savedEventDetailsButtonRefuseAppointment, savedEventDetailsButtonAcceptAppointment, savedEventDetailsButtonShowQr;
     RelativeLayout rLayout_savedEvent_helper;
     TextView savedEventDetailsOrganisatorText, savedEventphNumberText, savedEventeventDescription;
     Event selectedEvent;
     StringBuffer eventToStringBuffer;
+
     public SavedEventDetailsFragment() {
         // Required empty public constructor
     }
@@ -34,6 +35,7 @@ public class SavedEventDetailsFragment extends Fragment {
         Long MYEventIdLongResult = MYEventIdBundle.getLong("EventId");
         return MYEventIdLongResult;
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -41,6 +43,7 @@ public class SavedEventDetailsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_saved_event_details, container, false);
         savedEventDetailsButtonRefuseAppointment = view.findViewById(R.id.savedEventDetailsButtonRefuseAppointment);
         savedEventDetailsButtonAcceptAppointment = view.findViewById(R.id.savedEventDetailsButtonAcceptAppointment);
+        savedEventDetailsButtonShowQr = view.findViewById(R.id.savedEventDetailsButtonShowQr);
         rLayout_savedEvent_helper = view.findViewById(R.id.savedEvent_relativeLayout_helper);
         savedEventDetailsOrganisatorText = view.findViewById(R.id.savedEventDetailsOrganisatorText);
         savedEventphNumberText = view.findViewById(R.id.savedEventphNumberText);
@@ -59,6 +62,12 @@ public class SavedEventDetailsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //Code for accepting an event eg. update the DB and Calendar View
+            }
+        });
+        savedEventDetailsButtonShowQr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Code for showing the QR Code
             }
         });
 
