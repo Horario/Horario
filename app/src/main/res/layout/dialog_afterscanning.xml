@@ -51,9 +51,9 @@
     <RelativeLayout
         android:id="@+id/dialog_qrScanner_relativLayout_buttonFrame"
         android:layout_width="match_parent"
-        android:layout_height="310dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
+
 
         >
 
@@ -77,7 +77,8 @@
             android:id="@+id/dialog_qrScanner_button_eventSave"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
             android:backgroundTint="@color/zentea_darkgreen"
             android:drawableEnd="@drawable/ic_mydate_approved_white"
             android:text="@string/eventSave"
@@ -99,10 +100,11 @@
             android:id="@+id/dialog_qrScanner_button_about"
             android:layout_width="200dp"
             android:layout_height="70dp"
-            android:layout_centerInParent="true"
-            android:layout_alignParentBottom="true"
-            android:backgroundTint="@color/zentea_darkgreen"
+
+            android:layout_centerHorizontal="true"
             android:layout_marginBottom="50dp"
+
+            android:backgroundTint="@color/zentea_darkgreen"
             android:text="@string/abort"
             android:textColor="@color/zentea_white"
             android:visibility="visible" />
