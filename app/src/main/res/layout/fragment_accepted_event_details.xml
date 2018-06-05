@@ -20,13 +20,14 @@
 
         <TextView
             android:id="@+id/acceptedEventappointmentIsFromText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="92dp"
+            android:layout_height="28dp"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="@string/appointmentIsFrom"
+            android:textSize="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.07"
@@ -65,10 +66,45 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.126" />
 
+        <Button
+            android:id="@+id/acceptedEventDetailsButtonShowQR"
+            android:layout_width="345dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="108dp"
+            android:background="@color/zentea_darkgreen"
+            android:text="@string/savingSuccessful_qrcode"
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.521"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
+
+        <Button
+            android:id="@+id/acceptedEventDetailsButtonRefuseAppointment"
+            android:layout_width="345dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/zentea_darkgreen"
+            android:text="@string/refuseAppointment"
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.521"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/acceptedEventDetailsButtonShowQR"
+            app:layout_constraintVertical_bias="0.034" />
+
         <ScrollView
             android:id="@+id/scrollView2"
-            android:layout_width="192dp"
-            android:layout_height="113dp"
+            android:layout_width="346dp"
+            android:layout_height="214dp"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
@@ -92,33 +128,6 @@
                     android:text="" />
             </LinearLayout>
         </ScrollView>
-
-        <Button
-            android:id="@+id/acceptedEventDetailsButtonShowQR"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="20dp"
-            android:text="@string/savingSuccessful_qrcode"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
-
-        <Button
-            android:id="@+id/acceptedEventDetailsButtonRefuseAppointment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="@string/refuseAppointment"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/acceptedEventDetailsButtonShowQR"
-            app:layout_constraintVertical_bias="0.152" />
 
     </android.support.constraint.ConstraintLayout>
 </FrameLayout>
