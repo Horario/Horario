@@ -7,45 +7,47 @@
     android:orientation="vertical"
     tools:context=".TabActivity">
 
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="300dp">
-    <RelativeLayout
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="350dp">
 
-        android:id="@+id/dialog_qrScanner_relativeLayout_TextFrame"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true">
+        <RelativeLayout
 
-        <TextView
-            android:id="@+id/dialog_qrScanner_textView_headline"
+            android:id="@+id/dialog_qrScanner_relativeLayout_TextFrame"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="10dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/zentea_darkgreen"
-            android:textSize="24sp" />
+            android:layout_alignParentTop="true">
 
-        <TextView
-            android:id="@+id/dialog_qrScanner_textView_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/dialog_qrScanner_textView_headline"
-            android:layout_marginEnd="10dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
-            android:textSize="18sp"
-            tools:layout_editor_absoluteX="16dp"
-            tools:layout_editor_absoluteY="78dp" />
+            <TextView
+                android:id="@+id/dialog_qrScanner_textView_headline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/zentea_darkgreen"
+                android:textSize="24sp" />
 
-    </RelativeLayout>
-</ScrollView>
+            <TextView
+                android:id="@+id/dialog_qrScanner_textView_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/dialog_qrScanner_textView_headline"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:textSize="18sp"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="78dp" />
+
+        </RelativeLayout>
+    </ScrollView>
+
     <RelativeLayout
         android:id="@+id/dialog_qrScanner_relativLayout_buttonFrame"
         android:layout_width="match_parent"
@@ -95,18 +97,20 @@
 
         <Button
             android:id="@+id/dialog_qrScanner_button_about"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="200dp"
+            android:layout_height="70dp"
             android:layout_centerInParent="true"
+            android:layout_alignParentBottom="true"
             android:backgroundTint="@color/zentea_darkgreen"
+            android:layout_marginBottom="50dp"
             android:text="@string/abort"
             android:textColor="@color/zentea_white"
             android:visibility="visible" />
 
         <Button
             android:id="@+id/dialog_qrScanner_button_toCalender"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="200dp"
+            android:layout_height="70dp"
             android:layout_centerInParent="true"
             android:backgroundTint="@color/zentea_darkgreen"
             android:text="@string/back"

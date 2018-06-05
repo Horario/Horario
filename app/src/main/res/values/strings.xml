@@ -38,7 +38,7 @@
     <string name="savingSuccessful_new">neuen Termin erstellen</string>
     <string name="savingSuccessful_qrcode">QRCode anzeigen</string>
     <string name="titleDialogUsername">Bitte vergib einen Benutzernamen! </string>
-    <string name="titleDialogUsernamePhoneNumber">Bitte vergib einen Benutzernamen und deine Telefonnummer! </string>
+    <string name="titleDialogUsernamePhoneNumber">Bitte gib einen Benutzernamen und deine Telefonnummer ein! </string>
     <string name="save_text">speichern</string>
     <string name="later_text">Später</string>
     <string name="thanksForUsername">Benutzername wurde gespeichert. </string>
@@ -118,7 +118,7 @@
     <string name="at">\u0020um\u0020</string>
     <string name="instead_of">\u0020statt.</string>
     <string name="as_of">Vom\u0020</string>
-    <string name="until">\u0020bis\u0020</string>
+    <string name="until">\u0020Uhr bis\u0020</string>
     <string name="clock_to">\u0020Uhr bis\u0020</string>
     <string name="your_Event">Dein Termin</string>
     <string name="room">Raum:\u0020</string>

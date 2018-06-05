@@ -662,7 +662,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         //build dialog for username and phoneNumber
         final AlertDialog.Builder dialogAskForUsernamePhoneNumber = new AlertDialog.Builder(this);
         dialogAskForUsernamePhoneNumber.setView(R.layout.dialog_askforphonenumberandusername);
-        dialogAskForUsernamePhoneNumber.setTitle(R.string.titleDialogUsernamePhoneNumber);
+        //dialogAskForUsernamePhoneNumber.setTitle(R.string.titleDialogUsernamePhoneNumber);
+
         dialogAskForUsernamePhoneNumber.setCancelable(true);
 
         final AlertDialog alertDialogAskForUsernamePhoneNumber = dialogAskForUsernamePhoneNumber.create();
