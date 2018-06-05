@@ -58,8 +58,6 @@
     <string name="okayIWillAccept">Nochmal fragen</string>
 
 
-
-
     <!-- TODO: Remove or change this placeholder text -->
     <string name="thanksForUsernameAndPhoneNumber">Benutzername und Telefonnummer wurde gespeichert. </string>
     <string name="description_too_long">Die Beschreibung darf nicht länger als 500 Zeichen sein.</string>

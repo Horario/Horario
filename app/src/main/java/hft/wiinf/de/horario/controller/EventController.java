@@ -13,10 +13,11 @@ import hft.wiinf.de.horario.model.AcceptedState;
 import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
 
+
 public class EventController {
     //saves (update or create)an event
     public static void saveEvent(@NonNull Event event) {
-        if(event.getCreatorEventId() < 0)
+        if (event.getCreatorEventId() < 0)
             event.setCreatorEventId(event.save());
         event.save();
     }
@@ -65,14 +66,14 @@ public class EventController {
         return new Select().from(Event.class).where("accepted=?", true).orderBy("startTime,endTime,shortTitle").execute();
     }
 
-    public static boolean createdEventsYet(){
+    public static boolean createdEventsYet() {
         Person myself = PersonController.getPersonWhoIam();
-        List<Event> resultSet = new Select().from(Event.class).where("creator=?",  myself).execute();
-       if (resultSet.size()==0){
-           return false;
-       }else{
-           return true;
-       }
+        List<Event> resultSet = new Select().from(Event.class).where("creator=?", myself).execute();
+        if (resultSet.size() == 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public static List<Event> findMyAcceptedEventsInTheFuture() {
@@ -132,7 +133,7 @@ public class EventController {
     }
 
     public static Event checkIfEventIsInDatabase(String description, String shortTitle,
-                                                  String place,
+                                                 String place,
                                                  Calendar startTime, Calendar endTime) {
         return new Select()
                 .from(Event.class)
@@ -143,7 +144,6 @@ public class EventController {
                 .where("endTime = ?", endTime.getTimeInMillis())
                 .executeSingle();
     }
-
 
 
 }

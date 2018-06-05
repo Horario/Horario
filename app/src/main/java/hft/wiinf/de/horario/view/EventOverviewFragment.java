@@ -21,7 +21,6 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -75,18 +74,18 @@ public class EventOverviewFragment extends Fragment {
             if (eventList.size() > 0) {
                 eventArrayDay.add(new Appointment(CalendarFragment.dayFormat.format(helper.getTime()), 0));
             }
-            for (int i = 0; i<eventList.size(); i++){
-                if(eventList.get(i).getCreator().equals(PersonController.getPersonWhoIam())){
+            for (int i = 0; i < eventList.size(); i++) {
+                if (eventList.get(i).getCreator().equals(PersonController.getPersonWhoIam())) {
                     eventArrayDay.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 3, eventList.get(i).getId(), eventList.get(i).getCreator()));
-                }else{
-                    if(eventList.get(i).getAccepted().equals(AcceptedState.ACCEPTED)){
+                } else {
+                    if (eventList.get(i).getAccepted().equals(AcceptedState.ACCEPTED)) {
                         eventArrayDay.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 1, eventList.get(i).getId(), eventList.get(i).getCreator()));
-                    }else if(eventList.get(i).getAccepted().equals(AcceptedState.WAITING)) {
+                    } else if (eventList.get(i).getAccepted().equals(AcceptedState.WAITING)) {
                         eventArrayDay.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 2, eventList.get(i).getId(), eventList.get(i).getCreator()));
                     }
                 }
             }
-            if (eventArrayDay.size()>1){
+            if (eventArrayDay.size() > 1) {
                 eventArray.addAll(eventArrayDay);
             }
             eventArrayDay.clear();
