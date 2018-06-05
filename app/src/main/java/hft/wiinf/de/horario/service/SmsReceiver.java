@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.telephony.SmsMessage;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,8 +100,15 @@ public class SmsReceiver extends BroadcastReceiver {
         number = number.replace("+", "");
         number = number.replace("-", "");
         number = number.replace(" ", "");
-        number = number.substring(number.indexOf("1"));
-        return number;
+
+        try {
+            number = number.substring(number.indexOf("1"));
+            return number;
+        } catch (StringIndexOutOfBoundsException variablenname) {
+            // Ausländische Nummer
+
+        }
+        return "100000000";
     }
 
     private String lookForSavedContact(String address, Context context) {

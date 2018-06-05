@@ -432,7 +432,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches() && !dialog_inputUsername.contains("|")) {
                     if (PersonController.getPersonWhoIam() == null) {
                         //ToDo: Flo - PhoneNumber
-                        personMe = new Person(true, "007", dialog_inputUsername);
+                        personMe = new Person(true, "015164518569", dialog_inputUsername);
                         PersonController.addPersonMe(personMe);
 
                         Toast toast = Toast.makeText(v.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT);
