@@ -1,8 +1,10 @@
 package hft.wiinf.de.horario.service;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import hft.wiinf.de.horario.TabActivity;
 import hft.wiinf.de.horario.controller.EventController;
 import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.Person;
@@ -44,6 +47,10 @@ public class SmsReceiver extends BroadcastReceiver {
             for (int i = 0; i < receivedSMSArray.length; i++) {
                 /*collect all the Horario SMS*/
                 if (receivedSMSArray[i].getMessageBody().toString().substring(0, 9).equals(":Horario:")) {
+                    if(!checkForRegexOk(receivedSMSArray[i])){
+                        break;
+                        //Log.d("REGEXoccurence!", receivedSMSArray[i].getMessageBody().toString());
+                    }
                     String number = (receivedSMSArray[i].getOriginatingAddress());
                     String[] parsedSMS = receivedSMSArray[i].getMessageBody().toString().substring(9).split(",");
                     if (parsedSMS[1].equalsIgnoreCase("1")) {
@@ -57,6 +64,13 @@ public class SmsReceiver extends BroadcastReceiver {
 
         }
     }
+
+    private boolean checkForRegexOk(SmsMessage smsMessage) {
+        //TODO
+//        smsMessage.getMessageBody().toString().charAt(2);
+        return true;
+    }
+
     private void parseHorarioSMSAndUpdate(List<ReceivedHorarioSMS> unreadSMS, Context context) {
         for (ReceivedHorarioSMS singleUnreadSMS : unreadSMS) {
             Person person = new Person(singleUnreadSMS.getPhonenumber(), singleUnreadSMS.getName());
@@ -66,15 +80,32 @@ public class SmsReceiver extends BroadcastReceiver {
             /*Replace name if saved in contacts*/
             if (savedContactExisting != null) {
                 person.setName(savedContactExisting);
-                Log.d("savedContact", "Saved Contact is not null");
+            }else{
+                person.setName(person.getName() + " (" + singleUnreadSMS.getPhonenumber() + ")");
             }
+            Long eventIdInSMS = Long.valueOf(singleUnreadSMS.getCreatorEventId());
+//            if(EventController.checkIfEventIsInDatabaseThroughId(eventIdInSMS)){
+//                //continue
+//            }else{
+//                AlertDialog.Builder builder = new AlertDialog.Builder();
+//                builder.setTitle("Ups!");
+//                builder.setMessage("Horario hat festgestellt, dass Du eine Benachrichtigung zu einem Termin bekommen hast, der nicht mehr existiert." +
+//                        "Vermutlich hast Du Horario neu installiert, bitte benachrichtige doch folgende Person, ob BABLLABAABL");
+//                // Add the button
+//                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int id) {
+//                        // User clicked OK button
+//                    }
+//                });
+//                builder.create();
+//                builder.show();
+//            }
             /*Check if acceptance or cancellation*/
+            boolean hasAcceptedEarlier = false;
             if (singleUnreadSMS.isAcceptance()) {
-                Log.d("SINGLEUNREAD", String.valueOf(singleUnreadSMS.isAcceptance()));
-                person.setAcceptedEvent(EventController.getEventById(Long.valueOf(singleUnreadSMS.getCreatorEventId())));
+                person.setAcceptedEvent(EventController.getEventById(eventIdInSMS));
                 PersonController.savePerson(person);
             } else {
-                Log.d("SINGLEUNREAD", String.valueOf(singleUnreadSMS.isAcceptance()));
                 //cancellation: look for possible preceding acceptance. If yes, then delete person and create new. Else just save the person
                 List<Person> allAcceptances = PersonController.getEventAcceptedPersons(EventController.getEventById(Long.valueOf(singleUnreadSMS.getCreatorEventId())));
                 for (Person personAccepted : allAcceptances) {
@@ -85,11 +116,14 @@ public class SmsReceiver extends BroadcastReceiver {
                         person.setCanceledEvent(EventController.getEventById(Long.valueOf(singleUnreadSMS.getCreatorEventId())));
                         person.setRejectionReason(singleUnreadSMS.getExcuse());
                         PersonController.savePerson(person);
-                    } else {
-                        person.setCanceledEvent(EventController.getEventById(Long.valueOf(singleUnreadSMS.getCreatorEventId())));
-                        person.setRejectionReason(singleUnreadSMS.getExcuse());
-                        PersonController.savePerson(person);
+                        hasAcceptedEarlier = true;
                     }
+
+                }
+                if (!hasAcceptedEarlier){
+                    person.setCanceledEvent(EventController.getEventById(Long.valueOf(singleUnreadSMS.getCreatorEventId())));
+                    person.setRejectionReason(singleUnreadSMS.getExcuse());
+                    PersonController.savePerson(person);
                 }
             }
         }

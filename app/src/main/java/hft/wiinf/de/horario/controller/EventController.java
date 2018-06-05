@@ -146,4 +146,12 @@ public class EventController {
     }
 
 
+    public static boolean checkIfEventIsInDatabaseThroughId(Long eventIdInSMS) {
+        List<Event> resultSet = new Select().from(Event.class).where("Id=?", eventIdInSMS).execute();
+        if (resultSet.size() == 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }
