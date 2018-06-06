@@ -91,7 +91,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         tabLayout = (TabLayout) findViewById(R.id.tabBarLayout);
         tabLayout.setupWithViewPager(mViewPager);
 
-        //TODO Change Picture (DesignTeam)
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_dateview);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_calendarview);
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_settings);
@@ -747,11 +746,5 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             finish();
             startActivity(intent);
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        personMe = PersonController.getPersonWhoIam();
     }
 }
