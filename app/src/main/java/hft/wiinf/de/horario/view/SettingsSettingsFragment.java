@@ -167,6 +167,8 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
         });
         switch_enablePush.setChecked(person.isEnablePush());
         pushNotificationVisibility();
+        //write the phone number of the user into the text field (or empty string if number is currently not set)
+        editText_PhoneNumber.setText(person.getPhoneNumber());
         //Everything that needs to happen after Username was written in the EditText-Field
         editTextUsername.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             //on click: read out the textfield, ask for phone number and close the keyboard

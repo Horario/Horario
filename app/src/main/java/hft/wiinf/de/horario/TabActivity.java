@@ -370,7 +370,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 //check if settings Tab is unselected
                 //close keyboard
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(mSectionsPageAdapter.getItem(2).getView().getApplicationWindowToken(), 0);
+                imm.hideSoftInputFromWindow(mSectionsPageAdapter.getItem(tab.getPosition()).getView().getApplicationWindowToken(), 0);
                 if (tab.getPosition() == 2) {
                     getSupportFragmentManager().popBackStack();
                 } else if (tab.getPosition() == 1) {
