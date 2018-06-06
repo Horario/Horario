@@ -32,6 +32,7 @@ public class SavedEventDetailsFragment extends Fragment {
     @SuppressLint("LongLogTag")
     public Long getEventID() {
         Bundle MYEventIdBundle = getArguments();
+        assert MYEventIdBundle != null;
         Long MYEventIdLongResult = MYEventIdBundle.getLong("EventId");
         return MYEventIdLongResult;
     }
@@ -64,10 +65,29 @@ public class SavedEventDetailsFragment extends Fragment {
                 //Code for accepting an event eg. update the DB and Calendar View
             }
         });
+
+        // Open the QRGeneratorFragment to Show the QRCode form this Event.
         savedEventDetailsButtonShowQr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Code for showing the QR Code
+                Bundle whichFragment = getArguments();
+                QRGeneratorFragment qrFrag = new QRGeneratorFragment();
+                Bundle bundle = new Bundle();
+                bundle.putLong("eventId", getEventID());
+                bundle.putString("fragment", whichFragment.getString("fragment"));
+                qrFrag.setArguments(bundle);
+
+                if (whichFragment.getString("fragment").equals("EventOverview")) {
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.eventOverview_frameLayout, qrFrag, "QrGeneratorEO")
+                            .addToBackStack("QrGeneratorEO")
+                            .commit();
+                } else {
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.calendar_frameLayout, qrFrag, "QrGeneratorCA")
+                            .addToBackStack("QrGeneratorCA")
+                            .commit();
+                }
             }
         });
 
