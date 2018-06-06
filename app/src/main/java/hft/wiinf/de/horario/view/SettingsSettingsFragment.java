@@ -305,6 +305,7 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
                 return 6;
             default:
                 return 0;
+
         }
 
     }

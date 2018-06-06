@@ -68,6 +68,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
 
+
     implementation 'com.github.sundeepk:compact-calendar-view:2.0.3-beta'
 
     implementation 'com.android.support:design:27.1.0'
@@ -84,4 +85,5 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.5.0'
     //If you want to add a network helper
     implementation 'com.facebook.stetho:stetho-okhttp:1.5.0'
+
 }
