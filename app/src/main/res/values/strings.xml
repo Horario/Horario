@@ -178,4 +178,5 @@
     <string name="requestPermission_userDontLike">TEST</string>
     <string name="phoneNumber">Telefonnummer :</string>
     <string name="phoneNumberHint">Telefonnummer</string>
+    <string name="thanksUserData">Die Eingaben wurden gespeichert.</string>
 </resources>

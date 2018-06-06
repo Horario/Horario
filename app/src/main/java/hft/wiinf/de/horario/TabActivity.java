@@ -1,17 +1,22 @@
 package hft.wiinf.de.horario;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -45,10 +50,13 @@ import hft.wiinf.de.horario.view.EventOverviewActivity;
 import hft.wiinf.de.horario.view.EventOverviewFragment;
 import hft.wiinf.de.horario.view.SettingsActivity;
 
+import static com.activeandroid.Cache.getContext;
+
 public class TabActivity extends AppCompatActivity implements ScanResultReceiverController {
 
     //TODO Kommentieren und Java Doc Info Schreiben
     private static final String TAG = "TabActivity";
+    private static final int PERMISSION_REQUEST_READ_PHONE_STATE = 0;
     private SectionsPageAdapterActivity mSectionsPageAdapter;
     private ViewPager mViewPager;
     TabLayout tabLayout;
@@ -67,6 +75,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     Calendar myEndDate = Calendar.getInstance();
 
     int buttonId = 0;
+    private int counter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,9 +86,9 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         ActiveAndroid.initialize(this);
         Stetho.initializeWithDefaults(this);
         //read startTab out of db, default=1(calendar tab)
-        personMe=PersonController.getPersonWhoIam();
-        if (personMe==null)
-            personMe=new Person(true,"","");
+        personMe = PersonController.getPersonWhoIam();
+        if (personMe == null)
+            personMe = new Person(true, "", "");
         startTab = personMe.getStartTab();
 
         mSectionsPageAdapter = new SectionsPageAdapterActivity(getSupportFragmentManager());
@@ -95,16 +104,18 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_calendarview);
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_settings);
 
-        if (personMe == null||personMe.getName().isEmpty()) {
-            openDialogAskForUsername();
-        }
+        if (personMe == null || personMe.getName().isEmpty()) {
+            if (personMe == null || personMe.getName().isEmpty()) {
+                openDialogAskForUsername();
+            }
 
-        myStartTime.set(Calendar.SECOND, 0);
-        myStartTime.set(Calendar.MILLISECOND, 0);
-        myEndTime.set(Calendar.SECOND, 0);
-        myEndTime.set(Calendar.MILLISECOND, 0);
-        myEndDate.set(Calendar.SECOND, 0);
-        myEndDate.set(Calendar.MILLISECOND, 0);
+            myStartTime.set(Calendar.SECOND, 0);
+            myStartTime.set(Calendar.MILLISECOND, 0);
+            myEndTime.set(Calendar.SECOND, 0);
+            myEndTime.set(Calendar.MILLISECOND, 0);
+            myEndDate.set(Calendar.SECOND, 0);
+            myEndDate.set(Calendar.MILLISECOND, 0);
+        }
     }
 
     private void restartApp(String fragmentResource) {
@@ -425,18 +436,14 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 Matcher matcher_username = pattern_username.matcher(dialog_inputUsername);
 
                 if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches() && !dialog_inputUsername.contains("|")) {
-                    personMe=PersonController.getPersonWhoIam();
-                    if (personMe==null)
-                        personMe=new Person(true,"","");
                     personMe.setName(dialog_inputUsername);
-                        PersonController.savePerson(personMe);
-                        Toast toast = Toast.makeText(v.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT);
-                        toast.show();
+                    PersonController.savePerson(personMe);
+                    Toast toast = Toast.makeText(v.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT);
+                    toast.show();
 
-                        alertDialogAskForUsername.dismiss();
-                        return true;
-                    }
-                 else if (dialog_inputUsername.contains("|")) {
+                    alertDialogAskForUsername.dismiss();
+                    return true;
+                } else if (dialog_inputUsername.contains("|")) {
                     Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername_peek, Toast.LENGTH_SHORT);
                     toast.show();
                     return true;
@@ -477,7 +484,9 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         myStartTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hourOfDay));
         myStartTime.set(Calendar.MINUTE, Integer.parseInt(minutesOfDay));
         myStartTime.set(Integer.parseInt(year), Integer.parseInt(month) - 1, Integer.parseInt(day));
-
+        //set Seconds and milliseconds 0 to be independent from the current time
+        myStartTime.set(Calendar.SECOND, 0);
+        myStartTime.set(Calendar.MILLISECOND, 0);
         return myStartTime;
     }
 
@@ -495,7 +504,9 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         myEndTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hourOfDay));
         myEndTime.set(Calendar.MINUTE, Integer.parseInt(minutesOfDay));
         myEndTime.set(Integer.parseInt(year), Integer.parseInt(month) - 1, Integer.parseInt(day));
-
+       //set Seconds and milliseconds 0 to be independent from the current time
+        myEndTime.set(Calendar.SECOND, 0);
+        myEndTime.set(Calendar.MILLISECOND, 0);
         return myEndTime;
     }
 
@@ -514,6 +525,10 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         myEndDate.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hourOfDay));
         myEndDate.set(Calendar.MINUTE, Integer.parseInt(minutesOfDay));
         myEndDate.set(Integer.parseInt(year), Integer.parseInt(month) - 1, Integer.parseInt(day));
+        //set Seconds and milliseconds 0 to be independent from the current time
+        myEndDate.set(Calendar.SECOND, 0);
+        myEndDate.set(Calendar.MILLISECOND, 0);
+
         return myEndDate;
     }
 
@@ -534,7 +549,13 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     }
 
     //save Event and Person
-    private void saveEventAndPerson(final AlertDialog alertDialogAskForFinalDecission, final int buttonId) {
+    private void saveEventAndPerson() {
+        final AlertDialog.Builder dialogAskForFinalDecission = new AlertDialog.Builder(this);
+        dialogAskForFinalDecission.setView(R.layout.dialog_afterscanningbuttonclick);
+        dialogAskForFinalDecission.setTitle(R.string.titleDialogFinalDecission);
+        dialogAskForFinalDecission.setCancelable(true);
+
+        final AlertDialog alertDialogAskForFinalDecission = dialogAskForFinalDecission.create();
         //open Dialog with yes or no after button click (accept, save, reject)
         alertDialogAskForFinalDecission.show();
         alertDialogAskForFinalDecission.findViewById(R.id.dialog_event_final_decission_accept)
@@ -657,9 +678,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         final EditText afterScanning_username = alertDialogAskForUsernamePhoneNumber.findViewById(R.id.dialog_afterScanner_editText_username);
         final EditText afterScanning_phoneNumber = alertDialogAskForUsernamePhoneNumber.findViewById(R.id.dialog_afterScanner_editText_phoneNumber);
         //set textfield if user has username/phoneNumber
-        personMe=PersonController.getPersonWhoIam();
-        if (personMe==null)
-            personMe=new Person(true,"","");
         afterScanning_username.setText(personMe.getName());
         afterScanning_phoneNumber.setText(personMe.getPhoneNumber());
 
@@ -676,34 +694,35 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 Pattern pattern_afterScanning_username = Pattern.compile("^([\\S]).*");
                 Matcher matcher_afterScanning_username = pattern_afterScanning_username.matcher(dialog_afterScanning_inputUsername);
 
-                //check if personwhoiam is in database
-                personMe=PersonController.getPersonWhoIam();
-                if (personMe==null)
-                    personMe=new Person(true,"","");
-
                 //check for valid input
                 if (actionId == EditorInfo.IME_ACTION_DONE && matcher_afterScanning_username.matches() && !dialog_afterScanning_inputUsername.contains("|")
                         && dialog_afterScanning_inputPhoneNumber.matches("(00|0|\\+)[1-9][0-9]+")) {
                     //get username
                     personMe.setName(dialog_afterScanning_inputUsername);
+                    personMe.setPhoneNumber(afterScanning_phoneNumber.getText().toString());
                     PersonController.savePerson(personMe);
 
-                    Toast toast = Toast.makeText(v.getContext(),R.string.thanksphoneNumber, Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(v.getContext(), R.string.thanksUserData, Toast.LENGTH_SHORT);
                     toast.show();
+                    alertDialogAskForUsernamePhoneNumber.dismiss();
+                    saveEventAndPerson();
+                    return true;
                     //if isitme is in database without phonenumber
                     //check for valid input: username should not contain "|"
                 } else if (dialog_afterScanning_inputUsername.contains("|")) {
                     Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername_peek, Toast.LENGTH_SHORT);
                     toast.show();
-                    return true;
+                    return false;
+                }  else if (!afterScanning_phoneNumber.getText().toString().matches("(00|0|\\+)[1-9][0-9]+")){
+                    Toast toast = Toast.makeText(v.getContext(), R.string.wrongNumberFormat, Toast.LENGTH_SHORT);
+                    toast.show();
+                    return false;
                 } else {
                     //check for valid input: username should not start with blank space
                     Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
                     toast.show();
-                    return false;
+                    return true;
                 }
-
-                return false;
             }
         });
     }
@@ -722,23 +741,18 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     }
 
     private void decideWhatToDo() {
-        final AlertDialog.Builder dialogAskForFinalDecission = new AlertDialog.Builder(this);
-        dialogAskForFinalDecission.setView(R.layout.dialog_afterscanningbuttonclick);
-        dialogAskForFinalDecission.setTitle(R.string.titleDialogFinalDecission);
-        dialogAskForFinalDecission.setCancelable(true);
 
-        final AlertDialog alertDialogAskForFinalDecission = dialogAskForFinalDecission.create();
 
         if (!checkIfEventIsInPast()) {
             final Person myPerson = PersonController.getPersonWhoIam();
-            if (myPerson == null) {
-                openDialogAskForUsernameAndPhoneNumber();
+            if (myPerson == null || myPerson.getPhoneNumber().isEmpty()) {
+                checkPhonePermission();
             } else if (myPerson.getPhoneNumber().isEmpty()) {
                 openDialogAskForUsernameAndPhoneNumber();
             } else if (myPerson.getName().isEmpty()) {
                 openDialogAskForUsernameAndPhoneNumber();
             } else {
-                saveEventAndPerson(alertDialogAskForFinalDecission, buttonId);
+                saveEventAndPerson();
             }
         } else {
             //Restart the TabActivity an Reload all Views
@@ -747,4 +761,139 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             startActivity(intent);
         }
     }
+
+    private void checkPhonePermission() {
+        //Check if User has permission to start to scan, if not it's start a RequestLoop
+        if (!isPhonePermissionGranted()) {
+            requestPhonePermission();
+        } else {
+            readPhoneNumber();
+        }
+    }
+
+    private boolean isPhonePermissionGranted() {
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestPhonePermission() {
+        //For Fragment: requestPermissions(permissionsList,REQUEST_CODE);
+        //For Activity: ActivityCompat.requestPermissions(this,permissionsList,REQUEST_CODE);
+        requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, PERMISSION_REQUEST_READ_PHONE_STATE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_READ_PHONE_STATE) {
+            // for each permission check if the user granted/denied them you may want to group the
+            // rationale in a single dialog,this is just an example
+            for (int i = 0, len = permissions.length; i < len; i++) {
+
+                if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
+                    // user rejected the permission
+                    boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.READ_PHONE_STATE);
+                    if (!showRationale) {
+                        // user also CHECKED "never ask again" you can either enable some fall back,
+                        // disable features of your app or open another dialog explaining again the
+                        // permission and directing to the app setting
+
+                        new android.support.v7.app.AlertDialog.Builder(this)
+                                .setTitle(R.string.accessWith_NeverAskAgain_deny)
+                                .setMessage(R.string.sendSMS_accessDenied_withCheckbox)
+                                .setPositiveButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                        openDialogAskForUsernameAndPhoneNumber();
+                                    }
+                                })
+                                .create().show();
+                    } else if (counter < 1) {
+                        // user did NOT check "never ask again" this is a good place to explain the user
+                        // why you need the permission and ask if he wants // to accept it (the rationale)
+                        new android.support.v7.app.AlertDialog.Builder(this)
+                                .setTitle(R.string.requestPermission_firstTryRequest)
+                                .setMessage(R.string.phoneNumber_explanation)
+                                .setPositiveButton(R.string.oneMoreTime, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        counter++;
+                                        checkPhonePermission();
+                                    }
+                                })
+                                .setNegativeButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        //open keyboard
+                                        ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+                                        openDialogAskForUsernameAndPhoneNumber();
+                                    }
+                                })
+                                .create().show();
+                    } else if (counter == 1) {
+                        new android.support.v7.app.AlertDialog.Builder(this)
+                                .setTitle(R.string.sendSMS_lastTry)
+                                .setMessage(R.string.phoneNumber_explanation)
+                                .setPositiveButton(R.string.oneMoreTime, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        counter++;
+                                        checkPhonePermission();
+                                    }
+                                })
+                                .setNegativeButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+                                        openDialogAskForUsernameAndPhoneNumber();
+                                    }
+                                })
+                                .create().show();
+                    } else {
+                        openDialogAskForUsernameAndPhoneNumber();
+                        ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+                    }
+                } else {
+                    readPhoneNumber();
+                }
+            }
+
+        }
+
+
+    }
+
+    // }
+
+
+    // method to read the phone number of the user
+    public void readPhoneNumber() {
+        //if permission is granted read the phone number
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        @SuppressLint("MissingPermission") String phoneNumber = telephonyManager.getLine1Number();
+        //delete spaces and add a plus before the number if it begins without a 0
+        if (phoneNumber != null)
+            phoneNumber.replaceAll(" ", "");
+        if (phoneNumber.matches("[1-9][0-9]+"))
+            phoneNumber = "+" + phoneNumber;
+        personMe.setPhoneNumber(phoneNumber);
+        if (personMe.getPhoneNumber() == null || !personMe.getPhoneNumber().matches("(00|0|\\+)[1-9][0-9]+")) {
+            Toast.makeText(this, R.string.telephonenumerNotRead, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getContext(), R.string.thanksphoneNumber, Toast.LENGTH_SHORT).show();
+            if (this.getCurrentFocus() != null) {
+                InputMethodManager imm = (InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), 0);
+
+            }
+            if (personMe.getName().isEmpty())
+                openDialogAskForUsernameAndPhoneNumber();
+            else {
+                PersonController.savePerson(personMe);
+                saveEventAndPerson();
+            }
+        }
+    }
 }
+
+
