@@ -111,7 +111,8 @@ public class EventController {
             repetitionEvent.setPlace(firstEvent.getPlace());
             repetitionEvent.setDescription(firstEvent.getDescription());
             repetitionEvent.setAccepted(firstEvent.getAccepted());
-            repetitionEvent.setEndTime(firstEvent.getEndTime());
+            repetitionEvent.setRepetition(firstEvent.getRepetition());
+            repetitionEvent.setEndDate(firstEvent.getEndDate());
             repetitionEvent.setShortTitle(firstEvent.getShortTitle());
             repetitionEvent.setStartEvent(firstEvent);
             repetitionEvent.setCreatorEventId(firstEvent.getCreatorEventId());
