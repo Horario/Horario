@@ -43,6 +43,7 @@
     <string name="later_text">Später</string>
     <string name="thanksForUsername">Benutzername wurde gespeichert. </string>
     <string name="titleDialogFinalDecission">Bist du sicher?</string>
+    <string name="titleDialogRejectEvent">Willst du den Termin wirklich absagen und eine SMS versenden?</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="titleParticipantsEvent">Rückmeldungen</string>
@@ -59,8 +60,10 @@
 
 
     <!-- TODO: Remove or change this placeholder text -->
+    <string name="reject_event">Das Event wurde aus der Datenbank gelöscht</string>
     <string name="thanksForUsernameAndPhoneNumber">Benutzername und Telefonnummer wurde gespeichert. </string>
     <string name="description_too_long">Die Beschreibung darf nicht länger als 500 Zeichen sein.</string>
+    <string name="reject_event_hint">Der Termin wurde abgesagt und aus der Datenbank entfernt</string>
     <string name="shortTitle_too_long">Der Kurztitel darf nicht länger als 100 Zeichen sein.</string>
     <string name="startTime_past">Der Termin darf nicht in der Vergangenheit beginnen.</string>
     <string name="startTime_afterScanning_past">Der Termin hat schon in der Vergangenheit stattgefunden.</string>
@@ -100,6 +103,7 @@
         <item name="push_time_120">120</item>
     </string-array>
     <string-array name="reason_for_rejection">
+        <item name="reason_0"></item>
         <item name="reason_1">Krank</item>
         <item name="reason_2">Zeitlich verhindert</item>
         <item name="reason_3">Schlafen</item>

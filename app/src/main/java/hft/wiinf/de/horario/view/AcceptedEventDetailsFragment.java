@@ -3,6 +3,8 @@ package hft.wiinf.de.horario.view;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,6 +57,16 @@ public class AcceptedEventDetailsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //Code for cancelling an event eg. take it out of the DB and Calendar View
+                EventRejectEventFragment eventRejectEventFragment = new EventRejectEventFragment();
+                Bundle bundleAcceptedEventId = new Bundle();
+                bundleAcceptedEventId.putLong("EventId", getEventID());
+                Log.i("EVENT ID", getEventID().toString());
+                bundleAcceptedEventId.putString("fragment", "AcceptedEventDetails");
+                eventRejectEventFragment.setArguments(bundleAcceptedEventId);
+                FragmentTransaction fr = getFragmentManager().beginTransaction();
+                fr.replace(R.id.acceptedEvent_relativeLayout_main, eventRejectEventFragment, "RejectEvent");
+                fr.addToBackStack("RejectEvent");
+                fr.commit();
             }
         });
         acceptedEventDetailsButtonShowQR.setOnClickListener(new View.OnClickListener() {
