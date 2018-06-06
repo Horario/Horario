@@ -46,7 +46,7 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="titleParticipantsEvent">Rückmeldungen</string>
-    <string name="notificationParticipantsBeingFetched">SMS werden ausgelesen...</string>
+    <string name="notificationParticipantsBeingFetched">SMS werden ausgelesen\U+22EF</string>
     <string name="textMessagesUpdated">Teilnehmerlisten wurden aktualisiert</string>
     <string name="noNewTextMessages">Keine neuen Nachrichten gefunden</string>
     <string name="noTextMessagesAvailable">Keine Nachricht gefunden</string>
@@ -63,7 +63,7 @@
     <string name="description_too_long">Die Beschreibung darf nicht länger als 500 Zeichen sein.</string>
     <string name="shortTitle_too_long">Der Kurztitel darf nicht länger als 100 Zeichen sein.</string>
     <string name="startTime_past">Der Termin darf nicht in der Vergangenheit beginnen.</string>
-    <string name="startTime_afterScanning_past">Der Termin hat schon in der Vergangenheit stattgefunden.</string>
+    <string name="startTime_afterScanning_past">Der Termin hat schon stattgefunden.</string>
     <string name="save_event">Der Termin wurde in die Datenbank geschrieben.</string>
     <string name="shortTitle_spaces">Der Kurztitel darf nicht mit Leerzeichen beginnen.</string>
     <string name="description_spaces">Die Beschreibung darf nicht mit Leerzeichen beginnen.</string>

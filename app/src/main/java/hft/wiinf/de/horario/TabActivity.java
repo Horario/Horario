@@ -87,16 +87,16 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         mSectionsPageAdapter = new SectionsPageAdapterActivity(getSupportFragmentManager());
 
         //Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = findViewById(R.id.container);
         setupViewPager(mViewPager);
 
-        tabLayout = (TabLayout) findViewById(R.id.tabBarLayout);
+        tabLayout = findViewById(R.id.tabBarLayout);
         tabLayout.setupWithViewPager(mViewPager);
 
         //TODO Change Picture (DesignTeam)
-        tabLayout.getTabAt(0).setIcon(R.drawable.ic_dateview);
-        tabLayout.getTabAt(1).setIcon(R.drawable.ic_calendarview);
-        tabLayout.getTabAt(2).setIcon(R.drawable.ic_settings);
+        Objects.requireNonNull(tabLayout.getTabAt(0)).setIcon(R.drawable.ic_dateview);
+        Objects.requireNonNull(tabLayout.getTabAt(1)).setIcon(R.drawable.ic_calendarview);
+        Objects.requireNonNull(tabLayout.getTabAt(2)).setIcon(R.drawable.ic_settings);
 
         if (PersonController.getPersonWhoIam() == null) {
             openDialogAskForUsername();
@@ -120,14 +120,14 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
                 fr.replace(R.id.eventOverview_frameLayout, new EventOverviewFragment());
                 fr.commit();
-                tabLayout.getTabAt(0).select();
+                Objects.requireNonNull(tabLayout.getTabAt(0)).select();
                 break;
             case "Calendar":
                 getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 FragmentTransaction frCA = getSupportFragmentManager().beginTransaction();
                 frCA.replace(R.id.calendar_frameLayout, new CalendarFragment());
                 frCA.commit();
-                tabLayout.getTabAt(1).select();
+                Objects.requireNonNull(tabLayout.getTabAt(1)).select();
                 break;
             default:
                 Toast.makeText(this, R.string.ups_an_error, Toast.LENGTH_SHORT).show();
@@ -140,7 +140,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
 
     //After Scanning it was opened a Dialog where the user can choose what to do next
-    @SuppressLint("ResourceType")
+    @SuppressLint({"ResourceType", "SetTextI18n"})
     private void openActionDialogAfterScanning(final String qrScannContentResult, final String whichFragmentTag) {
         //Create the Dialog with the GUI Elements initial
         final Dialog afterScanningDialogAction = new Dialog(this);
@@ -355,7 +355,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                     getSupportFragmentManager().popBackStack();
                     //Close the keyboard on a tab change
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(mSectionsPageAdapter.getItem(2).getView().getApplicationWindowToken(), 0);
+                    assert imm != null;
+                    imm.hideSoftInputFromWindow(Objects.requireNonNull(mSectionsPageAdapter.getItem(2).getView()).getApplicationWindowToken(), 0);
                 } else if (tab.getPosition() == 1) {
                     getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
@@ -377,7 +378,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                     getSupportFragmentManager().popBackStack();
                     //Close the keyboard on a tab change
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(mSectionsPageAdapter.getItem(2).getView().getApplicationWindowToken(), 0);
+                    assert imm != null;
+                    imm.hideSoftInputFromWindow(Objects.requireNonNull(mSectionsPageAdapter.getItem(2).getView()).getApplicationWindowToken(), 0);
                 } else if (tab.getPosition() == 1) {
                     getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
@@ -551,7 +553,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     private void saveEventAndPerson(final AlertDialog alertDialogAskForFinalDecission, final int buttonId) {
         //open Dialog with yes or no after button click (accept, save, reject)
         alertDialogAskForFinalDecission.show();
-        alertDialogAskForFinalDecission.findViewById(R.id.dialog_event_final_decission_accept)
+        Objects.requireNonNull(alertDialogAskForFinalDecission.findViewById(R.id.dialog_event_final_decission_accept))
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -648,7 +650,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                     }
                 });
         //if Button "nein": cancel dialog
-        alertDialogAskForFinalDecission.findViewById(R.id.dialog_event_final_decission_reject)
+        Objects.requireNonNull(alertDialogAskForFinalDecission.findViewById(R.id.dialog_event_final_decission_reject))
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -672,7 +674,9 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         final EditText afterScanning_username = alertDialogAskForUsernamePhoneNumber.findViewById(R.id.dialog_afterScanner_editText_username);
         final EditText afterScanning_phoneNumber = alertDialogAskForUsernamePhoneNumber.findViewById(R.id.dialog_afterScanner_editText_phoneNumber);
         //set textfield if user has username/phoneNumber
+        assert afterScanning_username != null;
         afterScanning_username.setText(personMe.getName());
+        assert afterScanning_phoneNumber != null;
         afterScanning_phoneNumber.setText(personMe.getPhoneNumber());
 
         Objects.requireNonNull(afterScanning_phoneNumber).setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -750,11 +754,12 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     }
 
     private boolean checkIfEventIsInPast() {
-        //read the current date and time to compare if the start time is in the past, set seconds and milliseconds to 0 to ensure a ight compare (seonds and milliseconds doesn't matter)
+        //read the current date and time to compare if the End of the Event is in the past (Date & Time),
+        // set seconds and milliseconds to 0 to ensure a ight compare (seonds and milliseconds doesn't matter)
         Calendar now = Calendar.getInstance();
         now.set(Calendar.SECOND, 0);
         now.set(Calendar.MILLISECOND, 0);
-        if (getStartTimeEvent().before(now)) {
+        if (getEndDateEvent().before(now)) {
             Toast.makeText(this, R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();
             return true;
         } else {

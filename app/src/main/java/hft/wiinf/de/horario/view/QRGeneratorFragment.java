@@ -70,16 +70,15 @@ public class QRGeneratorFragment extends Fragment {
     // Push the User where he/she comes from
     private void goWhereUserComesFrom() {
         Bundle whichFragment = getArguments();
-        getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        if (whichFragment.getString("fragment").equals("EventOverview")) {
-            getActivity().getSupportFragmentManager().beginTransaction()
+        Objects.requireNonNull(getFragmentManager()).popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        if (Objects.requireNonNull(whichFragment).getString("fragment").equals("EventOverview")) {
+            Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
                     .replace(R.id.eventOverview_frameLayout, new EventOverviewFragment(), "")
                     .commit();
         } else {
-            getActivity().getSupportFragmentManager().beginTransaction()
+            Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
                     .replace(R.id.calendar_frameLayout, new CalendarFragment(), "")
                     .commit();
-            
         }
     }
 
@@ -107,6 +106,7 @@ public class QRGeneratorFragment extends Fragment {
         return view;
     }
 
+    @SuppressLint("SimpleDateFormat")
     public StringBuffer stringBufferGenerator() {
         //Modify the DateFormat form den DB to get a more readable Form for Date and Time disjunct
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
