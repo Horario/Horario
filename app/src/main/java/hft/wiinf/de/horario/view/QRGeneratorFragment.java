@@ -79,6 +79,7 @@ public class QRGeneratorFragment extends Fragment {
             getActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.calendar_frameLayout, new CalendarFragment(), "")
                     .commit();
+            
         }
     }
 
