@@ -155,9 +155,9 @@ public class SavedEventDetailsFragment extends Fragment {
         eventToStringBuffer = new StringBuffer();
         eventToStringBuffer.append(selectedEvent.getId() + stringSplitSymbol);
         if (selectedEvent.getStartEvent()==null)
-            eventToStringBuffer.append(simpleTimeFormat.format(selectedEvent.getStartTime()) + stringSplitSymbol);
+            eventToStringBuffer.append(simpleDateFormat.format(selectedEvent.getStartTime()) + stringSplitSymbol);
         else
-            eventToStringBuffer.append(simpleTimeFormat.format(selectedEvent.getStartEvent().getStartTime()) + stringSplitSymbol);
+            eventToStringBuffer.append(simpleDateFormat.format(selectedEvent.getStartEvent().getStartTime()) + stringSplitSymbol);
         eventToStringBuffer.append(simpleDateFormat.format(selectedEvent.getStartTime()) + stringSplitSymbol);
         eventToStringBuffer.append(simpleDateFormat.format(selectedEvent.getEndDate()) + stringSplitSymbol);
             eventToStringBuffer.append(simpleTimeFormat.format(selectedEvent.getStartTime()) + stringSplitSymbol);

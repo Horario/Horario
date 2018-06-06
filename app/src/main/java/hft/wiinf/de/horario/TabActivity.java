@@ -105,10 +105,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_settings);
 
         if (personMe == null || personMe.getName().isEmpty()) {
-            if (personMe == null || personMe.getName().isEmpty()) {
-                openDialogAskForUsername();
-            }
-
+            openDialogAskForUsername();
+        }
             myStartTime.set(Calendar.SECOND, 0);
             myStartTime.set(Calendar.MILLISECOND, 0);
             myEndTime.set(Calendar.SECOND, 0);
@@ -116,7 +114,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             myEndDate.set(Calendar.SECOND, 0);
             myEndDate.set(Calendar.MILLISECOND, 0);
         }
-    }
+
 
     private void restartApp(String fragmentResource) {
         //check from which Fragment (EventOverview or Calendar) are the Scanner was called
@@ -484,9 +482,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         myStartTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hourOfDay));
         myStartTime.set(Calendar.MINUTE, Integer.parseInt(minutesOfDay));
         myStartTime.set(Integer.parseInt(year), Integer.parseInt(month) - 1, Integer.parseInt(day));
-        //set Seconds and milliseconds 0 to be independent from the current time
-        myStartTime.set(Calendar.SECOND, 0);
-        myStartTime.set(Calendar.MILLISECOND, 0);
         return myStartTime;
     }
 
@@ -504,9 +499,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         myEndTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hourOfDay));
         myEndTime.set(Calendar.MINUTE, Integer.parseInt(minutesOfDay));
         myEndTime.set(Integer.parseInt(year), Integer.parseInt(month) - 1, Integer.parseInt(day));
-       //set Seconds and milliseconds 0 to be independent from the current time
-        myEndTime.set(Calendar.SECOND, 0);
-        myEndTime.set(Calendar.MILLISECOND, 0);
         return myEndTime;
     }
 
@@ -525,9 +517,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         myEndDate.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hourOfDay));
         myEndDate.set(Calendar.MINUTE, Integer.parseInt(minutesOfDay));
         myEndDate.set(Integer.parseInt(year), Integer.parseInt(month) - 1, Integer.parseInt(day));
-        //set Seconds and milliseconds 0 to be independent from the current time
-        myEndDate.set(Calendar.SECOND, 0);
-        myEndDate.set(Calendar.MILLISECOND, 0);
 
         return myEndDate;
     }
