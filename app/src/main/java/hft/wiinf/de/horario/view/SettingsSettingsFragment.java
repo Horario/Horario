@@ -430,7 +430,8 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
             //open keyboard
             ((InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
         } else {
-            Toast.makeText(getContext(), R.string.thanksphoneNumber, Toast.LENGTH_SHORT);
+            PersonController.savePerson(person);
+            Toast.makeText(getContext(), R.string.thanksphoneNumber, Toast.LENGTH_SHORT).show();
             editText_PhoneNumber.setText(phoneNumber);
             editText_PhoneNumber.setFocusable(false);
             editText_PhoneNumber.setFocusableInTouchMode(false);
