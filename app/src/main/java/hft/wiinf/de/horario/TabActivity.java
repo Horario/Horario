@@ -107,13 +107,13 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         if (personMe == null || personMe.getName().isEmpty()) {
             openDialogAskForUsername();
         }
-            myStartTime.set(Calendar.SECOND, 0);
-            myStartTime.set(Calendar.MILLISECOND, 0);
-            myEndTime.set(Calendar.SECOND, 0);
-            myEndTime.set(Calendar.MILLISECOND, 0);
-            myEndDate.set(Calendar.SECOND, 0);
-            myEndDate.set(Calendar.MILLISECOND, 0);
-        }
+        myStartTime.set(Calendar.SECOND, 0);
+        myStartTime.set(Calendar.MILLISECOND, 0);
+        myEndTime.set(Calendar.SECOND, 0);
+        myEndTime.set(Calendar.MILLISECOND, 0);
+        myEndDate.set(Calendar.SECOND, 0);
+        myEndDate.set(Calendar.MILLISECOND, 0);
+    }
 
 
     private void restartApp(String fragmentResource) {
@@ -652,7 +652,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 });
     }
 
-    //check after scan if app has an user with an phonenumber
+    //check after scan if app has an user with an phoneNumber
     private void openDialogAskForUsernameAndPhoneNumber() {
         //build dialog for username and phoneNumber
         final AlertDialog.Builder dialogAskForUsernamePhoneNumber = new AlertDialog.Builder(this);
@@ -673,7 +673,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         Objects.requireNonNull(afterScanning_phoneNumber).setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                //getText for both variables (phonenUmber and username)
+                //getText for both variables (phoneNumber and username)
                 String dialog_afterScanning_inputUsername;
                 dialog_afterScanning_inputUsername = afterScanning_username.getText().toString();
                 String dialog_afterScanning_inputPhoneNumber;
@@ -702,7 +702,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                     Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername_peek, Toast.LENGTH_SHORT);
                     toast.show();
                     return false;
-                }  else if (!afterScanning_phoneNumber.getText().toString().matches("(00|0|\\+)[1-9][0-9]+")){
+                } else if (!afterScanning_phoneNumber.getText().toString().matches("(00|0|\\+)[1-9][0-9]+")) {
                     Toast toast = Toast.makeText(v.getContext(), R.string.wrongNumberFormat, Toast.LENGTH_SHORT);
                     toast.show();
                     return false;
@@ -772,7 +772,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
-super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PERMISSION_REQUEST_READ_PHONE_STATE) {
             // for each permission check if the user granted/denied them you may want to group the
             // rationale in a single dialog,this is just an example

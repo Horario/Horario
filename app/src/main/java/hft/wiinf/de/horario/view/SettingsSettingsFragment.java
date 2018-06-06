@@ -143,7 +143,7 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
         });
 
 
-// set the user name of the person (empty string if no person set)
+        // set the user name of the person (empty string if no person set)
         editTextUsername.setText(person.getName());
         editText_PhoneNumber.setText(person.getPhoneNumber());
 
@@ -242,7 +242,7 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
         });
 
 
-// set the choice posibilities of the push minutes dropdown
+        // set the choice possibilities of the push minutes dropdown
         ArrayAdapter minutesAdapter = ArrayAdapter.createFromResource(getContext(), R.array.push_times, android.R.layout.simple_spinner_item);
         minutesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_notificationTime.setAdapter(minutesAdapter);
@@ -422,7 +422,7 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
         if (phoneNumber != null)
             phoneNumber.replaceAll(" ", "");
         if (phoneNumber.matches("[1-9][0-9]+"))
-            phoneNumber="+"+phoneNumber;
+            phoneNumber = "+" + phoneNumber;
         person.setPhoneNumber(phoneNumber);
         if (person.getPhoneNumber() == null || !person.getPhoneNumber().matches("(00|0|\\+)[1-9][0-9]+")) {
             Toast.makeText(getContext(), R.string.telephonenumerNotRead, Toast.LENGTH_SHORT).show();
