@@ -70,7 +70,9 @@ public class EventRejectEventFragment extends Fragment {
         button_reject_event.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                askForPermissionToDelete();
+                if(checkForInput()){
+                    askForPermissionToDelete();
+                }
             }
         });
     }
@@ -90,6 +92,8 @@ public class EventRejectEventFragment extends Fragment {
                     public void onClick(View v) {
                         EventController.deleteEvent(EventController.getEventById((getEventID())));
                         Toast.makeText(getContext(), R.string.reject_event_hint, Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getActivity(), TabActivity.class);
+                        startActivity(intent);
                     }
                 });
         alertDialogAskForFinalDecission.findViewById(R.id.dialog_button_event_back)
@@ -194,16 +198,21 @@ public class EventRejectEventFragment extends Fragment {
 
     }
     private boolean checkForInput(){
-        if(reason_for_rejection.getText().toString() == ""){
-            return false;
-        }
-        if(spinner_reason.getAdapter().toString() == ""){
+        if(reason_for_rejection.getText().length() == 0 && spinner_reason.getSelectedItemPosition() == 0){
+            Toast.makeText(getContext(), R.string.reject_event_reason, Toast.LENGTH_SHORT).show();
             return false;
         }
         if(reason_for_rejection.getText().toString().contains("|")){
+            Toast.makeText(getContext(), R.string.reject_event_reason_free_text_field, Toast.LENGTH_SHORT).show();
             return false;
         }
-
+        if(reason_for_rejection.getText().toString().matches(" +.*")){
+            Toast.makeText(getContext(), R.string.reject_event_reason_free_text_field_empty, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if(reason_for_rejection.getText().length() > 50){
+            Toast.makeText(getContext(), R.string.reject_event_reason_free_text_field_to_long, Toast.LENGTH_SHORT).show();
+        }
         return true;
     }
 }

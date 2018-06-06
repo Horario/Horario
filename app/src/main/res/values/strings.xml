@@ -64,6 +64,10 @@
     <string name="thanksForUsernameAndPhoneNumber">Benutzername und Telefonnummer wurde gespeichert. </string>
     <string name="description_too_long">Die Beschreibung darf nicht länger als 500 Zeichen sein.</string>
     <string name="reject_event_hint">Der Termin wurde abgesagt und aus der Datenbank entfernt</string>
+    <string name="reject_event_reason_free_text_field_empty">Die Beschreibung darf nicht mit einem Leerzeichen anfangen.</string>
+    <string name="reject_event_reason_free_text_field_to_long">Die Beschreibung darf nicht mehr als 60 Zeichen sein.</string>
+    <string name="reject_event_reason_free_text_field">Die Beschreibung darf kein "|" enthalten</string>
+    <string name="reject_event_reason">Bitte wähle einen Grund aus oder gebe ihn ein.</string>
     <string name="shortTitle_too_long">Der Kurztitel darf nicht länger als 100 Zeichen sein.</string>
     <string name="startTime_past">Der Termin darf nicht in der Vergangenheit beginnen.</string>
     <string name="startTime_afterScanning_past">Der Termin hat schon in der Vergangenheit stattgefunden.</string>
