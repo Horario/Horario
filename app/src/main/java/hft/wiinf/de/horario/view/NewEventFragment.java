@@ -375,7 +375,7 @@ public class NewEventFragment extends Fragment {
                 dialogSavingSuccessful.dismiss();
             }
         });
-        //TODO: open qrcode
+
         dialogSavingSuccessful.findViewById(R.id.savingSuccessful_button_qrcode).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
