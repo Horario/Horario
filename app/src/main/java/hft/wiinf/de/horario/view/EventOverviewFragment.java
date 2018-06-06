@@ -17,10 +17,10 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -31,7 +31,9 @@ import java.util.List;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
+import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.AcceptedState;
+import hft.wiinf.de.horario.model.Person;
 
 public class EventOverviewFragment extends Fragment {
 
@@ -41,12 +43,13 @@ public class EventOverviewFragment extends Fragment {
     static Context context = null;
     static DateFormat timeFormat = new SimpleDateFormat("HH:mm");
     FloatingActionButton eventOverviewFcMenu, eventOverviewFcQrScan, eventOverviewFcNewEvent;
-    Button overviewBtNext;
+    ImageButton overviewBtNext;
     TextView eventOverview_HiddenIsFloatingMenuOpen;
-    Button overviewBtPrevious;
+    ImageButton overviewBtPrevious;
     Animation ActionButtonOpen, ActionButtonClose, ActionButtonRotateRight, ActionButtonRotateLeft;
     ConstraintLayout layout_eventOverview_main;
     ConstraintLayout layoutOverview;
+
 
     public static void update() {
         overviewTvMonth.setText(CalendarFragment.monthFormat.format(selectedMonth));
@@ -54,7 +57,8 @@ public class EventOverviewFragment extends Fragment {
     }
 
     //get all events for the selected month and save them in a adapter
-    public static ArrayAdapter iterateOverMonth(Date date) {
+    public static ArrayAdapter iterateOverMonth(final Date date) {
+        ArrayList<Appointment> eventArrayDay = new ArrayList<>();
         final ArrayList<Appointment> eventArray = new ArrayList<>();
         Calendar helper = Calendar.getInstance();
         helper.setTime(date);
@@ -68,17 +72,23 @@ public class EventOverviewFragment extends Fragment {
             endOfDay.add(Calendar.DAY_OF_MONTH, 1);
             List<hft.wiinf.de.horario.model.Event> eventList = EventController.findEventsByTimePeriod(helper.getTime(), endOfDay.getTime());
             if (eventList.size() > 0) {
-                eventArray.add(new Appointment(CalendarFragment.dayFormat.format(helper.getTime()), 0));
+                eventArrayDay.add(new Appointment(CalendarFragment.dayFormat.format(helper.getTime()), 0));
             }
             for (int i = 0; i < eventList.size(); i++) {
-                if (eventList.get(i).getAccepted().equals(AcceptedState.ACCEPTED)) {
-                    eventArray.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 1));
-                } else if (eventList.get(i).getAccepted().equals(AcceptedState.WAITING)) {
-                    eventArray.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 2));
+                if (eventList.get(i).getCreator().equals(PersonController.getPersonWhoIam())) {
+                    eventArrayDay.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 3, eventList.get(i).getId(), eventList.get(i).getCreator()));
                 } else {
-                    eventArray.clear();
+                    if (eventList.get(i).getAccepted().equals(AcceptedState.ACCEPTED)) {
+                        eventArrayDay.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 1, eventList.get(i).getId(), eventList.get(i).getCreator()));
+                    } else if (eventList.get(i).getAccepted().equals(AcceptedState.WAITING)) {
+                        eventArrayDay.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 2, eventList.get(i).getId(), eventList.get(i).getCreator()));
+                    }
                 }
             }
+            if (eventArrayDay.size() > 1) {
+                eventArray.addAll(eventArrayDay);
+            }
+            eventArrayDay.clear();
             helper.setTime(endOfDay.getTime());
         }
         if (eventArray.size() < 1) { //when no events this month do stuff
@@ -87,15 +97,31 @@ public class EventOverviewFragment extends Fragment {
         final ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1, eventArray) {
             @NonNull
             @Override
+
+            public int getViewTypeCount() {
+                return getCount();
+            }
+
+            @Override
+            public int getItemViewType(int position) {
+                return position;
+            }
+
+            @Override
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
+                // 0 = date, 1 = accepted, 2 = waiting, 3 = own
                 if (eventArray.get(position).getType() == 1) {
-                    textView.setBackgroundColor(Color.GREEN);
+                    textView.setTextColor(Color.DKGRAY);
+                    textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_mydate_approved, 0);
                 } else if (eventArray.get(position).getType() == 2) {
-                    textView.setBackgroundColor(Color.RED);
+                    textView.setTextColor(Color.DKGRAY);
+                    textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_mydate_questionmark, 0);
                 } else if (eventArray.get(position).getType() == 3) {
-                    textView.setBackgroundColor(Color.BLUE);
+                    textView.setTextColor(Color.DKGRAY);
+                    textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_mydate, 0);
                 } else if (eventArray.get(position).getType() == 0) {
+                    textView.setTextColor(Color.BLACK);
                     textView.setBackgroundColor(Color.WHITE);
                     textView.setFocusable(false);
                 }
@@ -143,6 +169,7 @@ public class EventOverviewFragment extends Fragment {
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(selectedMonth);
                 calendar.add(Calendar.MONTH, 1);
+
                 selectedMonth.setTime(calendar.getTimeInMillis());
                 update();
             }
@@ -164,8 +191,47 @@ public class EventOverviewFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Appointment selectedItem = (Appointment) parent.getItemAtPosition(position);
-                Toast.makeText(getActivity(), selectedItem.getDescription(), Toast.LENGTH_SHORT).show(); //TODO just for testing, delete
                 closeFABMenu();
+                // 0 = date, 1 = accepted, 2 = waiting, 3 = own
+                switch (selectedItem.getType()) {
+                    case 1:
+                        AcceptedEventDetailsFragment acceptedEventDetailsFragment = new AcceptedEventDetailsFragment();
+                        Bundle bundleAcceptedEventId = new Bundle();
+                        bundleAcceptedEventId.putLong("EventId", selectedItem.getId());
+                        bundleAcceptedEventId.putString("fragment", "EventOverview");
+                        acceptedEventDetailsFragment.setArguments(bundleAcceptedEventId);
+                        FragmentTransaction fr1 = getFragmentManager().beginTransaction();
+                        fr1.replace(R.id.eventOverview_frameLayout, acceptedEventDetailsFragment, "EventOverview");
+                        fr1.addToBackStack("EventOverview");
+                        fr1.commit();
+                        break;
+                    case 2:
+                        SavedEventDetailsFragment savedEventDetailsFragment = new SavedEventDetailsFragment();
+                        Bundle bundleSavedEventId = new Bundle();
+                        bundleSavedEventId.putLong("EventId", selectedItem.getId());
+                        bundleSavedEventId.putString("fragment", "EventOverview");
+                        savedEventDetailsFragment.setArguments(bundleSavedEventId);
+                        FragmentTransaction fr2 = getFragmentManager().beginTransaction();
+                        fr2.replace(R.id.eventOverview_frameLayout, savedEventDetailsFragment, "EventOverview");
+                        fr2.addToBackStack("EventOverview");
+                        fr2.commit();
+                        break;
+                    case 3:
+                        MyOwnEventDetailsFragment myOwnEventDetailsFragment = new MyOwnEventDetailsFragment();
+                        Bundle bundleMyOwnEventId = new Bundle();
+                        bundleMyOwnEventId.putLong("EventId", selectedItem.getId());
+                        bundleMyOwnEventId.putString("fragment", "EventOverview");
+                        myOwnEventDetailsFragment.setArguments(bundleMyOwnEventId);
+                        FragmentTransaction fr3 = getFragmentManager().beginTransaction();
+                        fr3.replace(R.id.eventOverview_frameLayout, myOwnEventDetailsFragment, "EventOverview");
+                        fr3.addToBackStack("EventOverview");
+                        fr3.commit();
+                        break;
+                    default:
+                        break;
+                }
+
+
             }
         });
 
@@ -192,7 +258,7 @@ public class EventOverviewFragment extends Fragment {
                 newEventFragment.setArguments(bundle);
 
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
-                fr.replace(R.id.eventOverview_frameLayout, new NewEventFragment());
+                fr.replace(R.id.eventOverview_frameLayout, newEventFragment);
                 fr.addToBackStack(null);
                 fr.commit();
                 closeFABMenu();
@@ -209,7 +275,7 @@ public class EventOverviewFragment extends Fragment {
                 qrScanFragment.setArguments(bundle);
 
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
-                fr.replace(R.id.eventOverview_frameLayout, new QRScanFragment());
+                fr.replace(R.id.eventOverview_frameLayout, qrScanFragment);
                 fr.addToBackStack(null);
                 fr.commit();
                 closeFABMenu();
@@ -225,6 +291,7 @@ public class EventOverviewFragment extends Fragment {
 
         return view;
     }
+
 
     //Show the menu Buttons
     public void showFABMenu() {
@@ -259,6 +326,15 @@ public class EventOverviewFragment extends Fragment {
 class Appointment {
     private String description;
     private int type;
+    private long id;
+    private Person creator;
+
+    Appointment(String description, int type, long id, Person creator) {
+        this.description = description;
+        this.type = type;
+        this.id = id;
+        this.creator = creator;
+    }
 
     Appointment(String description, int type) {
         this.description = description;
@@ -284,5 +360,12 @@ class Appointment {
         this.type = type;
     }
 
+    public long getId() {
+        return id;
+    }
 
+    public Person getCreator() {
+        return creator;
+
+    }
 }

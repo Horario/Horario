@@ -2,7 +2,6 @@ package hft.wiinf.de.horario.controller;
 
 import android.support.annotation.NonNull;
 
-import com.activeandroid.Model;
 import com.activeandroid.query.Select;
 
 import java.util.Calendar;
@@ -14,10 +13,11 @@ import hft.wiinf.de.horario.model.AcceptedState;
 import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
 
+
 public class EventController {
     //saves (update or create)an event
     public static void saveEvent(@NonNull Event event) {
-        if(event.getCreatorEventId() < 0)
+        if (event.getCreatorEventId() < 0)
             event.setCreatorEventId(event.save());
         event.save();
     }
@@ -44,10 +44,16 @@ public class EventController {
         return Event.load(Event.class, id);
     }
 
+    public static Event getEventByCreatorEventId(@NonNull Long creatorEventId) {
+        Person myself = PersonController.getPersonWhoIam();
+        List<Event> resultSet = new Select().from(Event.class).where("creatorEventId=? AND creator=?", creatorEventId, myself).execute();
+        return resultSet.get(0);
+    }
+
+    //find the list of events that start in the given period (enddate is ecluded!)
     //find the list of events that start in the given period (enddate is not included!)
     public static List<Event> findEventsByTimePeriod(Date startDate, Date endDate) {
         return new Select().from(Event.class).where("starttime between ? AND ?", startDate.getTime(), endDate.getTime() - 1).orderBy("startTime,endTime,shortTitle").execute();
-
     }
 
     //get a list of all events
@@ -58,6 +64,16 @@ public class EventController {
     //get a list of all events that I accepted
     public static List<Event> findMyAcceptedEvents() {
         return new Select().from(Event.class).where("accepted=?", true).orderBy("startTime,endTime,shortTitle").execute();
+    }
+
+    public static boolean createdEventsYet() {
+        Person myself = PersonController.getPersonWhoIam();
+        List<Event> resultSet = new Select().from(Event.class).where("creator=?", myself).execute();
+        if (resultSet.size() == 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public static List<Event> findMyAcceptedEventsInTheFuture() {
@@ -117,7 +133,7 @@ public class EventController {
     }
 
     public static Event checkIfEventIsInDatabase(String description, String shortTitle,
-                                                  String place,
+                                                 String place,
                                                  Calendar startTime, Calendar endTime) {
         return new Select()
                 .from(Event.class)
@@ -128,4 +144,6 @@ public class EventController {
                 .where("endTime = ?", endTime.getTimeInMillis())
                 .executeSingle();
     }
+
+
 }

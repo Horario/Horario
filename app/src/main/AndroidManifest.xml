@@ -2,8 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="hft.wiinf.de.horario">
 
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission
+        android:name="android.permission.READ_SMS"
+        android:protectionLevel="normal" />
+    <uses-permission
+        android:name="android.permission.READ_CONTACTS"
+        android:protectionLevel="normal" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
 
     <application
         android:name="com.activeandroid.app.Application"
@@ -34,6 +42,7 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
 
         <activity
@@ -51,7 +60,7 @@
             android:value="18" />
         <meta-data
             android:name="AA_MODELS"
-            android:value="hft.wiinf.de.horario.model.Event, hft.wiinf.de.horario.model.Person" />
+            android:value="hft.wiinf.de.horario.model.Event, hft.wiinf.de.horario.model.Person, hft.wiinf.de.horario.model.FailedSMS" />
 
         <provider
             android:name="com.activeandroid.content.ContentProvider"
@@ -69,5 +78,14 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
+        <receiver
+            android:name=".controller.SendSmsController"
+            android:enabled="true"
+            android:exported="true"></receiver>
+
+        <service
+            android:name=".service.FailedSMSService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE"></service>
     </application>
 </manifest>
