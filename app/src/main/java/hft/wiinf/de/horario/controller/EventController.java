@@ -68,7 +68,7 @@ public class EventController {
 
     public static boolean createdEventsYet() {
         Person myself = PersonController.getPersonWhoIam();
-        List<Event> resultSet = new Select().from(Event.class).where("creator=?", myself).execute();
+        List<Event> resultSet = new Select().from(Event.class).execute();
         if (resultSet.size() == 0) {
             return false;
         } else {
