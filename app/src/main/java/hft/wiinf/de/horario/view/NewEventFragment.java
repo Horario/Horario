@@ -2,7 +2,6 @@ package hft.wiinf.de.horario.view;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -10,17 +9,12 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -46,8 +40,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import hft.wiinf.de.horario.R;
@@ -61,13 +53,15 @@ import hft.wiinf.de.horario.model.Repetition;
 
 
 //TODO Kommentieren und Java Doc Info Schreiben
-public class NewEventFragment extends Fragment implements ActivityCompat.OnRequestPermissionsResultCallback {
+public class NewEventFragment extends Fragment {
     private String TAG = "NewEventFragment";
     // calendar objects to save the startTime / end Time / endOfRepetition, default: values - today
     Calendar startTime = Calendar.getInstance();
     Calendar endTime = Calendar.getInstance();
     Calendar endOfRepetition = Calendar.getInstance();
-    private int counter = 0;
+    private int counterNUMBER = 0;
+    private int counterSMS = 0;
+    private int counterCONTACTS = 0;
     // elements of the gui
     private EditText editText_description, edittext_shortTitle, edittext_room, edittext_date, edittext_startTime, editText_endTime, edittext_userName, editText_endOfRepetition;
     private TextView textView_endofRepetiton;
@@ -77,7 +71,10 @@ public class NewEventFragment extends Fragment implements ActivityCompat.OnReque
     //person object of the user, to get the user name
     private Person me;
     private int PERMISSION_REQUEST_READ_PHONE_STATE = 0;
-    private static final int PERMISSION_REQUEST_SMS_AND_CONTACTS = 1;
+    private int PERMISSION_REQUEST_RECEIVE_SMS = 1;
+    private int PERMISSION_REQUEST_READ_CONTACTS = 2;
+    boolean createdEventsYet = EventController.createdEventsYet();
+
 
     @Nullable
     @Override
@@ -242,42 +239,6 @@ public class NewEventFragment extends Fragment implements ActivityCompat.OnReque
         edittext_userName.setText(me.getName());
     }
 
-
-    private void requestSMSAndContactsPermissions() {
-        //For Fragment: requestPermissions(permissionsList,REQUEST_CODE);
-        //For Activity: ActivityCompat.requestPermissions(this,permissionsList,REQUEST_CODE);
-        int sms = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.RECEIVE_SMS);
-        int contacts = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CONTACTS);
-        List<String> listPermissionsNeeded = new ArrayList<>();
-
-        if (sms != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(Manifest.permission.RECEIVE_SMS);
-        }
-        if (contacts != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(Manifest.permission.READ_CONTACTS);
-        }
-        if (!listPermissionsNeeded.isEmpty()) {
-            requestPermissions(listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), PERMISSION_REQUEST_SMS_AND_CONTACTS);
-        }
-    }
-
-    public boolean areSMSAndContactsPermissionsGranted() {
-        int sms = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.RECEIVE_SMS);
-        int contacts = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CONTACTS);
-        List<String> listPermissionsNeeded = new ArrayList<>();
-
-        if (sms != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(Manifest.permission.RECEIVE_SMS);
-        }
-        if (contacts != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(Manifest.permission.READ_CONTACTS);
-        }
-        if (!listPermissionsNeeded.isEmpty()) {
-            return false;
-        }
-        return true;
-    }
-
     //if the checkbox serial event is checked, repetition possibilities and the endOfrepetition is shown, else not
     private void checkSerialEvent() {
         if (checkBox_serialEvent.isChecked()) {
@@ -377,19 +338,14 @@ public class NewEventFragment extends Fragment implements ActivityCompat.OnReque
         if (checkValidity()) {
 
             //Look after all the permissions left to give.
-            if (me.getPhoneNumber() == null || !me.getPhoneNumber().matches("(\\+|0|00)[1-9][0-9]+")) {
-                checkPhonePermission();
-                //TODO check if returns true or false
-                if (!EventController.createdEventsYet()){
-                    checkSMSandContactsPermission();
-                }
-            } else if (!EventController.createdEventsYet()){
-                checkSMSandContactsPermission();
+            if (me.getPhoneNumber() == null || !me.getPhoneNumber().matches("(\\+|0|00)[1-9][0-9]+") || !createdEventsYet) {
+                checkPermissions();
             } else{
                 saveEvent();
             }
         }
     }
+
 
     //read the needed parameters / textfield and save the event
     public void saveEvent() {
@@ -616,31 +572,78 @@ public class NewEventFragment extends Fragment implements ActivityCompat.OnReque
         }
     }
 
-    private void checkPhonePermission() {
+    private void checkPermissions() {
         //Check if User has permission to start to scan, if not it's start a RequestLoop
-        if (!isPhonePermissionGranted()) {
-            requestPhonePermission();
+        if (!arePermissionsGranted()) {
+            Log.d("ONCLICKSAVE", "before request permissions");
+            requestPermissions();
         } else {
             readPhoneNumber();
+            createdEventsYet = true;
         }
     }
 
-    private void checkSMSandContactsPermission() {
-        /*Check if user has permission to read SMS and Contacts, if not it starts a request loop*/
-        if (!areSMSAndContactsPermissionsGranted()) {
-            requestSMSAndContactsPermissions();
-        } else {
+
+    public boolean arePermissionsGranted() {
+
+        int sms = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.RECEIVE_SMS);
+        int contacts = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CONTACTS);
+        int number = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_PHONE_STATE);
+        List<String> listPermissionsNeeded = new ArrayList<>();
+
+        if (sms != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.RECEIVE_SMS);
         }
+        if (contacts != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.READ_CONTACTS);
+        }
+        if (number != PackageManager.PERMISSION_GRANTED){
+            listPermissionsNeeded.add(Manifest.permission.READ_PHONE_STATE);
+        }
+        if (!listPermissionsNeeded.isEmpty()) {
+
+            for (String permissionToAskFor : listPermissionsNeeded){
+                Log.d("ONCLICKSAVE", permissionToAskFor);
+            }
+            return false;
+        }
+        return true;
     }
 
-    public boolean isPhonePermissionGranted() {
-        return ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED;
-    }
-
-    private void requestPhonePermission() {
+    private void requestPermissions() {
         //For Fragment: requestPermissions(permissionsList,REQUEST_CODE);
         //For Activity: ActivityCompat.requestPermissions(this,permissionsList,REQUEST_CODE);
-        requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, PERMISSION_REQUEST_READ_PHONE_STATE);
+        int sms = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.RECEIVE_SMS);
+        int contacts = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CONTACTS);
+        int number = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_PHONE_STATE);
+        List<String> listPermissionsNeeded = new ArrayList<>();
+
+        if (sms != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.RECEIVE_SMS);
+        }
+        if (contacts != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.READ_CONTACTS);
+        }
+        if (number != PackageManager.PERMISSION_GRANTED){
+            listPermissionsNeeded.add(Manifest.permission.READ_PHONE_STATE);
+        }
+        if (!listPermissionsNeeded.isEmpty()) {
+            for (String permissionToAskFor : listPermissionsNeeded){
+                switch (permissionToAskFor){
+                    case Manifest.permission.RECEIVE_SMS:
+                        requestPermissions(new String[]{Manifest.permission.RECEIVE_SMS}, PERMISSION_REQUEST_RECEIVE_SMS);
+                        break;
+                    case Manifest.permission.READ_CONTACTS:
+                        requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSION_REQUEST_READ_CONTACTS);
+                        break;
+                    case Manifest.permission.READ_PHONE_STATE:
+                        requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, PERMISSION_REQUEST_READ_PHONE_STATE);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
     }
 
     @Override
@@ -669,7 +672,7 @@ public class NewEventFragment extends Fragment implements ActivityCompat.OnReque
                                     }
                                 })
                                 .create().show();
-                    } else if (counter < 1) {
+                    } else if (counterNUMBER < 1) {
                         // user did NOT check "never ask again" this is a good place to explain the user
                         // why you need the permission and ask if he wants // to accept it (the rationale)
                         new android.support.v7.app.AlertDialog.Builder(getActivity())
@@ -678,8 +681,8 @@ public class NewEventFragment extends Fragment implements ActivityCompat.OnReque
                                 .setPositiveButton(R.string.oneMoreTime, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        counter++;
-                                        checkPhonePermission();
+                                        counterNUMBER++;
+                                        checkPermissions();
                                     }
                                 })
                                 .setNegativeButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
@@ -689,15 +692,15 @@ public class NewEventFragment extends Fragment implements ActivityCompat.OnReque
                                     }
                                 })
                                 .create().show();
-                    } else if (counter == 1) {
+                    } else if (counterNUMBER == 1) {
                         new android.support.v7.app.AlertDialog.Builder(getActivity())
                                 .setTitle(R.string.sendSMS_lastTry)
                                 .setMessage(R.string.lastTry_phoneNumber)
                                 .setPositiveButton(R.string.oneMoreTime, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        counter++;
-                                        checkPhonePermission();
+                                        counterNUMBER++;
+                                        checkPermissions();
                                     }
                                 })
                                 .setNegativeButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
@@ -715,7 +718,7 @@ public class NewEventFragment extends Fragment implements ActivityCompat.OnReque
                 }
             }
 
-        }else if (requestCode == PERMISSION_REQUEST_SMS_AND_CONTACTS) {
+        }else if (requestCode == PERMISSION_REQUEST_RECEIVE_SMS) {
             // for each permission check if the user granted/denied them you may want to group the
             // rationale in a single dialog,this is just an example
             for (int i = 0; i < 1; i++) {
@@ -732,7 +735,6 @@ public class NewEventFragment extends Fragment implements ActivityCompat.OnReque
                                     @Override
                                     public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
                                         if(keyCode == KeyEvent.KEYCODE_BACK){
-                                            restartApp();
                                             return true;
                                         }
                                         return false;
@@ -743,11 +745,11 @@ public class NewEventFragment extends Fragment implements ActivityCompat.OnReque
                                 .setPositiveButton(R.string.back, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        restartApp();
+
                                     }
                                 })
                                 .create().show();
-                    } else if (counter < 1) {
+                    } else if (counterSMS < 1) {
                         // user did NOT check "never ask again" this is a good place to explain the user
                         // why you need the permission and ask if he wants // to accept it (the rationale)
                         new AlertDialog.Builder(getActivity())
@@ -756,7 +758,6 @@ public class NewEventFragment extends Fragment implements ActivityCompat.OnReque
                                     public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
                                         if(keyCode == KeyEvent.KEYCODE_BACK){
                                             dialog.cancel();
-                                            restartApp();
                                             return true;
                                         }
                                         return false;
@@ -767,24 +768,23 @@ public class NewEventFragment extends Fragment implements ActivityCompat.OnReque
                                 .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        counter++;
-                                        checkSMSandContactsPermission();
+                                        counterSMS++;
+                                        checkPermissions();
                                     }
                                 })
-                                .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        restartApp();
-                                    }
-                                })
+//                                .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialog, int which) {
+//
+//                                    }
+//                                })
                                 .create().show();
-                    } else if (counter == 1) {
+                    } else if (counterSMS == 1) {
                         new AlertDialog.Builder(getActivity())
                                 .setOnKeyListener(new DialogInterface.OnKeyListener() {
                                     @Override
                                     public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
                                         if(keyCode == KeyEvent.KEYCODE_BACK){
-                                            restartApp();
                                             return true;
                                         }
                                         return false;
@@ -795,19 +795,112 @@ public class NewEventFragment extends Fragment implements ActivityCompat.OnReque
                                 .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        counter++;
-                                        checkSMSandContactsPermission();
+                                        counterSMS++;
+                                        checkPermissions();
                                     }
                                 })
-                                .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
+//                                .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialog, int which) {
+//
+//                                    }
+//                                })
+                                .create().show();
+                    } else {
+                    }
+                }else {
+                }
+            }
+
+        }else if (requestCode == PERMISSION_REQUEST_READ_CONTACTS) {
+            // for each permission check if the user granted/denied them you may want to group the
+            // rationale in a single dialog,this is just an example
+            for (int i = 0; i < 1; i++) {
+
+                if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
+                    // user rejected the permission
+                    boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS);
+                    if (!showRationale) {
+                        // user also CHECKED "never ask again" you can either enable some fall back,
+                        // disable features of your app or open another dialog explaining again the
+                        // permission and directing to the app setting
+                        new AlertDialog.Builder(getActivity())
+                                .setOnKeyListener(new DialogInterface.OnKeyListener() {
+                                    @Override
+                                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                                        if(keyCode == KeyEvent.KEYCODE_BACK){
+                                            return true;
+                                        }
+                                        return false;
+                                    }
+                                })
+                                .setTitle(R.string.accessWith_NeverAskAgain_deny)
+                                .setMessage(R.string.requestContactPermission_accessDenied_withCheckbox)
+                                .setPositiveButton(R.string.back, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        restartApp();
+
                                     }
                                 })
                                 .create().show();
+                    } else if (counterCONTACTS < 1) {
+                        // user did NOT check "never ask again" this is a good place to explain the user
+                        // why you need the permission and ask if he wants // to accept it (the rationale)
+                        new AlertDialog.Builder(getActivity())
+                                .setOnKeyListener(new DialogInterface.OnKeyListener() {
+                                    @Override
+                                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                                        if(keyCode == KeyEvent.KEYCODE_BACK){
+                                            dialog.cancel();
+                                            return true;
+                                        }
+                                        return false;
+                                    }
+                                })
+                                .setTitle(R.string.requestPermission_firstTryRequest)
+                                .setMessage(R.string.requestPermission_askForContactsPermission)
+                                .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        counterCONTACTS++;
+                                        checkPermissions();
+                                    }
+                                })
+//                                .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialog, int which) {
+//
+//                                    }
+//                                })
+                                .create().show();
+                    } else if (counterCONTACTS == 1) {
+                        new AlertDialog.Builder(getActivity())
+                                .setOnKeyListener(new DialogInterface.OnKeyListener() {
+                                    @Override
+                                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                                        if(keyCode == KeyEvent.KEYCODE_BACK){
+                                            return true;
+                                        }
+                                        return false;
+                                    }
+                                })
+                                .setTitle(R.string.requestPermission_lastTryRequest)
+                                .setMessage(R.string.requestPermission_askForContactsPermission)
+                                .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        counterCONTACTS++;
+                                        checkPermissions();
+                                    }
+                                })
+//                                .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialog, int which) {
+//
+//                                    }
+//                                })
+                                .create().show();
                     } else {
-                        restartApp();
                     }
                 }else {
                 }
@@ -837,7 +930,6 @@ public class NewEventFragment extends Fragment implements ActivityCompat.OnReque
             openDialogAskForPhoneNumber();
         } else {
             Toast.makeText(getContext(), R.string.thanksphoneNumber, Toast.LENGTH_SHORT).show();
-            saveEvent();
 
         }
     }
@@ -881,19 +973,19 @@ public class NewEventFragment extends Fragment implements ActivityCompat.OnReque
         });
 
     }
-
-    // Restart the App
-    private void restartApp() {
-        Bundle whichFragment = getArguments();
-//        getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        if (whichFragment.getString("fragment").equals("EventOverview")) {
-            getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.eventOverview_frameLayout, new EventOverviewFragment(), "")
-                    .commit();
-        } else {
-            getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.calendar_frameLayout, new CalendarFragment(), "")
-                    .commit();
-        }
-    }
+//
+//    // Restart the App
+//    private void restartApp() {
+//        Bundle whichFragment = getArguments();
+////        getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//        if (whichFragment.getString("fragment").equals("EventOverview")) {
+//            getActivity().getSupportFragmentManager().beginTransaction()
+//                    .replace(R.id.eventOverview_frameLayout, new EventOverviewFragment(), "")
+//                    .commit();
+//        } else {
+//            getActivity().getSupportFragmentManager().beginTransaction()
+//                    .replace(R.id.calendar_frameLayout, new CalendarFragment(), "")
+//                    .commit();
+//        }
+//    }
 }
