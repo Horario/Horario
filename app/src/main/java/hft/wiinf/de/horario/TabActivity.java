@@ -67,7 +67,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     Event singleEvent;
     //Index: 0 = CreatorID; 1 = StartDate; 2 = EndDate; 3 = StartTime; 4 = EndTime;
     //       5 = Repetition; 6 = ShortTitle; 7 = Place; 8 = Descriptoin;  9 = EventCreatorName
-    private String creatorID, startDate, endDate, startTime, endTime, repetition, shortTitle, place, description, eventCreatorName, creatorPhoneNumber;
+    private String creatorID, startDate, endDate, startTime, endTime, repetition, shortTitle, place,
+            description, eventCreatorName, creatorPhoneNumber;
     private String hourOfDay, minutesOfDay, year, month, day;
 
     Calendar myStartTime = Calendar.getInstance();
@@ -158,7 +159,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         Button qrScanner_result_eventSave = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_eventSave);
         final Button qrScanner_result_abort = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_about);
         Button qrScanner_result_toCalender = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_toCalender);
-        Button qrScanner_result_eventSave_without_assign = afterScanningDialogAction.findViewById((R.id.dialog_qrScanner_button_eventSaveOnly));
+        Button qrScanner_result_eventSave_without_assign = afterScanningDialogAction.findViewById(
+                (R.id.dialog_qrScanner_button_eventSaveOnly));
 
         //Set the Cancel and BackToCalenderButtons to Invisible
         qrScanner_result_abort.setVisibility(View.GONE);
@@ -185,10 +187,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         public void onClick(View v) {
                             buttonId = 1;
                             decideWhatToDo();
-//                            //Restart the TabActivity an Reload all Views
-                            //restartApp(whichFragmentTag);
-                            //afterScanningDialogAction.dismiss();
-
                         }
                     });
 
@@ -199,10 +197,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         public void onClick(View v) {
                             buttonId = 2;
                             decideWhatToDo();
-//                            //Restart the TabActivity an Reload all Views
-//                            restartApp(whichFragmentTag);
-//                            afterScanningDialogAction.dismiss();
-
                         }
                     });
 
@@ -213,12 +207,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         public void onClick(View v) {
                             buttonId = 3;
                             decideWhatToDo();
-//                            //Restart the TabActivity an Reload all Views
-//                            restartApp(whichFragmentTag);
-//                            afterScanningDialogAction.dismiss();
                         }
                     });
-
 
             //Put StringBuffer in an Array and split the Values to new String Variables
             //Index: 0 = CreatorID; 1 = StartDate; 2 = EndDate; 3 = StartTime; 4 = EndTime;
@@ -322,7 +312,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         }
     }
 
-
     // "Catch" the ScanningResult and throw the Content to the processing Method
     @Override
     public void scanResultData(String whichFragment, String codeContent) {
@@ -360,7 +349,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                     //Close the keyboard on a tab change
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     assert imm != null;
-                    imm.hideSoftInputFromWindow(Objects.requireNonNull(mSectionsPageAdapter.getItem(2).getView()).getApplicationWindowToken(), 0);
+                    imm.hideSoftInputFromWindow(Objects.requireNonNull(mSectionsPageAdapter.getItem(2)
+                            .getView()).getApplicationWindowToken(), 0);
                 } else if (tab.getPosition() == 1) {
                     getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
@@ -384,9 +374,9 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 if (tab.getPosition() == 2) {
                     getSupportFragmentManager().popBackStack();
                     //Close the keyboard on a tab change
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     assert imm != null;
-                    imm.hideSoftInputFromWindow(Objects.requireNonNull(mSectionsPageAdapter.getItem(2).getView()).getApplicationWindowToken(), 0);
+                    imm.hideSoftInputFromWindow(Objects.requireNonNull(mSectionsPageAdapter.getItem(2)
+                            .getView()).getApplicationWindowToken(), 0);
                 } else if (tab.getPosition() == 1) {
                     getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
