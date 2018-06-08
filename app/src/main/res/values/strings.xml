@@ -132,7 +132,7 @@
     <string name="toCalender">\u0020Zum Kalender\u0020</string>
     <string name="wrongQRCodeResult">Das ist der Inhalt des QR Codes:\u0020</string>
     <string name="notAsEventSaveable">Das kann leider nicht als Termin gespeichert werden!</string>
-    <string name="back_where_user_comesFrom">Zurück zum Ursprung</string>
+    <string name="back_where_user_comesFrom">Zurück zum Kalendar</string>
 
     <!-- QR Scanner & Scanner PopUp -->
     <string name="eventSave">Termin zusagen</string>
