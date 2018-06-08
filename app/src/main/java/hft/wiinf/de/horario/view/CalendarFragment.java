@@ -9,6 +9,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,6 +93,7 @@ public class CalendarFragment extends Fragment {
         Calendar today = Calendar.getInstance();
         today.set(Calendar.HOUR_OF_DAY, 0);
         today.set(Calendar.MINUTE, 0);
+        today.set(Calendar.SECOND, 0);
         selectedMonth = today.getTime();
         calendarTvMonth.setText(monthFormat.format(today.getTime())); //initialize month field
         update(today.getTime());
@@ -231,9 +233,12 @@ public class CalendarFragment extends Fragment {
         Calendar endOfDay = Calendar.getInstance();
         endOfDay.setTime(date);
         endOfDay.add(Calendar.DAY_OF_MONTH, 1);
+        endOfDay.add(Calendar.SECOND, -1);
+
         final List<hft.wiinf.de.horario.model.Event> eventList = EventController.findEventsByTimePeriod(date, endOfDay.getTime());
 
         for (int i = 0; i < eventList.size(); i++) {
+            Log.d("TAG", "Flo1" + eventList.get(i).getStartTime());
             if (eventList.get(i).getCreator().equals(PersonController.getPersonWhoIam())) {
                 eventsAsAppointments.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 3, eventList.get(i).getId(), eventList.get(i).getCreator()));
             } else {
