@@ -60,7 +60,6 @@ public class AcceptedEventDetailsFragment extends Fragment {
                 EventRejectEventFragment eventRejectEventFragment = new EventRejectEventFragment();
                 Bundle bundleAcceptedEventId = new Bundle();
                 bundleAcceptedEventId.putLong("EventId", getEventID());
-                Log.i("EVENT ID", getEventID().toString());
                 bundleAcceptedEventId.putString("fragment", "AcceptedEventDetails");
                 eventRejectEventFragment.setArguments(bundleAcceptedEventId);
                 FragmentTransaction fr = getFragmentManager().beginTransaction();

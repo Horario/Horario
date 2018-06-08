@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.TabActivity;
 import hft.wiinf.de.horario.controller.EventController;
+import hft.wiinf.de.horario.model.AcceptedState;
 import hft.wiinf.de.horario.model.Event;
 
 public class EventRejectEventFragment extends Fragment {
@@ -32,6 +33,7 @@ public class EventRejectEventFragment extends Fragment {
     Button button_reject_event, button_dialog_delete, button_dialog_back;
 
     Event selectedEvent;
+    Event event;
     StringBuffer eventToStringBuffer;
 
     public EventRejectEventFragment() {
@@ -90,7 +92,10 @@ public class EventRejectEventFragment extends Fragment {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        EventController.deleteEvent(EventController.getEventById((getEventID())));
+                        event = EventController.getEventById((getEventID()));
+                        event.setAccepted(AcceptedState.REJECTED);
+                        EventController.saveEvent(event);
+
                         Toast.makeText(getContext(), R.string.reject_event_hint, Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getActivity(), TabActivity.class);
                         startActivity(intent);
@@ -198,12 +203,12 @@ public class EventRejectEventFragment extends Fragment {
 
     }
     private boolean checkForInput(){
-        if(reason_for_rejection.getText().length() == 0 && spinner_reason.getSelectedItemPosition() == 0){
+        if(reason_for_rejection.getText().length() == 0 || spinner_reason.getSelectedItemPosition() == 0){
             Toast.makeText(getContext(), R.string.reject_event_reason, Toast.LENGTH_SHORT).show();
             return false;
         }
         if(reason_for_rejection.getText().toString().contains("|")){
-            Toast.makeText(getContext(), R.string.reject_event_reason_free_text_field, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.reject_event_reason_contains_pipe, Toast.LENGTH_SHORT).show();
             return false;
         }
         if(reason_for_rejection.getText().toString().matches(" +.*")){
@@ -212,6 +217,13 @@ public class EventRejectEventFragment extends Fragment {
         }
         if(reason_for_rejection.getText().length() > 50){
             Toast.makeText(getContext(), R.string.reject_event_reason_free_text_field_to_long, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if(reason_for_rejection.getText().toString().contains(",") ||
+                reason_for_rejection.getText().toString().contains("!")){
+            reason_for_rejection.getText().toString().replaceAll(",", " ");
+            reason_for_rejection.getText().toString().replaceAll("!", " ");
+            return true;
         }
         return true;
     }
