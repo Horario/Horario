@@ -665,30 +665,25 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
         //initialize GUI elements
         final EditText afterScanning_username = alertDialogAskForUsernamePhoneNumber.findViewById(R.id.dialog_afterScanner_editText_username);
-        final EditText afterScanning_phoneNumber = alertDialogAskForUsernamePhoneNumber.findViewById(R.id.dialog_afterScanner_editText_phoneNumber);
         //set textfield if user has username/phoneNumber
         afterScanning_username.setText(personMe.getName());
-        afterScanning_phoneNumber.setText(personMe.getPhoneNumber());
 
-        Objects.requireNonNull(afterScanning_phoneNumber).setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        Objects.requireNonNull(afterScanning_username).setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 //getText for both variables (phoneNumber and username)
                 String dialog_afterScanning_inputUsername;
                 dialog_afterScanning_inputUsername = afterScanning_username.getText().toString();
-                String dialog_afterScanning_inputPhoneNumber;
-                dialog_afterScanning_inputPhoneNumber = afterScanning_phoneNumber.getText().toString();
 
                 //RegEx: no whitespace at the beginning
                 Pattern pattern_afterScanning_username = Pattern.compile("^([\\S]).*");
                 Matcher matcher_afterScanning_username = pattern_afterScanning_username.matcher(dialog_afterScanning_inputUsername);
 
                 //check for valid input
-                if (actionId == EditorInfo.IME_ACTION_DONE && matcher_afterScanning_username.matches() && !dialog_afterScanning_inputUsername.contains("|")
-                        && dialog_afterScanning_inputPhoneNumber.matches("(00|0|\\+)[1-9][0-9]+")) {
+                if (actionId == EditorInfo.IME_ACTION_DONE && matcher_afterScanning_username.matches() && !dialog_afterScanning_inputUsername.contains("|")) {
                     //get username
+                    personMe = PersonController.getPersonWhoIam();
                     personMe.setName(dialog_afterScanning_inputUsername);
-                    personMe.setPhoneNumber(afterScanning_phoneNumber.getText().toString());
                     PersonController.savePerson(personMe);
 
                     Toast toast = Toast.makeText(v.getContext(), R.string.thanksUserData, Toast.LENGTH_SHORT);
@@ -700,11 +695,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                     //check for valid input: username should not contain "|"
                 } else if (dialog_afterScanning_inputUsername.contains("|")) {
                     Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername_peek, Toast.LENGTH_SHORT);
-                    toast.show();
-                    return false;
-                } else if (!afterScanning_phoneNumber.getText().toString().matches("(00|0|\\+)[1-9][0-9]+")) {
-                    Toast toast = Toast.makeText(v.getContext(), R.string.wrongNumberFormat, Toast.LENGTH_SHORT);
-                    toast.show();
                     return false;
                 } else {
                     //check for valid input: username should not start with blank space

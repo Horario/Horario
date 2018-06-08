@@ -16,14 +16,4 @@
         android:hint="@string/username_hint"
         android:inputType="textPersonName" />
 
-    <EditText
-        android:id="@+id/dialog_afterScanner_editText_phoneNumber"
-        android:layout_width="305dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="211dp"
-        android:hint="@string/phoneNumber_hint"
-        android:inputType="phone" />
-
 </RelativeLayout>
