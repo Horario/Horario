@@ -68,6 +68,8 @@ public class SavedEventDetailsFragment extends Fragment {
         savedEventDetailsButtonShowQr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 //Code for showing the QR Code
             }
         });
