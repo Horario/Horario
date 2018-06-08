@@ -78,9 +78,6 @@ public class EventOverviewFragment extends Fragment {
             endOfDay.set(Calendar.SECOND, 59);
             endOfDay.set(Calendar.MILLISECOND, 59);
 
-            Log.d("TAG", "Flo" + endOfDay.getTime());
-            Log.d("TAG", "Flo" + helper.getTime());
-
             List<hft.wiinf.de.horario.model.Event> eventList = EventController.findEventsByTimePeriod(helper.getTime(), endOfDay.getTime());
             if (eventList.size() > 0) {
                 eventArrayDay.add(new Appointment(CalendarFragment.dayFormat.format(helper.getTime()), 0));
