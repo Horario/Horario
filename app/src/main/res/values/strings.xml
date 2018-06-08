@@ -114,7 +114,7 @@
     <string name="from">von\u0020</string>
     <string name="clock_at_room">Uhr in Raum\u0020</string>
     <string name="organizer">Organisator:\u0020</string>
-    <string name="eventDetails">Termindetails sind:\u0020</string>
+    <string name="eventDetails">Termindetails:\u0020</string>
     <string name="at">\u0020um\u0020</string>
     <string name="instead_of">\u0020statt.</string>
     <string name="as_of">Vom\u0020</string>
@@ -132,7 +132,10 @@
     <string name="toCalender">\u0020Zum Kalender\u0020</string>
     <string name="wrongQRCodeResult">Das ist der Inhalt des QR Codes:\u0020</string>
     <string name="notAsEventSaveable">Das kann leider nicht als Termin gespeichert werden!</string>
-    <string name="back_where_user_comesFrom">Zurück zum Ursprung</string>
+    <string name="back_where_user_comesFrom">Zur Übersicht</string>
+    <string name="time">Zeit:\u0020</string>
+    <string name="clock">\u0020Uhr</string>
+    <string name="place">Ort:\u0020</string>
 
     <!-- QR Scanner & Scanner PopUp -->
     <string name="eventSave">Termin zusagen</string>

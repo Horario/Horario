@@ -15,18 +15,26 @@
 
         <TextView
             android:id="@+id/qrGenerator_textView_headline"
-            android:layout_width="361dp"
-            android:layout_height="55dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true" />
+            android:layout_alignParentTop="true"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/qrGenerator_textView_description"
             android:layout_width="372dp"
-            android:layout_height="130dp"
+            android:layout_height="173dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="54dp"
+            android:layout_marginTop="55dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:textSize="16sp"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="58dp" />
 
@@ -36,7 +44,7 @@
     <RelativeLayout
         android:id="@+id/qrGenerator_relativeLayout_buttonFrame"
         android:layout_width="match_parent"
-        android:layout_height="147dp"
+        android:layout_height="100dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         tools:layout_editor_absoluteX="0dp"
@@ -44,20 +52,31 @@
 
         <Button
             android:id="@+id/qrGenerator_button_shareWith"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="190dp"
+            android:layout_marginStart="39dp"
+            android:backgroundTint="@color/zentea_darkgreen"
             android:text="@string/share_with"
+            android:textColor="@color/zentea_white"
+            android:textSize="14sp"
             tools:layout_editor_absoluteX="129dp"
             tools:layout_editor_absoluteY="16dp" />
 
         <Button
             android:id="@+id/qrGenerator_button_goToWhereComesFrom"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="39dp"
+            android:layout_marginStart="190dp"
+            android:backgroundTint="@color/colorAccent"
             android:text="@string/back_where_user_comesFrom"
+            android:textColor="@color/zentea_white"
+            android:textSize="14sp"
             tools:layout_editor_absoluteX="101dp"
             tools:layout_editor_absoluteY="83dp" />
 
@@ -66,10 +85,10 @@
     <ImageView
         android:id="@+id/qrGenerator_imageView_qrCode"
         android:layout_width="309dp"
-        android:layout_height="231dp"
-        android:layout_above="@+id/qrGenerator_relativeLayout_buttonFrame"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="35dp"
+        android:layout_height="248dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="102dp"
         tools:layout_editor_absoluteX="83dp"
         tools:layout_editor_absoluteY="220dp" />
 

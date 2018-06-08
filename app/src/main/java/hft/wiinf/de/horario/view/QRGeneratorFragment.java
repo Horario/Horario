@@ -203,22 +203,19 @@ public class QRGeneratorFragment extends Fragment {
             }
 
             // Event shortTitle in Headline with StartDate
-            mQRGenerator_textView_headline.setText(getString(R.string.your_Event) + "\n" + shortTitle + ", " + startDate);
+            //mQRGenerator_textView_headline.setText(getString(R.string.your_Event) + "\n" + shortTitle + ", " + startDate);
+            mQRGenerator_textView_headline.setText(shortTitle + ", " + startDate);
             // Check for a Repetition Event and Change the Description Output with and without
             // Repetition Element inside.
             if (repetition.equals("")) {
-                mQRGenerator_textView_description.setText(getString(R.string.on) + startDate
-                        + getString(R.string.find) + getString(R.string.from) + startTime + getString(R.string.until)
-                        + endTime + getString(R.string.clock_at_room) + place + " " + shortTitle
-                        + getString(R.string.instead_of) + "\n" + getString(R.string.eventDetails)
-                        + description + "\n" + "\n" + getString(R.string.organizer) + eventCreatorName);
+                mQRGenerator_textView_description.setText(getString(R.string.time)+getString(R.string.from) + startTime + getString(R.string.until)
+                        + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place + "\n" + getString(R.string.organizer) + eventCreatorName  + "\n" + "\n" + getString(R.string.eventDetails)
+                        + description);
             } else {
                 mQRGenerator_textView_description.setText(getString(R.string.as_of) + startDate
-                        + getString(R.string.until) + endDate + getString(R.string.find)
-                        + repetition + getString(R.string.at) + startTime + getString(R.string.clock_to)
-                        + endTime + getString(R.string.clock_at_room) + place + " " + shortTitle
-                        + getString(R.string.instead_of) + "\n" + getString(R.string.eventDetails) + description +
-                        "\n" + "\n" + getString(R.string.organizer) + eventCreatorName);
+                        + getString(R.string.until) + endDate + "\n"+ getString(R.string.from) + startTime + getString(R.string.until)
+                        + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place + "\n" + getString(R.string.organizer) + eventCreatorName  + "\n" + "\n" + getString(R.string.eventDetails)
+                        + description);
             }
             // In the CatchBlock the User see a SnackBar Information and was pushed where the User Comes From
         } catch (NullPointerException e) {
