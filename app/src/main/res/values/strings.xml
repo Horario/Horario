@@ -44,6 +44,7 @@
     <string name="thanksForUsername">Benutzername wurde gespeichert. </string>
     <string name="titleDialogFinalDecission">Bist du sicher?</string>
     <string name="titleDialogRejectEvent">Willst du den Termin wirklich absagen und eine SMS versenden?</string>
+    <string name="titleDialogSaveEvent">Willst du den Termin wirklich speichern und eine SMS versenden?</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="titleParticipantsEvent">Rückmeldungen</string>

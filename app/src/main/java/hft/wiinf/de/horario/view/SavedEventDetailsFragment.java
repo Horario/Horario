@@ -1,19 +1,27 @@
 package hft.wiinf.de.horario.view;
 
 import android.annotation.SuppressLint;
+import android.app.TabActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.github.sundeepk.compactcalendarview.EventsContainer;
 
 import java.text.SimpleDateFormat;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
+import hft.wiinf.de.horario.model.AcceptedState;
 import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Repetition;
 
@@ -55,14 +63,17 @@ public class SavedEventDetailsFragment extends Fragment {
         savedEventDetailsButtonRefuseAppointment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Code for cancelling an event eg. take it out of the DB and Calendar View
+
+               //ToDo Es wird das Falsche Fragment aufgerufen!!!
+                askForPermissionToDelete();
+
             }
         });
 
         savedEventDetailsButtonAcceptAppointment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Code for accepting an event eg. update the DB and Calendar View
+                askForPermissionToSave();
             }
         });
         savedEventDetailsButtonShowQr.setOnClickListener(new View.OnClickListener() {
@@ -77,6 +88,77 @@ public class SavedEventDetailsFragment extends Fragment {
 
         return view;
     }
+
+    public void askForPermissionToDelete() {
+        final AlertDialog.Builder dialogAskForFinalDecission = new AlertDialog.Builder(getContext());
+        dialogAskForFinalDecission.setView(R.layout.dialog_afterrejectevent);
+        dialogAskForFinalDecission.setTitle(R.string.titleDialogRejectEvent);
+        dialogAskForFinalDecission.setCancelable(true);
+
+        final AlertDialog alertDialogAskForFinalDecission = dialogAskForFinalDecission.create();
+        alertDialogAskForFinalDecission.show();
+
+        alertDialogAskForFinalDecission.findViewById(R.id.dialog_button_event_delete)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        EventController.deleteEvent(EventController.getEventById((getEventID())));
+                        Toast.makeText(getContext(), R.string.reject_event, Toast.LENGTH_SHORT).show();
+
+                        Bundle bundleSavedEventId = new Bundle();
+                        bundleSavedEventId.putLong("EventId", getEventID());
+                        bundleSavedEventId.putString("fragment", "Calendar");
+
+
+                        //ReCreate the Activity and go Back to Calendar (StartTab)
+                        Intent intent = getActivity().getIntent();
+                        getActivity().finish();
+                        startActivity(intent);
+                    }
+                });
+        alertDialogAskForFinalDecission.findViewById(R.id.dialog_button_event_back)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialogAskForFinalDecission.cancel();
+                    }
+                });
+
+    }
+
+    public void askForPermissionToSave() {
+        final AlertDialog.Builder dialogAskForFinalDecission = new AlertDialog.Builder(getContext());
+        dialogAskForFinalDecission.setView(R.layout.dialog_afterrejectevent);
+        dialogAskForFinalDecission.setTitle(R.string.titleDialogSaveEvent);
+        dialogAskForFinalDecission.setCancelable(true);
+
+        final AlertDialog alertDialogAskForFinalDecission = dialogAskForFinalDecission.create();
+        alertDialogAskForFinalDecission.show();
+
+        alertDialogAskForFinalDecission.findViewById(R.id.dialog_button_event_delete)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //EventController.getEventById(getEventID()).setAccepted(AcceptedState.ACCEPTED);
+                        EventController.saveEvent(EventController.getEventById((getEventID())));
+                        //Toast.makeText(getContext(), R.string.save_event, Toast.LENGTH_SHORT).show();
+                        //getSelectedEvent().setAccepted(AcceptedState.ACCEPTED);
+                        Toast.makeText(getContext(),
+                                String.valueOf(EventController.getEventById(getEventID()).getAccepted()), Toast.LENGTH_LONG).show();
+                                //ReCreate the Activity and go Back to Calendar (StartTab)
+                         Intent intent = getActivity().getIntent();
+                         getActivity().finish();
+                         startActivity(intent);
+                    }
+                });
+        alertDialogAskForFinalDecission.findViewById(R.id.dialog_button_event_back)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialogAskForFinalDecission.cancel();
+                    }
+                });
+        }
 
     public Event getSelectedEvent() {
         return selectedEvent;
@@ -162,8 +244,8 @@ public class SavedEventDetailsFragment extends Fragment {
             eventToStringBuffer.append(simpleDateFormat.format(selectedEvent.getStartEvent().getStartTime()) + stringSplitSymbol);
         eventToStringBuffer.append(simpleDateFormat.format(selectedEvent.getStartTime()) + stringSplitSymbol);
         eventToStringBuffer.append(simpleDateFormat.format(selectedEvent.getEndDate()) + stringSplitSymbol);
-            eventToStringBuffer.append(simpleTimeFormat.format(selectedEvent.getStartTime()) + stringSplitSymbol);
-            eventToStringBuffer.append(simpleTimeFormat.format(selectedEvent.getEndTime()) + stringSplitSymbol);
+        eventToStringBuffer.append(simpleTimeFormat.format(selectedEvent.getStartTime()) + stringSplitSymbol);
+        eventToStringBuffer.append(simpleTimeFormat.format(selectedEvent.getEndTime()) + stringSplitSymbol);
         eventToStringBuffer.append(selectedEvent.getRepetition() + stringSplitSymbol);
         eventToStringBuffer.append(selectedEvent.getShortTitle() + stringSplitSymbol);
         eventToStringBuffer.append(selectedEvent.getPlace() + stringSplitSymbol);
