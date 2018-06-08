@@ -15,9 +15,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.activeandroid.ActiveAndroid;
 import com.github.sundeepk.compactcalendarview.EventsContainer;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
@@ -139,13 +141,27 @@ public class SavedEventDetailsFragment extends Fragment {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //EventController.getEventById(getEventID()).setAccepted(AcceptedState.ACCEPTED);
-                        EventController.saveEvent(EventController.getEventById((getEventID())));
-                        //Toast.makeText(getContext(), R.string.save_event, Toast.LENGTH_SHORT).show();
-                        //getSelectedEvent().setAccepted(AcceptedState.ACCEPTED);
-                        Toast.makeText(getContext(),
-                                String.valueOf(EventController.getEventById(getEventID()).getAccepted()), Toast.LENGTH_LONG).show();
-                                //ReCreate the Activity and go Back to Calendar (StartTab)
+                        //Pull the EventID change the AcceptedState and Save again.
+                       Event event = EventController.getEventById(getEventID());
+                       if(event.getRepetition().equals("None")){
+                           event.setAccepted(AcceptedState.ACCEPTED);
+                           EventController.saveEvent(event);
+                       }else {
+
+                           }
+
+                           //Toast.makeText(getContext(), String.valueOf(eventCreator), Toast.LENGTH_SHORT).show();
+
+
+                       
+
+
+                        //event.setAccepted(AcceptedState.ACCEPTED);
+                        //EventController.saveEvent(event);
+
+                        Toast.makeText(getContext(), R.string.save_event, Toast.LENGTH_SHORT).show();
+
+                        //ReCreate the Activity and go Back to Calendar (StartTab)
                          Intent intent = getActivity().getIntent();
                          getActivity().finish();
                          startActivity(intent);
