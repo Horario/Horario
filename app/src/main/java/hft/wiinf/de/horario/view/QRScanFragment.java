@@ -16,11 +16,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -40,7 +40,7 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
     private final String noResultErrorMsg = "No scan data received!";
     //Counter for the Loop of PermissionChecks
     private int counterSMS = 0, counterCAM = 0;
-    private String whitchFragment, codeContent;
+    private String whichFragment, codeContent;
     private Activity mActivity;
 
     @Override
@@ -219,111 +219,113 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
                 }
             }
             case SEND_SMS_PERMISSION_CODE: {
-                // for each permission check if the user granted/denied them you may want to group the
-                // rationale in a single dialog,this is just an example
-                for (int i = 0, len = permissions.length; i < len; i++) {
-                    if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
-                        // user rejected the permission
-                        boolean showRationale;
-                        if(counterSMS == 5){
-                            showRationale = true;
+                if (counterSMS != 5) {
+                    // for each permission check if the user granted/denied them you may want to group the
+                    // rationale in a single dialog,this is just an example
+                    for (int i = 0, len = permissions.length; i < len; i++) {
+                        if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
+                            // user rejected the permission
+                            boolean showRationale;
+                            if (counterSMS == 5) {
+                                showRationale = true;
+                            } else {
+                                showRationale = shouldShowRequestPermissionRationale(Manifest.permission.SEND_SMS);
+                            }
+                            if (!showRationale) {
+                                // user also CHECKED "never ask again" you can either enable some fall back,
+                                // disable features of your app or open another dialog explaining again the
+                                // permission and directing to the app setting
+                                new AlertDialog.Builder(mActivity)
+                                        .setOnKeyListener(new DialogInterface.OnKeyListener() {
+                                            @Override
+                                            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                                                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                                                    getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                                                    goWhereUserComesFrom();
+                                                    dialog.cancel();
+                                                    return true;
+                                                }
+                                                return false;
+                                            }
+                                        })
+                                        .setTitle(R.string.accessWith_NeverAskAgain_deny)
+                                        .setMessage(R.string.requestPermission_accessDenied_withCheckbox_SendSMS)
+                                        .setPositiveButton(R.string.back, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                goWhereUserComesFrom();
+                                            }
+                                        })
+                                        .create().show();
+                            } else if (counterSMS < 1) {
+                                // user did NOT check "never ask again" this is a good place to explain the user
+                                // why you need the permission and ask if he wants // to accept it (the rationale)
+                                new AlertDialog.Builder(mActivity)
+                                        .setOnKeyListener(new DialogInterface.OnKeyListener() {
+                                            @Override
+                                            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                                                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                                                    getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                                                    goWhereUserComesFrom();
+                                                    dialog.cancel();
+                                                    return true;
+                                                }
+                                                return false;
+                                            }
+                                        })
+                                        .setTitle(R.string.requestPermission_firstTryRequest)
+                                        .setMessage(R.string.requestPermission_askForPermission_sendSMS)
+                                        .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                counterSMS++;
+                                                checkForSMSPermission();
+                                            }
+                                        })
+                                        .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                goWhereUserComesFrom();
+                                            }
+                                        })
+                                        .create().show();
+                            } else if (counterSMS == 1) {
+                                new AlertDialog.Builder(mActivity)
+                                        .setOnKeyListener(new DialogInterface.OnKeyListener() {
+                                            @Override
+                                            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                                                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                                                    getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                                                    goWhereUserComesFrom();
+                                                    dialog.cancel();
+                                                    return true;
+                                                }
+                                                return false;
+                                            }
+                                        })
+                                        .setTitle(R.string.requestPermission_lastTryRequest)
+                                        .setMessage(R.string.requestPermission_askForPermission_sendSMS)
+                                        .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                counterSMS++;
+                                                checkForSMSPermission();
+                                            }
+                                        })
+                                        .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                goWhereUserComesFrom();
+                                            }
+                                        })
+                                        .create().show();
+                            } else {
+                                goWhereUserComesFrom();
+                            }
                         } else {
-                            showRationale = shouldShowRequestPermissionRationale(Manifest.permission.SEND_SMS);
+                            counterSMS = 5;
+                            showCameraPreview();
                         }
-                        if (!showRationale) {
-                            // user also CHECKED "never ask again" you can either enable some fall back,
-                            // disable features of your app or open another dialog explaining again the
-                            // permission and directing to the app setting
-                            new AlertDialog.Builder(mActivity)
-                                    .setOnKeyListener(new DialogInterface.OnKeyListener() {
-                                        @Override
-                                        public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                                            if (keyCode == KeyEvent.KEYCODE_BACK) {
-                                                getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                                                goWhereUserComesFrom();
-                                                dialog.cancel();
-                                                return true;
-                                            }
-                                            return false;
-                                        }
-                                    })
-                                    .setTitle(R.string.accessWith_NeverAskAgain_deny)
-                                    .setMessage(R.string.requestPermission_accessDenied_withCheckbox_SendSMS)
-                                    .setPositiveButton(R.string.back, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            goWhereUserComesFrom();
-                                        }
-                                    })
-                                    .create().show();
-                        } else if (counterSMS < 1) {
-                            // user did NOT check "never ask again" this is a good place to explain the user
-                            // why you need the permission and ask if he wants // to accept it (the rationale)
-                            new AlertDialog.Builder(mActivity)
-                                    .setOnKeyListener(new DialogInterface.OnKeyListener() {
-                                        @Override
-                                        public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                                            if (keyCode == KeyEvent.KEYCODE_BACK) {
-                                                getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                                                goWhereUserComesFrom();
-                                                dialog.cancel();
-                                                return true;
-                                            }
-                                            return false;
-                                        }
-                                    })
-                                    .setTitle(R.string.requestPermission_firstTryRequest)
-                                    .setMessage(R.string.requestPermission_askForPermission_sendSMS)
-                                    .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            counterSMS++;
-                                            checkForSMSPermission();
-                                        }
-                                    })
-                                    .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            goWhereUserComesFrom();
-                                        }
-                                    })
-                                    .create().show();
-                        } else if (counterSMS == 1) {
-                            new AlertDialog.Builder(mActivity)
-                                    .setOnKeyListener(new DialogInterface.OnKeyListener() {
-                                        @Override
-                                        public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                                            if (keyCode == KeyEvent.KEYCODE_BACK) {
-                                                getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                                                goWhereUserComesFrom();
-                                                dialog.cancel();
-                                                return true;
-                                            }
-                                            return false;
-                                        }
-                                    })
-                                    .setTitle(R.string.requestPermission_lastTryRequest)
-                                    .setMessage(R.string.requestPermission_askForPermission_sendSMS)
-                                    .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            counterSMS++;
-                                            checkForSMSPermission();
-                                        }
-                                    })
-                                    .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            goWhereUserComesFrom();
-                                        }
-                                    })
-                                    .create().show();
-                        } else {
-                            goWhereUserComesFrom();
-                        }
-                    } else {
-                        counterSMS = 5;
-                        showCameraPreview();
                     }
                 }
             }
@@ -357,7 +359,6 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
         if (context instanceof Activity) {
             mActivity = (Activity) context;
         }
-
     }
 
 
@@ -381,17 +382,14 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
             //we have a result
 
             codeContent = scanningResult.getContents();
-            whitchFragment = whichFragmentTag;
+            this.whichFragment = whichFragmentTag;
             // send received data
-            Objects.requireNonNull(parentActivity).scanResultData(whitchFragment, codeContent);
+            Objects.requireNonNull(parentActivity).scanResultData(this.whichFragment, codeContent);
 
         } else {
             // send exception
             Objects.requireNonNull(parentActivity).scanResultData(new NoScanResultExceptionController(noResultErrorMsg));
         }
-
     }
-
-
 }
 
