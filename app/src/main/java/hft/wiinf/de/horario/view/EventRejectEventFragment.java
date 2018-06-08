@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.TabActivity;
 import hft.wiinf.de.horario.controller.EventController;
+import hft.wiinf.de.horario.controller.SendSmsController;
 import hft.wiinf.de.horario.model.AcceptedState;
 import hft.wiinf.de.horario.model.Event;
 
@@ -36,6 +37,10 @@ public class EventRejectEventFragment extends Fragment {
     Event event;
     StringBuffer eventToStringBuffer;
 
+    String phNumber;
+    String rejectMessage;
+    String shortTitle;
+    Long creatorEventId;
     public EventRejectEventFragment() {
 
     }
@@ -96,7 +101,14 @@ public class EventRejectEventFragment extends Fragment {
                         event.setAccepted(AcceptedState.REJECTED);
                         EventController.saveEvent(event);
 
+                        //SMS
+                        rejectMessage = spinner_reason.getAdapter().toString() + "!" + reason_for_rejection.getText().toString();
+                        creatorEventId = event.getCreatorEventId();
+                        Log.i("SMS", rejectMessage);
+                        SendSmsController.sendSMS(getContext(), phNumber, rejectMessage, false, creatorEventId, shortTitle);
+
                         Toast.makeText(getContext(), R.string.reject_event_hint, Toast.LENGTH_SHORT).show();
+                        //restart Activity
                         Intent intent = new Intent(getActivity(), TabActivity.class);
                         startActivity(intent);
                     }
@@ -131,11 +143,11 @@ public class EventRejectEventFragment extends Fragment {
         String startTime = eventStringBufferArray[3].trim();
         String endTime = eventStringBufferArray[4].trim();
         String repetition = eventStringBufferArray[5].toUpperCase().trim();
-        String shortTitle = eventStringBufferArray[6].trim();
+        shortTitle = eventStringBufferArray[6].trim();
         String place = eventStringBufferArray[7].trim();
         String description = eventStringBufferArray[8].trim();
         String eventCreatorName = eventStringBufferArray[9].trim();
-        String phNumber = selectedEvent.getCreator().getPhoneNumber();
+        phNumber = selectedEvent.getCreator().getPhoneNumber();
 
         // Change the DataBase Repetition Information in a German String for the Repetition Element
         // like "Daily" into "täglich" and so on
