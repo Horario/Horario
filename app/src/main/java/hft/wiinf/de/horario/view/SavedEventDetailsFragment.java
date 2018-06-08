@@ -19,6 +19,7 @@ import com.activeandroid.ActiveAndroid;
 import com.github.sundeepk.compactcalendarview.EventsContainer;
 
 import java.text.SimpleDateFormat;
+import java.util.Iterator;
 import java.util.List;
 
 import hft.wiinf.de.horario.R;
@@ -143,17 +144,19 @@ public class SavedEventDetailsFragment extends Fragment {
                     public void onClick(View v) {
                         //Pull the EventID change the AcceptedState and Save again.
                        Event event = EventController.getEventById(getEventID());
-                       if(event.getRepetition().equals("None")){
+                       if(event.getRepetition() != Repetition.NONE){
                            event.setAccepted(AcceptedState.ACCEPTED);
                            EventController.saveEvent(event);
                        }else {
-
-                           }
-
+                           List<Event> a = EventController.findRepeatingEvents(getEventID());
+                           for (Event x : a){
+                               event.setAccepted(AcceptedState.ACCEPTED);
+                               EventController.saveEvent(x);
+                           }}
                            //Toast.makeText(getContext(), String.valueOf(eventCreator), Toast.LENGTH_SHORT).show();
 
 
-                       
+
 
 
                         //event.setAccepted(AcceptedState.ACCEPTED);
