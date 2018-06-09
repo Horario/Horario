@@ -48,7 +48,7 @@ public class NotificationReceiver extends BroadcastReceiver {
             manager.createNotificationChannel(mChannel);
             NotificationCompat.Builder builder =
                     new NotificationCompat.Builder(context, id)
-                            .setSmallIcon(R.drawable.ic_android_black2_24dp)
+                            .setSmallIcon(R.drawable.ic_notification_h)
                             .setContentTitle("Terminerinnerung")
                             .setContentText(msg);
             builder.setContentIntent(contentIntent);
@@ -56,7 +56,7 @@ public class NotificationReceiver extends BroadcastReceiver {
         } else {
             NotificationCompat.Builder builder =
                     new NotificationCompat.Builder(context, "")
-                            .setSmallIcon(R.drawable.ic_android_black2_24dp)
+                            .setSmallIcon(R.drawable.ic_notification_h)
                             .setContentTitle("Terminerinnerung")
                             .setContentText(msg);
 
