@@ -652,60 +652,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 });
     }
 
-    //check after scan if app has an user with an phoneNumber
-    private void openDialogAskForUsernameAndPhoneNumber() {
-        //build dialog for username and phoneNumber
-        final AlertDialog.Builder dialogAskForUsernamePhoneNumber = new AlertDialog.Builder(this);
-        dialogAskForUsernamePhoneNumber.setView(R.layout.dialog_askforphonenumberandusername);
-        dialogAskForUsernamePhoneNumber.setTitle(R.string.titleDialogUsernamePhoneNumber);
-        dialogAskForUsernamePhoneNumber.setCancelable(true);
-
-        final AlertDialog alertDialogAskForUsernamePhoneNumber = dialogAskForUsernamePhoneNumber.create();
-        alertDialogAskForUsernamePhoneNumber.show();
-
-        //initialize GUI elements
-        final EditText afterScanning_username = alertDialogAskForUsernamePhoneNumber.findViewById(R.id.dialog_afterScanner_editText_username);
-        //set textfield if user has username/phoneNumber
-        afterScanning_username.setText(personMe.getName());
-
-        Objects.requireNonNull(afterScanning_username).setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                //getText for both variables (phoneNumber and username)
-                String dialog_afterScanning_inputUsername;
-                dialog_afterScanning_inputUsername = afterScanning_username.getText().toString();
-
-                //RegEx: no whitespace at the beginning
-                Pattern pattern_afterScanning_username = Pattern.compile("^([\\S]).*");
-                Matcher matcher_afterScanning_username = pattern_afterScanning_username.matcher(dialog_afterScanning_inputUsername);
-
-                //check for valid input
-                if (actionId == EditorInfo.IME_ACTION_DONE && matcher_afterScanning_username.matches() && !dialog_afterScanning_inputUsername.contains("|")) {
-                    //get username
-                    personMe = PersonController.getPersonWhoIam();
-                    personMe.setName(dialog_afterScanning_inputUsername);
-                    PersonController.savePerson(personMe);
-
-                    Toast toast = Toast.makeText(v.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT);
-                    toast.show();
-                    alertDialogAskForUsernamePhoneNumber.dismiss();
-                    saveEventAndPerson();
-                    return true;
-                    //if isitme is in database without phonenumber
-                    //check for valid input: username should not contain "|"
-                } else if (dialog_afterScanning_inputUsername.contains("|")) {
-                    Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername_peek, Toast.LENGTH_SHORT);
-                    return false;
-                } else {
-                    //check for valid input: username should not start with blank space
-                    Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
-                    toast.show();
-                    return true;
-                }
-            }
-        });
-    }
-
     private boolean checkIfEventIsInPast() {
         //read the current date and time to compare if the start time is in the past, set seconds and milliseconds to 0 to ensure a ight compare (seonds and milliseconds doesn't matter)
         Calendar now = Calendar.getInstance();
@@ -720,12 +666,9 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     }
 
     private void decideWhatToDo() {
-
-
         if (!checkIfEventIsInPast()) {
-            final Person myPerson = PersonController.getPersonWhoIam();
-            if (myPerson.getName().isEmpty()) {
-                openDialogAskForUsernameAndPhoneNumber();
+            if (personMe.getName().isEmpty()) {
+                openDialogAskForUsername();
             } else {
                 saveEventAndPerson();
             }
