@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -106,13 +107,15 @@ public class SavedEventDetailsFragment extends Fragment {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        EventController.deleteEvent(EventController.getEventById((getEventID())));
-                        Toast.makeText(getContext(), R.string.reject_event, Toast.LENGTH_SHORT).show();
-
-                        Bundle bundleSavedEventId = new Bundle();
-                        bundleSavedEventId.putLong("EventId", getEventID());
-                        bundleSavedEventId.putString("fragment", "Calendar");
-
+                        EventRejectEventFragment eventRejectEventFragment = new EventRejectEventFragment();
+                        Bundle bundleAcceptedEventId = new Bundle();
+                        bundleAcceptedEventId.putLong("EventId", getEventID());
+                        bundleAcceptedEventId.putString("fragment", "AcceptedEventDetails");
+                        eventRejectEventFragment.setArguments(bundleAcceptedEventId);
+                        FragmentTransaction fr = getFragmentManager().beginTransaction();
+                        fr.replace(R.id.acceptedEvent_relativeLayout_main, eventRejectEventFragment, "RejectEvent");
+                        fr.addToBackStack("RejectEvent");
+                        fr.commit();
 
                         //ReCreate the Activity and go Back to Calendar (StartTab)
                         Intent intent = getActivity().getIntent();
@@ -145,8 +148,8 @@ public class SavedEventDetailsFragment extends Fragment {
                     public void onClick(View v) {
                         //Pull the EventID change the AcceptedState and Save again.
 
-                        Event event = EventController.getEventById(getEventID());
-                        long a = event.getCreatorEventId();
+                       Event event = EventController.getEventById(getEventID());
+                       long a = event.getCreatorEventId();
 
                        if(event.getRepetition().equals("NONE")){
                            Toast.makeText(getContext(), "IF", Toast.LENGTH_SHORT).show();
