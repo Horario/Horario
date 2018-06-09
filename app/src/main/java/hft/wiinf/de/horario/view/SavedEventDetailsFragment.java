@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.activeandroid.ActiveAndroid;
+import com.activeandroid.query.Select;
 import com.github.sundeepk.compactcalendarview.EventsContainer;
 
 import java.text.SimpleDateFormat;
@@ -143,24 +144,24 @@ public class SavedEventDetailsFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         //Pull the EventID change the AcceptedState and Save again.
-                       Event event = EventController.getEventById(getEventID());
-                       if(event.getRepetition() != Repetition.NONE){
+
+                        Event event = EventController.getEventById(getEventID());
+                        long a = event.getCreatorEventId();
+
+                       if(event.getRepetition().equals("NONE")){
+                           Toast.makeText(getContext(), "IF", Toast.LENGTH_SHORT).show();
                            event.setAccepted(AcceptedState.ACCEPTED);
                            EventController.saveEvent(event);
                        }else {
-                           List<Event> a = EventController.findRepeatingEvents(getEventID());
-                           for (Event x : a){
-                               event.setAccepted(AcceptedState.ACCEPTED);
+                           Toast.makeText(getContext(), "Else", Toast.LENGTH_SHORT).show();
+                          List<Event> findMyEventsByEventCreatorId =
+                                   new Select().from(Event.class).where("CreatorEventId=?",
+                                           String.valueOf(event.getCreatorEventId())).execute();
+                           for(Event x : findMyEventsByEventCreatorId){
+                               x.setAccepted(AcceptedState.ACCEPTED);
                                EventController.saveEvent(x);
-                           }}
-                           //Toast.makeText(getContext(), String.valueOf(eventCreator), Toast.LENGTH_SHORT).show();
-
-
-
-
-
-                        //event.setAccepted(AcceptedState.ACCEPTED);
-                        //EventController.saveEvent(event);
+                           }
+                       }
 
                         Toast.makeText(getContext(), R.string.save_event, Toast.LENGTH_SHORT).show();
 
