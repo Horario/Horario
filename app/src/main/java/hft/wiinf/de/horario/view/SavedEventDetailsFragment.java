@@ -15,7 +15,6 @@ import java.text.SimpleDateFormat;
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
 import hft.wiinf.de.horario.model.Event;
-import hft.wiinf.de.horario.model.Repetition;
 
 public class SavedEventDetailsFragment extends Fragment {
 
