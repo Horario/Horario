@@ -54,13 +54,10 @@ import hft.wiinf.de.horario.model.Repetition;
 
 //TODO Kommentieren und Java Doc Info Schreiben
 public class NewEventFragment extends Fragment {
-    private String TAG = "NewEventFragment";
     // calendar objects to save the startTime / end Time / endOfRepetition, default: values - today
     Calendar startTime = Calendar.getInstance();
     Calendar endTime = Calendar.getInstance();
     Calendar endOfRepetition = Calendar.getInstance();
-    private int counterNUMBER = 0;
-
     // elements of the gui
     private EditText editText_description, edittext_shortTitle, edittext_room, edittext_date, edittext_startTime, editText_endTime, edittext_userName, editText_endOfRepetition;
     private TextView textView_endofRepetiton;
@@ -69,8 +66,8 @@ public class NewEventFragment extends Fragment {
     private Button button_save;
     //person object of the user, to get the user name
     private Person me;
-    private int PERMISSION_REQUEST_READ_PHONE_STATE = 0;
-
+    int counter=0;
+    private int PERMISSION_REQUEST_READ_PHONE_STATE=0;
 
     @Nullable
     @Override
@@ -221,7 +218,6 @@ public class NewEventFragment extends Fragment {
                 onButtonClickSave();
                 EventOverviewFragment.update();
                 CalendarFragment.updateCompactCalendar();
-
             }
         });
 
@@ -235,8 +231,6 @@ public class NewEventFragment extends Fragment {
             me = new Person(true, "", "");
         edittext_userName.setText(me.getName());
     }
-
-
 
     //if the checkbox serial event is checked, repetition possibilities and the endOfrepetition is shown, else not
     private void checkSerialEvent() {
@@ -335,16 +329,13 @@ public class NewEventFragment extends Fragment {
     //if the save button is clicked check the entrys and save the event if everything is ok
     public void onButtonClickSave() {
         if (checkValidity()) {
-
-            //Look after all the permissions left to give.
-            if (me.getPhoneNumber() == null || !me.getPhoneNumber().matches("(\\+|0|00)[1-9][0-9]+")) {
-                checkPermissions();
-            } else {
+            if (me.getPhoneNumber() == null || !me.getPhoneNumber().matches("(\\+|0|00)[1-9][0-9]+"))
+                checkPhonePermission();
+            else
                 saveEvent();
-            }
+
         }
     }
-
 
     //read the needed parameters / textfield and save the event
     public void saveEvent() {
@@ -570,30 +561,24 @@ public class NewEventFragment extends Fragment {
             }
         }
     }
-
-    private void checkPermissions() {
+    private void checkPhonePermission() {
         //Check if User has permission to start to scan, if not it's start a RequestLoop
-        if (!arePermissionsGranted()) {
-            Log.d("ONCLICKSAVE", "before request permissions");
-            requestPermissions();
+        if (!isPhonePermissionGranted()) {
+            requestPhonePermission();
         } else {
             readPhoneNumber();
         }
     }
 
-
-
-
-
-    public boolean arePermissionsGranted() {
+    public boolean isPhonePermissionGranted() {
         return ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED;
     }
 
-    private void requestPermissions() {
+    private void requestPhonePermission() {
+        //For Fragment: requestPermissions(permissionsList,REQUEST_CODE);
+        //For Activity: ActivityCompat.requestPermissions(this,permissionsList,REQUEST_CODE);
         requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, PERMISSION_REQUEST_READ_PHONE_STATE);
     }
-
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
@@ -621,7 +606,7 @@ public class NewEventFragment extends Fragment {
                                     }
                                 })
                                 .create().show();
-                    } else if (counterNUMBER < 1) {
+                    } else if (counter < 1) {
                         // user did NOT check "never ask again" this is a good place to explain the user
                         // why you need the permission and ask if he wants // to accept it (the rationale)
                         new android.support.v7.app.AlertDialog.Builder(getActivity())
@@ -630,8 +615,8 @@ public class NewEventFragment extends Fragment {
                                 .setPositiveButton(R.string.oneMoreTime, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        counterNUMBER++;
-                                        checkPermissions();
+                                        counter++;
+                                        checkPhonePermission();
                                     }
                                 })
                                 .setNegativeButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
@@ -641,15 +626,15 @@ public class NewEventFragment extends Fragment {
                                     }
                                 })
                                 .create().show();
-                    } else if (counterNUMBER == 1) {
+                    } else if (counter == 1) {
                         new android.support.v7.app.AlertDialog.Builder(getActivity())
                                 .setTitle(R.string.sendSMS_lastTry)
                                 .setMessage(R.string.lastTry_phoneNumber)
                                 .setPositiveButton(R.string.oneMoreTime, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        counterNUMBER++;
-                                        checkPermissions();
+                                        counter++;
+                                        checkPhonePermission();
                                     }
                                 })
                                 .setNegativeButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
@@ -672,6 +657,8 @@ public class NewEventFragment extends Fragment {
 
     }
 
+    // }
+
 
     // method to read the phone number of the user
     public void readPhoneNumber() {
@@ -682,13 +669,14 @@ public class NewEventFragment extends Fragment {
         if (phoneNumber != null)
             phoneNumber.replaceAll(" ", "");
         if (phoneNumber.matches("[1-9][0-9]+"))
-            phoneNumber = "+" + phoneNumber;
+            phoneNumber="+"+phoneNumber;
         me.setPhoneNumber(phoneNumber);
         //if the number could not been read, open a dialog
         if (me.getPhoneNumber() == null || !me.getPhoneNumber().matches("(00|0|\\+)[1-9][0-9]+")) {
             openDialogAskForPhoneNumber();
         } else {
             Toast.makeText(getContext(), R.string.thanksphoneNumber, Toast.LENGTH_SHORT).show();
+            saveEvent();
 
         }
     }
@@ -732,19 +720,4 @@ public class NewEventFragment extends Fragment {
         });
 
     }
-//
-//    // Restart the App
-//    private void restartApp() {
-//        Bundle whichFragment = getArguments();
-////        getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-//        if (whichFragment.getString("fragment").equals("EventOverview")) {
-//            getActivity().getSupportFragmentManager().beginTransaction()
-//                    .replace(R.id.eventOverview_frameLayout, new EventOverviewFragment(), "")
-//                    .commit();
-//        } else {
-//            getActivity().getSupportFragmentManager().beginTransaction()
-//                    .replace(R.id.calendar_frameLayout, new CalendarFragment(), "")
-//                    .commit();
-//        }
-//    }
 }
