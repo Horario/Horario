@@ -48,7 +48,7 @@
     <string name="previous">Previous</string>
     <string name="titleParticipantsEvent">Rückmeldungen</string>
     <string name="notificationParticipantsBeingFetched">SMS werden ausgelesen...</string>
-    <string name="textMessagesUpdated">Teilnehmerlisten wurden aktualisiert</string>
+    <string name="participantsUpdated">Teilnehmerlisten wurden aktualisiert</string>
     <string name="noNewTextMessages">Keine neuen Nachrichten gefunden</string>
     <string name="noTextMessagesAvailable">Keine Nachricht gefunden</string>
     <string name="appointmentIsFrom">Termin von </string>
@@ -161,18 +161,22 @@
     <string name="scannerOverlay_positionYourScanner">Halte dein Smartphone vor den QR-Code und</string>
     <string name="scannerOverlay_toShowTheEvent">scanne ihn ab um den Termin zu öffnen</string>
     <string name="requestPermission_thankYou">Danke für die Zugriffsrechte auf die Kamera!</string>
-    <string name="requestPermission_askForPermission">Wir brauchen den Kamerazugriff um den QR-Code zu scannen.</string>
-    <string name="requestPermission_askForPermission_sendSMS">Wir müssen SMS verschicken um den Ersteller zu benachrichtigen.</string>
+    <string name="requestPermission_askForPermission">Wir brauchen den Kamerazugriff um den QR-Code einzuscannen.</string>
+    <string name="requestPermission_askForPermission_sendSMS">Wir müssen SMS verschicken, um den Ersteller zu benachrichtigen.</string>
+    <string name="requestPermission_askForSMSPermission">Wir brauchen den SMS-Zugriff um die Teilnehmerlisten zu füllen und aktualisieren.</string>
+    <string name="requestPermission_askForContactsPermission">Wir brauchen den Kontakte-Zugriff um die Teilnehmerlisten mit gespeicherten Kontaktnamen zu füllen und aktualisieren.</string>
     <string name="requestPermission_againButton">Nochmal</string>
     <string name="requestPermission_lastTryRequest">Letzer Versuch!</string>
     <string name="abort">ABBRUCH</string>
     <string name="setting_copyright_privacyPolicy">Privacy Policy</string>
     <string name="accessWith_NeverAskAgain_deny">Zugriff verweigert</string>
     <string name="requestPermission_accessDenied_withCheckbox">Du hast mit den Haken bei \"Nicht mehr fragen\"
-        dauerhaft den Zugiff zum Kalender verweigert. Um den QR Scanner zu nutzen aktiviere bitte den
-        Kamerazugriff über deine Rechteverwaltung.</string>
+        dauerhaft den Zugriff zum Kalender verweigert. Um den QR Scanner zu nutzen aktiviere bitte den
+        Kamerazugriff über deine Rechteverwaltung</string>
+    <string name="requestSMSPermission_accessDenied_withCheckbox">Du hast mit den Hacken bei \"Nicht mehr fragen\"  dauerhaft den Zugiff zu den SMS verweigert. Um Rückmeldungen zu nutzen aktiviere bitte den Lesezugriff über deine Rechteverwaltung</string>
+    <string name="requestContactPermission_accessDenied_withCheckbox">Du hast mit den Hacken bei \"Nicht mehr fragen\"  dauerhaft den Zugiff zu den Kontakten verweigert. Um Rückmeldungen mit Kontaktnamen zu nutzen aktiviere bitte den Lesezugriff über deine Rechteverwaltung</string>
     <string name="requestPermission_accessDenied_withCheckbox_SendSMS">Du hast mit den Haken bei \"Nicht mehr fragen\"
-        dauerhaft den Zugiff zum Kalender verweigert. Um den QR Scanner zu nutzen aktiviere bitte das SMS Senden über deine Rechteverwaltung.</string>
+        dauerhaft den Zugriff zum Kalender verweigert. Um den QR Scanner zu nutzen aktiviere bitte das SMS Senden über deine Rechteverwaltung</string>
     <string name="requestPermission_firstTryRequest">Erster von zwei Versuchen</string>
     <string name="qrGenerator_button_showInEventOverView">In Terminübersicht anzeigen</string>
 
