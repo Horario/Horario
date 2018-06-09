@@ -780,7 +780,14 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         Calendar now = Calendar.getInstance();
         now.set(Calendar.SECOND, 0);
         now.set(Calendar.MILLISECOND, 0);
-        if (getEndDateEvent().before(now)) {
+        if(getRepetition() == Repetition.NONE) {
+            if (getStartTimeEvent().before(now)) {
+                Toast.makeText(this, R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();
+                return true;
+            } else {
+                return false;
+            }
+        }else if (getEndDateEvent().before(now)) {
             Toast.makeText(this, R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();
             return true;
         } else {
