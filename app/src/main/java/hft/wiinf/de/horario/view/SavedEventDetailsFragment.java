@@ -74,7 +74,7 @@ public class SavedEventDetailsFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-               //ToDo Es wird das Falsche Fragment aufgerufen!!!
+               //ToDo Dennis: Soll die Abfrage ob man wirklich löschen will zweimal kommen?
                 askForPermissionToDelete();
 
             }
@@ -89,9 +89,15 @@ public class SavedEventDetailsFragment extends Fragment {
         savedEventDetailsButtonShowQr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-                //Code for showing the QR Code
+                QRGeneratorFragment qrGeneratorFragment = new QRGeneratorFragment();
+                Bundle bundleSavedEventId = new Bundle();
+                bundleSavedEventId.putLong("EventId", getEventID());
+                bundleSavedEventId.putString("fragment", "SavedEventDetails");
+                qrGeneratorFragment.setArguments(bundleSavedEventId);
+                FragmentTransaction fr = getFragmentManager().beginTransaction();
+                fr.replace(R.id.savedEvent_FrameLayout_main, qrGeneratorFragment, "SaveEvent");
+                fr.addToBackStack("SaveEvent");
+                fr.commit();
             }
         });
 
@@ -112,20 +118,16 @@ public class SavedEventDetailsFragment extends Fragment {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        alertDialogAskForFinalDecission.cancel();
                         EventRejectEventFragment eventRejectEventFragment = new EventRejectEventFragment();
-                        Bundle bundleAcceptedEventId = new Bundle();
-                        bundleAcceptedEventId.putLong("EventId", getEventID());
-                        bundleAcceptedEventId.putString("fragment", "AcceptedEventDetails");
-                        eventRejectEventFragment.setArguments(bundleAcceptedEventId);
+                        Bundle bundleSavedEventId = new Bundle();
+                        bundleSavedEventId.putLong("EventId", getEventID());
+                        bundleSavedEventId.putString("fragment", "SavedEventDetails");
+                        eventRejectEventFragment.setArguments(bundleSavedEventId);
                         FragmentTransaction fr = getFragmentManager().beginTransaction();
-                        fr.replace(R.id.acceptedEvent_relativeLayout_main, eventRejectEventFragment, "RejectEvent");
+                        fr.replace(R.id.savedEvent_FrameLayout_main, eventRejectEventFragment, "RejectEvent");
                         fr.addToBackStack("RejectEvent");
                         fr.commit();
-
-                        //ReCreate the Activity and go Back to Calendar (StartTab)
-                        Intent intent = getActivity().getIntent();
-                        getActivity().finish();
-                        startActivity(intent);
                     }
                 });
         alertDialogAskForFinalDecission.findViewById(R.id.dialog_button_event_back)
