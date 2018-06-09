@@ -75,7 +75,15 @@ public class SavedEventDetailsFragment extends Fragment {
             public void onClick(View v) {
 
                //ToDo Dennis: Soll die Abfrage ob man wirklich löschen will zweimal kommen?
-                askForPermissionToDelete();
+                EventRejectEventFragment eventRejectEventFragment = new EventRejectEventFragment();
+                Bundle bundleSavedEventId = new Bundle();
+                bundleSavedEventId.putLong("EventId", getEventID());
+                bundleSavedEventId.putString("fragment", "SavedEventDetails");
+                eventRejectEventFragment.setArguments(bundleSavedEventId);
+                FragmentTransaction fr = getFragmentManager().beginTransaction();
+                fr.replace(R.id.savedEvent_FrameLayout_main, eventRejectEventFragment, "RejectEvent");
+                fr.addToBackStack("RejectEvent");
+                fr.commit();
 
             }
         });
@@ -105,40 +113,40 @@ public class SavedEventDetailsFragment extends Fragment {
         return view;
     }
 
-    public void askForPermissionToDelete() {
-        final AlertDialog.Builder dialogAskForFinalDecission = new AlertDialog.Builder(getContext());
-        dialogAskForFinalDecission.setView(R.layout.dialog_afterrejectevent);
-        dialogAskForFinalDecission.setTitle(R.string.titleDialogRejectEvent);
-        dialogAskForFinalDecission.setCancelable(true);
-
-        final AlertDialog alertDialogAskForFinalDecission = dialogAskForFinalDecission.create();
-        alertDialogAskForFinalDecission.show();
-
-        alertDialogAskForFinalDecission.findViewById(R.id.dialog_button_event_delete)
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        alertDialogAskForFinalDecission.cancel();
-                        EventRejectEventFragment eventRejectEventFragment = new EventRejectEventFragment();
-                        Bundle bundleSavedEventId = new Bundle();
-                        bundleSavedEventId.putLong("EventId", getEventID());
-                        bundleSavedEventId.putString("fragment", "SavedEventDetails");
-                        eventRejectEventFragment.setArguments(bundleSavedEventId);
-                        FragmentTransaction fr = getFragmentManager().beginTransaction();
-                        fr.replace(R.id.savedEvent_FrameLayout_main, eventRejectEventFragment, "RejectEvent");
-                        fr.addToBackStack("RejectEvent");
-                        fr.commit();
-                    }
-                });
-        alertDialogAskForFinalDecission.findViewById(R.id.dialog_button_event_back)
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        alertDialogAskForFinalDecission.cancel();
-                    }
-                });
-
-    }
+//    public void askForPermissionToDelete() {
+//        final AlertDialog.Builder dialogAskForFinalDecission = new AlertDialog.Builder(getContext());
+//        dialogAskForFinalDecission.setView(R.layout.dialog_afterrejectevent);
+//        dialogAskForFinalDecission.setTitle(R.string.titleDialogRejectEvent);
+//        dialogAskForFinalDecission.setCancelable(true);
+//
+//        final AlertDialog alertDialogAskForFinalDecission = dialogAskForFinalDecission.create();
+//        alertDialogAskForFinalDecission.show();
+//
+//        alertDialogAskForFinalDecission.findViewById(R.id.dialog_button_event_delete)
+//                .setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        alertDialogAskForFinalDecission.cancel();
+//                        EventRejectEventFragment eventRejectEventFragment = new EventRejectEventFragment();
+//                        Bundle bundleSavedEventId = new Bundle();
+//                        bundleSavedEventId.putLong("EventId", getEventID());
+//                        bundleSavedEventId.putString("fragment", "SavedEventDetails");
+//                        eventRejectEventFragment.setArguments(bundleSavedEventId);
+//                        FragmentTransaction fr = getFragmentManager().beginTransaction();
+//                        fr.replace(R.id.savedEvent_FrameLayout_main, eventRejectEventFragment, "RejectEvent");
+//                        fr.addToBackStack("RejectEvent");
+//                        fr.commit();
+//                    }
+//                });
+//        alertDialogAskForFinalDecission.findViewById(R.id.dialog_button_event_back)
+//                .setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        alertDialogAskForFinalDecission.cancel();
+//                    }
+//                });
+//
+//    }
 
     public void askForPermissionToSave() {
         final AlertDialog.Builder dialogAskForFinalDecission = new AlertDialog.Builder(getContext());

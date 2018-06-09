@@ -63,7 +63,7 @@ public class QRGeneratorFragment extends Fragment {
     public Long eventIdDescription() {
         Bundle qrEventIdBundle = getArguments();
         assert qrEventIdBundle != null;
-        Long qrEventIdLongResult = qrEventIdBundle.getLong("eventId");
+        Long qrEventIdLongResult = qrEventIdBundle.getLong("EventId");
         return qrEventIdLongResult;
     }
 
