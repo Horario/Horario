@@ -355,11 +355,11 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
                 //check if settings Tab is unselected
+                //Close the keyboard on a tab change
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(mSectionsPageAdapter.getItem(tab.getPosition()).getView().getApplicationWindowToken(), 0);
                 if (tab.getPosition() == 2) {
                     getSupportFragmentManager().popBackStack();
-                    //Close the keyboard on a tab change
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(mSectionsPageAdapter.getItem(2).getView().getApplicationWindowToken(), 0);
                 } else if (tab.getPosition() == 1) {
                     getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
