@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import java.util.List;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
+import hft.wiinf.de.horario.controller.SendSmsController;
 import hft.wiinf.de.horario.model.AcceptedState;
 import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Repetition;
@@ -37,6 +39,9 @@ public class SavedEventDetailsFragment extends Fragment {
     TextView savedEventDetailsOrganisatorText, savedEventphNumberText, savedEventeventDescription;
     Event selectedEvent;
     StringBuffer eventToStringBuffer;
+
+    Long creatorEventId;
+    String shortTitle, phNumber;
 
     public SavedEventDetailsFragment() {
         // Required empty public constructor
@@ -149,29 +154,35 @@ public class SavedEventDetailsFragment extends Fragment {
                         //Pull the EventID change the AcceptedState and Save again.
 
                        Event event = EventController.getEventById(getEventID());
-                       long a = event.getCreatorEventId();
+                       event.setAccepted(AcceptedState.ACCEPTED);
+                       EventController.saveEvent(event);
 
-                       if(event.getRepetition().equals("NONE")){
-                           Toast.makeText(getContext(), "IF", Toast.LENGTH_SHORT).show();
-                           event.setAccepted(AcceptedState.ACCEPTED);
-                           EventController.saveEvent(event);
-                       }else {
-                           Toast.makeText(getContext(), "Else", Toast.LENGTH_SHORT).show();
-                          List<Event> findMyEventsByEventCreatorId =
-                                   new Select().from(Event.class).where("CreatorEventId=?",
-                                           String.valueOf(event.getCreatorEventId())).execute();
-                           for(Event x : findMyEventsByEventCreatorId){
-                               x.setAccepted(AcceptedState.ACCEPTED);
-                               EventController.saveEvent(x);
-                           }
-                       }
+                        //SMS
+                        creatorEventId = event.getCreatorEventId();
+                        SendSmsController.sendSMS(getContext(), phNumber, null, true, creatorEventId, shortTitle);
 
-                        Toast.makeText(getContext(), R.string.save_event, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.accept_event_hint, Toast.LENGTH_SHORT).show();
+                        //restart Activity
+                        Intent intent = new Intent(getActivity(), hft.wiinf.de.horario.TabActivity.class);
+                        startActivity(intent);
 
-                        //ReCreate the Activity and go Back to Calendar (StartTab)
-                         Intent intent = getActivity().getIntent();
-                         getActivity().finish();
-                         startActivity(intent);
+//
+//                       if(event.getRepetition().equals("NONE")){
+//                           Toast.makeText(getContext(), "IF", Toast.LENGTH_SHORT).show();
+//                           event.setAccepted(AcceptedState.ACCEPTED);
+//                           EventController.saveEvent(event);
+//                       }else {
+//                           Toast.makeText(getContext(), "Else", Toast.LENGTH_SHORT).show();
+//                          List<Event> findMyEventsByEventCreatorId =
+//                                   new Select().from(Event.class).where("CreatorEventId=?",
+//                                           String.valueOf(event.getCreatorEventId())).execute();
+//                           for(Event x : findMyEventsByEventCreatorId){
+//                               x.setAccepted(AcceptedState.ACCEPTED);
+//                               EventController.saveEvent(x);
+//                           }
+//                       }
+//
+//                        Toast.makeText(getContext(), R.string.save_event, Toast.LENGTH_SHORT).show();
                     }
                 });
         alertDialogAskForFinalDecission.findViewById(R.id.dialog_button_event_back)
@@ -202,11 +213,11 @@ public class SavedEventDetailsFragment extends Fragment {
         String startTime = eventStringBufferArray[4].trim();
         String endTime = eventStringBufferArray[5].trim();
         String repetition = eventStringBufferArray[6].toUpperCase().trim();
-        String shortTitle = eventStringBufferArray[7].trim();
+        shortTitle = eventStringBufferArray[7].trim();
         String place = eventStringBufferArray[8].trim();
         String description = eventStringBufferArray[9].trim();
         String eventCreatorName = eventStringBufferArray[10].trim();
-        String phNumber = selectedEvent.getCreator().getPhoneNumber();
+        phNumber = selectedEvent.getCreator().getPhoneNumber();
 
         // Change the DataBase Repetition Information in a German String for the Repetition Element
         // like "Daily" into "täglich" and so on
