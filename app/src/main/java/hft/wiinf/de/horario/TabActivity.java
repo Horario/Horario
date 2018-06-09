@@ -785,7 +785,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.dismiss();
-                                        openDialogAskForUsernameAndPhoneNumber();
+                                        openDialogAskForUsername();
                                     }
                                 })
                                 .create().show();
@@ -807,7 +807,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                                     public void onClick(DialogInterface dialog, int which) {
                                         //open keyboard
                                         ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-                                        openDialogAskForUsernameAndPhoneNumber();
+                                        openDialogAskForUsername();
                                     }
                                 })
                                 .create().show();
@@ -826,12 +826,12 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-                                        openDialogAskForUsernameAndPhoneNumber();
+                                        openDialogAskForUsername();
                                     }
                                 })
                                 .create().show();
                     } else {
-                        openDialogAskForUsernameAndPhoneNumber();
+                        openDialogAskForUsername();
                         ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
                     }
                 } else {
@@ -1072,7 +1072,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
             }
             if (personMe.getName().isEmpty())
-                openDialogAskForUsernameAndPhoneNumber();
+                openDialogAskForUsername();
             else {
                 PersonController.savePerson(personMe);
                 saveEventAndPerson();

@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.TabActivity;
 import hft.wiinf.de.horario.controller.EventController;
+import hft.wiinf.de.horario.controller.NotificationController;
 import hft.wiinf.de.horario.controller.SendSmsController;
 import hft.wiinf.de.horario.model.AcceptedState;
 import hft.wiinf.de.horario.model.Event;
@@ -99,6 +100,9 @@ public class EventRejectEventFragment extends Fragment {
                         event = EventController.getEventById((getEventID()));
                         event.setAccepted(AcceptedState.REJECTED);
                         EventController.saveEvent(event);
+
+                        //delete alarm for notification
+                        NotificationController.deleteAlarmNotification(getContext(), event);
 
                         //SMS
                         rejectMessage = spinner_reason.getSelectedItem().toString() + "!" + reason_for_rejection.getText().toString();
