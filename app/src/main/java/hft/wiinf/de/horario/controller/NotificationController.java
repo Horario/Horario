@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -22,11 +23,19 @@ public class NotificationController {
         if (PersonController.getPersonWhoIam() != null) {
             Person notificationPerson = PersonController.getPersonWhoIam();
             if (notificationPerson.isEnablePush()) {
-                //Check if it is a repeating Event
-                if (event.getRepetition().equals(Repetition.NONE)) {
-                    Intent alarmIntent = new Intent(context, NotificationReceiver.class);
-                    Date date = event.getStartTime();
-                    Calendar calendar = GregorianCalendar.getInstance();
+                Calendar testToday = GregorianCalendar.getInstance();
+                testToday.setTimeInMillis(System.currentTimeMillis());
+
+                Intent alarmIntent;
+                Date date;
+                Calendar calendar;
+                PendingIntent pendingIntent;
+                AlarmManager manager;
+
+                if (event.getStartTime().after(testToday.getTime())) {
+                    alarmIntent = new Intent(context, NotificationReceiver.class);
+                    date = event.getStartTime();
+                    calendar = GregorianCalendar.getInstance();
                     calendar.setTime(date);
 
                     alarmIntent.putExtra("Event", event.getShortTitle());
@@ -37,34 +46,36 @@ public class NotificationController {
                         alarmIntent.putExtra("Minute", String.valueOf(calendar.get(Calendar.MINUTE)));
                     }
                     alarmIntent.putExtra("ID", event.getId().intValue());
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(context, event.getId().intValue(), alarmIntent, 0);
+                    pendingIntent = PendingIntent.getBroadcast(context, event.getId().intValue(), alarmIntent, 0);
 
-                    AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                    manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                     manager.set(AlarmManager.RTC_WAKEUP, calcNotificationTime(calendar, notificationPerson), pendingIntent);
-                } else {
+                }
+                if (!event.getRepetition().equals(Repetition.NONE)) {
                     List<Event> allEvents = EventController.findRepeatingEvents(event.getId());
                     for (Event repEvent : allEvents) {
-                        Intent alarmIntent = new Intent(context, NotificationReceiver.class);
+                        if (repEvent.getStartTime().after(testToday.getTime())) {
+                            alarmIntent = new Intent(context, NotificationReceiver.class);
+                            //Get startTime an convert into a Calender to use it
+                            date = repEvent.getStartTime();
+                            calendar = GregorianCalendar.getInstance();
+                            calendar.setTime(date);
 
-                        //Get startTime an convert into a Calender to use it
-                        Date date = repEvent.getStartTime();
-                        Calendar calendar = GregorianCalendar.getInstance();
-                        calendar.setTime(date);
+                            //Put extra Data which is needed for the Notification
+                            alarmIntent.putExtra("Event", repEvent.getShortTitle());
+                            alarmIntent.putExtra("Hour", calendar.get(Calendar.HOUR_OF_DAY));
+                            if (calendar.get(Calendar.MINUTE) < 10) {
+                                alarmIntent.putExtra("Minute", "0" + String.valueOf(calendar.get(Calendar.MINUTE)));
+                            } else {
+                                alarmIntent.putExtra("Minute", String.valueOf(calendar.get(Calendar.MINUTE)));
+                            }
+                            alarmIntent.putExtra("ID", repEvent.getId().intValue());
+                            pendingIntent = PendingIntent.getBroadcast(context, repEvent.getId().intValue(), alarmIntent, 0);
 
-                        //Put extra Data which is needed for the Notification
-                        alarmIntent.putExtra("Event", repEvent.getShortTitle());
-                        alarmIntent.putExtra("Hour", calendar.get(Calendar.HOUR_OF_DAY));
-                        if (calendar.get(Calendar.MINUTE) < 10) {
-                            alarmIntent.putExtra("Minute", "0" + String.valueOf(calendar.get(Calendar.MINUTE)));
-                        } else {
-                            alarmIntent.putExtra("Minute", String.valueOf(calendar.get(Calendar.MINUTE)));
+                            //Set AlarmManager --> NotificationReceiver will be called
+                            manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                            manager.set(AlarmManager.RTC_WAKEUP, calcNotificationTime(calendar, notificationPerson), pendingIntent);
                         }
-                        alarmIntent.putExtra("ID", repEvent.getId().intValue());
-                        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, repEvent.getId().intValue(), alarmIntent, 0);
-
-                        //Set AlarmManager --> NotificationReceiver will be called
-                        AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                        manager.set(AlarmManager.RTC_WAKEUP, calcNotificationTime(calendar, notificationPerson), pendingIntent);
                     }
                 }
             }
