@@ -25,6 +25,7 @@ import hft.wiinf.de.horario.controller.SendSmsController;
 import hft.wiinf.de.horario.model.AcceptedState;
 import hft.wiinf.de.horario.model.Event;
 
+
 public class EventRejectEventFragment extends Fragment {
 
     private static final String TAG = "EventRejectEvent";
