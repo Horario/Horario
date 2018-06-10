@@ -994,7 +994,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                                         }
                                     })
                                     .setTitle(R.string.requestPermission_firstTryRequest)
-                                    .setMessage(R.string.requestPermission_askForContactsPermission)
+                                    .setMessage(R.string.requestPermission_askForSMSPermission)
                                     .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
@@ -1022,7 +1022,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                                         }
                                     })
                                     .setTitle(R.string.requestPermission_lastTryRequest)
-                                    .setMessage(R.string.requestPermission_askForContactsPermission)
+                                    .setMessage(R.string.requestPermission_askForSMSPermission)
                                     .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
