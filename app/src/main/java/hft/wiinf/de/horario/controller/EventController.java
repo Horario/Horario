@@ -68,7 +68,7 @@ public class EventController {
 
     public static boolean createdEventsYet() {
         Person myself = PersonController.getPersonWhoIam();
-        List<Event> resultSet = new Select().from(Event.class).where("creator=?", myself).execute();
+        List<Event> resultSet = new Select().from(Event.class).execute();
         if (resultSet.size() == 0) {
             return false;
         } else {
@@ -111,7 +111,8 @@ public class EventController {
             repetitionEvent.setPlace(firstEvent.getPlace());
             repetitionEvent.setDescription(firstEvent.getDescription());
             repetitionEvent.setAccepted(firstEvent.getAccepted());
-            repetitionEvent.setEndTime(firstEvent.getEndTime());
+            repetitionEvent.setRepetition(firstEvent.getRepetition());
+            repetitionEvent.setEndDate(firstEvent.getEndDate());
             repetitionEvent.setShortTitle(firstEvent.getShortTitle());
             repetitionEvent.setStartEvent(firstEvent);
             repetitionEvent.setCreatorEventId(firstEvent.getCreatorEventId());
@@ -146,4 +147,12 @@ public class EventController {
     }
 
 
+    public static boolean checkIfEventIsInDatabaseThroughId(Long eventIdInSMS) {
+        List<Event> resultSet = new Select().from(Event.class).where("Id=?", eventIdInSMS).execute();
+        if (resultSet.size() == 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

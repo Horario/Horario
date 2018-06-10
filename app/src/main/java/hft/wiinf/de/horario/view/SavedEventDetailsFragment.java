@@ -32,6 +32,7 @@ public class SavedEventDetailsFragment extends Fragment {
     @SuppressLint("LongLogTag")
     public Long getEventID() {
         Bundle MYEventIdBundle = getArguments();
+        assert MYEventIdBundle != null;
         Long MYEventIdLongResult = MYEventIdBundle.getLong("EventId");
         return MYEventIdLongResult;
     }
@@ -64,10 +65,29 @@ public class SavedEventDetailsFragment extends Fragment {
                 //Code for accepting an event eg. update the DB and Calendar View
             }
         });
+
+        // Open the QRGeneratorFragment to Show the QRCode form this Event.
         savedEventDetailsButtonShowQr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Code for showing the QR Code
+                Bundle whichFragment = getArguments();
+                QRGeneratorFragment qrFrag = new QRGeneratorFragment();
+                Bundle bundle = new Bundle();
+                bundle.putLong("eventId", getEventID());
+                bundle.putString("fragment", whichFragment.getString("fragment"));
+                qrFrag.setArguments(bundle);
+
+                if (whichFragment.getString("fragment").equals("EventOverview")) {
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.eventOverview_frameLayout, qrFrag, "QrGeneratorEO")
+                            .addToBackStack("QrGeneratorEO")
+                            .commit();
+                } else {
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.calendar_frameLayout, qrFrag, "QrGeneratorCA")
+                            .addToBackStack("QrGeneratorCA")
+                            .commit();
+                }
             }
         });
 
@@ -85,19 +105,21 @@ public class SavedEventDetailsFragment extends Fragment {
 
     private void buildDescriptionEvent(Event selectedEvent) {
         //Put StringBuffer in an Array and split the Values to new String Variables
-        //Index: 0 = CreatorID; 1 = StartDate; 2 = EndDate; 3 = StartTime; 4 = EndTime;
-        //       5 = Repetition; 6 = ShortTitle; 7 = Place; 8 = Description;  9 = EventCreatorName
+        //Index: 0 = CreatorID; 1 = StartDate; 2=date of event (for serial events) 3 = EndDate; 4 = StartTime; 5 = EndTime;
+        //       6 = Repetition; 7 = ShortTitle; 8 = Place; 9 = Description;  10 = EventCreatorName
         String[] eventStringBufferArray = String.valueOf(stringBufferGenerator()).split("\\|");
         String startDate = eventStringBufferArray[1].trim();
-        String endDate = eventStringBufferArray[2].trim();
-        String startTime = eventStringBufferArray[3].trim();
-        String endTime = eventStringBufferArray[4].trim();
-        String repetition = eventStringBufferArray[5].toUpperCase().trim();
-        String shortTitle = eventStringBufferArray[6].trim();
-        String place = eventStringBufferArray[7].trim();
-        String description = eventStringBufferArray[8].trim();
-        String eventCreatorName = eventStringBufferArray[9].trim();
+        String currentDate = eventStringBufferArray[2].trim();
+        String endDate = eventStringBufferArray[3].trim();
+        String startTime = eventStringBufferArray[4].trim();
+        String endTime = eventStringBufferArray[5].trim();
+        String repetition = eventStringBufferArray[6].toUpperCase().trim();
+        String shortTitle = eventStringBufferArray[7].trim();
+        String place = eventStringBufferArray[8].trim();
+        String description = eventStringBufferArray[9].trim();
+        String eventCreatorName = eventStringBufferArray[10].trim();
         String phNumber = selectedEvent.getCreator().getPhoneNumber();
+
         // Change the DataBase Repetition Information in a German String for the Repetition Element
         // like "Daily" into "täglich" and so on
         switch (repetition) {
@@ -121,7 +143,7 @@ public class SavedEventDetailsFragment extends Fragment {
         }
 
         // Event shortTitel in Headline with StartDate
-        savedEventDetailsOrganisatorText.setText(eventCreatorName + "\n" + shortTitle + ", " + startDate);
+        savedEventDetailsOrganisatorText.setText(eventCreatorName + "\n" + shortTitle + ", "+currentDate );
         savedEventphNumberText.setText(phNumber);
         // Check for a Repetition Event and Change the Description Output with and without
         // Repetition Element inside.
@@ -151,10 +173,14 @@ public class SavedEventDetailsFragment extends Fragment {
         // Place, Description and Name of EventCreator
         eventToStringBuffer = new StringBuffer();
         eventToStringBuffer.append(selectedEvent.getId() + stringSplitSymbol);
+        if (selectedEvent.getStartEvent()==null)
+            eventToStringBuffer.append(simpleDateFormat.format(selectedEvent.getStartTime()) + stringSplitSymbol);
+        else
+            eventToStringBuffer.append(simpleDateFormat.format(selectedEvent.getStartEvent().getStartTime()) + stringSplitSymbol);
         eventToStringBuffer.append(simpleDateFormat.format(selectedEvent.getStartTime()) + stringSplitSymbol);
         eventToStringBuffer.append(simpleDateFormat.format(selectedEvent.getEndDate()) + stringSplitSymbol);
-        eventToStringBuffer.append(simpleTimeFormat.format(selectedEvent.getStartTime()) + stringSplitSymbol);
-        eventToStringBuffer.append(simpleTimeFormat.format(selectedEvent.getEndTime()) + stringSplitSymbol);
+            eventToStringBuffer.append(simpleTimeFormat.format(selectedEvent.getStartTime()) + stringSplitSymbol);
+            eventToStringBuffer.append(simpleTimeFormat.format(selectedEvent.getEndTime()) + stringSplitSymbol);
         eventToStringBuffer.append(selectedEvent.getRepetition() + stringSplitSymbol);
         eventToStringBuffer.append(selectedEvent.getShortTitle() + stringSplitSymbol);
         eventToStringBuffer.append(selectedEvent.getPlace() + stringSplitSymbol);

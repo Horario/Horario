@@ -23,6 +23,8 @@ public class Person extends Model {
     private int notificationTime = 15;
     @Column
     private int startTab = 1;
+    @Column
+    private String rejectionReason = "";
 
     //Use this constructor for person that using this specific app (owner)
     public Person(boolean isItMe, String phoneNumber, String name) {
@@ -105,6 +107,14 @@ public class Person extends Model {
 
     public void setStartTab(int startTab) {
         this.startTab = startTab;
+    }
+
+    public String getRejectionReason() {
+        return rejectionReason;
+    }
+
+    public void setRejectionReason(String rejectionReason) {
+        this.rejectionReason = rejectionReason;
     }
 }
 
