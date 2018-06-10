@@ -70,13 +70,13 @@ public class QRGeneratorFragment extends Fragment {
     // Push the User where he/she comes from
     private void goWhereUserComesFrom() {
         Bundle whichFragment = getArguments();
-        getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        if (whichFragment.getString("fragment").equals("EventOverview")) {
-            getActivity().getSupportFragmentManager().beginTransaction()
+        Objects.requireNonNull(getFragmentManager()).popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        if (Objects.requireNonNull(whichFragment).getString("fragment").equals("EventOverview")) {
+            Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
                     .replace(R.id.eventOverview_frameLayout, new EventOverviewFragment(), "")
                     .commit();
         } else {
-            getActivity().getSupportFragmentManager().beginTransaction()
+            Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
                     .replace(R.id.calendar_frameLayout, new CalendarFragment(), "")
                     .commit();
         }
@@ -106,6 +106,7 @@ public class QRGeneratorFragment extends Fragment {
         return view;
     }
 
+    @SuppressLint("SimpleDateFormat")
     public StringBuffer stringBufferGenerator() {
         //Modify the DateFormat form den DB to get a more readable Form for Date and Time disjunct
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
@@ -217,7 +218,7 @@ public class QRGeneratorFragment extends Fragment {
                         + getString(R.string.until) + endDate + getString(R.string.find)
                         + repetition + getString(R.string.at) + startTime + getString(R.string.clock_to)
                         + endTime + getString(R.string.clock_at_room) + place + " " + shortTitle
-                        + getString(R.string.instead_of) + "\n" + getString(R.string.eventDetails) + description +
+                        + getString(R.string.instead_of) + "\n"+ "\n" + getString(R.string.eventDetails) + description +
                         "\n" + "\n" + getString(R.string.organizer) + eventCreatorName);
             }
             // In the CatchBlock the User see a SnackBar Information and was pushed where the User Comes From

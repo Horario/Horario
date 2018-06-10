@@ -38,11 +38,11 @@
     <string name="savingSuccessful_new">neuen Termin erstellen</string>
     <string name="savingSuccessful_qrcode">QRCode anzeigen</string>
     <string name="titleDialogUsername">Bitte vergib einen Benutzernamen! </string>
-    <string name="titleDialogUsernamePhoneNumber">Bitte vergib einen Benutzernamen und deine Telefonnummer! </string>
+    <string name="titleDialogUsernamePhoneNumber">Bitte gib einen Benutzernamen und deine Telefonnummer ein! </string>
     <string name="save_text">speichern</string>
     <string name="later_text">Später</string>
     <string name="thanksForUsername">Benutzername wurde gespeichert. </string>
-    <string name="titleDialogFinalDecission">Bist du sicher?</string>
+    <string name="titleDialogFinalDecission">Bist du dir sicher?</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="titleParticipantsEvent">Rückmeldungen</string>
@@ -108,18 +108,18 @@
 
     <!-- QR Generator -->
     <string name="show_Response">Rückmeldungen anzeigen</string>
-    <string name="share_with">Teilen via</string>
+    <string name="share_with">Teilen via…</string>
     <string name="on">Am\u0020</string>
     <string name="find">\u0020findet\u0020</string>
     <string name="from">von\u0020</string>
-    <string name="clock_at_room">Uhr in Raum\u0020</string>
+    <string name="clock_at_room">\u0020Uhr in Raum\u0020</string>
     <string name="organizer">Organisator:\u0020</string>
     <string name="eventDetails">Termindetails sind:\u0020</string>
     <string name="at">\u0020um\u0020</string>
     <string name="instead_of">\u0020statt.</string>
     <string name="as_of">Vom\u0020</string>
-    <string name="until">\u0020bis\u0020</string>
-    <string name="clock_to">Uhr bis\u0020</string>
+    <string name="until">\u0020Uhr bis\u0020</string>
+    <string name="clock_to">\u0020Uhr bis\u0020</string>
     <string name="your_Event">Dein Termin</string>
     <string name="room">Raum:\u0020</string>
     <string name="yourself">Du</string>
@@ -132,7 +132,7 @@
     <string name="toCalender">\u0020Zum Kalender\u0020</string>
     <string name="wrongQRCodeResult">Das ist der Inhalt des QR Codes:\u0020</string>
     <string name="notAsEventSaveable">Das kann leider nicht als Termin gespeichert werden!</string>
-    <string name="back_where_user_comesFrom">Zurück zum Ursprung</string>
+    <string name="back_where_user_comesFrom">Zurück zum Kalendar</string>
 
     <!-- QR Scanner & Scanner PopUp -->
     <string name="eventSave">Termin zusagen</string>

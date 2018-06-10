@@ -72,7 +72,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     Event singleEvent;
     //Index: 0 = CreatorID; 1 = StartDate; 2 = EndDate; 3 = StartTime; 4 = EndTime;
     //       5 = Repetition; 6 = ShortTitle; 7 = Place; 8 = Descriptoin;  9 = EventCreatorName
-    private String creatorID, startDate, endDate, startTime, endTime, repetition, shortTitle, place, description, eventCreatorName, creatorPhoneNumber;
+    private String creatorID, startDate, endDate, startTime, endTime, repetition, shortTitle, place,
+            description, eventCreatorName, creatorPhoneNumber;
     private String hourOfDay, minutesOfDay, year, month, day;
 
     Calendar myStartTime = Calendar.getInstance();
@@ -101,10 +102,10 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         mSectionsPageAdapter = new SectionsPageAdapterActivity(getSupportFragmentManager());
 
         //Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = findViewById(R.id.container);
         setupViewPager(mViewPager);
 
-        tabLayout = (TabLayout) findViewById(R.id.tabBarLayout);
+        tabLayout = findViewById(R.id.tabBarLayout);
         tabLayout.setupWithViewPager(mViewPager);
 
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_dateview);
@@ -213,14 +214,14 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
                 fr.replace(R.id.eventOverview_frameLayout, new EventOverviewFragment());
                 fr.commit();
-                tabLayout.getTabAt(0).select();
+                Objects.requireNonNull(tabLayout.getTabAt(0)).select();
                 break;
             case "Calendar":
                 getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 FragmentTransaction frCA = getSupportFragmentManager().beginTransaction();
                 frCA.replace(R.id.calendar_frameLayout, new CalendarFragment());
                 frCA.commit();
-                tabLayout.getTabAt(1).select();
+                Objects.requireNonNull(tabLayout.getTabAt(1)).select();
                 break;
             default:
                 Toast.makeText(this, R.string.ups_an_error, Toast.LENGTH_SHORT).show();
@@ -233,7 +234,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
 
     //After Scanning it was opened a Dialog where the user can choose what to do next
-    @SuppressLint("ResourceType")
+    @SuppressLint({"ResourceType", "SetTextI18n"})
     private void openActionDialogAfterScanning(final String qrScannContentResult, final String whichFragmentTag) {
         //Create the Dialog with the GUI Elements initial
         final Dialog afterScanningDialogAction = new Dialog(this);
@@ -247,7 +248,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         Button qrScanner_result_eventSave = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_eventSave);
         final Button qrScanner_result_abort = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_about);
         Button qrScanner_result_toCalender = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_toCalender);
-        Button qrScanner_result_eventSave_without_assign = afterScanningDialogAction.findViewById((R.id.dialog_qrScanner_button_eventSaveOnly));
+        Button qrScanner_result_eventSave_without_assign = afterScanningDialogAction.findViewById(
+                (R.id.dialog_qrScanner_button_eventSaveOnly));
 
         //Set the Cancel and BackToCalenderButtons to Invisible
         qrScanner_result_abort.setVisibility(View.GONE);
@@ -274,10 +276,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         public void onClick(View v) {
                             buttonId = 1;
                             decideWhatToDo();
-//                            //Restart the TabActivity an Reload all Views
-                            //restartApp(whichFragmentTag);
-                            //afterScanningDialogAction.dismiss();
-
                         }
                     });
 
@@ -288,10 +286,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         public void onClick(View v) {
                             buttonId = 2;
                             decideWhatToDo();
-//                            //Restart the TabActivity an Reload all Views
-//                            restartApp(whichFragmentTag);
-//                            afterScanningDialogAction.dismiss();
-
                         }
                     });
 
@@ -302,12 +296,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         public void onClick(View v) {
                             buttonId = 3;
                             decideWhatToDo();
-//                            //Restart the TabActivity an Reload all Views
-//                            restartApp(whichFragmentTag);
-//                            afterScanningDialogAction.dismiss();
                         }
                     });
-
 
             //Put StringBuffer in an Array and split the Values to new String Variables
             //Index: 0 = CreatorID; 1 = StartDate; 2 = EndDate; 3 = StartTime; 4 = EndTime;
@@ -369,7 +359,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
             }
 
-            // Event shortTitle in Headline with eventCreaftorName
+            // Event shortTitle in Headline with eventCreatorName
             qrScanner_result_headline.setText(shortTitle + " " + getString(R.string.from) + eventCreatorName);
             // Check for a Repetition Event and Change the Description Output with and without
             // Repetition Element inside.
@@ -377,14 +367,14 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 qrScanner_result_description.setText(getString(R.string.on) + startDate
                         + getString(R.string.find) + getString(R.string.from) + startTime + getString(R.string.until)
                         + endTime + getString(R.string.clock_at_room) + place + " " + shortTitle
-                        + getString(R.string.instead_of) + "\n" + getString(R.string.eventDetails)
+                        + getString(R.string.instead_of) + "\n" + "\n"+ getString(R.string.eventDetails)
                         + description + "\n" + "\n" + getString(R.string.organizer) + eventCreatorName);
             } else {
                 qrScanner_result_description.setText(getString(R.string.as_of) + startDate
                         + getString(R.string.until) + endDate + getString(R.string.find)
                         + repetition + getString(R.string.at) + startTime + getString(R.string.clock_to)
                         + endTime + getString(R.string.clock_at_room) + place + " " + shortTitle
-                        + getString(R.string.instead_of) + "\n" + getString(R.string.eventDetails) + description +
+                        + getString(R.string.instead_of) + "\n" + "\n" + getString(R.string.eventDetails) + description +
                         "\n" + "\n" + getString(R.string.organizer) + eventCreatorName);
 
             }
@@ -410,7 +400,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             });
         }
     }
-
 
     // "Catch" the ScanningResult and throw the Content to the processing Method
     @Override
@@ -448,7 +437,9 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                     getSupportFragmentManager().popBackStack();
                     //Close the keyboard on a tab change
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(mSectionsPageAdapter.getItem(2).getView().getApplicationWindowToken(), 0);
+                    assert imm != null;
+                    imm.hideSoftInputFromWindow(Objects.requireNonNull(mSectionsPageAdapter.getItem(2)
+                            .getView()).getApplicationWindowToken(), 0);
                 } else if (tab.getPosition() == 1) {
                     getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
@@ -471,6 +462,10 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 imm.hideSoftInputFromWindow(mSectionsPageAdapter.getItem(tab.getPosition()).getView().getApplicationWindowToken(), 0);
                 if (tab.getPosition() == 2) {
                     getSupportFragmentManager().popBackStack();
+                    //Close the keyboard on a tab change
+                    assert imm != null;
+                    imm.hideSoftInputFromWindow(Objects.requireNonNull(mSectionsPageAdapter.getItem(2)
+                            .getView()).getApplicationWindowToken(), 0);
                 } else if (tab.getPosition() == 1) {
                     getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
@@ -608,7 +603,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         myEndDate.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hourOfDay));
         myEndDate.set(Calendar.MINUTE, Integer.parseInt(minutesOfDay));
         myEndDate.set(Integer.parseInt(year), Integer.parseInt(month) - 1, Integer.parseInt(day));
-
         return myEndDate;
     }
 
@@ -638,7 +632,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         final AlertDialog alertDialogAskForFinalDecission = dialogAskForFinalDecission.create();
         //open Dialog with yes or no after button click (accept, save, reject)
         alertDialogAskForFinalDecission.show();
-        alertDialogAskForFinalDecission.findViewById(R.id.dialog_event_final_decission_accept)
+        Objects.requireNonNull(alertDialogAskForFinalDecission.findViewById(R.id.dialog_event_final_decission_accept))
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -734,7 +728,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                     }
                 });
         //if Button "nein": cancel dialog
-        alertDialogAskForFinalDecission.findViewById(R.id.dialog_event_final_decission_reject)
+        Objects.requireNonNull(alertDialogAskForFinalDecission.findViewById(R.id.dialog_event_final_decission_reject))
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -748,7 +742,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         //build dialog for username and phoneNumber
         final AlertDialog.Builder dialogAskForUsernamePhoneNumber = new AlertDialog.Builder(this);
         dialogAskForUsernamePhoneNumber.setView(R.layout.dialog_askforphonenumberandusername);
-        dialogAskForUsernamePhoneNumber.setTitle(R.string.titleDialogUsernamePhoneNumber);
+        //dialogAskForUsernamePhoneNumber.setTitle(R.string.titleDialogUsernamePhoneNumber);
+
         dialogAskForUsernamePhoneNumber.setCancelable(true);
 
         final AlertDialog alertDialogAskForUsernamePhoneNumber = dialogAskForUsernamePhoneNumber.create();
@@ -758,7 +753,9 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         final EditText afterScanning_username = alertDialogAskForUsernamePhoneNumber.findViewById(R.id.dialog_afterScanner_editText_username);
         final EditText afterScanning_phoneNumber = alertDialogAskForUsernamePhoneNumber.findViewById(R.id.dialog_afterScanner_editText_phoneNumber);
         //set textfield if user has username/phoneNumber
+        assert afterScanning_username != null;
         afterScanning_username.setText(personMe.getName());
+        assert afterScanning_phoneNumber != null;
         afterScanning_phoneNumber.setText(personMe.getPhoneNumber());
 
         Objects.requireNonNull(afterScanning_phoneNumber).setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -808,11 +805,19 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     }
 
     private boolean checkIfEventIsInPast() {
-        //read the current date and time to compare if the start time is in the past, set seconds and milliseconds to 0 to ensure a ight compare (seonds and milliseconds doesn't matter)
+        //read the current date and time to compare if the End of the Event is in the past (Date & Time),
+        // set seconds and milliseconds to 0 to ensure a ight compare (seonds and milliseconds doesn't matter)
         Calendar now = Calendar.getInstance();
         now.set(Calendar.SECOND, 0);
         now.set(Calendar.MILLISECOND, 0);
-        if (getStartTimeEvent().before(now)) {
+        if(getRepetition() == Repetition.NONE) {
+            if (getStartTimeEvent().before(now)) {
+                Toast.makeText(this, R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();
+                return true;
+            } else {
+                return false;
+            }
+        }else if (getEndDateEvent().before(now)) {
             Toast.makeText(this, R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();
             return true;
         } else {
