@@ -34,8 +34,8 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="fontFamily" value="Bahnschrift" />
-                                                <entry key="text" value="?" />
+                                                <entry key="fontFamily" value="Lucida Calligraphy" />
+                                                <entry key="text" value="H" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -46,7 +46,8 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="TEXT" />
-                                      <entry key="outputName" value="ic_mydate_questionmark" />
+                                      <entry key="outputName" value="ic_notification_h3" />
+                                      <entry key="theme" value="CUSTOM" />
                                       <entry key="themeColor" value="95ab63" />
                                     </map>
                                   </option>

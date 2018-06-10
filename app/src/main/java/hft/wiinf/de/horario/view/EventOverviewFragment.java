@@ -66,11 +66,16 @@ public class EventOverviewFragment extends Fragment {
         helper.set(Calendar.DAY_OF_MONTH, 1);
         helper.set(Calendar.HOUR_OF_DAY, 0);
         helper.set(Calendar.MINUTE, 0);
+        helper.set(Calendar.SECOND, 0);
+        helper.set(Calendar.MILLISECOND, 0);
         int endDate = helper.get(Calendar.MONTH);
         while (helper.get(Calendar.MONTH) == endDate) {
             Calendar endOfDay = Calendar.getInstance();
             endOfDay.setTime(helper.getTime());
-            endOfDay.add(Calendar.DAY_OF_MONTH, 1);
+            endOfDay.set(Calendar.HOUR_OF_DAY, 23);
+            endOfDay.set(Calendar.MINUTE, 59);
+            endOfDay.set(Calendar.SECOND, 59);
+            endOfDay.set(Calendar.MILLISECOND, 59);
             List<Event> eventList = EventController.findEventsByTimePeriod(helper.getTime(), endOfDay.getTime());
             if (eventList.size() > 0) {
                 eventArrayDay.add(new Appointment(CalendarFragment.dayFormat.format(helper.getTime()), 0));
@@ -90,7 +95,7 @@ public class EventOverviewFragment extends Fragment {
                 eventArray.addAll(eventArrayDay);
             }
             eventArrayDay.clear();
-            helper.setTime(endOfDay.getTime());
+            helper.add(Calendar.DAY_OF_MONTH, 1);
         }
         if (eventArray.size() < 1) { //when no events this month do stuff
             eventArray.add(new Appointment("Du hast keine Termine diesen Monat", 0));

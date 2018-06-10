@@ -246,7 +246,7 @@ public class NewEventFragment extends Fragment {
     public void getDate() {
         //close keyboard if it's open
         if (getActivity().getCurrentFocus() != null)
-        ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+            ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
         // create a listener for the date picker dialog: update the date parts (year, month, date) of start and end time with the selected values
         DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -265,7 +265,7 @@ public class NewEventFragment extends Fragment {
     public void getStartTime() {
         //close keyboard if it's open
         if (getActivity().getCurrentFocus() != null)
-        ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+            ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
         // create a listener for the time picker dialog: update the start time with the selected values
         TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
             @Override
@@ -285,7 +285,7 @@ public class NewEventFragment extends Fragment {
     public void getEndTime() {
         //close keyboard if it's open
         if (getActivity().getCurrentFocus() != null)
-        ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+            ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
         // create a listener for the time picker dialog: update the end time and the time for the end of repetition (for the comparing later) with the selected values
         TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
             @Override
@@ -307,7 +307,7 @@ public class NewEventFragment extends Fragment {
     public void getEndOfRepetition() {
         //close keyboard if it's open
         if (getActivity().getCurrentFocus() != null)
-        ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+            ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
         // create a listener for the time picker dialog: update the date part (year, month, day) of the end of repetition with the selected values
         DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -387,6 +387,7 @@ public class NewEventFragment extends Fragment {
                 dialogSavingSuccessful.dismiss();
             }
         });
+
         dialogSavingSuccessful.findViewById(R.id.savingSuccessful_button_qrcode).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -660,9 +661,9 @@ public class NewEventFragment extends Fragment {
     public void readPhoneNumber() {
         //if permission is granted read the phone number
         TelephonyManager telephonyManager = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
-         @SuppressLint("MissingPermission") String phoneNumber = telephonyManager.getLine1Number();
+        @SuppressLint("MissingPermission") String phoneNumber = telephonyManager.getLine1Number();
         //delete spaces and add a + if phoneNumber starts without a 0
-         if (phoneNumber != null)
+        if (phoneNumber != null)
             phoneNumber.replaceAll(" ", "");
         if (phoneNumber.matches("[1-9][0-9]+"))
             phoneNumber="+"+phoneNumber;

@@ -32,6 +32,7 @@ public class AcceptedEventDetailsFragment extends Fragment {
     @SuppressLint("LongLogTag")
     public Long getEventID() {
         Bundle MYEventIdBundle = getArguments();
+        assert MYEventIdBundle != null;
         Long MYEventIdLongResult = MYEventIdBundle.getLong("EventId");
         return MYEventIdLongResult;
     }
@@ -57,27 +58,29 @@ public class AcceptedEventDetailsFragment extends Fragment {
                 //Code for cancelling an event eg. take it out of the DB and Calendar View
             }
         });
+
+        // Open the QRGeneratorFragment to Show the QRCode form this Event.
         acceptedEventDetailsButtonShowQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO in another US uncomment and adapt with Class-Own variables
+                Bundle whichFragment = getArguments();
+                QRGeneratorFragment qrFrag = new QRGeneratorFragment();
+                Bundle bundle = new Bundle();
+                bundle.putLong("eventId", getEventID());
+                bundle.putString("fragment", whichFragment.getString("fragment"));
+                qrFrag.setArguments(bundle);
 
-//                //Create a Bundle to Send the Information to an other Fragment
-//                //The Bundle input is the StringBuffer with the EventInformation
-//                QRSharingActivity qrSharingBundle = new QRSharingActivity();
-//                Bundle bundle = new Bundle();
-//                bundle.putString("qrStringBufferDescription", String.valueOf(mQRGenerator_StringBuffer_Result));
-//                qrSharingBundle.setArguments(bundle);
-//
-//                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-//                fragmentTransaction.replace(R.id.generator_realtivLayout_show_qrSharingFragment, qrSharingBundle);
-//                fragmentTransaction.addToBackStack(null);
-//                fragmentTransaction.commit();
-//                mQRGenerator_textView_headline.setVisibility(View.GONE);
-//                mQRGenerator_textView_description.setVisibility(View.GONE);
-//                mQRGenerator_button_start_sharingFragment.setVisibility(View.GONE);
-//                mQRGenerator_button_start_eventFeedbackFragment.setVisibility(View.GONE);
-//                mQRGenerator_relativeLayout_show_newFragment.setVisibility(View.VISIBLE);
+                if (whichFragment.getString("fragment").equals("EventOverview")) {
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.eventOverview_frameLayout, qrFrag, "QrGeneratorEO")
+                            .addToBackStack("QrGeneratorEO")
+                            .commit();
+                } else {
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.calendar_frameLayout, qrFrag, "QrGeneratorCA")
+                            .addToBackStack("QrGeneratorCA")
+                            .commit();
+                }
             }
         });
         return view;

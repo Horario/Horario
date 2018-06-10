@@ -17,6 +17,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -29,7 +30,9 @@ import android.widget.Toast;
 import com.activeandroid.ActiveAndroid;
 import com.facebook.stetho.Stetho;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -57,6 +60,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     //TODO Kommentieren und Java Doc Info Schreiben
     private static final String TAG = "TabActivity";
     private static final int PERMISSION_REQUEST_READ_PHONE_STATE = 0;
+    private int PERMISSION_REQUEST_RECEIVE_SMS = 1;
+    private int PERMISSION_REQUEST_READ_CONTACTS = 2;
     private SectionsPageAdapterActivity mSectionsPageAdapter;
     private ViewPager mViewPager;
     TabLayout tabLayout;
@@ -67,7 +72,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     Event singleEvent;
     //Index: 0 = CreatorID; 1 = StartDate; 2 = EndDate; 3 = StartTime; 4 = EndTime;
     //       5 = Repetition; 6 = ShortTitle; 7 = Place; 8 = Descriptoin;  9 = EventCreatorName
-    private String creatorID, startDate, endDate, startTime, endTime, repetition, shortTitle, place, description, eventCreatorName, creatorPhoneNumber;
+    private String creatorID, startDate, endDate, startTime, endTime, repetition, shortTitle, place,
+            description, eventCreatorName, creatorPhoneNumber;
     private String hourOfDay, minutesOfDay, year, month, day;
 
     Calendar myStartTime = Calendar.getInstance();
@@ -76,6 +82,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
     int buttonId = 0;
     private int counter = 0;
+    private int counterSMS = 0;
+    private int counterCONTACTS = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,10 +102,10 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         mSectionsPageAdapter = new SectionsPageAdapterActivity(getSupportFragmentManager());
 
         //Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = findViewById(R.id.container);
         setupViewPager(mViewPager);
 
-        tabLayout = (TabLayout) findViewById(R.id.tabBarLayout);
+        tabLayout = findViewById(R.id.tabBarLayout);
         tabLayout.setupWithViewPager(mViewPager);
 
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_dateview);
@@ -107,6 +115,9 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         if (personMe == null || personMe.getName().isEmpty()) {
             openDialogAskForUsername();
         }
+        if (!EventController.createdEventsYet()) {
+            askForSMSPermissions();
+        }
         myStartTime.set(Calendar.SECOND, 0);
         myStartTime.set(Calendar.MILLISECOND, 0);
         myEndTime.set(Calendar.SECOND, 0);
@@ -115,6 +126,56 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         myEndDate.set(Calendar.MILLISECOND, 0);
     }
 
+    private void askForSMSPermissions() {
+        checkSMSPermissions();
+    }
+
+    private void checkSMSPermissions() {
+        if (!areSMSPermissionsGranted()) {
+            Log.d("ONCLICKSAVE", "before request permissions");
+            requestSMSPermissions();
+        } else {
+            counterCONTACTS = 5;
+            counterSMS = 5;
+        }
+    }
+
+    private boolean areSMSPermissionsGranted() {
+        int sms = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.RECEIVE_SMS);
+        int contacts = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CONTACTS);
+        List<String> listPermissionsNeeded = new ArrayList<>();
+
+        if (sms != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.RECEIVE_SMS);
+        }
+        if (contacts != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.READ_CONTACTS);
+        }
+
+        if (!listPermissionsNeeded.isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
+    private void requestSMSPermissions() {
+        int sms = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.RECEIVE_SMS);
+        int contacts = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CONTACTS);
+        List<String> listPermissionsNeeded = new ArrayList<>();
+
+        if (sms != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.RECEIVE_SMS);
+        }
+        if (contacts != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.READ_CONTACTS);
+        }
+
+        if (!listPermissionsNeeded.isEmpty()) {
+
+            String[] stringArray = listPermissionsNeeded.toArray(new String[2]);
+            requestPermissions(stringArray, PERMISSION_REQUEST_READ_CONTACTS);
+        }
+    }
 
     private void restartApp(String fragmentResource) {
         //check from which Fragment (EventOverview or Calendar) are the Scanner was called
@@ -124,14 +185,14 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
                 fr.replace(R.id.eventOverview_frameLayout, new EventOverviewFragment());
                 fr.commit();
-                tabLayout.getTabAt(0).select();
+                Objects.requireNonNull(tabLayout.getTabAt(0)).select();
                 break;
             case "Calendar":
                 getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 FragmentTransaction frCA = getSupportFragmentManager().beginTransaction();
                 frCA.replace(R.id.calendar_frameLayout, new CalendarFragment());
                 frCA.commit();
-                tabLayout.getTabAt(1).select();
+                Objects.requireNonNull(tabLayout.getTabAt(1)).select();
                 break;
             default:
                 Toast.makeText(this, R.string.ups_an_error, Toast.LENGTH_SHORT).show();
@@ -144,7 +205,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
 
     //After Scanning it was opened a Dialog where the user can choose what to do next
-    @SuppressLint("ResourceType")
+    @SuppressLint({"ResourceType", "SetTextI18n"})
     private void openActionDialogAfterScanning(final String qrScannContentResult, final String whichFragmentTag) {
         //Create the Dialog with the GUI Elements initial
         final Dialog afterScanningDialogAction = new Dialog(this);
@@ -158,7 +219,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         Button qrScanner_result_eventSave = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_eventSave);
         final Button qrScanner_result_abort = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_about);
         Button qrScanner_result_toCalender = afterScanningDialogAction.findViewById(R.id.dialog_qrScanner_button_toCalender);
-        Button qrScanner_result_eventSave_without_assign = afterScanningDialogAction.findViewById((R.id.dialog_qrScanner_button_eventSaveOnly));
+        Button qrScanner_result_eventSave_without_assign = afterScanningDialogAction.findViewById(
+                (R.id.dialog_qrScanner_button_eventSaveOnly));
 
         //Set the Cancel and BackToCalenderButtons to Invisible
         qrScanner_result_abort.setVisibility(View.GONE);
@@ -185,10 +247,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         public void onClick(View v) {
                             buttonId = 1;
                             decideWhatToDo();
-//                            //Restart the TabActivity an Reload all Views
-                            //restartApp(whichFragmentTag);
-                            //afterScanningDialogAction.dismiss();
-
                         }
                     });
 
@@ -199,10 +257,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         public void onClick(View v) {
                             buttonId = 2;
                             decideWhatToDo();
-//                            //Restart the TabActivity an Reload all Views
-//                            restartApp(whichFragmentTag);
-//                            afterScanningDialogAction.dismiss();
-
                         }
                     });
 
@@ -213,12 +267,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         public void onClick(View v) {
                             buttonId = 3;
                             decideWhatToDo();
-//                            //Restart the TabActivity an Reload all Views
-//                            restartApp(whichFragmentTag);
-//                            afterScanningDialogAction.dismiss();
                         }
                     });
-
 
             //Put StringBuffer in an Array and split the Values to new String Variables
             //Index: 0 = CreatorID; 1 = StartDate; 2 = EndDate; 3 = StartTime; 4 = EndTime;
@@ -280,7 +330,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
             }
 
-            // Event shortTitle in Headline with eventCreaftorName
+            // Event shortTitle in Headline with eventCreatorName
             qrScanner_result_headline.setText(shortTitle + " " + getString(R.string.from) + eventCreatorName);
             // Check for a Repetition Event and Change the Description Output with and without
             // Repetition Element inside.
@@ -288,14 +338,14 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 qrScanner_result_description.setText(getString(R.string.on) + startDate
                         + getString(R.string.find) + getString(R.string.from) + startTime + getString(R.string.until)
                         + endTime + getString(R.string.clock_at_room) + place + " " + shortTitle
-                        + getString(R.string.instead_of) + "\n" + getString(R.string.eventDetails)
+                        + getString(R.string.instead_of) + "\n" + "\n"+ getString(R.string.eventDetails)
                         + description + "\n" + "\n" + getString(R.string.organizer) + eventCreatorName);
             } else {
                 qrScanner_result_description.setText(getString(R.string.as_of) + startDate
                         + getString(R.string.until) + endDate + getString(R.string.find)
                         + repetition + getString(R.string.at) + startTime + getString(R.string.clock_to)
                         + endTime + getString(R.string.clock_at_room) + place + " " + shortTitle
-                        + getString(R.string.instead_of) + "\n" + getString(R.string.eventDetails) + description +
+                        + getString(R.string.instead_of) + "\n" + "\n" + getString(R.string.eventDetails) + description +
                         "\n" + "\n" + getString(R.string.organizer) + eventCreatorName);
 
             }
@@ -321,7 +371,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             });
         }
     }
-
 
     // "Catch" the ScanningResult and throw the Content to the processing Method
     @Override
@@ -357,7 +406,9 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 //check if settings Tab is unselected
                 //Close the keyboard on a tab change
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(mSectionsPageAdapter.getItem(tab.getPosition()).getView().getApplicationWindowToken(), 0);
+                assert imm!=null;
+                imm.hideSoftInputFromWindow(Objects.requireNonNull(mSectionsPageAdapter.getItem(2)
+                        .getView()).getApplicationWindowToken(), 0);
                 if (tab.getPosition() == 2) {
                     getSupportFragmentManager().popBackStack();
                 } else if (tab.getPosition() == 1) {
@@ -379,7 +430,9 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 //check if settings Tab is unselected
                 //close keyboard
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(mSectionsPageAdapter.getItem(tab.getPosition()).getView().getApplicationWindowToken(), 0);
+                assert imm != null;
+                imm.hideSoftInputFromWindow(Objects.requireNonNull(mSectionsPageAdapter.getItem(2)
+                        .getView()).getApplicationWindowToken(), 0);
                 if (tab.getPosition() == 2) {
                     getSupportFragmentManager().popBackStack();
                 } else if (tab.getPosition() == 1) {
@@ -395,6 +448,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 }
             }
         });
+
+        //TODO
     }
 
     // Add the Fragments to the PageViewer
@@ -517,7 +572,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         myEndDate.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hourOfDay));
         myEndDate.set(Calendar.MINUTE, Integer.parseInt(minutesOfDay));
         myEndDate.set(Integer.parseInt(year), Integer.parseInt(month) - 1, Integer.parseInt(day));
-
         return myEndDate;
     }
 
@@ -547,7 +601,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         final AlertDialog alertDialogAskForFinalDecission = dialogAskForFinalDecission.create();
         //open Dialog with yes or no after button click (accept, save, reject)
         alertDialogAskForFinalDecission.show();
-        alertDialogAskForFinalDecission.findViewById(R.id.dialog_event_final_decission_accept)
+        Objects.requireNonNull(alertDialogAskForFinalDecission.findViewById(R.id.dialog_event_final_decission_accept))
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -643,7 +697,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                     }
                 });
         //if Button "nein": cancel dialog
-        alertDialogAskForFinalDecission.findViewById(R.id.dialog_event_final_decission_reject)
+        Objects.requireNonNull(alertDialogAskForFinalDecission.findViewById(R.id.dialog_event_final_decission_reject))
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -657,7 +711,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         //build dialog for username and phoneNumber
         final AlertDialog.Builder dialogAskForUsernamePhoneNumber = new AlertDialog.Builder(this);
         dialogAskForUsernamePhoneNumber.setView(R.layout.dialog_askforphonenumberandusername);
-        dialogAskForUsernamePhoneNumber.setTitle(R.string.titleDialogUsernamePhoneNumber);
+        //dialogAskForUsernamePhoneNumber.setTitle(R.string.titleDialogUsernamePhoneNumber);
+
         dialogAskForUsernamePhoneNumber.setCancelable(true);
 
         final AlertDialog alertDialogAskForUsernamePhoneNumber = dialogAskForUsernamePhoneNumber.create();
@@ -667,7 +722,9 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         final EditText afterScanning_username = alertDialogAskForUsernamePhoneNumber.findViewById(R.id.dialog_afterScanner_editText_username);
         final EditText afterScanning_phoneNumber = alertDialogAskForUsernamePhoneNumber.findViewById(R.id.dialog_afterScanner_editText_phoneNumber);
         //set textfield if user has username/phoneNumber
+        assert afterScanning_username != null;
         afterScanning_username.setText(personMe.getName());
+        assert afterScanning_phoneNumber != null;
         afterScanning_phoneNumber.setText(personMe.getPhoneNumber());
 
         Objects.requireNonNull(afterScanning_phoneNumber).setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -717,11 +774,19 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     }
 
     private boolean checkIfEventIsInPast() {
-        //read the current date and time to compare if the start time is in the past, set seconds and milliseconds to 0 to ensure a ight compare (seonds and milliseconds doesn't matter)
+        //read the current date and time to compare if the End of the Event is in the past (Date & Time),
+        // set seconds and milliseconds to 0 to ensure a ight compare (seonds and milliseconds doesn't matter)
         Calendar now = Calendar.getInstance();
         now.set(Calendar.SECOND, 0);
         now.set(Calendar.MILLISECOND, 0);
-        if (getStartTimeEvent().before(now)) {
+        if(getRepetition() == Repetition.NONE) {
+            if (getStartTimeEvent().before(now)) {
+                Toast.makeText(this, R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();
+                return true;
+            } else {
+                return false;
+            }
+        }else if (getEndDateEvent().before(now)) {
             Toast.makeText(this, R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();
             return true;
         } else {
@@ -778,7 +843,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             // rationale in a single dialog,this is just an example
             for (int i = 0, len = permissions.length; i < len; i++) {
 
-                if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
+                if (grantResults.length > 0
+                        && grantResults[i] == PackageManager.PERMISSION_DENIED) {
                     // user rejected the permission
                     boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.READ_PHONE_STATE);
                     if (!showRationale) {
@@ -847,8 +913,212 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 }
             }
 
-        }
+        } else if (requestCode == PERMISSION_REQUEST_RECEIVE_SMS) {
+            if (counterSMS != 5) {
+                // for each permission check if the user granted/denied them you may want to group the
+                // rationale in a single dialog,this is just an example
+                for (int i = 0; i < 1; i++) {
 
+                    if (grantResults.length > 0
+                            && grantResults[i] == PackageManager.PERMISSION_DENIED) {
+                        // user rejected the permission
+                        boolean showRationale;
+                        if (counterSMS == 5) {
+                            showRationale = true;
+                        } else {
+                            showRationale = shouldShowRequestPermissionRationale(Manifest.permission.RECEIVE_SMS);
+                        }
+                        if (!showRationale) {
+                            // user also CHECKED "never ask again" you can either enable some fall back,
+                            // disable features of your app or open another dialog explaining again the
+                            // permission and directing to the app setting
+                            new AlertDialog.Builder(this)
+                                    .setOnKeyListener(new DialogInterface.OnKeyListener() {
+                                        @Override
+                                        public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                                            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                                                return true;
+                                            }
+                                            return false;
+                                        }
+                                    })
+                                    .setTitle(R.string.accessWith_NeverAskAgain_deny)
+                                    .setMessage(R.string.requestSMSPermission_accessDenied_withCheckbox)
+                                    .setPositiveButton(R.string.back, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+
+                                        }
+                                    })
+                                    .create().show();
+                        } else if (counterSMS < 1) {
+                            // user did NOT check "never ask again" this is a good place to explain the user
+                            // why you need the permission and ask if he wants // to accept it (the rationale)
+                            new AlertDialog.Builder(this)
+                                    .setOnKeyListener(new DialogInterface.OnKeyListener() {
+                                        @Override
+                                        public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                                            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                                                dialog.cancel();
+                                                return true;
+                                            }
+                                            return false;
+                                        }
+                                    })
+                                    .setTitle(R.string.requestPermission_firstTryRequest)
+                                    .setMessage(R.string.requestPermission_askForSMSPermission)
+                                    .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            counterSMS++;
+                                            checkSMSPermissions();
+                                        }
+                                    })
+//                                .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialog, int which) {
+//
+//                                    }
+//                                })
+                                    .create().show();
+                        } else if (counterSMS == 1) {
+                            new AlertDialog.Builder(this)
+                                    .setOnKeyListener(new DialogInterface.OnKeyListener() {
+                                        @Override
+                                        public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                                            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                                                return true;
+                                            }
+                                            return false;
+                                        }
+                                    })
+                                    .setTitle(R.string.requestPermission_lastTryRequest)
+                                    .setMessage(R.string.requestPermission_askForSMSPermission)
+                                    .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            counterSMS++;
+                                            checkSMSPermissions();
+                                        }
+                                    })
+//                                .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialog, int which) {
+//
+//                                    }
+//                                })
+                                    .create().show();
+                        } else {
+                        }
+                    } else {
+                        counterSMS = 5;
+                    }
+                }
+            }
+        } else if (requestCode == PERMISSION_REQUEST_READ_CONTACTS) {
+            if (counterCONTACTS != 5) {
+                // for each permission check if the user granted/denied them you may want to group the
+                // rationale in a single dialog,this is just an example
+                for (int i = 0; i < 1; i++) {
+
+                    if (grantResults.length > 0
+                            && grantResults[i] == PackageManager.PERMISSION_DENIED) {
+                        // user rejected the permission
+                        boolean showRationale;
+                        if (counterCONTACTS == 5) {
+                            showRationale = true;
+                        } else {
+                            showRationale = shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS);
+                        }
+                        if (!showRationale) {
+                            // user also CHECKED "never ask again" you can either enable some fall back,
+                            // disable features of your app or open another dialog explaining again the
+                            // permission and directing to the app setting
+                            new AlertDialog.Builder(this)
+                                    .setOnKeyListener(new DialogInterface.OnKeyListener() {
+                                        @Override
+                                        public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                                            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                                                return true;
+                                            }
+                                            return false;
+                                        }
+                                    })
+                                    .setTitle(R.string.accessWith_NeverAskAgain_deny)
+                                    .setMessage(R.string.requestContactPermission_accessDenied_withCheckbox)
+                                    .setPositiveButton(R.string.back, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+
+                                        }
+                                    })
+                                    .create().show();
+                        } else if (counterCONTACTS < 1) {
+                            // user did NOT check "never ask again" this is a good place to explain the user
+                            // why you need the permission and ask if he wants // to accept it (the rationale)
+                            new AlertDialog.Builder(this)
+                                    .setOnKeyListener(new DialogInterface.OnKeyListener() {
+                                        @Override
+                                        public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                                            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                                                dialog.cancel();
+                                                return true;
+                                            }
+                                            return false;
+                                        }
+                                    })
+                                    .setTitle(R.string.requestPermission_firstTryRequest)
+                                    .setMessage(R.string.requestPermission_askForContactsPermission)
+                                    .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            counterCONTACTS++;
+                                            checkSMSPermissions();
+                                        }
+                                    })
+//                                .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialog, int which) {
+//
+//                                    }
+//                                })
+                                    .create().show();
+                        } else if (counterCONTACTS == 1) {
+                            new AlertDialog.Builder(this)
+                                    .setOnKeyListener(new DialogInterface.OnKeyListener() {
+                                        @Override
+                                        public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                                            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                                                return true;
+                                            }
+                                            return false;
+                                        }
+                                    })
+                                    .setTitle(R.string.requestPermission_lastTryRequest)
+                                    .setMessage(R.string.requestPermission_askForContactsPermission)
+                                    .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            counterCONTACTS++;
+                                            checkSMSPermissions();
+                                        }
+                                    })
+//                                .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialog, int which) {
+//
+//                                    }
+//                                })
+                                    .create().show();
+                        } else {
+                        }
+                    } else {
+                        counterCONTACTS = 5;
+                    }
+                }
+
+            }
+        }
 
     }
 
