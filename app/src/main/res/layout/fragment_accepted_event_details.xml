@@ -92,6 +92,7 @@
             android:layout_marginTop="8dp"
             android:background="@color/zentea_darkgreen"
             android:text="@string/refuseAppointment"
+            android:drawableEnd="@drawable/ic_mydate_rejected_white"
             android:textColor="@android:color/background_light"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
