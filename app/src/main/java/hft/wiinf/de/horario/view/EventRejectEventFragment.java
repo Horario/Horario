@@ -98,8 +98,9 @@ public class EventRejectEventFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         event = EventController.getEventById((getEventID()));
-                        event.setAccepted(AcceptedState.REJECTED);
-                        EventController.saveEvent(event);
+                        //event.setAccepted(AcceptedState.REJECTED);
+                        //EventController.saveEvent(event);
+                        EventController.deleteEvent(event);
 
                         //SMS
                         rejectMessage = spinner_reason.getAdapter().toString() + "!" + reason_for_rejection.getText().toString();

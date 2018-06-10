@@ -65,7 +65,10 @@
     <string name="reject_event">Das Event wurde aus der Datenbank gelöscht</string>
     <string name="thanksForUsernameAndPhoneNumber">Benutzername und Telefonnummer wurde gespeichert. </string>
     <string name="description_too_long">Die Beschreibung darf nicht länger als 500 Zeichen sein.</string>
-    <string name="reject_event_hint">Der Termin wurde abgesagt.</string>
+    <string name="accept_event_hint">Die Termine wurde zugesagt.</string>
+    <string name="accept_event_hint_single">Der Termin wurde zugesagt.</string>
+    <string name="reject_event_hint">Die Termine wurde abgesagt.</string>
+    <string name="reject_event_hint_single">Der Termin wurde abgesagt.</string>
     <string name="reject_event_reason_free_text_field_empty">Die Beschreibung darf nicht mit einem Leerzeichen anfangen.</string>
     <string name="reject_event_reason_free_text_field_to_long">Die Beschreibung darf nicht mehr als 60 Zeichen sein.</string>
     <string name="reject_event_reason_contains_pipe">Die Beschreibung darf kein "|" enthalten</string>
