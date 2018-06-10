@@ -28,7 +28,6 @@ import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
 import hft.wiinf.de.horario.model.AcceptedState;
 import hft.wiinf.de.horario.model.Event;
-import hft.wiinf.de.horario.model.Repetition;
 
 public class SavedEventDetailsFragment extends Fragment {
 
@@ -46,6 +45,7 @@ public class SavedEventDetailsFragment extends Fragment {
     @SuppressLint("LongLogTag")
     public Long getEventID() {
         Bundle MYEventIdBundle = getArguments();
+        assert MYEventIdBundle != null;
         Long MYEventIdLongResult = MYEventIdBundle.getLong("EventId");
         return MYEventIdLongResult;
     }
@@ -81,12 +81,29 @@ public class SavedEventDetailsFragment extends Fragment {
                 askForPermissionToSave();
             }
         });
+
+        // Open the QRGeneratorFragment to Show the QRCode form this Event.
         savedEventDetailsButtonShowQr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Bundle whichFragment = getArguments();
+                QRGeneratorFragment qrFrag = new QRGeneratorFragment();
+                Bundle bundle = new Bundle();
+                bundle.putLong("eventId", getEventID());
+                bundle.putString("fragment", whichFragment.getString("fragment"));
+                qrFrag.setArguments(bundle);
 
-
-                //Code for showing the QR Code
+                if (whichFragment.getString("fragment").equals("EventOverview")) {
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.eventOverview_frameLayout, qrFrag, "QrGeneratorEO")
+                            .addToBackStack("QrGeneratorEO")
+                            .commit();
+                } else {
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.calendar_frameLayout, qrFrag, "QrGeneratorCA")
+                            .addToBackStack("QrGeneratorCA")
+                            .commit();
+                }
             }
         });
 

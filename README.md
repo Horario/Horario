@@ -33,4 +33,6 @@ US023 pushed to Quality. Quality tested and pushed to master on 02.06.2018.
 US013 and US047 pushed to Quality. Quality tested and pushed to master on 03.06.2018.  
 US017 pushed to Quality. Quality tested and pushed to master on 05.06.2018.  
 US049 pushed to Quality. Quality tested and pushed to master on 07.06.2018.  
+US014, US015, US016, US044, US059, US060, US061, US068 and Bug 9+10 pushed to Quality. Quality tested and pushed to master on 09.06.2018.  
+Design_US011, US050 and US068 pushed to Quality. Quality tested and pushed to master on 10.06.2018.  
 
