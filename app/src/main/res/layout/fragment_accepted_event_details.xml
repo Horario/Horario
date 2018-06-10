@@ -37,8 +37,8 @@
 
         <TextView
             android:id="@+id/acceptedEventDetailsOrganisatorText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="180dp"
+            android:layout_height="26dp"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="188dp"
             android:layout_marginStart="8dp"
@@ -46,14 +46,15 @@
             android:text=""
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/acceptedEventappointmentIsFromText"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.06" />
 
         <TextView
             android:id="@+id/acceptedEventphNumberText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="228dp"
+            android:layout_height="32dp"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
@@ -61,10 +62,10 @@
             android:text=""
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.067"
+            app:layout_constraintHorizontal_bias="0.135"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.126" />
+            app:layout_constraintVertical_bias="0.132" />
 
         <Button
             android:id="@+id/acceptedEventDetailsButtonShowQR"
@@ -72,7 +73,7 @@
             android:layout_height="50dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="108dp"
+            android:layout_marginTop="124dp"
             android:background="@color/zentea_darkgreen"
             android:text="@string/savingSuccessful_qrcode"
             android:textColor="@android:color/background_light"
@@ -85,14 +86,14 @@
         <Button
             android:id="@+id/acceptedEventDetailsButtonRefuseAppointment"
             android:layout_width="345dp"
-            android:layout_height="50dp"
+            android:layout_height="48dp"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:background="@color/zentea_darkgreen"
-            android:text="@string/refuseAppointment"
             android:drawableEnd="@drawable/ic_mydate_rejected_white"
+            android:text="@string/refuseAppointment"
             android:textColor="@android:color/background_light"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -100,7 +101,7 @@
             app:layout_constraintHorizontal_bias="0.521"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/acceptedEventDetailsButtonShowQR"
-            app:layout_constraintVertical_bias="0.034" />
+            app:layout_constraintVertical_bias="0.807" />
 
         <ScrollView
             android:id="@+id/scrollView2"
@@ -115,7 +116,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.272">
+            app:layout_constraintVertical_bias="0.323">
 
             <LinearLayout
                 android:layout_width="match_parent"
