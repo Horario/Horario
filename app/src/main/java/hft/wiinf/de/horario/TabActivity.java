@@ -135,20 +135,16 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
     private void checkSMSPermissions() {
         if (!areSMSPermissionsGranted()) {
-            Log.d("ONCLICKSAVE", "A");
             requestSMSPermissions();
         } else {
-            Log.d("ONCLICKSAVE", "B");
             counterSMS = 5;
             checkContactsPermission();
         }
     }
     public void checkContactsPermission() {
         if(!areContactPermissionsGranted()){
-            Log.d("ONCLICKSAVE", "C");
             requestContactPermissions();
         }else{
-            Log.d("ONCLICKSAVE", "D");
             counterCONTACTS = 5;
         }
     }
