@@ -16,7 +16,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.activeandroid.query.Delete;
+import com.activeandroid.query.Select;
+
 import java.text.SimpleDateFormat;
+import java.util.Iterator;
+import java.util.List;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.TabActivity;
@@ -99,12 +104,15 @@ public class EventRejectEventFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         event = EventController.getEventById((getEventID()));
-                        //event.setAccepted(AcceptedState.REJECTED);
-                        //EventController.saveEvent(event);
-                        EventController.deleteEvent(event);
+
+                        //If an Event of a recurring event is cancelled, all events
+                        // of the recurring event are deleted. This way the user can Scan the
+                        // Event again and confirm it again.
+                        new Delete().from(Event.class).where("CreatorEventId=?",
+                                String.valueOf(event.getCreatorEventId())).execute();
 
                         //SMS
-                        rejectMessage = spinner_reason.getAdapter().toString() + "!" + reason_for_rejection.getText().toString();
+                        rejectMessage = spinner_reason.getSelectedItem().toString() + "!" + reason_for_rejection.getText().toString();
                         creatorEventId = event.getCreatorEventId();
                         Log.i("SMS", rejectMessage);
                         SendSmsController.sendSMS(getContext(), phNumber, rejectMessage, false, creatorEventId, shortTitle);

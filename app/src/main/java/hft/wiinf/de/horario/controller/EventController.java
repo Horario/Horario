@@ -33,9 +33,9 @@ public class EventController {
         }
         //if other events point to the deleted event set only accepted state to rejected
         if (EventController.findRepeatingEvents(event.getId()).size() > 0) {
-       //     event.setAccepted(AcceptedState.REJECTED);
-       //     event.save();
-       // } else {
+            event.setAccepted(AcceptedState.REJECTED);
+            event.save();
+        } else {
             event.delete();
         }
     }
