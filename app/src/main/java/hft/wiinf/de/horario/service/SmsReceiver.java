@@ -71,9 +71,13 @@ public class SmsReceiver extends BroadcastReceiver {
                         break;
                     }
                     if (parsedSMS[1].equalsIgnoreCase("1")) {
-                        unreadHorarioSMS.add(new ReceivedHorarioSMS(number, true, Integer.parseInt(parsedSMS[0]), null, parsedSMS[2]));
+                        if (parsedSMS.length == 3) {
+                            unreadHorarioSMS.add(new ReceivedHorarioSMS(number, true, Integer.parseInt(parsedSMS[0]), null, parsedSMS[2]));
+                        }
                     } else {
-                        unreadHorarioSMS.add(new ReceivedHorarioSMS(number, false, Integer.parseInt(parsedSMS[0]), parsedSMS[3], parsedSMS[2]));
+                        if (parsedSMS.length == 4) {
+                            unreadHorarioSMS.add(new ReceivedHorarioSMS(number, false, Integer.parseInt(parsedSMS[0]), parsedSMS[3], parsedSMS[2]));
+                        }
                     }
                     isSMSValidAndParseable = "Yes";
                 }
@@ -93,10 +97,15 @@ public class SmsReceiver extends BroadcastReceiver {
 //        smsTextSplitted[3]= Excuse asString, needs to be splitted again by "!" and checked on two strings
         if (smsTextSplitted.length == 3 || smsTextSplitted.length == 4) {
             boolean isAcceptance = true;
+            if (smsTextSplitted.length == 3) {
+                isAcceptance = true;
+            } else {
+                isAcceptance = false;
+            }
             //Make Patterns
             Pattern pattern_onlyGreatherThan0 = Pattern.compile("(\\d+)", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
             Pattern pattern_only0Or1 = Pattern.compile("(0|1)", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
-            Pattern pattern_onlyAlphanumsAndPointsAndWhitespaces = Pattern.compile("(\\W|\\S|[^.])", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+            Pattern pattern_onlyAlphanumsAndPointsAndWhitespaces = Pattern.compile("(\\w|\\s|\\.)*", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
             //Make the matchers
             Matcher m_pattern_onlyGreatherThan0 = pattern_onlyGreatherThan0.matcher(smsTextSplitted[0]);
             Matcher m_pattern_only0Or1 = pattern_only0Or1.matcher(smsTextSplitted[1]);
@@ -106,9 +115,13 @@ public class SmsReceiver extends BroadcastReceiver {
             try {
                 //Do only if it is a rejection of an event
                 String[] excuseSplitted = smsTextSplitted[3].split("!");
-                m_pattern_onlyAlphanumsAndPointsAndWhitespacesRejectionReason = pattern_onlyAlphanumsAndPointsAndWhitespaces.matcher(excuseSplitted[0]);
-                m_pattern_onlyAlphanumsAndPointsAndWhitespacesRejectionNote = pattern_onlyAlphanumsAndPointsAndWhitespaces.matcher(excuseSplitted[1]);
-                isAcceptance = false;
+                if (excuseSplitted.length == 2) {
+                    m_pattern_onlyAlphanumsAndPointsAndWhitespacesRejectionReason = pattern_onlyAlphanumsAndPointsAndWhitespaces.matcher(excuseSplitted[0]);
+                    m_pattern_onlyAlphanumsAndPointsAndWhitespacesRejectionNote = pattern_onlyAlphanumsAndPointsAndWhitespaces.matcher(excuseSplitted[1]);
+
+                } else {
+                    return false;
+                }
             } catch (ArrayIndexOutOfBoundsException e) {
                 //SMS is Acceptance, no need to split
             }
@@ -121,17 +134,17 @@ public class SmsReceiver extends BroadcastReceiver {
                 Log.d("SMSRECEIVER", "Unvalid Acceptance boolean part");
                 return false;
             }
-            if (m_pattern_onlyAlphanumsAndPointsAndWhitespaces.matches()) {
+            if (!m_pattern_onlyAlphanumsAndPointsAndWhitespaces.matches()) {
                 Log.d("SMSRECEIVER", "Unvalid Alphanum/Dot/Whitespace sequence in name of participant");
                 return false;
             }
             if (!isAcceptance) {
-                if (m_pattern_onlyAlphanumsAndPointsAndWhitespacesRejectionReason.matches()) {
-                    Log.d("SMSRECEIVER", "Unvalid Alphanum/Dot/Whitespace sequence in name of participant");
+                if (!m_pattern_onlyAlphanumsAndPointsAndWhitespacesRejectionReason.matches()) {
+                    Log.d("SMSRECEIVER", "REASONUnvalid Alphanum/Dot/Whitespace sequence in name of participant");
                     return false;
                 }
-                if (m_pattern_onlyAlphanumsAndPointsAndWhitespacesRejectionNote.matches()) {
-                    Log.d("SMSRECEIVER", "Unvalid Alphanum/Dot/Whitespace sequence in name of participant");
+                if (!m_pattern_onlyAlphanumsAndPointsAndWhitespacesRejectionNote.matches()) {
+                    Log.d("SMSRECEIVER", "NOTEUnvalid Alphanum/Dot/Whitespace sequence in name of participant");
                     return false;
                 }
             }
@@ -160,6 +173,7 @@ public class SmsReceiver extends BroadcastReceiver {
             } else {
                 // Create an explicit intent for an Activity in your app
                 addNotification(context, 1, person.getName());
+                break;
             }
             /*Check if acceptance or cancellation*/
             boolean hasAcceptedEarlier = false;

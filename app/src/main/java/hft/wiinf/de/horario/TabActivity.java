@@ -111,12 +111,15 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_calendarview);
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_settings);
 
-        if (personMe == null || personMe.getName().isEmpty()) {
-            openDialogAskForUsername();
-        }
         if (!EventController.createdEventsYet()) {
             askForSMSPermissions();
         }
+
+        if (personMe == null || personMe.getName().isEmpty()) {
+            openDialogAskForUsername();
+        }
+
+
         myStartTime.set(Calendar.SECOND, 0);
         myStartTime.set(Calendar.MILLISECOND, 0);
         myEndTime.set(Calendar.SECOND, 0);
@@ -131,22 +134,42 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
     private void checkSMSPermissions() {
         if (!areSMSPermissionsGranted()) {
-            Log.d("ONCLICKSAVE", "before request permissions");
+            Log.d("ONCLICKSAVE", "A");
             requestSMSPermissions();
         } else {
-            counterCONTACTS = 5;
+            Log.d("ONCLICKSAVE", "B");
             counterSMS = 5;
+            checkContactsPermission();
+        }
+    }
+    public void checkContactsPermission() {
+        if(!areContactPermissionsGranted()){
+            Log.d("ONCLICKSAVE", "C");
+            requestContactPermissions();
+        }else{
+            Log.d("ONCLICKSAVE", "D");
+            counterCONTACTS = 5;
         }
     }
 
+
+
     private boolean areSMSPermissionsGranted() {
         int sms = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.RECEIVE_SMS);
-        int contacts = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CONTACTS);
         List<String> listPermissionsNeeded = new ArrayList<>();
 
         if (sms != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(Manifest.permission.RECEIVE_SMS);
         }
+
+        if (!listPermissionsNeeded.isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+    private boolean areContactPermissionsGranted() {
+        int contacts = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CONTACTS);
+        List<String> listPermissionsNeeded = new ArrayList<>();
         if (contacts != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(Manifest.permission.READ_CONTACTS);
         }
@@ -159,20 +182,26 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
     private void requestSMSPermissions() {
         int sms = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.RECEIVE_SMS);
-        int contacts = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CONTACTS);
         List<String> listPermissionsNeeded = new ArrayList<>();
 
         if (sms != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(Manifest.permission.RECEIVE_SMS);
         }
-        if (contacts != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(Manifest.permission.READ_CONTACTS);
-        }
 
         if (!listPermissionsNeeded.isEmpty()) {
 
-            String[] stringArray = listPermissionsNeeded.toArray(new String[2]);
-            requestPermissions(stringArray, PERMISSION_REQUEST_READ_CONTACTS);
+            requestPermissions(new String[]{Manifest.permission.RECEIVE_SMS}, PERMISSION_REQUEST_RECEIVE_SMS);
+        }
+    }
+
+    private void requestContactPermissions() {
+        int contacts = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CONTACTS);
+        List<String> listPermissionsNeeded = new ArrayList<>();
+        if (contacts != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.READ_CONTACTS);
+        }
+        if (!listPermissionsNeeded.isEmpty()) {
+            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSION_REQUEST_READ_CONTACTS);
         }
     }
 
@@ -956,6 +985,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                                         @Override
                                         public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
                                             if (keyCode == KeyEvent.KEYCODE_BACK) {
+                                                checkSMSPermissions();
                                                 dialog.cancel();
                                                 return true;
                                             }
@@ -963,7 +993,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                                         }
                                     })
                                     .setTitle(R.string.requestPermission_firstTryRequest)
-                                    .setMessage(R.string.requestPermission_askForSMSPermission)
+                                    .setMessage(R.string.requestPermission_askForContactsPermission)
                                     .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
@@ -984,13 +1014,14 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                                         @Override
                                         public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
                                             if (keyCode == KeyEvent.KEYCODE_BACK) {
+                                                checkSMSPermissions();
                                                 return true;
                                             }
                                             return false;
                                         }
                                     })
                                     .setTitle(R.string.requestPermission_lastTryRequest)
-                                    .setMessage(R.string.requestPermission_askForSMSPermission)
+                                    .setMessage(R.string.requestPermission_askForContactsPermission)
                                     .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
@@ -1009,8 +1040,10 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         }
                     } else {
                         counterSMS = 5;
+                        checkSMSPermissions();
                     }
                 }
+
             }
         } else if (requestCode == PERMISSION_REQUEST_READ_CONTACTS) {
             if (counterCONTACTS != 5) {
@@ -1036,6 +1069,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                                         @Override
                                         public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
                                             if (keyCode == KeyEvent.KEYCODE_BACK) {
+
                                                 return true;
                                             }
                                             return false;
@@ -1058,6 +1092,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                                         @Override
                                         public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
                                             if (keyCode == KeyEvent.KEYCODE_BACK) {
+                                                checkSMSPermissions();
                                                 dialog.cancel();
                                                 return true;
                                             }
@@ -1086,6 +1121,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                                         @Override
                                         public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
                                             if (keyCode == KeyEvent.KEYCODE_BACK) {
+                                                checkSMSPermissions();
                                                 return true;
                                             }
                                             return false;
@@ -1150,6 +1186,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             }
         }
     }
+
 }
 
 
