@@ -12,7 +12,6 @@
         android:layout_height="350dp">
 
         <RelativeLayout
-
             android:id="@+id/dialog_qrScanner_relativeLayout_TextFrame"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -52,20 +51,15 @@
         android:id="@+id/dialog_qrScanner_relativLayout_buttonFrame"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-
-
-        >
+        android:layout_alignParentBottom="true">
 
         <Button
             android:id="@+id/dialog_qrScanner_button_eventRecject"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
-
             android:layout_below="@id/dialog_qrScanner_button_eventSaveOnly"
             android:layout_centerHorizontal="true"
-
 
             android:backgroundTint="@color/zentea_darkgreen"
             android:drawableEnd="@drawable/ic_mydate_rejected_white"
@@ -119,6 +113,5 @@
             android:textColor="@color/zentea_white"
             android:visibility="visible" />
     </RelativeLayout>
-
 
 </RelativeLayout>

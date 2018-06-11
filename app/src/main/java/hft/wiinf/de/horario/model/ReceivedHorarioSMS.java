@@ -16,7 +16,9 @@ public class ReceivedHorarioSMS {
         this.name = name;
 
     }
-    public ReceivedHorarioSMS(){}
+
+    public ReceivedHorarioSMS() {
+    }
 
     public String getPhonenumber() {
         return phonenumber;

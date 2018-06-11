@@ -1,19 +1,29 @@
 package hft.wiinf.de.horario.view;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.activeandroid.query.Select;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
+import hft.wiinf.de.horario.controller.NotificationController;
+import hft.wiinf.de.horario.controller.SendSmsController;
+import hft.wiinf.de.horario.model.AcceptedState;
 import hft.wiinf.de.horario.model.Event;
 
 public class SavedEventDetailsFragment extends Fragment {
@@ -23,6 +33,9 @@ public class SavedEventDetailsFragment extends Fragment {
     TextView savedEventDetailsOrganisatorText, savedEventphNumberText, savedEventeventDescription;
     Event selectedEvent;
     StringBuffer eventToStringBuffer;
+
+    Long creatorEventId;
+    String shortTitle, phNumber;
 
     public SavedEventDetailsFragment() {
         // Required empty public constructor
@@ -56,13 +69,23 @@ public class SavedEventDetailsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //Code for cancelling an event eg. take it out of the DB and Calendar View
+                //Code for cancelling an event eg. take it out of the DB and Calendar View
+                EventRejectEventFragment eventRejectEventFragment = new EventRejectEventFragment();
+                Bundle bundleAcceptedEventId = new Bundle();
+                bundleAcceptedEventId.putLong("EventId", getEventID());
+                bundleAcceptedEventId.putString("fragment", "AcceptedEventDetails");
+                eventRejectEventFragment.setArguments(bundleAcceptedEventId);
+                FragmentTransaction fr = getFragmentManager().beginTransaction();
+                fr.replace(R.id.savedEvent_relativeLayout_main, eventRejectEventFragment, "RejectEvent");
+                fr.addToBackStack("RejectEvent");
+                fr.commit();
             }
         });
 
         savedEventDetailsButtonAcceptAppointment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Code for accepting an event eg. update the DB and Calendar View
+                askForPermissionToSave();
             }
         });
 
@@ -95,6 +118,68 @@ public class SavedEventDetailsFragment extends Fragment {
         return view;
     }
 
+    public void askForPermissionToSave() {
+        final AlertDialog.Builder dialogAskForFinalDecission = new AlertDialog.Builder(getContext());
+        dialogAskForFinalDecission.setView(R.layout.dialog_afterrejectevent);
+        dialogAskForFinalDecission.setTitle(R.string.titleDialogSaveEvent);
+        dialogAskForFinalDecission.setCancelable(true);
+
+        final AlertDialog alertDialogAskForFinalDecission = dialogAskForFinalDecission.create();
+        alertDialogAskForFinalDecission.show();
+
+        alertDialogAskForFinalDecission.findViewById(R.id.dialog_button_event_delete)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //Pull the EventID change the AcceptedState and Save again.
+                        Event event = EventController.getEventById(getEventID());
+
+                        //SMS
+                        creatorEventId = event.getCreatorEventId();
+
+                        //Check the Event if its a SingleEvent it set Accepted State just for this Event
+                        //and send a SMS
+                        if (event.getRepetition().equals("NONE")) {
+                            Toast.makeText(getContext(), R.string.accept_event_hint, Toast.LENGTH_SHORT).show();
+                            event.setAccepted(AcceptedState.ACCEPTED);
+                            EventController.saveEvent(event);
+                            SendSmsController.sendSMS(getContext(), phNumber, null, true,
+                                    creatorEventId, shortTitle);
+                            NotificationController.setAlarmForNotification(getContext(), event);
+                            Intent intent = new Intent(getActivity(), hft.wiinf.de.horario.TabActivity.class);
+                            startActivity(intent);
+                            // If have the Event a Repetition it set all Events to Accepted and send a SMS
+                        } else {
+                            Toast.makeText(getContext(), R.string.accept_event_hint, Toast.LENGTH_SHORT).show();
+                            //Create a List with all Events with the same CreatorEventId an set the State
+                            //to Accepted
+                            List<Event> findMyEventsByEventCreatorId =
+                                    //ToDo Creator EventId are not unique so its necessary to Enlarge the Select Statement
+                                    new Select().from(Event.class).where("CreatorEventId=?",
+                                            String.valueOf(event.getCreatorEventId())).execute();
+                            for (Event x : findMyEventsByEventCreatorId) {
+                                x.setAccepted(AcceptedState.ACCEPTED);
+                                NotificationController.setAlarmForNotification(getContext(), x);
+                                EventController.saveEvent(x);
+                            }
+                            SendSmsController.sendSMS(getContext(), phNumber, null, true,
+                                    creatorEventId, shortTitle);
+
+                            Intent intent = new Intent(getActivity(), hft.wiinf.de.horario.TabActivity.class);
+                            startActivity(intent);
+                        }
+                    }
+                });
+
+        alertDialogAskForFinalDecission.findViewById(R.id.dialog_button_event_back)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialogAskForFinalDecission.cancel();
+                    }
+                });
+    }
+
     public Event getSelectedEvent() {
         return selectedEvent;
     }
@@ -114,11 +199,11 @@ public class SavedEventDetailsFragment extends Fragment {
         String startTime = eventStringBufferArray[4].trim();
         String endTime = eventStringBufferArray[5].trim();
         String repetition = eventStringBufferArray[6].toUpperCase().trim();
-        String shortTitle = eventStringBufferArray[7].trim();
+        shortTitle = eventStringBufferArray[7].trim();
         String place = eventStringBufferArray[8].trim();
         String description = eventStringBufferArray[9].trim();
         String eventCreatorName = eventStringBufferArray[10].trim();
-        String phNumber = selectedEvent.getCreator().getPhoneNumber();
+        phNumber = selectedEvent.getCreator().getPhoneNumber();
 
         // Change the DataBase Repetition Information in a German String for the Repetition Element
         // like "Daily" into "täglich" and so on
@@ -143,7 +228,7 @@ public class SavedEventDetailsFragment extends Fragment {
         }
 
         // Event shortTitel in Headline with StartDate
-        savedEventDetailsOrganisatorText.setText(eventCreatorName + "\n" + shortTitle + ", "+currentDate );
+        savedEventDetailsOrganisatorText.setText(eventCreatorName + "\n" + shortTitle + ", " + currentDate);
         savedEventphNumberText.setText(phNumber);
         // Check for a Repetition Event and Change the Description Output with and without
         // Repetition Element inside.
@@ -173,14 +258,14 @@ public class SavedEventDetailsFragment extends Fragment {
         // Place, Description and Name of EventCreator
         eventToStringBuffer = new StringBuffer();
         eventToStringBuffer.append(selectedEvent.getId() + stringSplitSymbol);
-        if (selectedEvent.getStartEvent()==null)
+        if (selectedEvent.getStartEvent() == null)
             eventToStringBuffer.append(simpleDateFormat.format(selectedEvent.getStartTime()) + stringSplitSymbol);
         else
             eventToStringBuffer.append(simpleDateFormat.format(selectedEvent.getStartEvent().getStartTime()) + stringSplitSymbol);
         eventToStringBuffer.append(simpleDateFormat.format(selectedEvent.getStartTime()) + stringSplitSymbol);
         eventToStringBuffer.append(simpleDateFormat.format(selectedEvent.getEndDate()) + stringSplitSymbol);
-            eventToStringBuffer.append(simpleTimeFormat.format(selectedEvent.getStartTime()) + stringSplitSymbol);
-            eventToStringBuffer.append(simpleTimeFormat.format(selectedEvent.getEndTime()) + stringSplitSymbol);
+        eventToStringBuffer.append(simpleTimeFormat.format(selectedEvent.getStartTime()) + stringSplitSymbol);
+        eventToStringBuffer.append(simpleTimeFormat.format(selectedEvent.getEndTime()) + stringSplitSymbol);
         eventToStringBuffer.append(selectedEvent.getRepetition() + stringSplitSymbol);
         eventToStringBuffer.append(selectedEvent.getShortTitle() + stringSplitSymbol);
         eventToStringBuffer.append(selectedEvent.getPlace() + stringSplitSymbol);

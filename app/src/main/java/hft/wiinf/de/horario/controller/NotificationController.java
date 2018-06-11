@@ -81,6 +81,17 @@ public class NotificationController {
         }
     }
 
+    public static void deleteAlarmNotification(Context context, Event event) {
+        Intent alarmIntent = new Intent(context, NotificationReceiver.class);
+
+        alarmIntent.putExtra("ID", event.getId().intValue());
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, event.getId().intValue(), alarmIntent, 0);
+
+        //Set AlarmManager --> NotificationReceiver will be called
+        AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        manager.cancel(pendingIntent);
+    }
+
     public static void deleteAllAlarms(Context context) {
         //Get all events that are in the future to set the alarm
         List<Event> allEvents = EventController.findMyAcceptedEventsInTheFuture();
