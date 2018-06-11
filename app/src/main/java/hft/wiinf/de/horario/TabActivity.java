@@ -708,73 +708,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 });
     }
 
-    //check after scan if app has an user with an phoneNumber
-    private void openDialogAskForUsernameAndPhoneNumber() {
-        //build dialog for username and phoneNumber
-        final AlertDialog.Builder dialogAskForUsernamePhoneNumber = new AlertDialog.Builder(this);
-        dialogAskForUsernamePhoneNumber.setView(R.layout.dialog_askforphonenumberandusername);
-        //dialogAskForUsernamePhoneNumber.setTitle(R.string.titleDialogUsernamePhoneNumber);
-
-        dialogAskForUsernamePhoneNumber.setCancelable(true);
-
-        final AlertDialog alertDialogAskForUsernamePhoneNumber = dialogAskForUsernamePhoneNumber.create();
-        alertDialogAskForUsernamePhoneNumber.show();
-
-        //initialize GUI elements
-        final EditText afterScanning_username = alertDialogAskForUsernamePhoneNumber.findViewById(R.id.dialog_afterScanner_editText_username);
-        final EditText afterScanning_phoneNumber = alertDialogAskForUsernamePhoneNumber.findViewById(R.id.dialog_afterScanner_editText_phoneNumber);
-        //set textfield if user has username/phoneNumber
-        assert afterScanning_username != null;
-        afterScanning_username.setText(personMe.getName());
-        assert afterScanning_phoneNumber != null;
-        afterScanning_phoneNumber.setText(personMe.getPhoneNumber());
-
-        Objects.requireNonNull(afterScanning_phoneNumber).setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                //getText for both variables (phoneNumber and username)
-                String dialog_afterScanning_inputUsername;
-                dialog_afterScanning_inputUsername = afterScanning_username.getText().toString();
-                String dialog_afterScanning_inputPhoneNumber;
-                dialog_afterScanning_inputPhoneNumber = afterScanning_phoneNumber.getText().toString();
-
-                //RegEx: no whitespace at the beginning
-                Pattern pattern_afterScanning_username = Pattern.compile("^([\\S]).*");
-                Matcher matcher_afterScanning_username = pattern_afterScanning_username.matcher(dialog_afterScanning_inputUsername);
-
-                //check for valid input
-                if (actionId == EditorInfo.IME_ACTION_DONE && matcher_afterScanning_username.matches() && !dialog_afterScanning_inputUsername.contains("|")
-                        && dialog_afterScanning_inputPhoneNumber.matches("(00|0|\\+)[1-9][0-9]+")) {
-                    //get username
-                    personMe.setName(dialog_afterScanning_inputUsername);
-                    personMe.setPhoneNumber(afterScanning_phoneNumber.getText().toString());
-                    PersonController.savePerson(personMe);
-
-                    Toast toast = Toast.makeText(v.getContext(), R.string.thanksUserData, Toast.LENGTH_SHORT);
-                    toast.show();
-                    alertDialogAskForUsernamePhoneNumber.dismiss();
-                    saveEventAndPerson();
-                    return true;
-                    //if isitme is in database without phonenumber
-                    //check for valid input: username should not contain "|"
-                } else if (dialog_afterScanning_inputUsername.contains("|")) {
-                    Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername_peek, Toast.LENGTH_SHORT);
-                    toast.show();
-                    return false;
-                } else if (!afterScanning_phoneNumber.getText().toString().matches("(00|0|\\+)[1-9][0-9]+")) {
-                    Toast toast = Toast.makeText(v.getContext(), R.string.wrongNumberFormat, Toast.LENGTH_SHORT);
-                    toast.show();
-                    return false;
-                } else {
-                    //check for valid input: username should not start with blank space
-                    Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
-                    toast.show();
-                    return true;
-                }
-            }
-        });
-    }
-
     private boolean checkIfEventIsInPast() {
         //read the current date and time to compare if the End of the Event is in the past (Date & Time),
         // set seconds and milliseconds to 0 to ensure a ight compare (seonds and milliseconds doesn't matter)
@@ -797,16 +730,9 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     }
 
     private void decideWhatToDo() {
-
-
         if (!checkIfEventIsInPast()) {
-            final Person myPerson = PersonController.getPersonWhoIam();
-            if (myPerson == null || myPerson.getPhoneNumber().isEmpty()) {
-                checkPhonePermission();
-            } else if (myPerson.getPhoneNumber().isEmpty()) {
-                openDialogAskForUsernameAndPhoneNumber();
-            } else if (myPerson.getName().isEmpty()) {
-                openDialogAskForUsernameAndPhoneNumber();
+            if (personMe.getName().isEmpty()) {
+                openDialogAskForUsername();
             } else {
                 saveEventAndPerson();
             }
@@ -861,7 +787,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.dismiss();
-                                        openDialogAskForUsernameAndPhoneNumber();
+                                        openDialogAskForUsername();
                                     }
                                 })
                                 .create().show();
@@ -883,7 +809,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                                     public void onClick(DialogInterface dialog, int which) {
                                         //open keyboard
                                         ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-                                        openDialogAskForUsernameAndPhoneNumber();
+                                        openDialogAskForUsername();
                                     }
                                 })
                                 .create().show();
@@ -902,12 +828,12 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-                                        openDialogAskForUsernameAndPhoneNumber();
+                                        openDialogAskForUsername();
                                     }
                                 })
                                 .create().show();
                     } else {
-                        openDialogAskForUsernameAndPhoneNumber();
+                        openDialogAskForUsername();
                         ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
                     }
                 } else {
@@ -1148,7 +1074,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
             }
             if (personMe.getName().isEmpty())
-                openDialogAskForUsernameAndPhoneNumber();
+                openDialogAskForUsername();
             else {
                 PersonController.savePerson(personMe);
                 saveEventAndPerson();

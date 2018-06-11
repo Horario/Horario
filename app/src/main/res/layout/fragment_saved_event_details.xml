@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="?android:windowBackground"
     tools:context=".view.SavedEventDetailsFragment"
-    android:id="@+id/savedEvent_FrameLayout_main">
+    android:id="@+id/savedEvent_relativeLayout_main">
 
 
     <RelativeLayout

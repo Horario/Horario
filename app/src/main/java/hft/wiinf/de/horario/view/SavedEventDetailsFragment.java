@@ -51,6 +51,7 @@ public class SavedEventDetailsFragment extends Fragment {
     @SuppressLint("LongLogTag")
     public Long getEventID() {
         Bundle MYEventIdBundle = getArguments();
+        assert MYEventIdBundle != null;
         Long MYEventIdLongResult = MYEventIdBundle.getLong("EventId");
         return MYEventIdLongResult;
     }
@@ -73,18 +74,17 @@ public class SavedEventDetailsFragment extends Fragment {
         savedEventDetailsButtonRefuseAppointment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                //ToDo Dennis: Soll die Abfrage ob man wirklich löschen will zweimal kommen?
+                //Code for cancelling an event eg. take it out of the DB and Calendar View
+                //Code for cancelling an event eg. take it out of the DB and Calendar View
                 EventRejectEventFragment eventRejectEventFragment = new EventRejectEventFragment();
-                Bundle bundleSavedEventId = new Bundle();
-                bundleSavedEventId.putLong("EventId", getEventID());
-                bundleSavedEventId.putString("fragment", "SavedEventDetails");
-                eventRejectEventFragment.setArguments(bundleSavedEventId);
+                Bundle bundleAcceptedEventId = new Bundle();
+                bundleAcceptedEventId.putLong("EventId", getEventID());
+                bundleAcceptedEventId.putString("fragment", "AcceptedEventDetails");
+                eventRejectEventFragment.setArguments(bundleAcceptedEventId);
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
-                fr.replace(R.id.savedEvent_FrameLayout_main, eventRejectEventFragment, "RejectEvent");
+                fr.replace(R.id.savedEvent_relativeLayout_main, eventRejectEventFragment, "RejectEvent");
                 fr.addToBackStack("RejectEvent");
                 fr.commit();
-
             }
         });
 
@@ -94,18 +94,29 @@ public class SavedEventDetailsFragment extends Fragment {
                 askForPermissionToSave();
             }
         });
+
+        // Open the QRGeneratorFragment to Show the QRCode form this Event.
         savedEventDetailsButtonShowQr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                QRGeneratorFragment qrGeneratorFragment = new QRGeneratorFragment();
-                Bundle bundleSavedEventId = new Bundle();
-                bundleSavedEventId.putLong("EventId", getEventID());
-                bundleSavedEventId.putString("fragment", "SavedEventDetails");
-                qrGeneratorFragment.setArguments(bundleSavedEventId);
-                FragmentTransaction fr = getFragmentManager().beginTransaction();
-                fr.replace(R.id.savedEvent_FrameLayout_main, qrGeneratorFragment, "SaveEvent");
-                fr.addToBackStack("SaveEvent");
-                fr.commit();
+                Bundle whichFragment = getArguments();
+                QRGeneratorFragment qrFrag = new QRGeneratorFragment();
+                Bundle bundle = new Bundle();
+                bundle.putLong("eventId", getEventID());
+                bundle.putString("fragment", whichFragment.getString("fragment"));
+                qrFrag.setArguments(bundle);
+
+                if (whichFragment.getString("fragment").equals("EventOverview")) {
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.eventOverview_frameLayout, qrFrag, "QrGeneratorEO")
+                            .addToBackStack("QrGeneratorEO")
+                            .commit();
+                } else {
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.calendar_frameLayout, qrFrag, "QrGeneratorCA")
+                            .addToBackStack("QrGeneratorCA")
+                            .commit();
+                }
             }
         });
 

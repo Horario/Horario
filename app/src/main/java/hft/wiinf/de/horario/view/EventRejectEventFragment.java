@@ -6,9 +6,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,10 +29,12 @@ import java.util.List;
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.TabActivity;
 import hft.wiinf.de.horario.controller.EventController;
+import hft.wiinf.de.horario.controller.NotificationController;
 import hft.wiinf.de.horario.controller.SendSmsController;
 import hft.wiinf.de.horario.model.AcceptedState;
 import hft.wiinf.de.horario.model.Event;
 
+import static android.content.Context.INPUT_METHOD_SERVICE;
 
 public class EventRejectEventFragment extends Fragment {
 
@@ -43,10 +48,9 @@ public class EventRejectEventFragment extends Fragment {
     Event event;
     StringBuffer eventToStringBuffer;
 
-    String phNumber;
-    String rejectMessage;
-    String shortTitle;
+    String phNumber, rejectMessage, shortTitle;
     Long creatorEventId;
+
     public EventRejectEventFragment() {
 
     }
@@ -75,10 +79,34 @@ public class EventRejectEventFragment extends Fragment {
         setSelectedEvent(EventController.getEventById(getEventID()));
         buildDescriptionEvent(EventController.getEventById(getEventID()));
 
+        //initialize adapter
         ArrayAdapter reasonAdapter = ArrayAdapter.createFromResource(getContext(),
                 R.array.reason_for_rejection, android.R.layout.simple_spinner_item);
         reasonAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_reason.setAdapter(reasonAdapter);
+
+        //Make EditText-Field editable
+        reason_for_rejection.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                reason_for_rejection.setFocusable(true);
+                reason_for_rejection.setFocusableInTouchMode(true);
+                return false;
+            }
+        });
+
+        reason_for_rejection.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            //on click: close the keyboard after input is done
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                reason_for_rejection.setFocusable(false);
+                reason_for_rejection.setFocusableInTouchMode(false);
+                InputMethodManager imm = (InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                return true;
+
+            }
+        });
 
         button_reject_event.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,6 +119,7 @@ public class EventRejectEventFragment extends Fragment {
     }
 
     public void askForPermissionToDelete() {
+        //Build dialog
         final AlertDialog.Builder dialogAskForFinalDecission = new AlertDialog.Builder(getContext());
         dialogAskForFinalDecission.setView(R.layout.dialog_afterrejectevent);
         dialogAskForFinalDecission.setTitle(R.string.titleDialogRejectEvent);
@@ -115,6 +144,15 @@ public class EventRejectEventFragment extends Fragment {
                         rejectMessage = spinner_reason.getSelectedItem().toString() + "!" + reason_for_rejection.getText().toString();
                         creatorEventId = event.getCreatorEventId();
                         Log.i("SMS", rejectMessage);
+                        SendSmsController.sendSMS(getContext(), phNumber, rejectMessage, false, creatorEventId, shortTitle);
+
+                        //delete alarm for notification
+                        NotificationController.deleteAlarmNotification(getContext(), event);
+
+                        //SMS
+                        rejectMessage = spinner_reason.getSelectedItem().toString() + "!" + reason_for_rejection.getText().toString();
+                        creatorEventId = event.getCreatorEventId();
+                        Log.i("Absagegrund", rejectMessage);
                         SendSmsController.sendSMS(getContext(), phNumber, rejectMessage, false, creatorEventId, shortTitle);
 
                         Toast.makeText(getContext(), R.string.reject_event_hint, Toast.LENGTH_SHORT).show();
@@ -224,6 +262,7 @@ public class EventRejectEventFragment extends Fragment {
         return eventToStringBuffer;
 
     }
+    //check for userinput
     private boolean checkForInput(){
         if(reason_for_rejection.getText().length() == 0 || spinner_reason.getSelectedItemPosition() == 0){
             Toast.makeText(getContext(), R.string.reject_event_reason, Toast.LENGTH_SHORT).show();
@@ -241,6 +280,8 @@ public class EventRejectEventFragment extends Fragment {
             Toast.makeText(getContext(), R.string.reject_event_reason_free_text_field_to_long, Toast.LENGTH_SHORT).show();
             return false;
         }
+        //check if "," and "!" is not part of user input
+        //if they are: replace them with empty string " "
         if(reason_for_rejection.getText().toString().contains(",") ||
                 reason_for_rejection.getText().toString().contains("!")){
             reason_for_rejection.getText().toString().replaceAll(",", " ");
