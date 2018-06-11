@@ -27,6 +27,7 @@ import java.util.List;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
+import hft.wiinf.de.horario.controller.NotificationController;
 import hft.wiinf.de.horario.controller.SendSmsController;
 import hft.wiinf.de.horario.model.AcceptedState;
 import hft.wiinf.de.horario.model.Event;
@@ -121,6 +122,8 @@ public class SavedEventDetailsFragment extends Fragment {
         });
 
 
+
+
         return view;
     }
 
@@ -151,6 +154,7 @@ public class SavedEventDetailsFragment extends Fragment {
                             EventController.saveEvent(event);
                             SendSmsController.sendSMS(getContext(), phNumber, null, true,
                                     creatorEventId, shortTitle);
+                            NotificationController.setAlarmForNotification(getContext(), event);
                             Intent intent = new Intent(getActivity(), hft.wiinf.de.horario.TabActivity.class);
                             startActivity(intent);
                             // If have the Event a Repetition it set all Events to Accepted and send a SMS
@@ -164,6 +168,7 @@ public class SavedEventDetailsFragment extends Fragment {
                                             String.valueOf(event.getCreatorEventId())).execute();
                             for (Event x : findMyEventsByEventCreatorId) {
                                 x.setAccepted(AcceptedState.ACCEPTED);
+                                NotificationController.setAlarmForNotification(getContext(), x);
                                 EventController.saveEvent(x);
                             }
                             SendSmsController.sendSMS(getContext(), phNumber, null, true,
@@ -174,6 +179,7 @@ public class SavedEventDetailsFragment extends Fragment {
                         }
                     }
                 });
+
         alertDialogAskForFinalDecission.findViewById(R.id.dialog_button_event_back)
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
