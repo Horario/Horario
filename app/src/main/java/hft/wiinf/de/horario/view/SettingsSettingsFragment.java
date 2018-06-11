@@ -1,6 +1,5 @@
 package hft.wiinf.de.horario.view;
 
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -43,6 +42,7 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
  * A simple {@link Fragment} subclass.
  */
 public class SettingsSettingsFragment extends Fragment implements ActivityCompat.OnRequestPermissionsResultCallback {
+
     private static final String TAG = "SettingFragmentActivity";
     private static final int PERMISSION_REQUEST_SEND_SMS = 0;
     EditText editTextUsername, editText_PhoneNumber;
@@ -400,8 +400,6 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
 
 
     }
-
-    // }
 
 
     // method to read the phone number of the user

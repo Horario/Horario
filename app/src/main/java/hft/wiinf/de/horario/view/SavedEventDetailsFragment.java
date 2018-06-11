@@ -1,14 +1,11 @@
 package hft.wiinf.de.horario.view;
 
 import android.annotation.SuppressLint;
-import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,12 +14,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.activeandroid.ActiveAndroid;
 import com.activeandroid.query.Select;
-import com.github.sundeepk.compactcalendarview.EventsContainer;
 
 import java.text.SimpleDateFormat;
-import java.util.Iterator;
 import java.util.List;
 
 import hft.wiinf.de.horario.R;
@@ -31,7 +25,6 @@ import hft.wiinf.de.horario.controller.NotificationController;
 import hft.wiinf.de.horario.controller.SendSmsController;
 import hft.wiinf.de.horario.model.AcceptedState;
 import hft.wiinf.de.horario.model.Event;
-import hft.wiinf.de.horario.model.Repetition;
 
 public class SavedEventDetailsFragment extends Fragment {
 
@@ -120,8 +113,6 @@ public class SavedEventDetailsFragment extends Fragment {
                 }
             }
         });
-
-
 
 
         return view;

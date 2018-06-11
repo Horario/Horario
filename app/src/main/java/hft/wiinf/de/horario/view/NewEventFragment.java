@@ -47,9 +47,9 @@ import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.model.Repetition;
 
-
 //TODO Kommentieren und Java Doc Info Schreiben
 public class NewEventFragment extends Fragment {
+
     // calendar objects to save the startTime / end Time / endOfRepetition, default: values - today
     Calendar startTime = Calendar.getInstance();
     Calendar endTime = Calendar.getInstance();
@@ -62,8 +62,8 @@ public class NewEventFragment extends Fragment {
     private Button button_save;
     //person object of the user, to get the user name
     private Person me;
-    int counter=0;
-    private int PERMISSION_REQUEST_READ_PHONE_STATE=0;
+    int counter = 0;
+    private int PERMISSION_REQUEST_READ_PHONE_STATE = 0;
 
     @Nullable
     @Override
@@ -559,6 +559,7 @@ public class NewEventFragment extends Fragment {
             }
         }
     }
+
     private void checkPhonePermission() {
         //Check if User has permission to start to scan, if not it's start a RequestLoop
         if (!isPhonePermissionGranted()) {
@@ -655,8 +656,6 @@ public class NewEventFragment extends Fragment {
 
     }
 
-    // }
-
 
     // method to read the phone number of the user
     public void readPhoneNumber() {
@@ -667,7 +666,7 @@ public class NewEventFragment extends Fragment {
         if (phoneNumber != null)
             phoneNumber.replaceAll(" ", "");
         if (phoneNumber.matches("[1-9][0-9]+"))
-            phoneNumber="+"+phoneNumber;
+            phoneNumber = "+" + phoneNumber;
         me.setPhoneNumber(phoneNumber);
         //if the number could not been read, open a dialog
         if (me.getPhoneNumber() == null || !me.getPhoneNumber().matches("(00|0|\\+)[1-9][0-9]+")) {

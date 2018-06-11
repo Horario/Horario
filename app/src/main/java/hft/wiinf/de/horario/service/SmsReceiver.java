@@ -1,4 +1,3 @@
-
 package hft.wiinf.de.horario.service;
 
 import android.app.NotificationChannel;
@@ -85,11 +84,11 @@ public class SmsReceiver extends BroadcastReceiver {
     }
 
     private boolean checkForRegexOk(String[] smsTextSplitted) {
-        //RegEx: NO SQL Injections allowed PLUS check if SMS is valid
-//        smsTextSplitted[0]= CreatorEventId, should be only number greater than 0
-//        smsTextSplitted[1]= boolean for acceptance, should be only 0 or 1
-//        smsTextSplitted[2]= String for name, only Chars and points
-//        smsTextSplitted[3]= Excuse asString, needs to be splitted again by "!" and checked on two strings
+        // RegEx: NO SQL Injections allowed PLUS check if SMS is valid
+        // smsTextSplitted[0]= CreatorEventId, should be only number greater than 0
+        // smsTextSplitted[1]= boolean for acceptance, should be only 0 or 1
+        // smsTextSplitted[2]= String for name, only Chars and points
+        // smsTextSplitted[3]= Excuse asString, needs to be splitted again by "!" and checked on two strings
         if (smsTextSplitted.length == 3 || smsTextSplitted.length == 4) {
             boolean isAcceptance = true;
             if (smsTextSplitted.length == 3) {
@@ -170,11 +169,11 @@ public class SmsReceiver extends BroadcastReceiver {
                 addNotification(context, 1, person.getName());
                 break;
             }
-            if(isSerialEvent(eventIdInSMS)){
+            if (isSerialEvent(eventIdInSMS)) {
                 boolean hasAcceptedEarlier = false;
                 List<Event> myEvents = EventController.getMyEventsByCreatorEventId(eventIdInSMS);
-                if(singleUnreadSMS.isAcceptance()){
-                    for(Event event : myEvents){
+                if (singleUnreadSMS.isAcceptance()) {
+                    for (Event event : myEvents) {
                         Person personA = new Person(singleUnreadSMS.getPhonenumber(), singleUnreadSMS.getName());
                         String savedContactExistingSerial = null;
                         savedContactExistingSerial = lookForSavedContact(singleUnreadSMS.getPhonenumber(), context);
@@ -188,8 +187,8 @@ public class SmsReceiver extends BroadcastReceiver {
                         personA.setAcceptedEvent(event);
                         PersonController.savePerson(personA);
                     }
-                }else{
-                    for(Event event : myEvents){
+                } else {
+                    for (Event event : myEvents) {
                         Person personB = new Person(singleUnreadSMS.getPhonenumber(), singleUnreadSMS.getName());
                         String savedContactExistingSerial = null;
                         savedContactExistingSerial = lookForSavedContact(singleUnreadSMS.getPhonenumber(), context);
@@ -220,7 +219,7 @@ public class SmsReceiver extends BroadcastReceiver {
                         }
                     }
                 }
-            }else{
+            } else {
                 /*Check if acceptance or cancellation*/
                 boolean hasAcceptedEarlier = false;
                 if (singleUnreadSMS.isAcceptance()) {
@@ -253,15 +252,15 @@ public class SmsReceiver extends BroadcastReceiver {
     }
 
     private boolean isSerialEvent(Long eventIdInSMS) {
-        try{
+        try {
             Event x = EventController.getEventById(eventIdInSMS).getStartEvent();
-            if (x!=null){
+            if (x != null) {
                 return true;
-            }else{
+            } else {
                 return false;
             }
 
-        }catch(Exception e){
+        } catch (Exception e) {
             return false;
         }
     }

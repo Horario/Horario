@@ -17,7 +17,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -141,14 +140,14 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             checkContactsPermission();
         }
     }
+
     public void checkContactsPermission() {
-        if(!areContactPermissionsGranted()){
+        if (!areContactPermissionsGranted()) {
             requestContactPermissions();
-        }else{
+        } else {
             counterCONTACTS = 5;
         }
     }
-
 
 
     private boolean areSMSPermissionsGranted() {
@@ -164,6 +163,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         }
         return true;
     }
+
     private boolean areContactPermissionsGranted() {
         int contacts = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CONTACTS);
         List<String> listPermissionsNeeded = new ArrayList<>();
@@ -363,7 +363,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 qrScanner_result_description.setText(getString(R.string.on) + startDate
                         + getString(R.string.find) + getString(R.string.from) + startTime + getString(R.string.until)
                         + endTime + getString(R.string.clock_at_room) + place + " " + shortTitle
-                        + getString(R.string.instead_of) + "\n" + "\n"+ getString(R.string.eventDetails)
+                        + getString(R.string.instead_of) + "\n" + "\n" + getString(R.string.eventDetails)
                         + description + "\n" + "\n" + getString(R.string.organizer) + eventCreatorName);
             } else {
                 qrScanner_result_description.setText(getString(R.string.as_of) + startDate
@@ -739,14 +739,14 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         Calendar now = Calendar.getInstance();
         now.set(Calendar.SECOND, 0);
         now.set(Calendar.MILLISECOND, 0);
-        if(getRepetition() == Repetition.NONE) {
+        if (getRepetition() == Repetition.NONE) {
             if (getStartTimeEvent().before(now)) {
                 Toast.makeText(this, R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();
                 return true;
             } else {
                 return false;
             }
-        }else if (getEndDateEvent().before(now)) {
+        } else if (getEndDateEvent().before(now)) {
             Toast.makeText(this, R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();
             return true;
         } else {

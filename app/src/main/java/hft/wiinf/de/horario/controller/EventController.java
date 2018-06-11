@@ -13,7 +13,6 @@ import hft.wiinf.de.horario.model.AcceptedState;
 import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
 
-
 public class EventController {
     //saves (update or create)an event
     public static void saveEvent(@NonNull Event event) {
@@ -44,7 +43,7 @@ public class EventController {
         return Event.load(Event.class, id);
     }
 
-    public static  List<Event> getMyEventsByCreatorEventId(@NonNull Long creatorEventId) {
+    public static List<Event> getMyEventsByCreatorEventId(@NonNull Long creatorEventId) {
         return new Select().from(Event.class).where("creatorEventId=? AND startEvent=?", creatorEventId, creatorEventId).execute();
 
     }

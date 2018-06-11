@@ -1,6 +1,5 @@
 package hft.wiinf.de.horario.model;
 
-
 import android.support.annotation.NonNull;
 
 import com.activeandroid.Model;

@@ -1,6 +1,5 @@
 package hft.wiinf.de.horario.view;
 
-
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;

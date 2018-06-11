@@ -20,18 +20,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.activeandroid.query.Delete;
-import com.activeandroid.query.Select;
 
 import java.text.SimpleDateFormat;
-import java.util.Iterator;
-import java.util.List;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.TabActivity;
 import hft.wiinf.de.horario.controller.EventController;
 import hft.wiinf.de.horario.controller.NotificationController;
 import hft.wiinf.de.horario.controller.SendSmsController;
-import hft.wiinf.de.horario.model.AcceptedState;
 import hft.wiinf.de.horario.model.Event;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
@@ -69,13 +65,13 @@ public class EventRejectEventFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         //initialize GUI-Elements
-        reason_for_rejection = (EditText) view.findViewById(R.id.reject_event_editText_note);
-        reject_event_description = (TextView) view.findViewById(R.id.reject_event_textView_description);
-        reject_event_header = (TextView) view.findViewById(R.id.reject_event_textView_header);
-        spinner_reason = (Spinner) view.findViewById(R.id.reject_event_spinner_reason);
-        button_reject_event = (Button) view.findViewById(R.id.reject_event_button_reject);
-        button_dialog_delete = (Button) view.findViewById(R.id.dialog_button_event_delete);
-        button_dialog_back = (Button) view.findViewById(R.id.dialog_button_event_back);
+        reason_for_rejection = view.findViewById(R.id.reject_event_editText_note);
+        reject_event_description = view.findViewById(R.id.reject_event_textView_description);
+        reject_event_header = view.findViewById(R.id.reject_event_textView_header);
+        spinner_reason = view.findViewById(R.id.reject_event_spinner_reason);
+        button_reject_event = view.findViewById(R.id.reject_event_button_reject);
+        button_dialog_delete = view.findViewById(R.id.dialog_button_event_delete);
+        button_dialog_back = view.findViewById(R.id.dialog_button_event_back);
         setSelectedEvent(EventController.getEventById(getEventID()));
         buildDescriptionEvent(EventController.getEventById(getEventID()));
 
@@ -111,7 +107,7 @@ public class EventRejectEventFragment extends Fragment {
         button_reject_event.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(checkForInput()){
+                if (checkForInput()) {
                     askForPermissionToDelete();
                 }
             }
@@ -256,28 +252,29 @@ public class EventRejectEventFragment extends Fragment {
         return eventToStringBuffer;
 
     }
+
     //check for userinput
-    private boolean checkForInput(){
-        if(reason_for_rejection.getText().length() == 0 || spinner_reason.getSelectedItemPosition() == 0){
+    private boolean checkForInput() {
+        if (reason_for_rejection.getText().length() == 0 || spinner_reason.getSelectedItemPosition() == 0) {
             Toast.makeText(getContext(), R.string.reject_event_reason, Toast.LENGTH_SHORT).show();
             return false;
         }
-        if(reason_for_rejection.getText().toString().contains("|")){
+        if (reason_for_rejection.getText().toString().contains("|")) {
             Toast.makeText(getContext(), R.string.reject_event_reason_contains_pipe, Toast.LENGTH_SHORT).show();
             return false;
         }
-        if(reason_for_rejection.getText().toString().matches(" +.*")){
+        if (reason_for_rejection.getText().toString().matches(" +.*")) {
             Toast.makeText(getContext(), R.string.reject_event_reason_free_text_field_empty, Toast.LENGTH_SHORT).show();
             return false;
         }
-        if(reason_for_rejection.getText().length() > 50){
+        if (reason_for_rejection.getText().length() > 50) {
             Toast.makeText(getContext(), R.string.reject_event_reason_free_text_field_to_long, Toast.LENGTH_SHORT).show();
             return false;
         }
         //check if "," and "!" is not part of user input
         //if they are: replace them with empty string " "
-        if(reason_for_rejection.getText().toString().contains(",") ||
-                reason_for_rejection.getText().toString().contains("!")){
+        if (reason_for_rejection.getText().toString().contains(",") ||
+                reason_for_rejection.getText().toString().contains("!")) {
             reason_for_rejection.getText().toString().replaceAll(",", " ");
             reason_for_rejection.getText().toString().replaceAll("!", " ");
             return true;
