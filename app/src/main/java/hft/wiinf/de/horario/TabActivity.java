@@ -715,7 +715,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             EventRejectEventFragment eventRejectEventFragment = new EventRejectEventFragment();
             Bundle bundleAcceptedEventId = new Bundle();
             bundleAcceptedEventId.putLong("EventId", event.getId());
-            Log.i("EVENT ID", creatorID);
             bundleAcceptedEventId.putString("fragment", "AcceptedEventDetails");
             eventRejectEventFragment.setArguments(bundleAcceptedEventId);
             FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
@@ -1128,7 +1127,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 openDialogAskForUsername();
             else {
                 PersonController.savePerson(personMe);
-                saveEventAndPerson();
+                dialogListener();
             }
         }
     }

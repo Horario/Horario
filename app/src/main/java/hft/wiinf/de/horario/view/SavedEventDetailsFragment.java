@@ -72,7 +72,7 @@ public class SavedEventDetailsFragment extends Fragment {
                 Bundle whichFragment = getArguments();
                 EventRejectEventFragment eventRejectEventFragment = new EventRejectEventFragment();
                 Bundle bundle = new Bundle();
-                bundle.putLong("eventId", getEventID());
+                bundle.putLong("EventId", getEventID());
                 bundle.putString("fragment", whichFragment.getString("fragment"));
                 eventRejectEventFragment.setArguments(bundle);
 

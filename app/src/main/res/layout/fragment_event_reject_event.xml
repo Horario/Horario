@@ -53,7 +53,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="27dp"
-            android:text="@string/reject_event" />
+            android:text="@string/reject_event_button" />
 
         <EditText
             android:id="@+id/reject_event_editText_note"
