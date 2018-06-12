@@ -46,7 +46,7 @@ public class QRGeneratorFragment extends Fragment {
 
     private static final String TAG = "QRGeneratorFragmentActivity";
     private TextView mQRGenerator_textView_description, mQRGenerator_textView_headline;
-    private RelativeLayout mQRGenerator_relativeLayout_buttonFrame, mQRGenerator_realtiveLayout_textViewFrame;
+    private RelativeLayout mQRGenerator_realtiveLayout_textViewFrame;
     private Button mQRGenerator_button_shareWith, mQRGenerator_button_goToWhereComesFrom;
     private ImageView mQRGenerator_imageView_qrCode;
     private BitMatrix mBitmatrix;
@@ -94,7 +94,7 @@ public class QRGeneratorFragment extends Fragment {
         mQRGenerator_realtiveLayout_textViewFrame = view.findViewById(R.id.qrGenerator_relativeLayout_textViewFrame);
         mQRGenerator_textView_description = view.findViewById(R.id.qrGenerator_textView_description);
         mQRGenerator_textView_headline = view.findViewById(R.id.qrGenerator_textView_headline);
-        mQRGenerator_relativeLayout_buttonFrame = view.findViewById(R.id.qrGenerator_relativeLayout_buttonFrame);
+        //mQRGenerator_relativeLayout_buttonFrame = view.findViewById(R.id.qrGenerator_relativeLayout_buttonFrame);
 
         // Show always Scrollbar on Description TextView
         mQRGenerator_textView_description.setMovementMethod(new ScrollingMovementMethod());
@@ -205,29 +205,25 @@ public class QRGeneratorFragment extends Fragment {
             }
 
             // Event shortTitle in Headline with StartDate
-            mQRGenerator_textView_headline.setText(getString(R.string.your_Event) + "\n" + shortTitle + ", " + startDate);
+            mQRGenerator_textView_headline.setText(shortTitle + ", " + startDate);
             // Check for a Repetition Event and Change the Description Output with and without
             // Repetition Element inside.
-            if (repetition.equals("")) {
-                mQRGenerator_textView_description.setText(getString(R.string.on) + startDate
-                        + getString(R.string.find) + getString(R.string.from) + startTime + getString(R.string.until)
-                        + endTime + getString(R.string.clock_at_room) + place + " " + shortTitle
-                        + getString(R.string.instead_of) + "\n" + getString(R.string.eventDetails)
-                        + description + "\n" + "\n" + getString(R.string.organizer) + eventCreatorName);
+           if (repetition.equals("")) {
+                mQRGenerator_textView_description.setText(getString(R.string.time)+getString(R.string.from) + startTime + getString(R.string.until)
+                        + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place + "\n" + getString(R.string.organizer) + eventCreatorName  + "\n" + "\n" + getString(R.string.eventDetails)
+                        + description);
             } else {
                 mQRGenerator_textView_description.setText(getString(R.string.as_of) + startDate
-                        + getString(R.string.until) + endDate + getString(R.string.find)
-                        + repetition + getString(R.string.at) + startTime + getString(R.string.clock_to)
-                        + endTime + getString(R.string.clock_at_room) + place + " " + shortTitle
-                        + getString(R.string.instead_of) + "\n" + "\n" + getString(R.string.eventDetails) + description +
-                        "\n" + "\n" + getString(R.string.organizer) + eventCreatorName);
+                        + getString(R.string.until) + endDate + "\n"+ getString(R.string.from) + startTime + getString(R.string.until)
+                        + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place + "\n" + getString(R.string.organizer) + eventCreatorName  + "\n" + "\n" + getString(R.string.eventDetails)
+                        + description);
             }
             // In the CatchBlock the User see a SnackBar Information and was pushed where the User Comes From
         } catch (NullPointerException e) {
             Log.d(TAG, "QRGeneratorFragmentActivity:" + e.getMessage());
             mQRGenerator_button_goToWhereComesFrom.setVisibility(View.GONE);
             mQRGenerator_button_shareWith.setVisibility(View.GONE);
-            Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(R.id.qrGenerator_relativeLayout_buttonFrame),
+            Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(R.id.qrGenerator_relativeLayout_textViewFrame),
                     getString(R.string.ups_an_error),
                     Snackbar.LENGTH_INDEFINITE).setAction(getString(R.string.back), new View.OnClickListener() {
                 @Override
@@ -246,7 +242,7 @@ public class QRGeneratorFragment extends Fragment {
             mQRGenerator_textView_description.setText(getString(R.string.wrongQRCodeResult) + "\n" + "\n"
                     + mQRGenerator_StringBuffer_Result + "\n" + "\n" + getString(R.string.notAsEventSaveable));
 
-            Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(R.id.qrGenerator_relativeLayout_buttonFrame),
+            Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(R.id.qrGenerator_relativeLayout_textViewFrame),
                     getString(R.string.ups_an_error),
                     Snackbar.LENGTH_INDEFINITE).setAction(getString(R.string.back), new View.OnClickListener() {
                 @Override

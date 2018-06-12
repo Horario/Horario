@@ -1,75 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:windowBackground"
     tools:context=".view.QRGeneratorFragment">
 
+
+
+
     <RelativeLayout
         android:id="@+id/qrGenerator_relativeLayout_textViewFrame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true">
+        android:layout_alignParentTop="true" >
 
-        <TextView
-            android:id="@+id/qrGenerator_textView_headline"
-            android:layout_width="361dp"
-            android:layout_height="55dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true" />
 
-        <TextView
-            android:id="@+id/qrGenerator_textView_description"
-            android:layout_width="372dp"
-            android:layout_height="130dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="54dp"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="58dp" />
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/myOwnEventDetails_constraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/qrGenerator_textView_headline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:backgroundTint="@color/zentea_white"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="10dp"
+                android:textAlignment="gravity"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <ScrollView
+                android:id="@+id/scrollView11"
+                android:layout_width="0dp"
+                android:layout_height="364dp"
+                android:layout_marginStart="10dp"
+                android:paddingBottom="10dp"
+                android:paddingEnd="10dp"
+                android:paddingStart="10dp"
+                android:paddingTop="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/qrGenerator_textView_headline">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical"
+                    android:paddingBottom="20dp">
+
+                    <TextView
+                        android:id="@+id/qrGenerator_textView_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginTop="0dp"
+                        android:paddingLeft="0dp"
+                        android:paddingRight="0dp"
+                        android:textSize="16sp"
+                        tools:layout_editor_absoluteX="0dp"
+                        tools:layout_editor_absoluteY="58dp" />
+
+                    <ImageView
+                        android:id="@+id/qrGenerator_imageView_qrCode"
+                        android:layout_width="309dp"
+                        android:layout_height="248dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="20dp"
+                        android:layout_gravity="center_horizontal"
+                        tools:layout_editor_absoluteX="83dp"
+                        tools:layout_editor_absoluteY="220dp" />
+
+                </LinearLayout>
+
+            </ScrollView>
+
+
+            <Button
+                android:id="@+id/qrGenerator_button_shareWith"
+                android:layout_width="0dp"
+                android:layout_height="49dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:background="@color/zentea_darkgreen"
+                android:text="@string/share_with"
+                android:textColor="@android:color/background_light"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toTopOf="@+id/qrGenerator_button_goToWhereComesFrom"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/scrollView11"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <Button
+                android:id="@+id/qrGenerator_button_goToWhereComesFrom"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+
+                android:background="@color/zentea_darkgreen"
+                android:text="@string/back_where_user_comesFrom"
+                android:textColor="@android:color/background_light"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/qrGenerator_button_shareWith" />
+
+
+        </android.support.constraint.ConstraintLayout>
+
+
+
+
 
     </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/qrGenerator_relativeLayout_buttonFrame"
-        android:layout_width="match_parent"
-        android:layout_height="147dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="420dp">
-
-        <Button
-            android:id="@+id/qrGenerator_button_shareWith"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:text="@string/share_with"
-            tools:layout_editor_absoluteX="129dp"
-            tools:layout_editor_absoluteY="16dp" />
-
-        <Button
-            android:id="@+id/qrGenerator_button_goToWhereComesFrom"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/back_where_user_comesFrom"
-            tools:layout_editor_absoluteX="101dp"
-            tools:layout_editor_absoluteY="83dp" />
-
-    </RelativeLayout>
-
-    <ImageView
-        android:id="@+id/qrGenerator_imageView_qrCode"
-        android:layout_width="309dp"
-        android:layout_height="231dp"
-        android:layout_above="@+id/qrGenerator_relativeLayout_buttonFrame"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="35dp"
-        tools:layout_editor_absoluteX="83dp"
-        tools:layout_editor_absoluteY="220dp" />
-
 </RelativeLayout>

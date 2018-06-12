@@ -44,7 +44,7 @@
     <string name="thanksForUsername">Benutzername wurde gespeichert. </string>
     <string name="titleDialogRejectEvent">Willst du den Termin wirklich absagen und eine SMS versenden?</string>
     <string name="titleDialogSaveEvent">Willst du den Termin wirklich speichern und eine SMS versenden?</string>
-    <string name="titleDialogFinalDecission">Bist du dir sicher?</string>
+    <string name="titleDialogFinalDecission">Bist du sicher?</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="titleParticipantsEvent">Rückmeldungen</string>
@@ -61,11 +61,11 @@
 
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="reject_event">Das Event wurde aus der Datenbank gelöscht</string>
+    <string name="reject_event">Das Event wurde abgesagt und gelöscht</string>
     <string name="thanksForUsernameAndPhoneNumber">Benutzername und Telefonnummer wurde gespeichert. </string>
     <string name="description_too_long">Die Beschreibung darf nicht länger als 500 Zeichen sein.</string>
     <string name="reject_event_hint">Der Termin wurde abgesagt und eine SMS versendet.</string>
-    <string name="accept_event_hint">Die Termine wurde zugesagt.</string>
+    <string name="accept_event_hint">Die Termine wurden zugesagt.</string>
     <string name="accept_event_hint_single">Der Termin wurde zugesagt.</string>
     <string name="reject_event_hint_single">Der Termin wurde abgesagt.</string>
     <string name="reject_event_reason_free_text_field_empty">Die Beschreibung darf nicht mit einem Leerzeichen anfangen.</string>
@@ -77,7 +77,7 @@
     <string name="shortTitle_too_long">Der Kurztitel darf nicht länger als 50 Zeichen sein.</string>
     <string name="startTime_past">Der Termin darf nicht in der Vergangenheit beginnen.</string>
     <string name="startTime_afterScanning_past">Der Termin hat schon in der Vergangenheit stattgefunden.</string>
-    <string name="save_event">Der Termin wurde in die Datenbank geschrieben.</string>
+    <string name="save_event">Der Termin wurde gespeichert.</string>
     <string name="shortTitle_spaces">Der Kurztitel darf nicht mit Leerzeichen beginnen.</string>
     <string name="description_spaces">Die Beschreibung darf nicht mit Leerzeichen beginnen.</string>
     <string name="place_spaces">Der Raum darf nicht mit Leerzeichen beginnen.</string>
@@ -93,7 +93,7 @@
     <string name="acceptEventAfterScan">Willst du wirklich zusagen?</string>
     <string name="rejectEventAfterScan">Willst du wirklich ablehnen?</string>
     <string name="saveEventAfterScan">Willst du wirklich speichern ohne zuzusagen?</string>
-    <string name="eventIsInDatabase">Termin ist schon in der Datenbank vorhanden!</string>
+    <string name="eventIsInDatabase">Termin ist schon gespeichert!</string>
 
 
     <string-array name="event_repetitions">
@@ -131,18 +131,18 @@
 
     <!-- QR Generator -->
     <string name="show_Response">Rückmeldungen anzeigen</string>
-    <string name="share_with">Teilen via…</string>
+    <string name="share_with">Teilen via</string>
     <string name="on">Am\u0020</string>
     <string name="find">\u0020findet\u0020</string>
     <string name="from">von\u0020</string>
-    <string name="clock_at_room">\u0020Uhr in Raum\u0020</string>
+    <string name="clock_at_room">Uhr in Raum\u0020</string>
     <string name="organizer">Organisator:\u0020</string>
-    <string name="eventDetails">Termindetails sind:\u0020</string>
+    <string name="eventDetails">Termindetails:\u0020</string>
     <string name="at">\u0020um\u0020</string>
     <string name="instead_of">\u0020statt.</string>
     <string name="as_of">Vom\u0020</string>
     <string name="until">\u0020bis\u0020</string>
-    <string name="clock_to">\u0020Uhr bis\u0020</string>
+    <string name="clock_to">Uhr bis\u0020</string>
     <string name="your_Event">Dein Termin</string>
     <string name="room">Raum:\u0020</string>
     <string name="yourself">Du</string>
@@ -155,7 +155,10 @@
     <string name="toCalender">\u0020Zum Kalender\u0020</string>
     <string name="wrongQRCodeResult">Das ist der Inhalt des QR Codes:\u0020</string>
     <string name="notAsEventSaveable">Das kann leider nicht als Termin gespeichert werden!</string>
-    <string name="back_where_user_comesFrom">Zurück zum Kalendar</string>
+    <string name="back_where_user_comesFrom">Zur Übersicht</string>
+    <string name="time">Zeit:\u0020</string>
+    <string name="clock">\u0020Uhr</string>
+    <string name="place">Ort:\u0020</string>
 
     <!-- QR Scanner & Scanner PopUp -->
     <string name="eventSave">Termin zusagen</string>
