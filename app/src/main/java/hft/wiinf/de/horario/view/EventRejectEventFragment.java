@@ -259,7 +259,7 @@ public class EventRejectEventFragment extends Fragment {
 
     //check for userinput
     private boolean checkForInput() {
-        if (reason_for_rejection.getText().length() == 0 || spinner_reason.getSelectedItemPosition() == 0) {
+        if (reason_for_rejection.getText().length() == 0) {
             Toast.makeText(getContext(), R.string.reject_event_reason, Toast.LENGTH_SHORT).show();
             return false;
         }

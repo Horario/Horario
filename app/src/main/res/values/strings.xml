@@ -73,7 +73,7 @@
     <string name="reject_event_reason_contains_pipe">Die Beschreibung darf kein "|" enthalten</string>
     <string name="reject_event_reason_contains_comma">Die Beschreibung darf kein "," enthalten</string>
     <string name="reject_event_reason_contains_exclamation_mark">Die Beschreibung darf kein "!" enthalten</string>
-    <string name="reject_event_reason">Bitte wähle einen Grund aus und gebe eine Begründung ein.</string>
+    <string name="reject_event_reason">Bitte gebe einen Grund ein, warum du nicht am Termin teilnehmen kannst.</string>
     <string name="shortTitle_too_long">Der Kurztitel darf nicht länger als 50 Zeichen sein.</string>
     <string name="startTime_past">Der Termin darf nicht in der Vergangenheit beginnen.</string>
     <string name="startTime_afterScanning_past">Der Termin hat schon in der Vergangenheit stattgefunden.</string>
