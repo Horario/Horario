@@ -53,7 +53,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="27dp"
-            android:text="Termin absagen" />
+            android:text="@string/reject_event" />
 
         <EditText
             android:id="@+id/reject_event_editText_note"
@@ -63,6 +63,6 @@
             android:layout_alignStart="@+id/reject_event_textView_header"
             android:layout_marginBottom="198dp"
             android:ems="10"
-            android:inputType="text|textPersonName" />
+            android:inputType="text|textMultiLine|textPersonName"/>
     </RelativeLayout>
 </FrameLayout>

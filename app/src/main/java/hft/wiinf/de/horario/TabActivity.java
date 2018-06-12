@@ -272,7 +272,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         @Override
                         public void onClick(View v) {
                             buttonId = 1;
-                            decideWhatToDo();
+                            decideWhatToDo(afterScanningDialogAction);
                         }
                     });
 
@@ -282,7 +282,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         @Override
                         public void onClick(View v) {
                             buttonId = 2;
-                            decideWhatToDo();
+                            decideWhatToDo(afterScanningDialogAction);
                         }
                     });
 
@@ -292,7 +292,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         @Override
                         public void onClick(View v) {
                             buttonId = 3;
-                            if(!checkIfEventIsInPast()){
+                            if (!checkIfEventIsInPast()) {
+                                decideWhatToDo(afterScanningDialogAction);
 
                             }
                         }
@@ -622,7 +623,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     }
 
     //save Event and Person
-    private void saveEventAndPerson() {
+    private void dialogListener() {
         final AlertDialog.Builder dialogAskForFinalDecission = new AlertDialog.Builder(this);
         dialogAskForFinalDecission.setView(R.layout.dialog_afterscanningbuttonclick);
         dialogAskForFinalDecission.setTitle(R.string.titleDialogFinalDecission);
@@ -639,14 +640,11 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         Calendar checkStartTime = getStartTimeEvent();
                         Calendar checkEndTime = getEndTimeEvent();
 
-                        Person person = new Person();
-                        Event event = new Event(person);
-
                         //check if Event is n Database or not
                         singleEvent = EventController.checkIfEventIsInDatabase(description,
                                 shortTitle, place, checkStartTime, checkEndTime);
 
-                        //if event is in  database
+                        //if event is in database
                         if (singleEvent != null) {
                             //finish and restart the activity
                             Intent intent = getIntent();
@@ -657,72 +655,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                             toast.show();
                             //if event is not in database
                         } else {
-                            //check if user who published the event is in database
-                            personEventCreator = PersonController.checkforPhoneNumber(creatorPhoneNumber);
+                            savePersonAndEvent(alertDialogAskForFinalDecission);
 
-                            //if publisher is in database
-                            if (personEventCreator != null) {
-                                event.setCreator(personEventCreator);
-                            } else {
-                                //if publisher is not in database: save a new person
-                                person.setName(eventCreatorName);
-                                person.setPhoneNumber(creatorPhoneNumber);
-                                person.save();
-                            }
-
-                            //set all things for event
-                            event.setCreatorEventId(Long.parseLong(creatorID));
-                            event.setStartTime(getStartTimeEvent().getTime());
-                            event.setEndTime(getEndTimeEvent().getTime());
-                            event.setRepetition(getRepetition());
-                            event.setShortTitle(shortTitle);
-                            event.setPlace(place);
-                            event.setDescription(description);
-
-                            //check which button got pressed and set acceptedState
-                            if (buttonId == 1) {
-                                event.setAccepted(AcceptedState.ACCEPTED);
-                            } else if (buttonId == 2) {
-                                event.setAccepted(AcceptedState.WAITING);
-                            } else if (buttonId == 3) {
-                                event.setAccepted(AcceptedState.REJECTED);
-                            }
-
-                            //check if event is serialevent
-                            if (event.getRepetition() != Repetition.NONE) {
-                                event.setEndDate(getEndDateEvent().getTime());
-                                //save serialevent
-                                EventController.saveSerialevent(event);
-                            } else {
-                                //save the one event
-                                EventController.saveEvent(event);
-                            }
-
-                            if (event.getAccepted().equals(AcceptedState.ACCEPTED)) {
-                                NotificationController.setAlarmForNotification(getApplicationContext(), event);
-                            }
-                            Toast.makeText(v.getContext(), R.string.save_event, Toast.LENGTH_SHORT).show();
-                            alertDialogAskForFinalDecission.dismiss();
-
-
-                            //SMS
-                            String reject_message;
-                            boolean accepted;
-                            if ((event.getAccepted().equals(AcceptedState.ACCEPTED) || (event.getAccepted().equals(AcceptedState.REJECTED)))) {
-                                if (event.getAccepted().equals(AcceptedState.ACCEPTED)) {
-                                    accepted = true;
-                                    reject_message = "";
-                                } else {
-                                    accepted = false;
-                                    reject_message = "ToDo!ToDO";
-                                }
-                                SendSmsController.sendSMS(getApplicationContext(), event.getCreator().getPhoneNumber(), reject_message, accepted, event.getCreatorEventId(), event.getShortTitle());
-                            }
-
-                            //Restart the TabActivity an Reload all Views
-                            Intent intent = getIntent();
-                            finish();
-                            startActivity(intent);
                         }
                     }
                 });
@@ -734,6 +668,88 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         alertDialogAskForFinalDecission.cancel();
                     }
                 });
+    }
+
+    private void savePersonAndEvent(AlertDialog alertDialogAskForFinalDecission) {
+        Person person = new Person();
+        Event event = new Event(person);
+        //check if user who published the event is in database
+        personEventCreator = PersonController.checkforPhoneNumber(creatorPhoneNumber);
+
+        checkIfPersonIsInDatabase(event, person);
+
+        //set all things for event
+        event.setCreatorEventId(Long.parseLong(creatorID));
+        event.setStartTime(getStartTimeEvent().getTime());
+        event.setEndTime(getEndTimeEvent().getTime());
+        event.setRepetition(getRepetition());
+        event.setShortTitle(shortTitle);
+        event.setPlace(place);
+        event.setDescription(description);
+
+        //check which button got pressed and set acceptedState
+        if (buttonId == 1) {
+            event.setAccepted(AcceptedState.ACCEPTED);
+        } else if (buttonId == 2) {
+            event.setAccepted(AcceptedState.WAITING);
+        } else if (buttonId == 3) {
+            event.setAccepted(AcceptedState.REJECTED);
+        }
+
+        //check if event is serialevent
+        if (event.getRepetition() != Repetition.NONE) {
+            event.setEndDate(getEndDateEvent().getTime());
+            //save serialevent
+            EventController.saveSerialevent(event);
+        } else {
+            //save the one event
+            EventController.saveEvent(event);
+        }
+
+        if (event.getAccepted().equals(AcceptedState.ACCEPTED)) {
+            NotificationController.setAlarmForNotification(getApplicationContext(), event);
+        }
+
+        //TODO: geht nicht weil die Dialoge noch im Vordergrund sind
+        if(event.getAccepted().equals(AcceptedState.REJECTED)){
+            EventRejectEventFragment eventRejectEventFragment = new EventRejectEventFragment();
+            Bundle bundleAcceptedEventId = new Bundle();
+            bundleAcceptedEventId.putLong("EventId", event.getId());
+            Log.i("EVENT ID", creatorID);
+            bundleAcceptedEventId.putString("fragment", "AcceptedEventDetails");
+            eventRejectEventFragment.setArguments(bundleAcceptedEventId);
+            FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
+            fr.replace(R.id.calendar_frameLayout, eventRejectEventFragment, "RejectEvent");
+            fr.addToBackStack("RejectEvent");
+            fr.commit();
+        }else {
+            Toast.makeText(getContext(), R.string.save_event, Toast.LENGTH_SHORT).show();
+
+            sendSMS(event);
+            //Restart the TabActivity an Reload all Views
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
+        }
+    }
+
+    private void sendSMS(Event event) {
+        //SMS
+        String reject_message = "";
+        SendSmsController.sendSMS(getApplicationContext(), event.getCreator().getPhoneNumber(), reject_message, true, event.getCreatorEventId(), event.getShortTitle());
+    }
+
+    private void checkIfPersonIsInDatabase(Event event, Person person){
+        //if publisher is in database
+        if (personEventCreator != null) {
+            event.setCreator(personEventCreator);
+        } else {
+            //if publisher is not in database: save a new person
+            person.setName(eventCreatorName);
+            person.setPhoneNumber(creatorPhoneNumber);
+            person.save();
+        }
+
     }
 
     private boolean checkIfEventIsInPast() {
@@ -757,12 +773,12 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         }
     }
 
-    private void decideWhatToDo() {
+    private void decideWhatToDo(Dialog afterScanningDialogAction) {
         if (!checkIfEventIsInPast()) {
             if (personMe.getName().isEmpty()) {
                 openDialogAskForUsername();
             } else {
-                saveEventAndPerson();
+                dialogListener();
             }
         } else {
             //Restart the TabActivity an Reload all Views
