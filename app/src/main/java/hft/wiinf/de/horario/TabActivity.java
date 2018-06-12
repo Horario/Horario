@@ -51,6 +51,7 @@ import hft.wiinf.de.horario.view.CalendarActivity;
 import hft.wiinf.de.horario.view.CalendarFragment;
 import hft.wiinf.de.horario.view.EventOverviewActivity;
 import hft.wiinf.de.horario.view.EventOverviewFragment;
+import hft.wiinf.de.horario.view.EventRejectEventFragment;
 import hft.wiinf.de.horario.view.SettingsActivity;
 
 import static com.activeandroid.Cache.getContext;
@@ -266,7 +267,17 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         @Override
                         public void onClick(View v) {
                             buttonId = 3;
-                            decideWhatToDo();
+                            if(!checkIfEventIsInPast()){
+                                EventRejectEventFragment eventRejectEventFragment = new EventRejectEventFragment();
+                                Bundle bundleAcceptedEventId = new Bundle();
+                                bundleAcceptedEventId.putLong("EventId", Long.parseLong(creatorID));
+                                bundleAcceptedEventId.putString("fragment", "AcceptedEventDetails");
+                                eventRejectEventFragment.setArguments(bundleAcceptedEventId);
+                                FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
+                                fr.replace(R.id.calendar_frameLayout, eventRejectEventFragment, "RejectEvent");
+                                fr.addToBackStack("RejectEvent");
+                                fr.commit();
+                            }
                         }
                     });
 
