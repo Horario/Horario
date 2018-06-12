@@ -153,7 +153,7 @@ public class SmsReceiver extends BroadcastReceiver {
                 //continue
             } else {
                 // Create an explicit intent for an Activity in your app
-                addNotification(context, 1, person.getName());
+                addNotification(context, 1, person.getName(), singleUnreadSMS.isAcceptance());
             }
             /*Check if acceptance or cancellation*/
             boolean hasAcceptedEarlier = false;
@@ -232,10 +232,17 @@ public class SmsReceiver extends BroadcastReceiver {
         return null;
     }
 
-    private void addNotification(Context context, int id, String person) {
-        String contentText = "Horario hat festgestellt, dass Du eine Benachrichtigung zu einem Termin bekommen hast, der nicht mehr vorhanden ist." +
-                "Vermutlich hast Du Horario neu installiert, bitte kontaktiere doch folgende Person, um ihren zuletzt zugesagten Termin zu überprüfen: " +
-                person;
+    private void addNotification(Context context, int id, String person, boolean isAcceptance) {
+        String contentText = "";
+        if (isAcceptance) {
+            contentText = "Horario hat festgestellt, dass Du eine Benachrichtigung zu einem Termin bekommen hast, der nicht mehr vorhanden ist." +
+                    "Vermutlich hast Du Horario neu installiert, bitte kontaktiere doch folgende Person, um ihren zuletzt zugesagten Termin zu überprüfen: " +
+                    person;
+        } else {
+            contentText = "Horario hat festgestellt, dass Du eine Benachrichtigung zu einem Termin bekommen hast, der nicht mehr vorhanden ist." +
+                    "Vermutlich hast Du Horario neu installiert, bitte kontaktiere doch folgende Person, um ihren zuletzt abgesagten Termin zu überprüfen: " +
+                    person;
+        }
         String title = "Ups!";
         Intent notificationIntent = new Intent(context, TabActivity.class);
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent,

@@ -338,7 +338,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 qrScanner_result_description.setText(getString(R.string.on) + startDate
                         + getString(R.string.find) + getString(R.string.from) + startTime + getString(R.string.until)
                         + endTime + getString(R.string.clock_at_room) + place + " " + shortTitle
-                        + getString(R.string.instead_of) + "\n" + "\n"+ getString(R.string.eventDetails)
+                        + getString(R.string.instead_of) + "\n" + "\n" + getString(R.string.eventDetails)
                         + description + "\n" + "\n" + getString(R.string.organizer) + eventCreatorName);
             } else {
                 qrScanner_result_description.setText(getString(R.string.as_of) + startDate
@@ -490,7 +490,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 Pattern pattern_username = Pattern.compile("^([\\S]).*");
                 Matcher matcher_username = pattern_username.matcher(dialog_inputUsername);
 
-                if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches() && !dialog_inputUsername.contains("|")) {
+                if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches() && !dialog_inputUsername.contains("|") && !dialog_inputUsername.contains(",")) {
                     personMe.setName(dialog_inputUsername);
                     PersonController.savePerson(personMe);
                     Toast toast = Toast.makeText(v.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT);
@@ -500,6 +500,10 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                     return true;
                 } else if (dialog_inputUsername.contains("|")) {
                     Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername_peek, Toast.LENGTH_SHORT);
+                    toast.show();
+                    return true;
+                } else if (dialog_inputUsername.contains(",")) {
+                    Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername_comma, Toast.LENGTH_SHORT);
                     toast.show();
                     return true;
                 } else {
@@ -781,14 +785,14 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         Calendar now = Calendar.getInstance();
         now.set(Calendar.SECOND, 0);
         now.set(Calendar.MILLISECOND, 0);
-        if(getRepetition() == Repetition.NONE) {
+        if (getRepetition() == Repetition.NONE) {
             if (getStartTimeEvent().before(now)) {
                 Toast.makeText(this, R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();
                 return true;
             } else {
                 return false;
             }
-        }else if (getEndDateEvent().before(now)) {
+        } else if (getEndDateEvent().before(now)) {
             Toast.makeText(this, R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();
             return true;
         } else {
