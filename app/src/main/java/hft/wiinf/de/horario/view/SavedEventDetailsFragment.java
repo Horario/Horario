@@ -69,16 +69,24 @@ public class SavedEventDetailsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //Code for cancelling an event eg. take it out of the DB and Calendar View
-                //Code for cancelling an event eg. take it out of the DB and Calendar View
+                Bundle whichFragment = getArguments();
                 EventRejectEventFragment eventRejectEventFragment = new EventRejectEventFragment();
-                Bundle bundleAcceptedEventId = new Bundle();
-                bundleAcceptedEventId.putLong("EventId", getEventID());
-                bundleAcceptedEventId.putString("fragment", "AcceptedEventDetails");
-                eventRejectEventFragment.setArguments(bundleAcceptedEventId);
-                FragmentTransaction fr = getFragmentManager().beginTransaction();
-                fr.replace(R.id.savedEvent_relativeLayout_main, eventRejectEventFragment, "RejectEvent");
-                fr.addToBackStack("RejectEvent");
-                fr.commit();
+                Bundle bundle = new Bundle();
+                bundle.putLong("eventId", getEventID());
+                bundle.putString("fragment", whichFragment.getString("fragment"));
+                eventRejectEventFragment.setArguments(bundle);
+
+                if (whichFragment.getString("fragment").equals("EventOverview")) {
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.eventOverview_frameLayout, eventRejectEventFragment, "RejectEvent")
+                            .addToBackStack("RejectEvent")
+                            .commit();
+                } else {
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.calendar_frameLayout, eventRejectEventFragment, "RejectEvent")
+                            .addToBackStack("RejectEvent")
+                            .commit();
+                }
             }
         });
 
@@ -96,7 +104,7 @@ public class SavedEventDetailsFragment extends Fragment {
                 Bundle whichFragment = getArguments();
                 QRGeneratorFragment qrFrag = new QRGeneratorFragment();
                 Bundle bundle = new Bundle();
-                bundle.putLong("eventId", getEventID());
+                bundle.putLong("EventId", getEventID());
                 bundle.putString("fragment", whichFragment.getString("fragment"));
                 qrFrag.setArguments(bundle);
 
