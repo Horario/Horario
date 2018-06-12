@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import com.activeandroid.query.Select;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import hft.wiinf.de.horario.R;
@@ -71,7 +73,7 @@ public class SavedEventDetailsFragment extends Fragment {
             public void onClick(View v) {
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(System.currentTimeMillis());
-                if (EventController.getEventById(getEventID()).getEndTime().after(cal.getTime())) {
+                if (cal.getTime().before(EventController.getEventById(getEventID()).getEndTime())) {
                     //Code for cancelling an event eg. take it out of the DB and Calendar View
                     EventRejectEventFragment eventRejectEventFragment = new EventRejectEventFragment();
                     Bundle bundleAcceptedEventId = new Bundle();
@@ -93,7 +95,7 @@ public class SavedEventDetailsFragment extends Fragment {
             public void onClick(View v) {
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(System.currentTimeMillis());
-                if (EventController.getEventById(getEventID()).getEndTime().after(cal.getTime())) {
+                if (cal.getTime().before(EventController.getEventById(getEventID()).getEndTime())) {
                     askForPermissionToSave();
                 } else {
                     Toast.makeText(getContext(), R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();

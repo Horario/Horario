@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
@@ -60,7 +61,7 @@ public class AcceptedEventDetailsFragment extends Fragment {
             public void onClick(View v) {
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(System.currentTimeMillis());
-                if(EventController.getEventById(getEventID()).getEndTime().after(cal.getTime())) {
+                if (cal.getTime().before(EventController.getEventById(getEventID()).getEndTime())) {
                     //Code for cancelling an event eg. take it out of the DB and Calendar View
                     EventRejectEventFragment eventRejectEventFragment = new EventRejectEventFragment();
                     Bundle bundleAcceptedEventId = new Bundle();
