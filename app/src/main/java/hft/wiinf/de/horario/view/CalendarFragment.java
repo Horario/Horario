@@ -52,6 +52,9 @@ public class CalendarFragment extends Fragment {
     static DateFormat timeFormat = new SimpleDateFormat("HH:mm");
     public static Date selectedMonth;
 
+    static List<hft.wiinf.de.horario.model.Event> eventListCalendar = new ArrayList<>();
+    static List<hft.wiinf.de.horario.model.Event> allEvents = new ArrayList<>();
+
     Animation ActionButtonOpen, ActionButtonClose, ActionButtonRotateRight, ActionButtonRotateLeft;
 
     public static void update(Date date) {
@@ -229,20 +232,29 @@ public class CalendarFragment extends Fragment {
 
     public static ArrayAdapter getAdapter(Date date) {
         final ArrayList<Appointment> eventsAsAppointments = new ArrayList<>();
+
         Calendar endOfDay = Calendar.getInstance();
         endOfDay.setTime(date);
         endOfDay.add(Calendar.DAY_OF_MONTH, 1);
         endOfDay.add(Calendar.SECOND, -1);
-        final List<hft.wiinf.de.horario.model.Event> eventList = EventController.findEventsByTimePeriod(date, endOfDay.getTime());
 
-        for (int i = 0; i < eventList.size(); i++) {
-            if (eventList.get(i).getCreator().equals(PersonController.getPersonWhoIam())) {
-                eventsAsAppointments.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 3, eventList.get(i).getId(), eventList.get(i).getCreator()));
+        allEvents = EventController.getAllEvents();
+
+        eventListCalendar.clear();
+        for (hft.wiinf.de.horario.model.Event event : allEvents) {
+            if (event.getEndTime().after(date) && event.getEndTime().before(endOfDay.getTime())) {
+                eventListCalendar.add(event);
+            }
+        }
+
+        for (int i = 0; i < eventListCalendar.size(); i++) {
+            if (eventListCalendar.get(i).getCreator().equals(PersonController.getPersonWhoIam())) {
+                eventsAsAppointments.add(new Appointment(timeFormat.format(eventListCalendar.get(i).getStartTime()) + " - " + timeFormat.format(eventListCalendar.get(i).getEndTime()) + " " + eventListCalendar.get(i).getShortTitle(), 3, eventListCalendar.get(i).getId(), eventListCalendar.get(i).getCreator()));
             } else {
-                if (eventList.get(i).getAccepted().equals(AcceptedState.ACCEPTED)) {
-                    eventsAsAppointments.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 1, eventList.get(i).getId(), eventList.get(i).getCreator()));
-                } else if (eventList.get(i).getAccepted().equals(AcceptedState.WAITING)) {
-                    eventsAsAppointments.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 2, eventList.get(i).getId(), eventList.get(i).getCreator()));
+                if (eventListCalendar.get(i).getAccepted().equals(AcceptedState.ACCEPTED)) {
+                    eventsAsAppointments.add(new Appointment(timeFormat.format(eventListCalendar.get(i).getStartTime()) + " - " + timeFormat.format(eventListCalendar.get(i).getEndTime()) + " " + eventListCalendar.get(i).getShortTitle(), 1, eventListCalendar.get(i).getId(), eventListCalendar.get(i).getCreator()));
+                } else if (eventListCalendar.get(i).getAccepted().equals(AcceptedState.WAITING)) {
+                    eventsAsAppointments.add(new Appointment(timeFormat.format(eventListCalendar.get(i).getStartTime()) + " - " + timeFormat.format(eventListCalendar.get(i).getEndTime()) + " " + eventListCalendar.get(i).getShortTitle(), 2, eventListCalendar.get(i).getId(), eventListCalendar.get(i).getCreator()));
                 }
             }
         }
@@ -298,5 +310,4 @@ public class CalendarFragment extends Fragment {
             calendarFcMenu.setImageResource(R.drawable.ic_plusmenu);
         }
     }
-
 }

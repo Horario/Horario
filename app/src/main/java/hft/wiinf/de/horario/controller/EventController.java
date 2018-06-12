@@ -64,6 +64,10 @@ public class EventController {
         return new Select().from(Event.class).where("accepted=?", true).orderBy("startTime,endTime,shortTitle").execute();
     }
 
+    public static List<Event> getAllEvents(){
+        return new Select().from(Event.class).execute();
+    }
+
     public static boolean createdEventsYet() {
         Person myself = PersonController.getPersonWhoIam();
         List<Event> resultSet = new Select().from(Event.class).execute();

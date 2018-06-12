@@ -422,6 +422,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             public void onTabSelected(TabLayout.Tab tab) {
                 if (tab.getPosition() == 1) {
                     CalendarFragment.update(CalendarFragment.selectedMonth);
+                    EventOverviewFragment.update();
                 }
             }
 
