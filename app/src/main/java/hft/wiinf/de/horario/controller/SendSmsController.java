@@ -9,6 +9,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PersistableBundle;
@@ -32,7 +33,7 @@ public class SendSmsController extends BroadcastReceiver {
 
 
     public static void sendSMS(final Context context, String sms_phoneNumber, String sms_rejectMessage, boolean sms_accepted, long sms_creatorEventId, String eventShortDesc) {
-        if (((TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE)).getPhoneType() == TelephonyManager.PHONE_TYPE_NONE)
+        if (!context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_TELEPHONY))
         {
             Toast.makeText(context, context.getString(R.string.sms_exception), Toast.LENGTH_SHORT).show();
         } else {
