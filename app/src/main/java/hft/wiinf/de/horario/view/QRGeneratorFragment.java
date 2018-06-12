@@ -214,7 +214,7 @@ public class QRGeneratorFragment extends Fragment {
                         + description);
             } else {
                 mQRGenerator_textView_description.setText(getString(R.string.as_of) + startDate
-                        + getString(R.string.until) + endDate + "\n"+ getString(R.string.from) + startTime + getString(R.string.until)
+                        + getString(R.string.until) + endDate + "\n"+ getString(R.string.time) + startTime + getString(R.string.until)
                         + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place + "\n" + getString(R.string.organizer) + eventCreatorName  + "\n" + "\n" + getString(R.string.eventDetails)
                         + description);
             }
