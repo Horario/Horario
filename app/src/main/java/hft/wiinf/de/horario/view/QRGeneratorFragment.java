@@ -209,7 +209,7 @@ public class QRGeneratorFragment extends Fragment {
             // Check for a Repetition Event and Change the Description Output with and without
             // Repetition Element inside.
            if (repetition.equals("")) {
-                mQRGenerator_textView_description.setText(getString(R.string.time)+getString(R.string.from) + startTime + getString(R.string.until)
+                mQRGenerator_textView_description.setText(getString(R.string.time)+ startTime + getString(R.string.until)
                         + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place + "\n" + getString(R.string.organizer) + eventCreatorName  + "\n" + "\n" + getString(R.string.eventDetails)
                         + description);
             } else {
