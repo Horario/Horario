@@ -5,12 +5,14 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -65,6 +67,8 @@ public class EventRejectEventFragment extends Fragment {
 
         //initialize GUI-Elements
         reason_for_rejection = (EditText) view.findViewById(R.id.reject_event_editText_note);
+        reason_for_rejection.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        reason_for_rejection.setRawInputType(InputType.TYPE_CLASS_TEXT);
         reject_event_description = (TextView) view.findViewById(R.id.reject_event_textView_description);
         reject_event_header = (TextView) view.findViewById(R.id.reject_event_textView_header);
         spinner_reason = (Spinner) view.findViewById(R.id.reject_event_spinner_reason);
