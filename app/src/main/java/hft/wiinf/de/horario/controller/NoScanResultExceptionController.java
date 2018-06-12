@@ -1,6 +1,7 @@
 package hft.wiinf.de.horario.controller;
 
 public class NoScanResultExceptionController extends Exception {
+
     public NoScanResultExceptionController() {
     }
 

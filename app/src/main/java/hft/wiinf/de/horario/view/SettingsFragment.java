@@ -19,6 +19,7 @@ public class SettingsFragment extends Fragment {
     private static final String TAG = "SettingFragmentActivity";
     Button button_settings, button_support, button_copyright, button_feedback;
     Person person;
+    Button test;
 
     @Nullable
     @Override

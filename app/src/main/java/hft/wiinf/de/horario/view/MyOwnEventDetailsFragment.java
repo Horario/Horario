@@ -21,7 +21,6 @@ import hft.wiinf.de.horario.model.Event;
 
 public class MyOwnEventDetailsFragment extends Fragment {
 
-
     Button myOwnEventDetailsButtonShowQR, myOwnEventDetailsButtonShowAcceptances;
     RelativeLayout rLayout_myOwnEvent_helper;
     ConstraintLayout myOwnEventDetails_constraintLayout;
@@ -191,7 +190,7 @@ public class MyOwnEventDetailsFragment extends Fragment {
         // Place, Description and Name of EventCreator
         eventToStringBuffer = new StringBuffer();
         eventToStringBuffer.append(selectedEvent.getId() + stringSplitSymbol);
-        if (selectedEvent.getStartEvent()==null)
+        if (selectedEvent.getStartEvent() == null)
             eventToStringBuffer.append(simpleDateFormat.format(selectedEvent.getStartTime()) + stringSplitSymbol);
         else
             eventToStringBuffer.append(simpleDateFormat.format(selectedEvent.getStartEvent().getStartTime()) + stringSplitSymbol);

@@ -43,6 +43,7 @@ import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
 
 public class QRGeneratorFragment extends Fragment {
+
     private static final String TAG = "QRGeneratorFragmentActivity";
     private TextView mQRGenerator_textView_description, mQRGenerator_textView_headline;
     private RelativeLayout mQRGenerator_relativeLayout_buttonFrame, mQRGenerator_realtiveLayout_textViewFrame;
@@ -218,7 +219,7 @@ public class QRGeneratorFragment extends Fragment {
                         + getString(R.string.until) + endDate + getString(R.string.find)
                         + repetition + getString(R.string.at) + startTime + getString(R.string.clock_to)
                         + endTime + getString(R.string.clock_at_room) + place + " " + shortTitle
-                        + getString(R.string.instead_of) + "\n"+ "\n" + getString(R.string.eventDetails) + description +
+                        + getString(R.string.instead_of) + "\n" + "\n" + getString(R.string.eventDetails) + description +
                         "\n" + "\n" + getString(R.string.organizer) + eventCreatorName);
             }
             // In the CatchBlock the User see a SnackBar Information and was pushed where the User Comes From

@@ -1,6 +1,5 @@
 package hft.wiinf.de.horario.view;
 
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -31,8 +30,8 @@ import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.NoScanResultExceptionController;
 import hft.wiinf.de.horario.controller.ScanResultReceiverController;
 
-
 public class QRScanFragment extends Fragment implements ActivityCompat.OnRequestPermissionsResultCallback {
+
     private static final String TAG = "QRScanFragmentActivity";
     private static final int PERMISSION_REQUEST_CAMERA = 1;
     private static final int SEND_SMS_PERMISSION_CODE = 2;
