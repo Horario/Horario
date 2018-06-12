@@ -79,8 +79,10 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
+                                      <entry key="assetType" value="IMAGE" />
                                       <entry key="backgroundColor" value="f5f9db" />
-                                      <entry key="outputName" value="ic_setting_black" />
+                                      <entry key="iconShape" value="NONE" />
+                                      <entry key="imageAsset" value="C:\Users\Christine\Documents\HKalender.png" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -103,7 +105,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputIconType" value="NOTIFICATION" />
+                            <entry key="outputIconType" value="LAUNCHER_LEGACY" />
                           </map>
                         </option>
                       </PersistentState>
