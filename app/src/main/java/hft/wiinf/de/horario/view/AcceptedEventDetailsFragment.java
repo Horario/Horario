@@ -10,8 +10,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
@@ -56,16 +58,22 @@ public class AcceptedEventDetailsFragment extends Fragment {
         acceptedEventDetailsButtonRefuseAppointment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Code for cancelling an event eg. take it out of the DB and Calendar View
-                EventRejectEventFragment eventRejectEventFragment = new EventRejectEventFragment();
-                Bundle bundleAcceptedEventId = new Bundle();
-                bundleAcceptedEventId.putLong("EventId", getEventID());
-                bundleAcceptedEventId.putString("fragment", "AcceptedEventDetails");
-                eventRejectEventFragment.setArguments(bundleAcceptedEventId);
-                FragmentTransaction fr = getFragmentManager().beginTransaction();
-                fr.replace(R.id.acceptedEvent_relativeLayout_main, eventRejectEventFragment, "RejectEvent");
-                fr.addToBackStack("RejectEvent");
-                fr.commit();
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(System.currentTimeMillis());
+                if(EventController.getEventById(getEventID()).getEndTime().after(cal.getTime())) {
+                    //Code for cancelling an event eg. take it out of the DB and Calendar View
+                    EventRejectEventFragment eventRejectEventFragment = new EventRejectEventFragment();
+                    Bundle bundleAcceptedEventId = new Bundle();
+                    bundleAcceptedEventId.putLong("EventId", getEventID());
+                    bundleAcceptedEventId.putString("fragment", "AcceptedEventDetails");
+                    eventRejectEventFragment.setArguments(bundleAcceptedEventId);
+                    FragmentTransaction fr = getFragmentManager().beginTransaction();
+                    fr.replace(R.id.acceptedEvent_relativeLayout_main, eventRejectEventFragment, "RejectEvent");
+                    fr.addToBackStack("RejectEvent");
+                    fr.commit();
+                } else{
+                    Toast.makeText(getContext(), R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -189,7 +197,5 @@ public class AcceptedEventDetailsFragment extends Fragment {
         eventToStringBuffer.append(selectedEvent.getCreator().getName());
 
         return eventToStringBuffer;
-
     }
-
 }

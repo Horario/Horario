@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.activeandroid.query.Select;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import hft.wiinf.de.horario.R;
@@ -68,24 +69,35 @@ public class SavedEventDetailsFragment extends Fragment {
         savedEventDetailsButtonRefuseAppointment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Code for cancelling an event eg. take it out of the DB and Calendar View
-                //Code for cancelling an event eg. take it out of the DB and Calendar View
-                EventRejectEventFragment eventRejectEventFragment = new EventRejectEventFragment();
-                Bundle bundleAcceptedEventId = new Bundle();
-                bundleAcceptedEventId.putLong("EventId", getEventID());
-                bundleAcceptedEventId.putString("fragment", "AcceptedEventDetails");
-                eventRejectEventFragment.setArguments(bundleAcceptedEventId);
-                FragmentTransaction fr = getFragmentManager().beginTransaction();
-                fr.replace(R.id.savedEvent_relativeLayout_main, eventRejectEventFragment, "RejectEvent");
-                fr.addToBackStack("RejectEvent");
-                fr.commit();
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(System.currentTimeMillis());
+                if (EventController.getEventById(getEventID()).getEndTime().after(cal.getTime())) {
+                    //Code for cancelling an event eg. take it out of the DB and Calendar View
+                    EventRejectEventFragment eventRejectEventFragment = new EventRejectEventFragment();
+                    Bundle bundleAcceptedEventId = new Bundle();
+                    bundleAcceptedEventId.putLong("EventId", getEventID());
+                    bundleAcceptedEventId.putString("fragment", "AcceptedEventDetails");
+                    eventRejectEventFragment.setArguments(bundleAcceptedEventId);
+                    FragmentTransaction fr = getFragmentManager().beginTransaction();
+                    fr.replace(R.id.savedEvent_relativeLayout_main, eventRejectEventFragment, "RejectEvent");
+                    fr.addToBackStack("RejectEvent");
+                    fr.commit();
+                } else {
+                    Toast.makeText(getContext(), R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         savedEventDetailsButtonAcceptAppointment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                askForPermissionToSave();
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(System.currentTimeMillis());
+                if (EventController.getEventById(getEventID()).getEndTime().after(cal.getTime())) {
+                    askForPermissionToSave();
+                } else {
+                    Toast.makeText(getContext(), R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
