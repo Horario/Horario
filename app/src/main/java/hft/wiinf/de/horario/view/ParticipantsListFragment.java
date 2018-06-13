@@ -146,10 +146,10 @@ public class ParticipantsListFragment extends Fragment {
                 // Setting all values in listview
                 if (participantRow.charAt(0) == 'Y') {
                     participant.setText(participantRow.substring(2));
-                    presenceIndicator.setImageResource(R.drawable.ic_fiber_manual_record_green_24dp);
+                    presenceIndicator.setImageResource(R.drawable.ic_mydate_approved_white);
                 } else {
                     participant.setText(participantRow.substring(2));
-                    presenceIndicator.setImageResource(R.drawable.ic_fiber_manual_record_red_24dp);
+                    presenceIndicator.setImageResource(R.drawable.ic_mydate_rejected_white);
                 }
 
                 return item;

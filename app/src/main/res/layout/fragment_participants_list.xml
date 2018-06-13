@@ -4,36 +4,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:windowBackground"
     tools:context=".view.ParticipantsListFragment">
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/layoutOverview2"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/textViewTitleParticipantsEvent"
-            android:layout_width="153dp"
-            android:layout_height="33dp"
+            android:layout_width="182dp"
+            android:layout_height="35dp"
+            android:layout_marginBottom="4dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="32dp"
             android:text="@string/titleParticipantsEvent"
             android:textAlignment="center"
             android:textColor="@color/zentea_darkgreen"
-            android:textSize="18sp"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toTopOf="@+id/textViewEventData"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.502"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/textViewEventData"
-            android:layout_width="140dp"
-            android:layout_height="26dp"
-            android:layout_marginBottom="8dp"
+            android:layout_width="178dp"
+            android:layout_height="19dp"
+            android:layout_marginBottom="32dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:text=""
             android:textAlignment="center"
             app:layout_constraintBottom_toTopOf="@+id/swiperefresh"
@@ -41,39 +43,29 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewTitleParticipantsEvent" />
 
-
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swiperefresh"
-            android:layout_width="368dp"
-            android:layout_height="408dp"
+            android:layout_width="383dp"
+            android:layout_height="409dp"
             android:layout_marginBottom="16dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="2dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/rect_listview_frame"
+            android:layout_marginTop="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewEventData">
 
+            <ListView
+                android:id="@+id/ParticipantsList"
+                android:layout_width="380dp"
+                android:layout_height="270dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textViewEventData" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <ListView
-                    android:id="@+id/ParticipantsList"
-                    android:layout_width="352dp"
-                    android:layout_height="421dp"
-                    android:layout_weight="1"
-                    android:cacheColorHint="@color/zentea_darkgreen"
-                    android:divider="@color/zentea_darkgreen"
-                    android:dividerHeight="1dp"
-                    android:listSelector="@drawable/list_selector" />
-
-            </LinearLayout>
         </android.support.v4.widget.SwipeRefreshLayout>
     </android.support.constraint.ConstraintLayout>
 </FrameLayout>
