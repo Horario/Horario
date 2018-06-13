@@ -1,25 +1,57 @@
 <!DOCTYPE html>
 <html>
-
+<head>
+    <title>Imprint, Copyright and Privacy Policy</title>
+</head>
 <body>
-<h1>Privacy Policy</h1>
-<h2>This is a project which was developed in the context of the Business Informatics Lecture "Wirtschaftsinformatikprojekt 2" in the summer semester 2018 at the University of Applied Sciences in Stuttgart - Faculty of Surveying, Computer Science and Mathematics – (Short HFT) under the direction of Prof. Dr. Rainer Keller. The open source app HORARIO was developed by Frank, Dennis, Henri, Benedikt, Melanie, Mariam, Lucas, Mario, Florian, Christine, Tanja, Daniel. This SERVICE is provided by HFT at no cost and is intended for use as is.
-    This text is used to inform the app user about the guidelines for the collection, use and disclosure of personal data when someone has decided to use this service.
-    If you choose to use this service, you consent to the collection and use of information related to this policy. The personal data collected will be used for the provision and improvement of the service. Your data will not be passed on to third parties or used in any other way except as described in this data protection declaration.
+    <h1>Imprint and Copyright</h1>
+    <h2>Introduction</h2>
+    <p>The HORARIO project which was developed in the context of the Business Informatics Lecture
+    "Wirtschaftsinformatikprojekt 2" during summer term 2018 at the
+    <a href="http://www.hft-stuttgart.de">University of Applied Sciences, Stuttgart</a> -
+    Faculty of Surveying, Computer Science and Mathematics – (in short HFT) under the direction of Prof. Dr. Rainer Keller
+    for Paulinenpflege Winnenden e.V.</p>
+    <p>The HORARIO app is released as open source under the
+    <a href="https://en.wikipedia.org/wiki/BSD_licenses">BSD license</a> and was developed by</p>
+    <ul><li>Frank,</li><li>Dennis,</li><li>Henri,</li><li>Benedikt,</li><li>Melanie,</li><li>Mariam,</li>
+    <li>Lucas,</li><li>Mario,</li><li>Florian,</li><li>Christine,</li><li>Tanja and</li><li>Daniel</li></ul>
+    <p>This SERVICE is provided by HFT at no cost and is intended for use as is.
+    This document informs the app's user about guidelines for collection, use and disclosure of personal data .
+    By using this service, you consent to the collection and use of information related to this policy.
+    The personal data collected will be used for the provision and improvement of the service.
+    Your data will not be passed on to third parties or used in any other way except as described in
+    this data protection declaration.</p>
 
-    Collection and Use of Information
-    In order to use the Service, the HFT may require that you provide us with certain personal data, such as access to your contacts, camera and SMS as well as your telephone number. The information request is stored on your device and is not collected by HFT in any way.
+    <h2>Collection and Use of Information</h2>
+    <p>In order to use the Service, the HFT may require that you provide us with certain personal
+    data, such as access to your contacts, camera and SMS as well as your telephone number.
+    The information request is stored on your device and is not collected by HFT in any way or
+    passed on to other entities other than the persons You provide access to (by SMS or QR code).</p>
 
-    Log Information
-    HFT would like to inform you that in case of an error in the application, the App will collect data and information on your phone called Log Data. This log data may include information such as your device phone number, your device IP address, the device name, the version of the operating system, the configuration of the application when using the service, the time and date of your use of the service and other statistics.
+    <h2>Log Information</h2>
+    <p>In case of an error in the application, the app will collect data and information on your
+    phone called Log Data. This log data will include information such as your device phone number,
+    your device IP address, the device name, the version of the operating system, the configuration
+    of the application when using the service, the time and date of your use of the service and
+    other statistics. This data is used for debugging and error reporting, only. This Personal data
+    will not be provided to other entities or released publicly.</p>
 
-    Security
-    HFT values your trust in providing your Personal Information, thus the HFT are striving to use commercially acceptable means of protecting it. But remember that no method of transmission over the internet or method of electronic storage is 100% secure and reliable and the HFT cannot guarantee its absolute security.
+    <h2>Security</h2>
+    <p>We value your trust in providing your Personal Information, thus we strive to use best
+    practice means of protecting personal information. Nevertheless, other Apps on your phone,
+    transmission over the internet or any other access to your storage is not 100% secure and
+    reliable and therefore we do not provide any guarantee on the security of this app, any usage
+    claims, or any value lost due to its not working properly.</p>
 
-    Children's privacy
-    These services are not intended for persons under 13 years of age but can be used by them without hesitation. If you are a parent or legal guardian and you know that your child uses or wishes to use our service, you are also responsible for follow-up costs incurred in the context of short message transmission (SMS).
-    This privacy policy was created based on privacypolicytemplate.net and generated by App Privacy Policy Generator.
-</h2>
+    <h2>Children's privacy</h2>
+    <p>These service is not intended for persons under 13 years of age, even though there is no
+    reason why it cannot or should not be used by persons under age.
+    As a parent or legal guardian and You should know and observe your childs usage of the mobile
+    phone and are responsible for any follow-up costs incurred in the context of short message
+    transmission (SMS) or release of personal information.</p>
+
+    <h2>Background</h2>
+    <p>This privacy policy is based on a generated document by
+    <a href="http://privacypolicytemplate.net">privacypolicytemplate.net</a> and App Privacy Policy Generator.</p>
 </body>
-
 </html>
