@@ -43,7 +43,7 @@ public class NotificationReceiver extends BroadcastReceiver {
             mChannel.enableLights(true);
             // Sets the notification light color for notifications posted to this
             // channel, if the device supports this feature.
-            mChannel.setLightColor(Color.YELLOW);
+            mChannel.setLightColor(Color.GREEN);
             mChannel.enableVibration(false);
             manager.createNotificationChannel(mChannel);
             NotificationCompat.Builder builder =
