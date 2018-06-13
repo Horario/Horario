@@ -69,7 +69,7 @@ public class EventController {
     }
 
     public static List<Event> getAllEvents(){
-        return new Select().from(Event.class).execute();
+        return new Select().from(Event.class).orderBy("startTime, endTime, shortTitle").execute();
     }
 
     public static boolean createdEventsYet() {
