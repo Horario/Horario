@@ -130,14 +130,15 @@ public class EventRejectEventFragment extends Fragment {
                     public void onClick(View v) {
                         event = EventController.getEventById((getEventID()));
 
+                        //delete alarm for notification
+                        NotificationController.deleteAlarmNotification(getContext(), event);
                         //If an Event of a recurring event is cancelled, all events
                         // of the recurring event are deleted. This way the user can Scan the
                         // Event again and confirm it again.
                         new Delete().from(Event.class).where("CreatorEventId=?",
                                 String.valueOf(event.getCreatorEventId())).execute();
 
-                        //delete alarm for notification
-                        NotificationController.deleteAlarmNotification(getContext(), event);
+
 
                         //SMS
                         rejectMessage = spinner_reason.getSelectedItem().toString() + "!" + reason_for_rejection.getText().toString();
