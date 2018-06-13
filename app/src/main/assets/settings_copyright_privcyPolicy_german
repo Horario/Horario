@@ -1,30 +1,63 @@
 <!DOCTYPE html>
 <html>
 <head>
-<Titel> <FONT SIZE="5"> <b> Datenschutzerklärung </b> </FONT> <br> </Titel>
+    <title>Impressum, Copyright und Datenschutzerkl&auml;rung</title>
 </head>
 
 <body>
+    <h1>Impressum und Copyright</h1>
+    <h2>Einf&uuml;hrung</h2>
+    <p>Das Projekt HORARIO wurde im Rahmen der Vorlesung "Wirtschaftsinformatikprojekt 2"
+    im Sommersemester 2018 an der Fachhochschule f&uuml;r Technik Stuttgart - Fakult&auml;t f&uuml;r
+    Vermessung, Informatik und Mathematik - (kurz HFT) unter der Leitung von Prof. Dr. Rainer Keller
+    f&uuml; die Paulinenpflege Winnenden e.V. umgesetzt.</p>
+    <p>Die App HORARIO wird als Open Source unter der
+    <a href="https://de.wikipedia.org/wiki/BSD-Lizenz">BSD-Lizenz</a> herausgegeben und wurde entwickelt von:</p>
+    <ul><li>Frank,</li><li>Dennis,</li><li>Henri,</li><li>Benedikt,</li><li>Melanie,</li><li>Mariam,</li>
+    <li>Lucas,</li><li>Mario,</li><li>Florian,</li><li>Christine,</li><li>Tanja und</li><li>Daniel</li></ul>
+    <p>Dieser SERVICE wird von HFT kostenlos zur Verf&uuml;gung gestellt und ist f&uuml;r die Nutzung in der
+    vorliegenden Form ohne M&auml;ngelgew&auml;hr vorgesehen.
+    Dieser Text dient dazu, den Nutzer der App &uuml;ber die Richtlinien f&uuml;r die Erhebung, Verwendung und
+    Weitergabe personenbezogener Daten zu informieren.
+    Durch Nutzung des Services, stimmen Sie der Sammlung und Nutzung von Informationen im Zusammenhang
+    mit dieser Richtlinie zu. Die gesammelten pers&ouml;nlichen Daten werden f&uuml;r die Bereitstellung
+    und Verbesserung des Dienstes verwendet. Ihre pers&ouml;nlichen Daten werden nicht an Dritte
+    weitergegeben oder anderweitig verwendet, au&szlig;er wie in dieser Datenschutzerkl&auml;rung beschrieben.
+    </p>
 
-    <br>
-    <b> Das Projekt "Horario" </b> <br>
-    Dieses Projekt wurde im Rahmen der Vorlesung "Wirtschaftsinformatikprojekt 2" im Sommersemester 2018 an der Fachhochschule für Technik Stuttgart - Fakultät für Vermessung, Informatik und Mathematik - (kurz HFT) unter der Leitung von Prof. Dr. Rainer Keller umgesetzt. Die Open Source App HORARIO wurde von Frank, Dennis, Henri, Benedikt, Melanie, Mariam, Lucas, Mario, Florian, Christine, Tanja, Daniel entwickelt. Dieser SERVICE wird von HFT kostenlos zur Verfügung gestellt und ist für die Nutzung in der vorliegenden Form vorgesehen.
-    Dieser Text dient dazu, den Nutzer der App über die Richtlinien für die Erhebung, Verwendung und Weitergabe personenbezogener Daten zu informieren, wenn sich jemand für diesen Service entschieden hat.
-    Wenn Sie sich dafür entscheiden, diesen Service zu nutzen, stimmen Sie der Sammlung und Nutzung von Informationen im Zusammenhang mit dieser Richtlinie zu. Die gesammelten persönlichen Daten werden für die Bereitstellung und Verbesserung des Dienstes verwendet. Ihre Daten werden nicht an Dritte weitergegeben oder anderweitig verwendet, außer wie in dieser Datenschutzerklärung beschrieben. <br>
-    <br>
-   <b> Sammlung und Verwendung von Informationen </b> <br>
-    Um den Service nutzen zu können, kann die HFT verlangen, dass Sie uns bestimmte persönliche Daten, wie z.B. Zugang zu Ihren Kontakten, Kamera und SMS sowie Ihre Telefonnummer zur Verfügung stellen. Die HFT-Anfrage wird auf Ihrem Gerät gespeichert und von HFT in keiner Weise erfasst. <br>
-    <br>
-    <b> Log-Informationen </b> <br>
-    Die HFT möchte Sie darüber informieren, dass im Falle eines Fehlers in der Anwendung, die App Daten und Informationen auf Ihrem Telefon sammelt, die Logdaten genannt werden. Diese Protokolldaten können Informationen wie Ihre Gerätetelefonnummer, Ihre Geräte-IP-Adresse, den Gerätenamen, die Version des Betriebssystems, die Konfiguration der Anwendung bei der Nutzung des Dienstes, die Uhrzeit und das Datum Ihrer Nutzung des Dienstes und andere Statistiken enthalten. <br>
-    <br>
-    <b> Sicherheit </b> <br>
-    HFT schätzt Ihr Vertrauen in die Bereitstellung Ihrer persönlichen Daten, daher ist die HFT bestrebt, diese auf kommerziell akzeptable Weise zu schützen. Aber denken Sie daran, dass keine Methode der Übertragung über das Internet oder Methode der elektronischen Speicherung 100% sicher und zuverlässig ist. Die HFT kann keine absolute Sicherheit garantieren. <br>
-    <br>
-    <b> Privatsphäre der Kinder </b> <br>
-    Dieser Service ist nicht für Personen unter 13 Jahren gedacht, kann von ihnen aber ohne Bedenken genutzt werden. Wenn Sie ein Elternteil oder Erziehungsberechtigter sind und wissen, dass Ihr Kind unseren Service nutzt oder nutzen möchte, sind Sie auch für Folgekosten im Zusammenhang mit dem Versand von Kurznachrichten (SMS) verantwortlich.
-    Diese Datenschutzerklärung wurde auf Basis von privacypolicytemplate.net erstellt und von App Privacy Policy Generator generiert. <br>
+    <h2>Sammlung und Verwendung von Informationen</h2>
+    <p>Um diese App korrekt nutzen zu k&ouml;nnen, muss sie pers&ouml;nliche Daten abfragen bzw. Berechtigungen
+    erhalten, wie z.B. Ihre Telefonnummer abfragen, oder in Ihren Kontakten suchen, Zugriff auf die
+    Kamera und die Berechtigung zum Versand und Empfang von SMS.
+    Die HFT-Anfrage wird auf Ihrem Ger&auml;t gespeichert und von HFT in keiner Weise erfasst.</p>
 
+    <h2>Log-Informationen</h2>
+    <p>Die HFT m&ouml;chte Sie dar&uuml;ber informieren, dass im Falle eines Fehlers in der App,
+    Daten und Informationen auf Ihrem Telefon gesammelt werden, die sogenannten Logdaten.
+    Diese Logdaten enthalten Informationen wie Ihre Telefonnummer, Ihre IP-Adresse, den
+    Ger&auml;tenamen, die Version des Betriebssystems, die Konfiguration der Anwendung,
+    die Uhrzeit und das Datum Ihrer Nutzung des Dienstes und kann andere Statistiken enthalten.
+    Diese Informationen werden nur f&uuml;r Fehlererkennung und Fehlerbehebung benutzt.
+    Diese Pers&ouml;nliche Daten werden nicht an Dritte weitergegeben oder ver&ouml;ffentlicht.</p>
+
+    <h2>Sicherheit</h2>
+    <p>Wir sch&auml;tzen Ihr Vertrauen in die Bereitstellung Ihrer pers&ouml;nlichen Daten. Daher sind wir
+    Entwickler bestrebt, diese Informationen durch in der Industrie bew&auml;hrte Methoden zu sch&uuml;tzen.
+    Nichtsdestotrotz ist ein Schutz vor anderen Anwendungen auf Ihrem Telefon, durch &Uuml;bertragung
+    &uuml;ber das Internet und anderer Zugang der elektronischen Speicherung 100% sicher.
+    Deswegen k&ouml;nnen wir nicht f&uuml;r die Sicherheit dieser App, das Funktionieren oder
+    einen Verlust bei Nichtfunktionieren garantieren.</p>
+
+    <h2>Privatsph&auml;re von Kinder</h2>
+    <p>Dieser Service ist nicht f&uuml;r Personen unter 13 Jahren gedacht, kann von ihnen aber ohne
+    Bedenken genutzt werden.
+    Als Eltern oder Erziehungsberechtigter sollten Sie wissen und kontrollieren, wie Ihr Kind das
+    Mobiltelefon nutzt. Sie sind auch f&uuml;r Folgekosten im Zusammenhang mit dem Versand von
+    Kurznachrichten (SMS) verantwortlich.</p>
+
+    <h2>Hintergrundinformation</h2>
+    <p>Diese Datenschutzerkl&auml;rung wurde auf Basis von
+    <a href="http://privacypolicytemplate.net">privacypolicytemplate.net</a> und von
+    App Privacy Policy Generator generiert.</p>
 </body>
-
 </html>
