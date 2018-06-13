@@ -32,6 +32,10 @@ public class NotificationController {
                 PendingIntent pendingIntent;
                 AlarmManager manager;
 
+                if(event.getStartEvent() != null) {
+                    event = event.getStartEvent();
+                }
+
                 if (event.getStartTime().after(testToday.getTime())) {
                     alarmIntent = new Intent(context, NotificationReceiver.class);
                     date = event.getStartTime();
