@@ -32,6 +32,7 @@ import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
 import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.AcceptedState;
+import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
 
 public class EventOverviewFragment extends Fragment {
@@ -74,7 +75,7 @@ public class EventOverviewFragment extends Fragment {
             endOfDay.set(Calendar.MINUTE, 59);
             endOfDay.set(Calendar.SECOND, 59);
             endOfDay.set(Calendar.MILLISECOND, 59);
-            List<hft.wiinf.de.horario.model.Event> eventList = EventController.findEventsByTimePeriod(helper.getTime(), endOfDay.getTime());
+            List<Event> eventList = EventController.findEventsByTimePeriod(helper.getTime(), endOfDay.getTime());
             if (eventList.size() > 0) {
                 eventArrayDay.add(new Appointment(CalendarFragment.dayFormat.format(helper.getTime()), 0));
             }
