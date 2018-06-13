@@ -35,7 +35,7 @@ public class SendSmsController extends BroadcastReceiver {
     public static void sendSMS(final Context context, String sms_phoneNumber, String sms_rejectMessage, boolean sms_accepted, long sms_creatorEventId, String eventShortDesc) {
         if (!context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_TELEPHONY))
         {
-            Toast.makeText(context, context.getString(R.string.sms_notAbleToSend), Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, context.getString(R.string.sms_notAbleToSend), Toast.LENGTH_LONG).show();
         } else {
             sms_phoneNo = sms_phoneNumber;
             sms_msg = sms_rejectMessage;
