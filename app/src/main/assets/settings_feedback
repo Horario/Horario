@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-<Titel> <FONT SIZE="6"> <b> Feedback </b> </FONT> <br>  </Titel>
+    <title>Feedback</title>
 </head>
 
 <body>
-<br>
- <p> Wir freuen uns über deine Unterstützung!   <br> </p>
- Da es sich bei dieser App um ein Studienprojekt handelt, werden wir diese Anwendung nicht weiter entwickeln.
-    Wenn du Lust hast, kannst du aber gerne unser GitHub Projekt forken und Horario selbst weiter gestalten!  <br> </p>
+    <h1>Feedback</h1>
+    <p>Wir freuen uns &uuml;ber Kommentare und Verbesserungsvorschl&auml;ge.
+    Da es sich bei dieser App um ein studentisches Projekt handelt, werden wir diese Anwendung nach
+    Abschluss der Semesterarbeit nicht weiter entwickeln.
+    Wenn du Lust hast, kannst du aber gerne unser GitHub Projekt forken und Horario selbst weiter
+    gestalten!</p>
 
-    Hier geht's zu unserem Branch: <br>
- <b> <br> <a href="https://github.com/rietzfl/Horario"> https://github.com/rietzfl/Horario </a> </b>
+    <p>Hier geht's zu unserem Branch auf GitHub:<br>
+    <a href="https://github.com/rietzfl/Horario">https://github.com/rietzfl/Horario</a></p>
 
 </body>
-
 </html>
