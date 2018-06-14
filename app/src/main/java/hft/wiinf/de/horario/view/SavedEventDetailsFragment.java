@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.activeandroid.query.Select;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import hft.wiinf.de.horario.R;
@@ -93,7 +94,13 @@ public class SavedEventDetailsFragment extends Fragment {
         savedEventDetailsButtonAcceptAppointment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                askForPermissionToSave();
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(System.currentTimeMillis());
+                if (cal.getTime().before(EventController.getEventById(getEventID()).getEndTime())) {
+                    askForPermissionToSave();
+                } else {
+                    Toast.makeText(getContext(), R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

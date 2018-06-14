@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -30,6 +31,10 @@ public class NotificationController {
                 Calendar calendar;
                 PendingIntent pendingIntent;
                 AlarmManager manager;
+
+                if(event.getStartEvent() != null) {
+                    event = event.getStartEvent();
+                }
 
                 if (event.getStartTime().after(testToday.getTime())) {
                     alarmIntent = new Intent(context, NotificationReceiver.class);
@@ -82,8 +87,27 @@ public class NotificationController {
     }
 
     public static void deleteAlarmNotification(Context context, Event event) {
-        Intent alarmIntent = new Intent(context, NotificationReceiver.class);
+        List<Event> eventsToDelete;
+        if(event.getStartEvent() != null) {
+            eventsToDelete = EventController.findRepeatingEvents(event.getStartEvent().getId());
+            deleteStartEvent(context, event.getStartEvent());
+        } else{
+            eventsToDelete = EventController.findRepeatingEvents(event.getId());
+            deleteStartEvent(context, event);
+        }
+        for (Event delEvent : eventsToDelete) {
+            Intent alarmIntent = new Intent(context, NotificationReceiver.class);
+            alarmIntent.putExtra("ID", delEvent.getId().intValue());
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, delEvent.getId().intValue(), alarmIntent, 0);
 
+            //Set AlarmManager --> NotificationReceiver will be called
+            AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            manager.cancel(pendingIntent);
+        }
+    }
+
+    public static void deleteStartEvent(Context context, Event event){
+        Intent alarmIntent = new Intent(context, NotificationReceiver.class);
         alarmIntent.putExtra("ID", event.getId().intValue());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, event.getId().intValue(), alarmIntent, 0);
 

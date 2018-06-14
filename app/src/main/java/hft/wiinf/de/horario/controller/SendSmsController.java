@@ -9,10 +9,12 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PersistableBundle;
 import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
 import android.widget.Toast;
 
 import hft.wiinf.de.horario.R;
@@ -31,46 +33,51 @@ public class SendSmsController extends BroadcastReceiver {
 
 
     public static void sendSMS(final Context context, String sms_phoneNumber, String sms_rejectMessage, boolean sms_accepted, long sms_creatorEventId, String eventShortDesc) {
-        sms_phoneNo = sms_phoneNumber;
-        sms_msg = sms_rejectMessage;
-        sms_acc = sms_accepted;
-        sms_creatorID = sms_creatorEventId;
-        sms_eventShortDesc = eventShortDesc;
-        cont = context;
-
-        String msg;
-        Person personMe = PersonController.getPersonWhoIam();
-        if (sms_accepted) {
-            //SMS: :Horario:123,1,Lucas
-            //(":Horario:" als Kennzeichner, 123 als creatorEventId, 1 für Zusage, Lucas als Name der Person im Handy)
-            msg = ":Horario:" + sms_creatorEventId + ",1," + personMe.getName();
+        if (!context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_TELEPHONY))
+        {
+            Toast.makeText(context, context.getString(R.string.sms_notAbleToSend), Toast.LENGTH_LONG).show();
         } else {
-            //SMS: :Horario:123,0,Lucas,Krankheit!habe die Grippe
-            //(":Horario:" als Kennzeichner, 123 als creatorEventId, 0
-            // für Absage, Lucas als Name der Person im Handy, Krankheit als Absagekategorie, !
-            // als Kennzeichner (drin lassen!!!), habe die Grippe als persönliche Notiz)
-            msg = ":Horario:" + sms_creatorEventId + ",0," + personMe.getName() + "," + sms_rejectMessage;
-        }
+            sms_phoneNo = sms_phoneNumber;
+            sms_msg = sms_rejectMessage;
+            sms_acc = sms_accepted;
+            sms_creatorID = sms_creatorEventId;
+            sms_eventShortDesc = eventShortDesc;
+            cont = context;
 
-        try {
-            PendingIntent sentPI = PendingIntent.getBroadcast(cont, 0, new Intent(SENT), 0);
+            String msg;
+            Person personMe = PersonController.getPersonWhoIam();
+            if (sms_accepted) {
+                //SMS: :Horario:123,1,Lucas
+                //(":Horario:" als Kennzeichner, 123 als creatorEventId, 1 für Zusage, Lucas als Name der Person im Handy)
+                msg = ":Horario:" + sms_creatorEventId + ",1," + personMe.getName();
+            } else {
+                //SMS: :Horario:123,0,Lucas,Krankheit!habe die Grippe
+                //(":Horario:" als Kennzeichner, 123 als creatorEventId, 0
+                // für Absage, Lucas als Name der Person im Handy, Krankheit als Absagekategorie, !
+                // als Kennzeichner (drin lassen!!!), habe die Grippe als persönliche Notiz)
+                msg = ":Horario:" + sms_creatorEventId + ",0," + personMe.getName() + "," + sms_rejectMessage;
+            }
 
-            final SendSmsController smsUtils = new SendSmsController();
-            //register for sending and delivery
-            cont.registerReceiver(smsUtils, new IntentFilter(SendSmsController.SENT));
+            try {
+                PendingIntent sentPI = PendingIntent.getBroadcast(cont, 0, new Intent(SENT), 0);
 
-            SmsManager sms = SmsManager.getDefault();
-            sms.sendTextMessage(sms_phoneNumber, null, msg, sentPI, null);
+                final SendSmsController smsUtils = new SendSmsController();
+                //register for sending and delivery
+                cont.registerReceiver(smsUtils, new IntentFilter(SendSmsController.SENT));
 
-            //we unregister in 10 seconds
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    cont.unregisterReceiver(smsUtils);
-                }
-            }, 10000);
-        } catch (Exception e) {
-            Toast.makeText(cont, cont.getString(R.string.sms_exception), Toast.LENGTH_SHORT).show();
+                SmsManager sms = SmsManager.getDefault();
+                sms.sendTextMessage(sms_phoneNumber, null, msg, sentPI, null);
+
+                //we unregister in 10 seconds
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        cont.unregisterReceiver(smsUtils);
+                    }
+                }, 10000);
+            } catch (Exception e) {
+                Toast.makeText(cont, cont.getString(R.string.sms_exception), Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

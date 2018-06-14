@@ -429,20 +429,22 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             public void onTabSelected(TabLayout.Tab tab) {
                 if (tab.getPosition() == 1) {
                     CalendarFragment.update(CalendarFragment.selectedMonth);
+                    EventOverviewFragment.update();
                 }
             }
 
             //Do something if Tab is unselected. Parameters: selected Tab.--- Info: tab.getPosition() == x for check which Tab
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
+//Close the keyboard on a tab change
+                //close keyboard
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                assert imm!=null;
+                imm.hideSoftInputFromWindow(Objects.requireNonNull(mSectionsPageAdapter.getItem(tab.getPosition())
+                        .getView()).getApplicationWindowToken(), 0);
                 //check if settings Tab is unselected
                 if (tab.getPosition() == 2) {
                     getSupportFragmentManager().popBackStack();
-                    //Close the keyboard on a tab change
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    assert imm != null;
-                    imm.hideSoftInputFromWindow(Objects.requireNonNull(mSectionsPageAdapter.getItem(2)
-                            .getView()).getApplicationWindowToken(), 0);
                 } else if (tab.getPosition() == 1) {
                     getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
@@ -462,13 +464,11 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 //check if settings Tab is unselected
                 //close keyboard
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(mSectionsPageAdapter.getItem(tab.getPosition()).getView().getApplicationWindowToken(), 0);
+                assert imm != null;
+                imm.hideSoftInputFromWindow(Objects.requireNonNull(mSectionsPageAdapter.getItem(tab.getPosition())
+                        .getView()).getApplicationWindowToken(), 0);
                 if (tab.getPosition() == 2) {
                     getSupportFragmentManager().popBackStack();
-                    //Close the keyboard on a tab change
-                    assert imm != null;
-                    imm.hideSoftInputFromWindow(Objects.requireNonNull(mSectionsPageAdapter.getItem(2)
-                            .getView()).getApplicationWindowToken(), 0);
                 } else if (tab.getPosition() == 1) {
                     getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
