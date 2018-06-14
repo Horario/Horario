@@ -21,6 +21,7 @@
         android:textColor="@color/zentea_darkgreen"
         android:textSize="25sp" />
 
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -273,7 +274,7 @@
                 android:layout_height="wrap_content"
 
                 android:layout_alignParentEnd="true"
-                android:layout_below="@+id/newEventTab"
+                android:layout_alignBaseline="@id/newEvent_textEdit_shortTitle"
                 android:ems="8"
                 android:inputType="text"
                 android:textSize="16sp" />

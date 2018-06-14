@@ -213,14 +213,13 @@ public class QRGeneratorFragment extends Fragment {
                         + getString(R.string.find) + getString(R.string.from) + startTime + getString(R.string.until)
                         + endTime + getString(R.string.clock_at_room) + place + " " + shortTitle
                         + getString(R.string.instead_of) + "\n" + getString(R.string.eventDetails)
-                        + description + "\n" + "\n" + getString(R.string.organizer) + eventCreatorName);
+                        + description);
             } else {
                 mQRGenerator_textView_description.setText(getString(R.string.as_of) + startDate
                         + getString(R.string.until) + endDate + getString(R.string.find)
                         + repetition + getString(R.string.at) + startTime + getString(R.string.clock_to)
                         + endTime + getString(R.string.clock_at_room) + place + " " + shortTitle
-                        + getString(R.string.instead_of) + "\n" + "\n" + getString(R.string.eventDetails) + description +
-                        "\n" + "\n" + getString(R.string.organizer) + eventCreatorName);
+                        + getString(R.string.instead_of) + "\n" + "\n" + getString(R.string.eventDetails) + description);
             }
             // In the CatchBlock the User see a SnackBar Information and was pushed where the User Comes From
         } catch (NullPointerException e) {

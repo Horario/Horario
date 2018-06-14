@@ -235,12 +235,11 @@ public class SavedEventDetailsFragment extends Fragment {
         if (repetition.equals("")) {
             savedEventeventDescription.setText("Am " + startDate + " findet von " + startTime + " bis "
                     + endTime + " Uhr in Raum " + place + " " + shortTitle + " statt." + "\n" + "Termindetails sind: "
-                    + description + "\n" + "\n" + "Organisator: " + eventCreatorName);
+                    + description);
         } else {
             savedEventeventDescription.setText("Vom " + startDate + " bis " + endDate +
                     " findet " + repetition + " um " + startTime + "Uhr bis " + endTime + "Uhr in Raum "
-                    + place + " " + shortTitle + " statt." + "\n" + "Termindetails sind: " + description +
-                    "\n" + "\n" + "Organisator: " + eventCreatorName);
+                    + place + " " + shortTitle + " statt." + "\n" + "Termindetails sind: " + description);
         }
     }
 
