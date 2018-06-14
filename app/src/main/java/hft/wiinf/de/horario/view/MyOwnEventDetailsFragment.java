@@ -1,16 +1,25 @@
 package hft.wiinf.de.horario.view;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
+import android.app.TabActivity;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.activeandroid.query.Delete;
 
 import java.text.SimpleDateFormat;
 import java.util.Objects;
@@ -21,11 +30,11 @@ import hft.wiinf.de.horario.model.Event;
 
 public class MyOwnEventDetailsFragment extends Fragment {
 
-    Button myOwnEventDetailsButtonShowQR, myOwnEventDetailsButtonShowAcceptances;
+    Button myOwnEventDetailsButtonShowQR, myOwnEventDetailsButtonShowAcceptances, myOwnEventDetailsButtonDelete;
     RelativeLayout rLayout_myOwnEvent_helper;
     ConstraintLayout myOwnEventDetails_constraintLayout;
     TextView myOwnEventeventDescription, myOwnEventYourAppointment;
-    Event selectedEvent;
+    Event selectedEvent, event;
     StringBuffer eventToStringBuffer;
 
     public MyOwnEventDetailsFragment() {
@@ -48,6 +57,7 @@ public class MyOwnEventDetailsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_my_own_event_details, container, false);
         myOwnEventDetailsButtonShowAcceptances = view.findViewById(R.id.myOwnEventDetailsButtonShowAcceptances);
         myOwnEventDetailsButtonShowQR = view.findViewById(R.id.myOwnEventDetailsButtonShowQR);
+        myOwnEventDetailsButtonDelete = view.findViewById(R.id.myOwnEventDetailsButtonDeleteEvent);
         rLayout_myOwnEvent_helper = view.findViewById(R.id.myOwnEvent_relativeLayout_helper);
         myOwnEventeventDescription = view.findViewById(R.id.myOwnEventeventDescription);
         myOwnEventYourAppointment = view.findViewById(R.id.myOwnEventyourAppointmentText);
@@ -78,6 +88,40 @@ public class MyOwnEventDetailsFragment extends Fragment {
                     fragmentTransaction.addToBackStack("MyOwnEventDetails");
                     fragmentTransaction.commit();
                 }
+            }
+        });
+
+
+        myOwnEventDetailsButtonDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                final AlertDialog.Builder dialogAskForFinalDecission = new AlertDialog.Builder(getContext());
+                dialogAskForFinalDecission.setView(R.layout.dialog_afterrejectevent);
+                dialogAskForFinalDecission.setTitle(R.string.myOwnEventDetails_DeleteDialogMessage);
+                dialogAskForFinalDecission.setCancelable(true);
+
+                final AlertDialog alertDialogAskForFinalDecission = dialogAskForFinalDecission.create();
+                alertDialogAskForFinalDecission.show();
+                // YES Button to Delete the Event
+                alertDialogAskForFinalDecission.findViewById(R.id.dialog_button_event_delete)
+                        .setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                event = EventController.getEventById((getEventID()));
+                                new Delete().from(Event.class).where("CreatorEventId=?",
+                                        String.valueOf(event.getCreatorEventId())).execute();
+                                alertDialogAskForFinalDecission.dismiss();
+                                goWhereUserComesFrom();
+                            }
+                        });
+                alertDialogAskForFinalDecission.findViewById(R.id.dialog_button_event_back)
+                        .setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                alertDialogAskForFinalDecission.cancel();
+                            }
+                        });
             }
         });
 
@@ -207,6 +251,21 @@ public class MyOwnEventDetailsFragment extends Fragment {
         return eventToStringBuffer;
 
     }
-
+    // Push the User where he/she comes from
+    private void goWhereUserComesFrom() {
+        Bundle whichFragment = getArguments();
+        Objects.requireNonNull(getFragmentManager()).popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        if (Objects.requireNonNull(whichFragment).getString("fragment").equals("EventOverview")) {
+            Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.eventOverview_frameLayout, new EventOverviewFragment(), "")
+                    .commit();
+        } else {
+            Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.calendar_frameLayout, new CalendarFragment(), "")
+                    .commit();
+        }
+    }
 
 }
+
+

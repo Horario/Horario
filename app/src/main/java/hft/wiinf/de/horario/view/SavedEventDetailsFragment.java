@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -14,10 +15,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Objects;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
@@ -28,10 +31,11 @@ import hft.wiinf.de.horario.model.Event;
 
 public class SavedEventDetailsFragment extends Fragment {
 
-    Button savedEventDetailsButtonRefuseAppointment, savedEventDetailsButtonAcceptAppointment, savedEventDetailsButtonShowQr;
+    Button savedEventDetailsButtonRefuseAppointment, savedEventDetailsButtonAcceptAppointment,
+            savedEventDetailsButtonShowQr, savedEventDetailsButtonDelete;
     RelativeLayout rLayout_savedEvent_helper;
     TextView savedEventDetailsOrganisatorText, savedEventphNumberText, savedEventeventDescription;
-    Event selectedEvent;
+    Event selectedEvent, event;
     StringBuffer eventToStringBuffer;
 
     Long creatorEventId;
@@ -58,6 +62,7 @@ public class SavedEventDetailsFragment extends Fragment {
         savedEventDetailsButtonRefuseAppointment = view.findViewById(R.id.savedEventDetailsButtonRefuseAppointment);
         savedEventDetailsButtonAcceptAppointment = view.findViewById(R.id.savedEventDetailsButtonAcceptAppointment);
         savedEventDetailsButtonShowQr = view.findViewById(R.id.savedEventDetailsButtonShowQr);
+        savedEventDetailsButtonDelete = view.findViewById(R.id.savedEventDetailsButtonDelete);
         rLayout_savedEvent_helper = view.findViewById(R.id.savedEvent_relativeLayout_helper);
         savedEventDetailsOrganisatorText = view.findViewById(R.id.savedEventDetailsOrganisatorText);
         savedEventphNumberText = view.findViewById(R.id.savedEventphNumberText);
@@ -86,6 +91,38 @@ public class SavedEventDetailsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 askForPermissionToSave();
+            }
+        });
+
+        savedEventDetailsButtonDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final AlertDialog.Builder dialogAskForFinalDecission = new AlertDialog.Builder(getContext());
+                dialogAskForFinalDecission.setView(R.layout.dialog_afterrejectevent);
+                dialogAskForFinalDecission.setTitle(R.string.myOwnEventDetails_DeleteDialogMessage);
+                dialogAskForFinalDecission.setCancelable(true);
+
+                final AlertDialog alertDialogAskForFinalDecission = dialogAskForFinalDecission.create();
+                alertDialogAskForFinalDecission.show();
+                // YES Button to Delete the Event
+                alertDialogAskForFinalDecission.findViewById(R.id.dialog_button_event_delete)
+                        .setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                event = EventController.getEventById((getEventID()));
+                                new Delete().from(Event.class).where("CreatorEventId=?",
+                                        String.valueOf(event.getCreatorEventId())).execute();
+                                alertDialogAskForFinalDecission.dismiss();
+                                goWhereUserComesFrom();
+                            }
+                        });
+                alertDialogAskForFinalDecission.findViewById(R.id.dialog_button_event_back)
+                        .setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                alertDialogAskForFinalDecission.cancel();
+                            }
+                        });
             }
         });
 
@@ -274,6 +311,21 @@ public class SavedEventDetailsFragment extends Fragment {
 
         return eventToStringBuffer;
 
+    }
+
+    // Push the User where he/she comes from
+    private void goWhereUserComesFrom() {
+        Bundle whichFragment = getArguments();
+        Objects.requireNonNull(getFragmentManager()).popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        if (Objects.requireNonNull(whichFragment).getString("fragment").equals("EventOverview")) {
+            Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.eventOverview_frameLayout, new EventOverviewFragment(), "")
+                    .commit();
+        } else {
+            Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.calendar_frameLayout, new CalendarFragment(), "")
+                    .commit();
+        }
     }
 
 }

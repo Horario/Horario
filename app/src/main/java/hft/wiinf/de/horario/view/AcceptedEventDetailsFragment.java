@@ -3,7 +3,10 @@ package hft.wiinf.de.horario.view;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +14,10 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.activeandroid.query.Delete;
+
 import java.text.SimpleDateFormat;
+import java.util.Objects;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
@@ -19,10 +25,10 @@ import hft.wiinf.de.horario.model.Event;
 
 public class AcceptedEventDetailsFragment extends Fragment {
 
-    Button acceptedEventDetailsButtonShowQR, acceptedEventDetailsButtonRefuseAppointment;
+    Button acceptedEventDetailsButtonShowQR, acceptedEventDetailsButtonRefuseAppointment, acceptedEventDetailButtonDelete;
     TextView acceptedEventDetailsOrganisatorText, acceptedEventphNumberText, acceptedEventeventDescription;
     RelativeLayout rLayout_acceptedEvent_helper;
-    Event selectedEvent;
+    Event selectedEvent, event;
     StringBuffer eventToStringBuffer;
 
     public AcceptedEventDetailsFragment() {
@@ -46,6 +52,7 @@ public class AcceptedEventDetailsFragment extends Fragment {
 
         acceptedEventDetailsButtonRefuseAppointment = view.findViewById(R.id.acceptedEventDetailsButtonRefuseAppointment);
         acceptedEventDetailsButtonShowQR = view.findViewById(R.id.acceptedEventDetailsButtonShowQR);
+        acceptedEventDetailButtonDelete = view.findViewById(R.id.acceptedEventDetailsButtonDelete);
         rLayout_acceptedEvent_helper = view.findViewById(R.id.acceptedEvent_relativeLayout_helper);
         acceptedEventDetailsOrganisatorText = view.findViewById(R.id.acceptedEventDetailsOrganisatorText);
         acceptedEventphNumberText = view.findViewById(R.id.acceptedEventphNumberText);
@@ -66,6 +73,38 @@ public class AcceptedEventDetailsFragment extends Fragment {
                 fr.replace(R.id.acceptedEvent_relativeLayout_main, eventRejectEventFragment, "RejectEvent");
                 fr.addToBackStack("RejectEvent");
                 fr.commit();
+            }
+        });
+
+        acceptedEventDetailButtonDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final AlertDialog.Builder dialogAskForFinalDecission = new AlertDialog.Builder(getContext());
+                dialogAskForFinalDecission.setView(R.layout.dialog_afterrejectevent);
+                dialogAskForFinalDecission.setTitle(R.string.myOwnEventDetails_DeleteDialogMessage);
+                dialogAskForFinalDecission.setCancelable(true);
+
+                final AlertDialog alertDialogAskForFinalDecission = dialogAskForFinalDecission.create();
+                alertDialogAskForFinalDecission.show();
+                // YES Button to Delete the Event
+                alertDialogAskForFinalDecission.findViewById(R.id.dialog_button_event_delete)
+                        .setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                event = EventController.getEventById((getEventID()));
+                                new Delete().from(Event.class).where("CreatorEventId=?",
+                                        String.valueOf(event.getCreatorEventId())).execute();
+                                alertDialogAskForFinalDecission.dismiss();
+                                goWhereUserComesFrom();
+                            }
+                        });
+                alertDialogAskForFinalDecission.findViewById(R.id.dialog_button_event_back)
+                        .setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                alertDialogAskForFinalDecission.cancel();
+                            }
+                        });
             }
         });
 
@@ -191,5 +230,21 @@ public class AcceptedEventDetailsFragment extends Fragment {
         return eventToStringBuffer;
 
     }
+
+    // Push the User where he/she comes from
+    private void goWhereUserComesFrom() {
+        Bundle whichFragment = getArguments();
+        Objects.requireNonNull(getFragmentManager()).popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        if (Objects.requireNonNull(whichFragment).getString("fragment").equals("EventOverview")) {
+            Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.eventOverview_frameLayout, new EventOverviewFragment(), "")
+                    .commit();
+        } else {
+            Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.calendar_frameLayout, new CalendarFragment(), "")
+                    .commit();
+        }
+    }
+
 
 }
