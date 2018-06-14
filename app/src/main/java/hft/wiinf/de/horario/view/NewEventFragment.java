@@ -717,4 +717,9 @@ public class NewEventFragment extends Fragment {
         });
 
     }
+
+    public void onPause() {
+        super.onPause();
+        getActivity().finish();
+    }
 }

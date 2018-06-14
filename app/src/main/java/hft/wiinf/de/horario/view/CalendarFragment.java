@@ -298,5 +298,4 @@ public class CalendarFragment extends Fragment {
             calendarFcMenu.setImageResource(R.drawable.ic_plusmenu);
         }
     }
-
 }
