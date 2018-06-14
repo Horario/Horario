@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-<Titel> <FONT SIZE="6"> <b> Ansprechpartner </b> </FONT> <br> </Titel>
+    <title>Ansprechpartner</title>
 </head>
 
 <body>
-<br>
- Die App wurde im Rahmen eines Studienprojektes entwickelt! <br>
-    <br>
- Bei der unveränderten Version (XXX) dieser Anwendung ist der Leiter des Studienprojektes Prof. Dr. Rainer Keller
-    (Professor an der Hochschule für Technik Stuttgart, Schellingstr. 24, 70174 Stuttgart)
-    der Hauptansprechpartner. Da diese App jedoch unter den Richtlinien von Open Source entwickelt wurde,
-        kann der Ansprechpartner sich jederzeit ändern.
-
-
+    <h1>Ansprechpartner</h1>
+    <p>Die App Horario wurde im Rahmen eines studentischen Projektes w&auml;hrend des Sommersemesters 2018
+    an der <a href="http://www.hft-stuttgart.de">HFT Stuttgart</a> entwickelt.</p>
+    
+    <p>Als Ansprechpartner f&uuml;r die Anwendung und insbesondere Fragen zum Datenschutz
+    fungiert der Leiter des Studienprojektes Prof. Dr. Rainer Keller (Anschrift: Hochschule f&uuml;r Technik
+    Stuttgart, Schellingstr. 24, 70174 Stuttgart).
+    Da diese App jedoch unter den Richtlinien von Open Source entwickelt wurde, kann sich der
+    Ansprechpartner jederzeit &auml;ndern.
 </body>
 
 </html>
