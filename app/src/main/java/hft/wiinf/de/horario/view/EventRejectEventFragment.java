@@ -275,9 +275,9 @@ public class EventRejectEventFragment extends Fragment {
         //if they are: replace them with empty string " "
         if (reason_for_rejection.getText().toString().contains(",") ||
                 reason_for_rejection.getText().toString().contains("!") || reason_for_rejection.getText().toString().contains(":")) {
-            reason_for_rejection.getText().toString().replaceAll(",", " ");
-            reason_for_rejection.getText().toString().replaceAll("!", " ");
-            reason_for_rejection.getText().toString().replaceAll(":", " ");
+            reason_for_rejection.setText(reason_for_rejection.getText().toString().replaceAll(",", ""));
+            reason_for_rejection.setText(reason_for_rejection.getText().toString().replaceAll("!", ""));
+            reason_for_rejection.setText(reason_for_rejection.getText().toString().replaceAll(":", ""));
             return true;
         }
         return true;

@@ -182,7 +182,7 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
                 } else if (inputText.contains("|")) {
                     Toast toast = Toast.makeText(view.getContext(), R.string.noValidUsername_peek, Toast.LENGTH_SHORT);
                     toast.show();
-                    editTextUsername.setText(person.getName());
+                  //  editTextUsername.setText(person.getName());
                     return true;
                 }  else if (inputText.contains(",")) {
                     Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername_comma, Toast.LENGTH_SHORT);
