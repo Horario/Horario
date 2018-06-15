@@ -161,11 +161,11 @@ public class MyOwnEventDetailsFragment extends Fragment {
             eventCreatorName = "Du";
         }
         // Event shortTitel in Headline with StartDate
-        myOwnEventYourAppointment.setText("Dein Termin" + "\n" + shortTitle + ", " + currentDate);
+        myOwnEventYourAppointment.setText("Dein Termin" + "\n" + shortTitle);
         // Check for a Repetition Event and Change the Description Output with and without
         // Repetition Element inside.
         if (repetition.equals("")) {
-            myOwnEventeventDescription.setText(getString(R.string.time)+ startTime + getString(R.string.until)
+            myOwnEventeventDescription.setText(getString(R.string.event_date) + currentDate +"\n"+ getString(R.string.time)+ startTime + getString(R.string.until)
                     + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place + "\n" + "\n" + getString(R.string.eventDetails)
                     + description);
         } else {
