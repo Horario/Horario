@@ -4,6 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:windowBackground"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:orientation="vertical">
 
     <TextView
@@ -20,8 +22,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/settings_settings_textView_settings"
-        android:layout_marginTop="169dp"
+        android:layout_alignStart="@+id/settings_settings_textView_username"
+        android:layout_marginTop="201dp"
         android:text="@string/allowpush_text" />
 
     <TextView
@@ -41,40 +43,45 @@
         android:id="@+id/settings_settings_textView_minutesBefore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
+        android:layout_alignBaseline="@id/settings_settings_spinner_minutes"
+        android:layout_alignEnd="@id/settings_settings_spinner_minutes"
+        android:layout_alignParentEnd="true"
         android:layout_alignTop="@+id/settings_settings_spinner_minutes"
-        android:layout_toEndOf="@+id/settings_settings_textView_settings"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="15dp"
         android:text="@string/minutesBefore_text" />
 
     <EditText
         android:id="@+id/settings_settings_editText_username"
-        android:layout_width="140dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignTop="@+id/settings_settings_textView_username"
-        android:layout_marginEnd="42dp"
+
         android:layout_marginTop="-19dp"
-        android:ems="10"
-        android:focusable="false"
+        android:ems="7"
         android:hint="@string/username_hint"
-        android:imeOptions="flagNoExtractUi"
-        android:inputType="textPersonName" />
+        android:imeOptions="actionDone"
+        android:inputType="text"
+        android:singleLine="true" />
 
     <Switch
         android:id="@+id/settings_settings_Switch_allowPush"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/settings_settings_textView_allowPush"
+        android:layout_alignBaseline="@id/settings_settings_textView_allowPush"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="62dp"
+        android:layout_marginEnd="60dp"
         android:backgroundTint="@color/ic_launcher_background" />
 
     <Spinner
         android:id="@+id/settings_settings_spinner_minutes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+
+
         android:layout_alignTop="@+id/settings_settings_textView_reminder"
-        android:layout_toEndOf="@+id/settings_settings_textView_username"
+        android:layout_toStartOf="@+id/settings_settings_Switch_allowPush"
         android:entries="@array/push_times"
         android:prompt="@string/calendar"
         android:visibility="visible" />
@@ -83,27 +90,50 @@
         android:id="@+id/settings_settings_textView_reminder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+
         android:layout_alignStart="@+id/settings_settings_textView_settings"
-        android:layout_marginTop="234dp"
+        android:layout_below="@id/settings_settings_textView_allowPush"
+
+        android:layout_marginTop="35dp"
+
         android:text="@string/reminder_text" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/settings_settings_textView_startTab"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_height="31dp"
         android:layout_alignStart="@+id/settings_settings_textView_username"
-        android:layout_marginBottom="256dp"
+        android:layout_below="@id/settings_settings_textView_reminder"
+        android:layout_marginTop="35dp"
+
         android:text="@string/startTab" />
 
     <Spinner
         android:id="@+id/settings_settings_spinner_startTab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/textView"
-        android:layout_marginStart="-14dp"
-        android:layout_toEndOf="@+id/settings_settings_textView_settings"
+        android:layout_alignBaseline="@id/settings_settings_textView_startTab"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/settings_settings_textView_startTab"
         android:entries="@array/start_tab" />
+
+    <TextView
+        android:id="@+id/settings_settings_phoneNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/settings_settings_textView_username"
+        android:layout_marginTop="143dp"
+        android:text="@string/phoneNumber" />
+
+    <EditText
+        android:id="@+id/settings_settings_editText_phoneNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/settings_settings_editText_username"
+        android:ems="7"
+        android:hint="@string/phoneNumberHint"
+        android:inputType="phone" />
 
 </RelativeLayout>

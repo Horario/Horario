@@ -1,22 +1,11 @@
 package hft.wiinf.de.horario.view;
 
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Html;
-import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.widget.Switch;
-import android.widget.TextView;
-
-import com.activeandroid.util.IOUtils;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 
 import hft.wiinf.de.horario.R;
 

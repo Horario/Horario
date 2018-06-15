@@ -26,3 +26,14 @@ Design_US001 and Bug02 pushed to Quality. Quality tested and pushed to master on
 US012, US020, US021, US022 and US026 pushed to Quality. Quality tested and pushed to master on 24.05.2018.  
 Design_US006 and Bug06 pushed to Quality. Quality tested and pushed to master on 25.05.2018.  
 US039 and Bug07 pushed to Quality. Quality tested and pushed to master on 26.05.2018.  
+US046 pushed to Quality. Quality tested and pushed to master on 31.05.2018.  
+US011 pushed to Quality. Quality tested and pushed to master on 01.06.2018.  
+Design_US012 pushed to Quality. Quality tested and pushed to master on 01.06.2018.  
+US023 pushed to Quality. Quality tested and pushed to master on 02.06.2018.  
+US013 and US047 pushed to Quality. Quality tested and pushed to master on 03.06.2018.  
+US017 pushed to Quality. Quality tested and pushed to master on 05.06.2018.  
+US049 pushed to Quality. Quality tested and pushed to master on 07.06.2018.  
+US014, US015, US016, US044, US059, US060, US061, US068 and Bug 9+10 pushed to Quality. Quality tested and pushed to master on 09.06.2018.  
+Design_US011, US050 and US068 pushed to Quality. Quality tested and pushed to master on 10.06.2018.  
+US018, US019, US024, US025, US062 and Bug11 pushed to Quality. Quality tested and pushed to master on 10.06.2018.  
+

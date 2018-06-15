@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:windowBackground"
+    tools:context=".view.AcceptedEventDetailsFragment">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <TextView
+            android:id="@+id/reject_event_textView_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="43dp"
+            android:layout_marginTop="41dp" />
+
+        <TextView
+            android:id="@+id/reject_event_textView_description"
+            android:layout_width="282dp"
+            android:layout_height="107dp"
+            android:layout_alignEnd="@+id/reject_event_textView_header"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="-224dp"
+            android:layout_marginTop="99dp" />
+
+        <TextView
+            android:id="@+id/reject_event_textView_reason"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/reject_event_textView_header"
+            android:layout_marginTop="262dp"
+            android:text="Grund:" />
+
+        <Spinner
+            android:id="@+id/reject_event_spinner_reason"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignTop="@+id/reject_event_textView_reason"
+            android:layout_marginStart="150dp" />
+
+        <Button
+            android:id="@+id/reject_event_button_reject"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="27dp"
+            android:text="@string/reject_event_button" />
+
+        <EditText
+            android:id="@+id/reject_event_editText_note"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignStart="@+id/reject_event_textView_header"
+            android:layout_marginBottom="198dp"
+            android:ems="10"
+            android:inputType="text|textMultiLine|textPersonName"/>
+    </RelativeLayout>
+</FrameLayout>

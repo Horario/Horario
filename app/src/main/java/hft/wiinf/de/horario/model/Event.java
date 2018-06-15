@@ -1,6 +1,5 @@
 package hft.wiinf.de.horario.model;
 
-
 import android.support.annotation.NonNull;
 
 import com.activeandroid.Model;
@@ -39,7 +38,7 @@ public class Event extends Model {
     private Event startEvent = null;
     // the id of the event in the db of the creator
     @Column
-    private long creatorEventId;
+    private long creatorEventId = -1;
 
     //create a new event with a creator
     public Event(Person creator) {
@@ -54,6 +53,10 @@ public class Event extends Model {
 
     public Person getCreator() {
         return creator;
+    }
+
+    public void setCreator(@NonNull Person creator) {
+        this.creator = creator;
     }
 
     public String getShortTitle() {
@@ -136,6 +139,8 @@ public class Event extends Model {
     public void setCreatorEventId(long creatorEventId) {
         this.creatorEventId = creatorEventId;
     }
+
+
 }
 
 

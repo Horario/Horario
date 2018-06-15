@@ -26,6 +26,13 @@ public class PersonController {
                 .executeSingle();
     }
 
+    public static Person checkforPhoneNumber(String phoneNumber) {
+        return new Select()
+                .from(Person.class)
+                .where("phoneNumber = ?", phoneNumber)
+                .executeSingle();
+    }
+
     //get all persons
     public static List<Person> getAllPersons() {
         return new Select()
@@ -50,4 +57,5 @@ public class PersonController {
     public static List<Person> getEventCancelledPersons(Event event) {
         return new Select().from(Person.class).where("event_canceled=?", event.getId()).execute();
     }
+
 }

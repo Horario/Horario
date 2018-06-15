@@ -16,8 +16,15 @@ import hft.wiinf.de.horario.model.Person;
 public class EventController {
     //saves (update or create)an event
     public static void saveEvent(@NonNull Event event) {
-        event.setCreatorEventId(event.save());
-        event.save();
+        if (event.getAccepted()!=AcceptedState.REJECTED) {
+            if (event.getCreatorEventId() < 0)
+                event.setCreatorEventId(event.save());
+            event.save();
+        }
+        //if state is rejected and id!=null delete event from db
+        else if (event.getId()!=null){
+            EventController.deleteEvent(event);
+        }
     }
 
     public static void deleteEvent(@NonNull Event event) {
@@ -29,23 +36,26 @@ public class EventController {
         for (Person person : PersonController.getEventAcceptedPersons(event)) {
             PersonController.deletePerson(person);
         }
-        //if other events point to the deleted event set only accepted state to rejected
-        if (EventController.findRepeatingEvents(event.getId()).size() > 0) {
-            event.setAccepted(AcceptedState.REJECTED);
-            event.save();
-        } else {
-            event.delete();
+        //delete also the repeating events if applicable
+        List<Event> repeatingEvents=EventController.findRepeatingEvents(event.getId());
+        for (Event repeatingEvent:repeatingEvents){
+            repeatingEvent.delete();
         }
+        event.delete();
     }
 
     public static Event getEventById(@NonNull Long id) {
         return Event.load(Event.class, id);
     }
 
+    public static List<Event> getMyEventsByCreatorEventId(@NonNull Long creatorEventId) {
+        return new Select().from(Event.class).where("creatorEventId=? AND startEvent=?", creatorEventId, creatorEventId).execute();
+
+    }
+
     //find the list of events that start in the given period (enddate is not included!)
     public static List<Event> findEventsByTimePeriod(Date startDate, Date endDate) {
         return new Select().from(Event.class).where("starttime between ? AND ?", startDate.getTime(), endDate.getTime() - 1).orderBy("startTime,endTime,shortTitle").execute();
-
     }
 
     //get a list of all events
@@ -56,6 +66,19 @@ public class EventController {
     //get a list of all events that I accepted
     public static List<Event> findMyAcceptedEvents() {
         return new Select().from(Event.class).where("accepted=?", true).orderBy("startTime,endTime,shortTitle").execute();
+    }
+
+    public static List<Event> getAllEvents(){
+        return new Select().from(Event.class).orderBy("startTime, endTime, shortTitle").execute();
+    }
+
+    public static boolean createdEventsYet() {
+        List<Event> resultSet = new Select().from(Event.class).execute();
+        if (resultSet.size() == 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public static List<Event> findMyAcceptedEventsInTheFuture() {
@@ -93,9 +116,11 @@ public class EventController {
             repetitionEvent.setPlace(firstEvent.getPlace());
             repetitionEvent.setDescription(firstEvent.getDescription());
             repetitionEvent.setAccepted(firstEvent.getAccepted());
-            repetitionEvent.setEndTime(firstEvent.getEndTime());
+            repetitionEvent.setRepetition(firstEvent.getRepetition());
+            repetitionEvent.setEndDate(firstEvent.getEndDate());
             repetitionEvent.setShortTitle(firstEvent.getShortTitle());
             repetitionEvent.setStartEvent(firstEvent);
+            repetitionEvent.setCreatorEventId(firstEvent.getCreatorEventId());
             //copy the start and end time of the start event into a temporary variable, add 1 to the corresponding field and save the new value into the next event
             Calendar temporary = new GregorianCalendar();
             temporary.setTime(firstEvent.getStartTime());
@@ -111,5 +136,28 @@ public class EventController {
             saveEvent(repetitionEvent);
         }
 
+    }
+
+    public static Event checkIfEventIsInDatabase(String description, String shortTitle,
+                                                 String place,
+                                                 Calendar startTime, Calendar endTime) {
+        return new Select()
+                .from(Event.class)
+                .where("description = ?", description)
+                .where("shortTitle = ?", shortTitle)
+                .where("place = ?", place)
+                .where("startTime = ?", startTime.getTimeInMillis())
+                .where("endTime = ?", endTime.getTimeInMillis())
+                .executeSingle();
+    }
+
+
+    public static boolean checkIfEventIsInDatabaseThroughId(Long eventIdInSMS) {
+        List<Event> resultSet = new Select().from(Event.class).where("Id=?", eventIdInSMS).execute();
+        if (resultSet.size() == 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }

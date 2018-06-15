@@ -1,6 +1,5 @@
 package hft.wiinf.de.horario.view;
 
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,7 +13,7 @@ import hft.wiinf.de.horario.R;
  * A simple {@link Fragment} subclass.
  */
 public class SettingsFeedbackFragment extends Fragment {
-private WebView settings_feedback_webView;
+    private WebView settings_feedback_webView;
 
     public SettingsFeedbackFragment() {
         // Required empty public constructor

@@ -18,7 +18,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
@@ -33,23 +32,28 @@ import java.util.Locale;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
+import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.AcceptedState;
 
 public class CalendarFragment extends Fragment {
     private static final String TAG = "CalendarFragmentActivity";
 
     public static CompactCalendarView calendarCvCalendar;
-    public static Date selectedMonth;
     static ListView calendarLvList;
     static TextView calendarTvMonth;
+    static TextView calendarTvDay;
     TextView calendarIsFloatMenuOpen;
     FloatingActionButton calendarFcMenu, calendarFcQrScan, calendarFcNewEvent;
     ConstraintLayout cLayout_calendar_main;
-    static TextView calendarTvDay;
     static Context context = null;
+
     static DateFormat monthFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
     static DateFormat dayFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
     static DateFormat timeFormat = new SimpleDateFormat("HH:mm");
+    public static Date selectedMonth;
+
+    static List<hft.wiinf.de.horario.model.Event> eventListCalendar = new ArrayList<>();
+    static List<hft.wiinf.de.horario.model.Event> allEvents = new ArrayList<>();
 
     Animation ActionButtonOpen, ActionButtonClose, ActionButtonRotateRight, ActionButtonRotateLeft;
 
@@ -60,45 +64,6 @@ public class CalendarFragment extends Fragment {
         updateCompactCalendar();
     }
 
-    //is marking the day in the calendar for the parameter date
-    public static void updateCompactCalendar() {
-        List<hft.wiinf.de.horario.model.Event> acceptedEvents = EventController.findMyEvents();
-        for (int i = 0; i < acceptedEvents.size(); i++) {
-            if (calendarCvCalendar.getEvents(acceptedEvents.get(i).getStartTime().getTime()).size() == 0 && acceptedEvents.get(i).getAccepted() != AcceptedState.REJECTED) {
-                Event event = new Event(Color.BLUE, acceptedEvents.get(i).getStartTime().getTime());
-                calendarCvCalendar.addEvent(event, true);
-            }
-        }
-    }
-
-    public static ArrayAdapter getAdapter(Date date) {
-        ArrayList<String> eventsAsString = new ArrayList<>();
-        Calendar endOfDay = Calendar.getInstance();
-        endOfDay.setTime(date);
-        endOfDay.add(Calendar.DAY_OF_MONTH, 1);
-        final List<hft.wiinf.de.horario.model.Event> eventList = EventController.findEventsByTimePeriod(date, endOfDay.getTime());
-        for (int i = 0; i < eventList.size(); i++) {
-            if (eventList.get(i).getAccepted() != AcceptedState.REJECTED) {
-                eventsAsString.add(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle());
-            }
-        }
-        final ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1, eventsAsString) {
-            @NonNull
-            @Override
-            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-                TextView textView = (TextView) super.getView(position, convertView, parent);
-                if (eventList.get(position).getAccepted().equals(AcceptedState.ACCEPTED)) {
-                    textView.setBackgroundColor(Color.GREEN);
-                } else if (eventList.get(position).getAccepted().equals(AcceptedState.WAITING)) {
-                    textView.setBackgroundColor(Color.RED);
-                } else {
-                    textView.setBackgroundColor(Color.WHITE);
-                }
-                return textView;
-            }
-        };
-        return adapter;
-    }
 
     @Nullable
     @Override
@@ -130,6 +95,7 @@ public class CalendarFragment extends Fragment {
         Calendar today = Calendar.getInstance();
         today.set(Calendar.HOUR_OF_DAY, 0);
         today.set(Calendar.MINUTE, 0);
+        today.set(Calendar.SECOND, 0);
         selectedMonth = today.getTime();
         calendarTvMonth.setText(monthFormat.format(today.getTime())); //initialize month field
         update(today.getTime());
@@ -154,9 +120,47 @@ public class CalendarFragment extends Fragment {
         calendarLvList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedItem = (String) parent.getItemAtPosition(position); //Get the clicked item as String
-                Toast.makeText(getActivity(), selectedItem, Toast.LENGTH_SHORT).show(); //TODO just for testing, delete
+                Appointment selectedItem = (Appointment) parent.getItemAtPosition(position);
                 closeFABMenu();
+                // 0 = date, 1 = accepted, 2 = waiting, 3 = own
+                switch (selectedItem.getType()) {
+                    case 1:
+                        AcceptedEventDetailsFragment acceptedEventDetailsFragment = new AcceptedEventDetailsFragment();
+                        Bundle bundleAcceptedEventId = new Bundle();
+                        bundleAcceptedEventId.putLong("EventId", selectedItem.getId());
+                        bundleAcceptedEventId.putString("fragment", "Calendar");
+                        acceptedEventDetailsFragment.setArguments(bundleAcceptedEventId);
+                        FragmentTransaction fr1 = getFragmentManager().beginTransaction();
+                        fr1.replace(R.id.calendar_frameLayout, acceptedEventDetailsFragment, "CalendarFragment");
+                        fr1.addToBackStack("CalendarFragment");
+                        fr1.commit();
+                        break;
+                    case 2:
+                        SavedEventDetailsFragment savedEventDetailsFragment = new SavedEventDetailsFragment();
+                        Bundle bundleSavedEventId = new Bundle();
+                        bundleSavedEventId.putLong("EventId", selectedItem.getId());
+                        bundleSavedEventId.putString("fragment", "Calendar");
+                        savedEventDetailsFragment.setArguments(bundleSavedEventId);
+                        FragmentTransaction fr2 = getFragmentManager().beginTransaction();
+                        fr2.replace(R.id.calendar_frameLayout, savedEventDetailsFragment, "CalendarFragment");
+                        fr2.addToBackStack("CalendarFragment");
+                        fr2.commit();
+                        break;
+                    case 3:
+                        MyOwnEventDetailsFragment myOwnEventDetailsFragment = new MyOwnEventDetailsFragment();
+                        Bundle bundleMyOwnEventId = new Bundle();
+                        bundleMyOwnEventId.putLong("EventId", selectedItem.getId());
+                        bundleMyOwnEventId.putString("fragment", "Calendar");
+                        myOwnEventDetailsFragment.setArguments(bundleMyOwnEventId);
+                        FragmentTransaction fr3 = getFragmentManager().beginTransaction();
+                        fr3.replace(R.id.calendar_frameLayout, myOwnEventDetailsFragment, "CalendarFragment");
+                        fr3.addToBackStack("CalendarFragment");
+                        fr3.commit();
+                        break;
+                    default:
+                        break;
+                }
+
             }
         });
 
@@ -211,8 +215,74 @@ public class CalendarFragment extends Fragment {
                 closeFABMenu();
             }
         });
-
         return view;
+    }
+
+
+    //is marking the day in the calendar for the parameter date
+    public static void updateCompactCalendar() {
+        List<hft.wiinf.de.horario.model.Event> acceptedEvents = EventController.findMyEvents();
+        for (int i = 0; i < acceptedEvents.size(); i++) {
+            if (calendarCvCalendar.getEvents(acceptedEvents.get(i).getStartTime().getTime()).size() == 0 && acceptedEvents.get(i).getAccepted() != AcceptedState.REJECTED) {
+                Event event = new Event(Color.DKGRAY, acceptedEvents.get(i).getStartTime().getTime());
+                calendarCvCalendar.addEvent(event, true);
+            }
+        }
+    }
+
+    public static ArrayAdapter getAdapter(Date date) {
+        final ArrayList<Appointment> eventsAsAppointments = new ArrayList<>();
+
+        Calendar endOfDay = Calendar.getInstance();
+        endOfDay.setTime(date);
+        endOfDay.add(Calendar.DAY_OF_MONTH, 1);
+        endOfDay.add(Calendar.SECOND, -1);
+
+        allEvents = EventController.getAllEvents();
+
+        eventListCalendar.clear();
+        for (hft.wiinf.de.horario.model.Event event : allEvents) {
+            if (event.getEndTime().after(date) && event.getEndTime().before(endOfDay.getTime())) {
+                eventListCalendar.add(event);
+            }
+        }
+
+        for (int i = 0; i < eventListCalendar.size(); i++) {
+            if (eventListCalendar.get(i).getCreator().equals(PersonController.getPersonWhoIam())) {
+                eventsAsAppointments.add(new Appointment(timeFormat.format(eventListCalendar.get(i).getStartTime()) + " - " + timeFormat.format(eventListCalendar.get(i).getEndTime()) + " " + eventListCalendar.get(i).getShortTitle(), 3, eventListCalendar.get(i).getId(), eventListCalendar.get(i).getCreator()));
+            } else {
+                if (eventListCalendar.get(i).getAccepted().equals(AcceptedState.ACCEPTED)) {
+                    eventsAsAppointments.add(new Appointment(timeFormat.format(eventListCalendar.get(i).getStartTime()) + " - " + timeFormat.format(eventListCalendar.get(i).getEndTime()) + " " + eventListCalendar.get(i).getShortTitle(), 1, eventListCalendar.get(i).getId(), eventListCalendar.get(i).getCreator()));
+                } else if (eventListCalendar.get(i).getAccepted().equals(AcceptedState.WAITING)) {
+                    eventsAsAppointments.add(new Appointment(timeFormat.format(eventListCalendar.get(i).getStartTime()) + " - " + timeFormat.format(eventListCalendar.get(i).getEndTime()) + " " + eventListCalendar.get(i).getShortTitle(), 2, eventListCalendar.get(i).getId(), eventListCalendar.get(i).getCreator()));
+                }
+            }
+        }
+        final ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1, eventsAsAppointments) {
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                TextView textView = (TextView) super.getView(position, convertView, parent);
+                // 0 = date, 1 = accepted, 2 = waiting, 3 = own
+                if (eventsAsAppointments.get(position).getType() == 1) {
+                    textView.setTextColor(Color.DKGRAY);
+                    textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_mydate_approved, 0);
+                } else if (eventsAsAppointments.get(position).getType() == 2) {
+                    textView.setTextColor(Color.DKGRAY);
+                    textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_mydate_questionmark, 0);
+                } else if (eventsAsAppointments.get(position).getType() == 3) {
+                    textView.setTextColor(Color.DKGRAY);
+                    textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_mydate, 0);
+                } else if (eventsAsAppointments.get(position).getType() == 0) {
+                    textView.setTextColor(Color.BLACK);
+                    textView.setBackgroundColor(Color.WHITE);
+                    textView.setFocusable(false);
+                }
+                textView.setText(eventsAsAppointments.get(position).getDescription());
+                return textView;
+            }
+        };
+        return adapter;
     }
 
     public void showFABMenu() {
@@ -240,5 +310,4 @@ public class CalendarFragment extends Fragment {
             calendarFcMenu.setImageResource(R.drawable.ic_plusmenu);
         }
     }
-
 }

@@ -1,16 +1,20 @@
 package hft.wiinf.de.horario.view;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.Intent;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,23 +31,25 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
+import hft.wiinf.de.horario.controller.NotificationController;
 import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.AcceptedState;
 import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.model.Repetition;
-import hft.wiinf.de.horario.service.NotificationReceiver;
 
 //TODO Kommentieren und Java Doc Info Schreiben
 public class NewEventFragment extends Fragment {
+
     // calendar objects to save the startTime / end Time / endOfRepetition, default: values - today
     Calendar startTime = Calendar.getInstance();
     Calendar endTime = Calendar.getInstance();
@@ -56,6 +62,8 @@ public class NewEventFragment extends Fragment {
     private Button button_save;
     //person object of the user, to get the user name
     private Person me;
+    int counter = 0;
+    private int PERMISSION_REQUEST_READ_PHONE_STATE = 0;
 
     @Nullable
     @Override
@@ -94,7 +102,8 @@ public class NewEventFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+                    ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE))
+                            .hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
                     edittext_room.clearFocus();
                     return true;
 
@@ -157,19 +166,19 @@ public class NewEventFragment extends Fragment {
                 return false;
             }
         });
-        // on click on serial event checkbox change visibility of the rpetiton and repetiton end field,
+        // on click on serial event checkbox change visibility of the repetition and repetition end field,
         checkBox_serialEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 checkSerialEvent();
             }
         });
-        // sets the choice posibitilites of the repetition spinner (set in string resource-file as array event-repetiton)
+        // sets the choice possibilities of the repetition spinner (set in string resource-file as array event-repetition)
         ArrayAdapter repetitionAdapter = ArrayAdapter.createFromResource(getContext(), R.array.event_repetitions, android.R.layout.simple_spinner_item);
-        //set the appearence of one choice posibility
+        //set the appearance of one choice possibility
         repetitionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_repetition.setAdapter(repetitionAdapter);
-        //set weekly selected until the user selects something different or it is overwriten by the loaded event
+        //set weekly selected until the user selects something different or it is overwritten by the loaded event
         spinner_repetition.setSelection(2);
         //don't open keyboard on focus,
         editText_endOfRepetition.setShowSoftInputOnFocus(false);
@@ -216,11 +225,11 @@ public class NewEventFragment extends Fragment {
         //get the user, if it is saved in the db, the user name is read
         me = PersonController.getPersonWhoIam();
         if (me == null)
-            me = new Person(true, "007", "");
+            me = new Person(true, "", "");
         edittext_userName.setText(me.getName());
     }
 
-    //if the checkbox serial event is checked, repetiiton posibilities and the endOfrepetition is shown, else not
+    //if the checkbox serial event is checked, repetition possibilities and the endOfrepetition is shown, else not
     private void checkSerialEvent() {
         if (checkBox_serialEvent.isChecked()) {
             textView_endofRepetiton.setVisibility(View.VISIBLE);
@@ -237,7 +246,8 @@ public class NewEventFragment extends Fragment {
 
     public void getDate() {
         //close keyboard if it's open
-        ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+        if (getActivity().getCurrentFocus() != null)
+            ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
         // create a listener for the date picker dialog: update the date parts (year, month, date) of start and end time with the selected values
         DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -255,7 +265,8 @@ public class NewEventFragment extends Fragment {
 
     public void getStartTime() {
         //close keyboard if it's open
-        ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+        if (getActivity().getCurrentFocus() != null)
+            ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
         // create a listener for the time picker dialog: update the start time with the selected values
         TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
             @Override
@@ -274,7 +285,8 @@ public class NewEventFragment extends Fragment {
 
     public void getEndTime() {
         //close keyboard if it's open
-        ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+        if (getActivity().getCurrentFocus() != null)
+            ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
         // create a listener for the time picker dialog: update the end time and the time for the end of repetition (for the comparing later) with the selected values
         TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
             @Override
@@ -295,7 +307,8 @@ public class NewEventFragment extends Fragment {
 
     public void getEndOfRepetition() {
         //close keyboard if it's open
-        ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+        if (getActivity().getCurrentFocus() != null)
+            ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
         // create a listener for the time picker dialog: update the date part (year, month, day) of the end of repetition with the selected values
         DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -313,12 +326,18 @@ public class NewEventFragment extends Fragment {
     //if the save button is clicked check the entrys and save the event if everything is ok
     public void onButtonClickSave() {
         if (checkValidity()) {
-            saveEvent();
+            if (me.getPhoneNumber() == null || !me.getPhoneNumber().matches("(\\+|0|00)[1-9][0-9]+"))
+                checkPhonePermission();
+            else
+                saveEvent();
+
         }
     }
 
     //read the needed parameters / textfield and save the event
     public void saveEvent() {
+        //save the new user name
+        me.setName(edittext_userName.getText().toString());
         PersonController.savePerson(me);
         Event event = new Event(me);
         event.setAccepted(AcceptedState.ACCEPTED);
@@ -334,15 +353,25 @@ public class NewEventFragment extends Fragment {
             EventController.saveSerialevent(event);
         } else
             EventController.saveEvent(event);
-        // if me (the user) is not created (aka null) a new user with typed in the user name is created
-        if (me == null)
-            //TODO: read the phone number of the user
-            me = new Person(true, "007", "");
-        //update or save a new person (me)
-        me.setName(edittext_userName.getText().toString());
-        PersonController.savePerson(me);
+        if (!EventController.createdEventsYet()) {
+            Long date = System.currentTimeMillis();
+            saveReadDate(String.valueOf(date));
+        }
         openSavedSuccessfulDialog(event.getId());
-        setAlarmForNotification(event);
+        NotificationController.setAlarmForNotification(getContext(), event);
+    }
+
+    private void saveReadDate(String date) {
+        FileOutputStream outputStream;
+        try {
+            outputStream = getContext().openFileOutput("lastReadDate.txt", Context.MODE_PRIVATE);
+            outputStream.write(date.getBytes());
+            outputStream.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     //clear all entrys and open a dialog where the user can choose what to do next
@@ -359,7 +388,7 @@ public class NewEventFragment extends Fragment {
                 dialogSavingSuccessful.dismiss();
             }
         });
-        //TODO: open qrcode
+
         dialogSavingSuccessful.findViewById(R.id.savingSuccessful_button_qrcode).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -439,15 +468,15 @@ public class NewEventFragment extends Fragment {
             return false;
         }
 
-        if (editText_description.getText().length() > 500) {
+        if (editText_description.getText().length() > 200) {
             Toast.makeText(getContext(), R.string.description_too_long, Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (edittext_shortTitle.getText().length() > 100) {
+        if (edittext_shortTitle.getText().length() > 50) {
             Toast.makeText(getContext(), R.string.shortTitle_too_long, Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (edittext_room.getText().length() > 100) {
+        if (edittext_room.getText().length() > 50) {
             Toast.makeText(getContext(), R.string.room_too_long, Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -464,7 +493,7 @@ public class NewEventFragment extends Fragment {
             Toast.makeText(getContext(), R.string.endTime_before_startTime, Toast.LENGTH_SHORT).show();
             return false;
         }
-        //if it is and repetaing event and the end of the repetiton is beofre the end time of the first event
+        //if it is and repeating event and the end of the repetition is before the end time of the first event
         if (getRepetition() != Repetition.NONE && endOfRepetition.before(endTime)) {
             Toast.makeText(getContext(), R.string.endOfRepetition_before_endTime, Toast.LENGTH_SHORT).show();
             return false;
@@ -531,34 +560,161 @@ public class NewEventFragment extends Fragment {
         }
     }
 
-    public long calcNotificationTime(Calendar cal, Person person) {
-        cal.add(Calendar.MINUTE, ((-1) * person.getNotificationTime()));
-        return cal.getTimeInMillis();
+    private void checkPhonePermission() {
+        //Check if User has permission to start to scan, if not it's start a RequestLoop
+        if (!isPhonePermissionGranted()) {
+            requestPhonePermission();
+        } else {
+            readPhoneNumber();
+        }
     }
 
-    //Method is going to set the alarm x minutes before the event
-    public void setAlarmForNotification(Event event) {
-        if (PersonController.getPersonWhoIam() != null) {
-            Person notificationPerson = PersonController.getPersonWhoIam();
-            if (notificationPerson.isEnablePush()) {
-                Intent alarmIntent = new Intent(getContext(), NotificationReceiver.class);
-                Date date = event.getStartTime();
-                Calendar calendar = GregorianCalendar.getInstance();
-                calendar.setTime(date);
+    public boolean isPhonePermissionGranted() {
+        return ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED;
+    }
 
-                alarmIntent.putExtra("Event", event.getShortTitle());
-                alarmIntent.putExtra("Hour", calendar.get(Calendar.HOUR_OF_DAY));
-                if (calendar.get(Calendar.MINUTE) < 10) {
-                    alarmIntent.putExtra("Minute", "0" + String.valueOf(calendar.get(Calendar.MINUTE)));
+    private void requestPhonePermission() {
+        //For Fragment: requestPermissions(permissionsList,REQUEST_CODE);
+        //For Activity: ActivityCompat.requestPermissions(this,permissionsList,REQUEST_CODE);
+        requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, PERMISSION_REQUEST_READ_PHONE_STATE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+
+        if (requestCode == PERMISSION_REQUEST_READ_PHONE_STATE) {
+            // for each permission check if the user granted/denied them you may want to group the
+            // rationale in a single dialog,this is just an example
+            for (int i = 0, len = permissions.length; i < len; i++) {
+
+                if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
+                    // user rejected the permission
+                    boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.READ_PHONE_STATE);
+                    if (!showRationale) {
+                        // user also CHECKED "never ask again" you can either enable some fall back,
+                        // disable features of your app or open another dialog explaining again the
+                        // permission and directing to the app setting
+
+                        new android.support.v7.app.AlertDialog.Builder(getActivity())
+                                .setTitle(R.string.accessWith_NeverAskAgain_deny)
+                                .setMessage(R.string.sendSMS_accessDenied_withCheckbox)
+                                .setPositiveButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        openDialogAskForPhoneNumber();
+                                    }
+                                })
+                                .create().show();
+                    } else if (counter < 1) {
+                        // user did NOT check "never ask again" this is a good place to explain the user
+                        // why you need the permission and ask if he wants // to accept it (the rationale)
+                        new android.support.v7.app.AlertDialog.Builder(getActivity())
+                                .setTitle(R.string.requestPermission_firstTryRequest)
+                                .setMessage(R.string.phoneNumber_explanation)
+                                .setPositiveButton(R.string.oneMoreTime, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        counter++;
+                                        checkPhonePermission();
+                                    }
+                                })
+                                .setNegativeButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        openDialogAskForPhoneNumber();
+                                    }
+                                })
+                                .create().show();
+                    } else if (counter == 1) {
+                        new android.support.v7.app.AlertDialog.Builder(getActivity())
+                                .setTitle(R.string.sendSMS_lastTry)
+                                .setMessage(R.string.lastTry_phoneNumber)
+                                .setPositiveButton(R.string.oneMoreTime, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        counter++;
+                                        checkPhonePermission();
+                                    }
+                                })
+                                .setNegativeButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        openDialogAskForPhoneNumber();
+                                    }
+                                })
+                                .create().show();
+                    } else {
+                        openDialogAskForPhoneNumber();
+                    }
                 } else {
-                    alarmIntent.putExtra("Minute", String.valueOf(calendar.get(Calendar.MINUTE)));
+                    readPhoneNumber();
                 }
-                alarmIntent.putExtra("ID", event.getId().intValue());
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), event.getId().intValue(), alarmIntent, 0);
-
-                AlarmManager manager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
-                manager.set(AlarmManager.RTC_WAKEUP, calcNotificationTime(calendar, notificationPerson), pendingIntent);
             }
+
         }
+
+
+    }
+
+
+    // method to read the phone number of the user
+    public void readPhoneNumber() {
+        //if permission is granted read the phone number
+        TelephonyManager telephonyManager = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
+        @SuppressLint("MissingPermission") String phoneNumber = telephonyManager.getLine1Number();
+        //delete spaces and add a + if phoneNumber starts without a 0
+        if (phoneNumber != null)
+            phoneNumber.replaceAll(" ", "");
+        if (phoneNumber.matches("[1-9][0-9]+"))
+            phoneNumber = "+" + phoneNumber;
+        me.setPhoneNumber(phoneNumber);
+        //if the number could not been read, open a dialog
+        if (me.getPhoneNumber() == null || !me.getPhoneNumber().matches("(00|0|\\+)[1-9][0-9]+")) {
+            openDialogAskForPhoneNumber();
+        } else {
+            Toast.makeText(getContext(), R.string.thanksphoneNumber, Toast.LENGTH_SHORT).show();
+            saveEvent();
+
+        }
+    }
+
+
+    public void openDialogAskForPhoneNumber() {
+        final android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder(getActivity());
+        dialogBuilder.setView(R.layout.dialog_askingforphonenumber);
+        dialogBuilder.setCancelable(true);
+        final android.app.AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
+        EditText phoneNumber = alertDialog.findViewById(R.id.dialog_EditText_telephonNumber);
+        phoneNumber.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                String input = v.getText().toString().replaceAll(" ", "");
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    //regex: perhaps 0 + or 00 then 1-9 then numbers
+                    if (input.matches("(0|\\+|00)[1-9][0-9]+")) {
+                        alertDialog.dismiss();
+                        me.setPhoneNumber(input);
+                        Toast.makeText(v.getContext(), R.string.thanksphoneNumber, Toast.LENGTH_SHORT).show();
+                        saveEvent();
+                        return false;
+                    } else {
+                        Toast toast = Toast.makeText(v.getContext(), R.string.wrongNumberFormat, Toast.LENGTH_SHORT);
+                        toast.show();
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+        //if the dialog is canceled save nothing
+        alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                Toast toast = Toast.makeText(getContext(), R.string.event_save_notSuccessful, Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
+
     }
 }
