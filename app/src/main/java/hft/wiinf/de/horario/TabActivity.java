@@ -17,6 +17,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -834,384 +835,392 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         Calendar now = Calendar.getInstance();
         now.set(Calendar.SECOND, 0);
         now.set(Calendar.MILLISECOND, 0);
-//        if (getRepetition() != Repetition.NONE) {
-        if (getStartTimeEvent().before(now)) {
-            Toast.makeText(this, R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();
-            return true;
-        } else if (getEndDateEvent().before(now)) {
-            Toast.makeText(this, R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();
-            return true;
+        boolean test = getStartTimeEvent().before(now);
+        Log.i("STARTZEIT", getStartTimeEvent().getTime().toString());
+        Log.i("EVENTZEIT", now.getTime().toString());
+        if (getRepetition() == Repetition.NONE) {
+            if (getStartTimeEvent().getTime().before(now.getTime())) {
+                Toast.makeText(this, R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();
+                return true;
+            } else {
+                return false;
+            }
+
         } else {
-            return false;
+            if (getEndDateEvent().getTime().before(now.getTime())) {
+                Toast.makeText(this, R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();
+                return true;
+            } else {
+                return false;
+            }
         }
     }
-//        }
 
-        private void decideWhatToDo (Dialog afterScanningDialogActionn){
-            if (!checkIfEventIsInPast()) {
-                Person person = PersonController.getPersonWhoIam();
-                if (person.getName().isEmpty()) {
-                    openDialogAskForUsername();
-                } else if (buttonId == 1 || buttonId == 2) {
-                    dialogListener();
-                } else if (buttonId == 3) {
-                    saveEventAndPersonForRejection(afterScanningDialogActionn);
+    private void decideWhatToDo(Dialog afterScanningDialogActionn) {
+        if (!checkIfEventIsInPast()) {
+            Person person = PersonController.getPersonWhoIam();
+            if (person.getName().isEmpty()) {
+                openDialogAskForUsername();
+            } else if (buttonId == 1 || buttonId == 2) {
+                dialogListener();
+            } else if (buttonId == 3) {
+                saveEventAndPersonForRejection(afterScanningDialogActionn);
+            }
+        } else {
+            //Restart the TabActivity an Reload all Views
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
+        }
+    }
+
+    private void checkPhonePermission() {
+        //Check if User has permission to start to scan, if not it's start a RequestLoop
+        if (!isPhonePermissionGranted()) {
+            requestPhonePermission();
+        } else {
+            readPhoneNumber();
+        }
+    }
+
+    private boolean isPhonePermissionGranted() {
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestPhonePermission() {
+        //For Fragment: requestPermissions(permissionsList,REQUEST_CODE);
+        //For Activity: ActivityCompat.requestPermissions(this,permissionsList,REQUEST_CODE);
+        requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, PERMISSION_REQUEST_READ_PHONE_STATE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_READ_PHONE_STATE) {
+            // for each permission check if the user granted/denied them you may want to group the
+            // rationale in a single dialog,this is just an example
+            for (int i = 0, len = permissions.length; i < len; i++) {
+
+                if (grantResults.length > 0
+                        && grantResults[i] == PackageManager.PERMISSION_DENIED) {
+                    // user rejected the permission
+                    boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.READ_PHONE_STATE);
+                    if (!showRationale) {
+                        // user also CHECKED "never ask again" you can either enable some fall back,
+                        // disable features of your app or open another dialog explaining again the
+                        // permission and directing to the app setting
+
+                        new android.support.v7.app.AlertDialog.Builder(this)
+                                .setTitle(R.string.accessWith_NeverAskAgain_deny)
+                                .setMessage(R.string.sendSMS_accessDenied_withCheckbox)
+                                .setPositiveButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                        openDialogAskForUsername();
+                                    }
+                                })
+                                .create().show();
+                    } else if (counter < 1) {
+                        // user did NOT check "never ask again" this is a good place to explain the user
+                        // why you need the permission and ask if he wants // to accept it (the rationale)
+                        new android.support.v7.app.AlertDialog.Builder(this)
+                                .setTitle(R.string.requestPermission_firstTryRequest)
+                                .setMessage(R.string.phoneNumber_explanation)
+                                .setPositiveButton(R.string.oneMoreTime, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        counter++;
+                                        checkPhonePermission();
+                                    }
+                                })
+                                .setNegativeButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        //open keyboard
+                                        ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+                                        openDialogAskForUsername();
+                                    }
+                                })
+                                .create().show();
+                    } else if (counter == 1) {
+                        new android.support.v7.app.AlertDialog.Builder(this)
+                                .setTitle(R.string.sendSMS_lastTry)
+                                .setMessage(R.string.phoneNumber_explanation)
+                                .setPositiveButton(R.string.oneMoreTime, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        counter++;
+                                        checkPhonePermission();
+                                    }
+                                })
+                                .setNegativeButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+                                        openDialogAskForUsername();
+                                    }
+                                })
+                                .create().show();
+                    } else {
+                        openDialogAskForUsername();
+                        ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+                    }
+                } else {
+                    readPhoneNumber();
                 }
-            } else {
-                //Restart the TabActivity an Reload all Views
-                Intent intent = getIntent();
-                finish();
-                startActivity(intent);
             }
-        }
 
-        private void checkPhonePermission () {
-            //Check if User has permission to start to scan, if not it's start a RequestLoop
-            if (!isPhonePermissionGranted()) {
-                requestPhonePermission();
-            } else {
-                readPhoneNumber();
-            }
-        }
-
-        private boolean isPhonePermissionGranted () {
-            return ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED;
-        }
-
-        private void requestPhonePermission () {
-            //For Fragment: requestPermissions(permissionsList,REQUEST_CODE);
-            //For Activity: ActivityCompat.requestPermissions(this,permissionsList,REQUEST_CODE);
-            requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, PERMISSION_REQUEST_READ_PHONE_STATE);
-        }
-
-        @Override
-        public void onRequestPermissionsResult ( int requestCode, @NonNull String permissions[],
-        @NonNull int[] grantResults){
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-            if (requestCode == PERMISSION_REQUEST_READ_PHONE_STATE) {
+        } else if (requestCode == PERMISSION_REQUEST_RECEIVE_SMS) {
+            if (counterSMS != 5) {
                 // for each permission check if the user granted/denied them you may want to group the
                 // rationale in a single dialog,this is just an example
-                for (int i = 0, len = permissions.length; i < len; i++) {
+                for (int i = 0; i < 1; i++) {
 
                     if (grantResults.length > 0
                             && grantResults[i] == PackageManager.PERMISSION_DENIED) {
                         // user rejected the permission
-                        boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.READ_PHONE_STATE);
+                        boolean showRationale;
+                        if (counterSMS == 5) {
+                            showRationale = true;
+                        } else {
+                            showRationale = shouldShowRequestPermissionRationale(Manifest.permission.RECEIVE_SMS);
+                        }
                         if (!showRationale) {
                             // user also CHECKED "never ask again" you can either enable some fall back,
                             // disable features of your app or open another dialog explaining again the
                             // permission and directing to the app setting
-
-                            new android.support.v7.app.AlertDialog.Builder(this)
+                            new AlertDialog.Builder(this)
+                                    .setOnKeyListener(new DialogInterface.OnKeyListener() {
+                                        @Override
+                                        public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                                            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                                                return true;
+                                            }
+                                            return false;
+                                        }
+                                    })
                                     .setTitle(R.string.accessWith_NeverAskAgain_deny)
-                                    .setMessage(R.string.sendSMS_accessDenied_withCheckbox)
-                                    .setPositiveButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
+                                    .setMessage(R.string.requestSMSPermission_accessDenied_withCheckbox)
+                                    .setPositiveButton(R.string.back, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            dialog.dismiss();
-                                            openDialogAskForUsername();
+
                                         }
                                     })
                                     .create().show();
-                        } else if (counter < 1) {
+                        } else if (counterSMS < 1) {
                             // user did NOT check "never ask again" this is a good place to explain the user
                             // why you need the permission and ask if he wants // to accept it (the rationale)
-                            new android.support.v7.app.AlertDialog.Builder(this)
-                                    .setTitle(R.string.requestPermission_firstTryRequest)
-                                    .setMessage(R.string.phoneNumber_explanation)
-                                    .setPositiveButton(R.string.oneMoreTime, new DialogInterface.OnClickListener() {
+                            new AlertDialog.Builder(this)
+                                    .setOnKeyListener(new DialogInterface.OnKeyListener() {
                                         @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            counter++;
-                                            checkPhonePermission();
+                                        public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                                            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                                                dialog.cancel();
+                                                return true;
+                                            }
+                                            return false;
                                         }
                                     })
-                                    .setNegativeButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
+                                    .setTitle(R.string.requestPermission_firstTryRequest)
+                                    .setMessage(R.string.requestPermission_askForSMSPermission)
+                                    .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            //open keyboard
-                                            ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-                                            openDialogAskForUsername();
+                                            counterSMS++;
+                                            checkSMSPermissions();
+                                        }
+
+                                    })
+                                    .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            checkContactsPermission();
+                                            counterSMS = 0;
                                         }
                                     })
                                     .create().show();
-                        } else if (counter == 1) {
-                            new android.support.v7.app.AlertDialog.Builder(this)
-                                    .setTitle(R.string.sendSMS_lastTry)
-                                    .setMessage(R.string.phoneNumber_explanation)
-                                    .setPositiveButton(R.string.oneMoreTime, new DialogInterface.OnClickListener() {
+                        } else if (counterSMS == 1) {
+                            new AlertDialog.Builder(this)
+                                    .setOnKeyListener(new DialogInterface.OnKeyListener() {
                                         @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            counter++;
-                                            checkPhonePermission();
+                                        public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                                            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                                                return true;
+                                            }
+                                            return false;
                                         }
                                     })
-                                    .setNegativeButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
+                                    .setTitle(R.string.requestPermission_lastTryRequest)
+                                    .setMessage(R.string.requestPermission_askForSMSPermission)
+                                    .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-                                            openDialogAskForUsername();
+                                            counterSMS++;
+                                            checkSMSPermissions();
+                                        }
+                                    })
+                                    .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            checkContactsPermission();
+                                            counterSMS = 0;
                                         }
                                     })
                                     .create().show();
                         } else {
-                            openDialogAskForUsername();
-                            ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
                         }
                     } else {
-                        readPhoneNumber();
+                        counterSMS = 5;
+                        checkSMSPermissions();
                     }
                 }
 
-            } else if (requestCode == PERMISSION_REQUEST_RECEIVE_SMS) {
-                if (counterSMS != 5) {
-                    // for each permission check if the user granted/denied them you may want to group the
-                    // rationale in a single dialog,this is just an example
-                    for (int i = 0; i < 1; i++) {
-
-                        if (grantResults.length > 0
-                                && grantResults[i] == PackageManager.PERMISSION_DENIED) {
-                            // user rejected the permission
-                            boolean showRationale;
-                            if (counterSMS == 5) {
-                                showRationale = true;
-                            } else {
-                                showRationale = shouldShowRequestPermissionRationale(Manifest.permission.RECEIVE_SMS);
-                            }
-                            if (!showRationale) {
-                                // user also CHECKED "never ask again" you can either enable some fall back,
-                                // disable features of your app or open another dialog explaining again the
-                                // permission and directing to the app setting
-                                new AlertDialog.Builder(this)
-                                        .setOnKeyListener(new DialogInterface.OnKeyListener() {
-                                            @Override
-                                            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                                                if (keyCode == KeyEvent.KEYCODE_BACK) {
-                                                    return true;
-                                                }
-                                                return false;
-                                            }
-                                        })
-                                        .setTitle(R.string.accessWith_NeverAskAgain_deny)
-                                        .setMessage(R.string.requestSMSPermission_accessDenied_withCheckbox)
-                                        .setPositiveButton(R.string.back, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-
-                                            }
-                                        })
-                                        .create().show();
-                            } else if (counterSMS < 1) {
-                                // user did NOT check "never ask again" this is a good place to explain the user
-                                // why you need the permission and ask if he wants // to accept it (the rationale)
-                                new AlertDialog.Builder(this)
-                                        .setOnKeyListener(new DialogInterface.OnKeyListener() {
-                                            @Override
-                                            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                                                if (keyCode == KeyEvent.KEYCODE_BACK) {
-                                                    dialog.cancel();
-                                                    return true;
-                                                }
-                                                return false;
-                                            }
-                                        })
-                                        .setTitle(R.string.requestPermission_firstTryRequest)
-                                        .setMessage(R.string.requestPermission_askForSMSPermission)
-                                        .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                counterSMS++;
-                                                checkSMSPermissions();
-                                            }
-
-                                        })
-                                        .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                checkContactsPermission();
-                                                counterSMS = 0;
-                                            }
-                                        })
-                                        .create().show();
-                            } else if (counterSMS == 1) {
-                                new AlertDialog.Builder(this)
-                                        .setOnKeyListener(new DialogInterface.OnKeyListener() {
-                                            @Override
-                                            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                                                if (keyCode == KeyEvent.KEYCODE_BACK) {
-                                                    return true;
-                                                }
-                                                return false;
-                                            }
-                                        })
-                                        .setTitle(R.string.requestPermission_lastTryRequest)
-                                        .setMessage(R.string.requestPermission_askForSMSPermission)
-                                        .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                counterSMS++;
-                                                checkSMSPermissions();
-                                            }
-                                        })
-                                        .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                checkContactsPermission();
-                                                counterSMS = 0;
-                                            }
-                                        })
-                                        .create().show();
-                            } else {
-                            }
-                        } else {
-                            counterSMS = 5;
-                            checkSMSPermissions();
-                        }
-                    }
-
-                }
-            } else if (requestCode == PERMISSION_REQUEST_READ_CONTACTS) {
-                if (counterCONTACTS != 5) {
-                    // for each permission check if the user granted/denied them you may want to group the
-                    // rationale in a single dialog,this is just an example
-                    for (int i = 0; i < 1; i++) {
-
-                        if (grantResults.length > 0
-                                && grantResults[i] == PackageManager.PERMISSION_DENIED) {
-                            // user rejected the permission
-                            boolean showRationale;
-                            if (counterCONTACTS == 5) {
-                                showRationale = true;
-                            } else {
-                                showRationale = shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS);
-                            }
-                            if (!showRationale) {
-                                // user also CHECKED "never ask again" you can either enable some fall back,
-                                // disable features of your app or open another dialog explaining again the
-                                // permission and directing to the app setting
-                                new AlertDialog.Builder(this)
-                                        .setOnKeyListener(new DialogInterface.OnKeyListener() {
-                                            @Override
-                                            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                                                if (keyCode == KeyEvent.KEYCODE_BACK) {
-
-                                                    return true;
-                                                }
-                                                return false;
-                                            }
-                                        })
-                                        .setTitle(R.string.accessWith_NeverAskAgain_deny)
-                                        .setMessage(R.string.requestContactPermission_accessDenied_withCheckbox)
-                                        .setPositiveButton(R.string.back, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-
-                                            }
-                                        })
-                                        .create().show();
-                            } else if (counterCONTACTS < 1) {
-                                // user did NOT check "never ask again" this is a good place to explain the user
-                                // why you need the permission and ask if he wants // to accept it (the rationale)
-                                new AlertDialog.Builder(this)
-                                        .setOnKeyListener(new DialogInterface.OnKeyListener() {
-                                            @Override
-                                            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                                                if (keyCode == KeyEvent.KEYCODE_BACK) {
-
-                                                    dialog.cancel();
-                                                    return true;
-                                                }
-                                                return false;
-                                            }
-                                        })
-                                        .setTitle(R.string.requestPermission_firstTryRequest)
-                                        .setMessage(R.string.requestPermission_askForContactsPermission)
-                                        .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                counterCONTACTS++;
-                                                checkContactsPermission();
-                                            }
-                                        })
-                                        .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-
-                                                counterCONTACTS = 0;
-                                            }
-                                        })
-                                        .create().show();
-                            } else if (counterCONTACTS == 1) {
-                                new AlertDialog.Builder(this)
-                                        .setOnKeyListener(new DialogInterface.OnKeyListener() {
-                                            @Override
-                                            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                                                if (keyCode == KeyEvent.KEYCODE_BACK) {
-                                                    return true;
-                                                }
-                                                return false;
-                                            }
-                                        })
-                                        .setTitle(R.string.requestPermission_lastTryRequest)
-                                        .setMessage(R.string.requestPermission_askForContactsPermission)
-                                        .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                counterCONTACTS++;
-                                                checkContactsPermission();
-                                            }
-                                        })
-                                        .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                counterCONTACTS = 0;
-                                            }
-                                        })
-                                        .create().show();
-                            } else {
-                            }
-                        } else {
-                            counterCONTACTS = 5;
-                        }
-                    }
-
-                }
             }
+        } else if (requestCode == PERMISSION_REQUEST_READ_CONTACTS) {
+            if (counterCONTACTS != 5) {
+                // for each permission check if the user granted/denied them you may want to group the
+                // rationale in a single dialog,this is just an example
+                for (int i = 0; i < 1; i++) {
 
-        }
+                    if (grantResults.length > 0
+                            && grantResults[i] == PackageManager.PERMISSION_DENIED) {
+                        // user rejected the permission
+                        boolean showRationale;
+                        if (counterCONTACTS == 5) {
+                            showRationale = true;
+                        } else {
+                            showRationale = shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS);
+                        }
+                        if (!showRationale) {
+                            // user also CHECKED "never ask again" you can either enable some fall back,
+                            // disable features of your app or open another dialog explaining again the
+                            // permission and directing to the app setting
+                            new AlertDialog.Builder(this)
+                                    .setOnKeyListener(new DialogInterface.OnKeyListener() {
+                                        @Override
+                                        public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                                            if (keyCode == KeyEvent.KEYCODE_BACK) {
 
-        // }
+                                                return true;
+                                            }
+                                            return false;
+                                        }
+                                    })
+                                    .setTitle(R.string.accessWith_NeverAskAgain_deny)
+                                    .setMessage(R.string.requestContactPermission_accessDenied_withCheckbox)
+                                    .setPositiveButton(R.string.back, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
 
+                                        }
+                                    })
+                                    .create().show();
+                        } else if (counterCONTACTS < 1) {
+                            // user did NOT check "never ask again" this is a good place to explain the user
+                            // why you need the permission and ask if he wants // to accept it (the rationale)
+                            new AlertDialog.Builder(this)
+                                    .setOnKeyListener(new DialogInterface.OnKeyListener() {
+                                        @Override
+                                        public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                                            if (keyCode == KeyEvent.KEYCODE_BACK) {
 
-        // method to read the phone number of the user
-        public void readPhoneNumber () {
-            //if permission is granted read the phone number
-            TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-            @SuppressLint("MissingPermission") String phoneNumber = telephonyManager.getLine1Number();
-            //delete spaces and add a plus before the number if it begins without a 0
-            if (phoneNumber != null)
-                phoneNumber.replaceAll(" ", "");
-            if (phoneNumber.matches("[1-9][0-9]+"))
-                phoneNumber = "+" + phoneNumber;
-            personMe.setPhoneNumber(phoneNumber);
-            if (personMe.getPhoneNumber() == null || !personMe.getPhoneNumber().matches("(00|0|\\+)[1-9][0-9]+")) {
-                Toast.makeText(this, R.string.telephonenumerNotRead, Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(getContext(), R.string.thanksphoneNumber, Toast.LENGTH_SHORT).show();
-                if (this.getCurrentFocus() != null) {
-                    InputMethodManager imm = (InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), 0);
+                                                dialog.cancel();
+                                                return true;
+                                            }
+                                            return false;
+                                        }
+                                    })
+                                    .setTitle(R.string.requestPermission_firstTryRequest)
+                                    .setMessage(R.string.requestPermission_askForContactsPermission)
+                                    .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            counterCONTACTS++;
+                                            checkContactsPermission();
+                                        }
+                                    })
+                                    .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
 
+                                            counterCONTACTS = 0;
+                                        }
+                                    })
+                                    .create().show();
+                        } else if (counterCONTACTS == 1) {
+                            new AlertDialog.Builder(this)
+                                    .setOnKeyListener(new DialogInterface.OnKeyListener() {
+                                        @Override
+                                        public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                                            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                                                return true;
+                                            }
+                                            return false;
+                                        }
+                                    })
+                                    .setTitle(R.string.requestPermission_lastTryRequest)
+                                    .setMessage(R.string.requestPermission_askForContactsPermission)
+                                    .setPositiveButton(R.string.requestPermission_againButton, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            counterCONTACTS++;
+                                            checkContactsPermission();
+                                        }
+                                    })
+                                    .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            counterCONTACTS = 0;
+                                        }
+                                    })
+                                    .create().show();
+                        } else {
+                        }
+                    } else {
+                        counterCONTACTS = 5;
+                    }
                 }
-                if (personMe.getName().isEmpty())
-                    openDialogAskForUsername();
-                else {
-                    PersonController.savePerson(personMe);
-                    dialogListener();
-                }
+
             }
         }
 
     }
+
+    // }
+
+
+    // method to read the phone number of the user
+    public void readPhoneNumber() {
+        //if permission is granted read the phone number
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        @SuppressLint("MissingPermission") String phoneNumber = telephonyManager.getLine1Number();
+        //delete spaces and add a plus before the number if it begins without a 0
+        if (phoneNumber != null)
+            phoneNumber.replaceAll(" ", "");
+        if (phoneNumber.matches("[1-9][0-9]+"))
+            phoneNumber = "+" + phoneNumber;
+        personMe.setPhoneNumber(phoneNumber);
+        if (personMe.getPhoneNumber() == null || !personMe.getPhoneNumber().matches("(00|0|\\+)[1-9][0-9]+")) {
+            Toast.makeText(this, R.string.telephonenumerNotRead, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getContext(), R.string.thanksphoneNumber, Toast.LENGTH_SHORT).show();
+            if (this.getCurrentFocus() != null) {
+                InputMethodManager imm = (InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), 0);
+
+            }
+            if (personMe.getName().isEmpty())
+                openDialogAskForUsername();
+            else {
+                PersonController.savePerson(personMe);
+                dialogListener();
+            }
+        }
+    }
+
+}
 
 
