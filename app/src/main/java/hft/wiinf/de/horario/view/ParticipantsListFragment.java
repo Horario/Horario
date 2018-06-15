@@ -149,7 +149,7 @@ public class ParticipantsListFragment extends Fragment {
                     presenceIndicator.setImageResource(R.mipmap.ic_mydate_approved_gruen);
                 } else {
                     participant.setText(participantRow.substring(2));
-                    presenceIndicator.setImageResource(R.mipmap.ic_mydate_rejected_rot);
+                    presenceIndicator.setImageResource(R.drawable.ic_mydate_rejected_red);
                 }
 
                 return item;

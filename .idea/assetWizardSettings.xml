@@ -23,8 +23,8 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="fontFamily" value="Lucida Calligraphy" />
-                                                <entry key="text" value="H" />
+                                                <entry key="fontFamily" value="Arial" />
+                                                <entry key="text" value="X" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -35,9 +35,9 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="TEXT" />
-                                      <entry key="outputName" value="ic_notification_h3" />
+                                      <entry key="outputName" value="ic_mydate_rejected_red" />
                                       <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="95ab63" />
+                                      <entry key="themeColor" value="ab0c08" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -91,17 +91,6 @@
                                           </PersistentState>
                                         </value>
                                       </entry>
-                                      <entry key="clipartAsset">
-                                        <value>
-                                          <PersistentState>
-                                            <option name="values">
-                                              <map>
-                                                <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/navigation/ic_close_black_24dp.xml" />
-                                              </map>
-                                            </option>
-                                          </PersistentState>
-                                        </value>
-                                      </entry>
                                     </map>
                                   </option>
                                   <option name="values">
@@ -118,7 +107,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputIconType" value="LAUNCHER_LEGACY" />
+                            <entry key="outputIconType" value="ACTIONBAR" />
                           </map>
                         </option>
                       </PersistentState>
