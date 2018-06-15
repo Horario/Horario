@@ -274,6 +274,11 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                             buttonId = 1;
                             if (!checkIfEventIsInPast()) {
                                 decideWhatToDo(afterScanningDialogAction);
+                            }else{
+                                //Restart the TabActivity an Reload all Views
+                                Intent intent = getIntent();
+                                finish();
+                                startActivity(intent);
                             }
                         }
                     });
@@ -286,6 +291,11 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                             buttonId = 2;
                             if (!checkIfEventIsInPast()) {
                                 decideWhatToDo(afterScanningDialogAction);
+                            } else{
+                                //Restart the TabActivity an Reload all Views
+                                Intent intent = getIntent();
+                                finish();
+                                startActivity(intent);
                             }
                         }
                     });
@@ -298,6 +308,11 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                             buttonId = 3;
                             if (!checkIfEventIsInPast()) {
                                 decideWhatToDo(afterScanningDialogAction);
+                            } else{
+                                //Restart the TabActivity an Reload all Views
+                                Intent intent = getIntent();
+                                finish();
+                                startActivity(intent);
                             }
                         }
                     });
@@ -648,13 +663,23 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                                 shortTitle, place, checkStartTime, checkEndTime);
 
                         //if event is in database
-                        if (singleEvent != null) {
+                        if (singleEvent != null && singleEvent.getAccepted().equals(AcceptedState.WAITING) ||
+                                singleEvent != null && singleEvent.getAccepted().equals(AcceptedState.ACCEPTED)  ) {
                             //finish and restart the activity
                             Intent intent = getIntent();
                             finish();
                             startActivity(intent);
                             //write Toast, event is in database
                             Toast toast = Toast.makeText(v.getContext(), R.string.eventIsInDatabase, Toast.LENGTH_LONG);
+                            toast.show();
+
+                        } else if(singleEvent != null && singleEvent.getAccepted().equals(AcceptedState.REJECTED)){
+                            //finish and restart the activity
+                            Intent intent = getIntent();
+                            finish();
+                            startActivity(intent);
+                            //write Toast, event is in database
+                            Toast toast = Toast.makeText(v.getContext(), R.string.eventIsInDatabaseRejected, Toast.LENGTH_LONG);
                             toast.show();
                             //if event is not in database
                         } else {
@@ -805,7 +830,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         Calendar now = Calendar.getInstance();
         now.set(Calendar.SECOND, 0);
         now.set(Calendar.MILLISECOND, 0);
-        if (getRepetition() == Repetition.NONE) {
+        if (getRepetition() != Repetition.NONE) {
             if (getStartTimeEvent().before(now)) {
                 Toast.makeText(this, R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();
                 return true;

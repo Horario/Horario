@@ -94,6 +94,7 @@
     <string name="rejectEventAfterScan">Willst du wirklich ablehnen?</string>
     <string name="saveEventAfterScan">Willst du wirklich speichern ohne zuzusagen?</string>
     <string name="eventIsInDatabase">Termin ist schon in der Datenbank vorhanden!</string>
+    <string name="eventIsInDatabaseRejected">Termin muss erst abgesagt werden!</string>
 
 
     <string-array name="event_repetitions">
