@@ -42,8 +42,8 @@
     <string name="save_text">speichern</string>
     <string name="later_text">Später</string>
     <string name="thanksForUsername">Benutzername wurde gespeichert. </string>
-    <string name="titleDialogRejectEvent">Willst du den Termin wirklich absagen und eine SMS versenden?</string>
-    <string name="titleDialogSaveEvent">Willst du den Termin wirklich speichern und eine SMS versenden?</string>
+    <string name="titleDialogRejectEvent">Willst du den Termin wirklich absagen?</string>
+    <string name="titleDialogSaveEvent">Willst du den Termin wirklich speichern?</string>
     <string name="titleDialogFinalDecission">Bist du sicher?</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
@@ -187,7 +187,7 @@
     <string name="requestPermission_firstTryRequest">Erster von zwei Versuchen</string>
     <string name="qrGenerator_button_showInEventOverView">In Terminübersicht anzeigen</string>
 
-
+    <string name="furtherDetails">Weitere Details</string>
     <string name="accept">Ja!</string>
     <string name="reject">Nein!</string>
     <string name="sms_sent">SMS wurde erfolgreich versandt!</string>

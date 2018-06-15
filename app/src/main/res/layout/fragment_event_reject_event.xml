@@ -17,52 +17,62 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="43dp"
-            android:layout_marginTop="41dp" />
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/zentea_darkgreen"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/reject_event_textView_description"
-            android:layout_width="282dp"
-            android:layout_height="107dp"
-            android:layout_alignEnd="@+id/reject_event_textView_header"
-            android:layout_alignParentTop="true"
-            android:layout_marginEnd="-224dp"
-            android:layout_marginTop="99dp" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/reject_event_textView_header"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+
+            />
 
         <TextView
             android:id="@+id/reject_event_textView_reason"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/reject_event_textView_header"
-            android:layout_marginTop="262dp"
+            android:layout_below="@id/reject_event_textView_description"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="40dp"
             android:text="Grund:" />
 
         <Spinner
             android:id="@+id/reject_event_spinner_reason"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignTop="@+id/reject_event_textView_reason"
-            android:layout_marginStart="150dp" />
+
+            android:layout_alignBaseline="@id/reject_event_textView_reason"
+            android:layout_alignParentEnd="true" />
 
         <Button
             android:id="@+id/reject_event_button_reject"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:layout_marginBottom="20dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="27dp"
-            android:text="Termin absagen" />
+
+            android:backgroundTint="@color/zentea_darkgreen"
+            android:drawableEnd="@drawable/ic_mydate_rejected_white"
+            android:text="Termin absagen"
+            android:textColor="@color/zentea_white" />
 
         <EditText
             android:id="@+id/reject_event_editText_note"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignStart="@+id/reject_event_textView_header"
-            android:layout_marginBottom="198dp"
+            android:layout_below="@id/reject_event_textView_reason"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
             android:ems="10"
-            android:inputType="text|textPersonName" />
+            android:hint="@string/furtherDetails"
+            android:inputType="text|textPersonName"
+            android:textSize="14sp" />
     </RelativeLayout>
 </FrameLayout>
