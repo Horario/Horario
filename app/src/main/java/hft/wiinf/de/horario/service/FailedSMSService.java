@@ -34,9 +34,7 @@ public class FailedSMSService extends JobService {
         TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         tm.listen(mPhoneListener, PhoneStateListener.LISTEN_SERVICE_STATE);
 
-        int simState = tm.getSimState();
-
-        if ((phone_state == ServiceState.STATE_IN_SERVICE) && (simState == TelephonyManager.SIM_STATE_READY)) {
+        if (phone_state == ServiceState.STATE_IN_SERVICE) {
             sms = BundleUtility.toBundle(params.getExtras());
             FailedSMS failedSMS = new FailedSMS(sms.getString("message"), sms.getString("phoneNo"), sms.getLong("creatorID"), sms.getBoolean("accepted"));
 

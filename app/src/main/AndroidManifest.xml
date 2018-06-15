@@ -62,11 +62,9 @@
             android:name="com.activeandroid.content.ContentProvider"
             android:authorities="${applicationId}"
             android:enabled="true"
-            android:exported="false">
-        </provider>
+            android:exported="false"></provider>
 
-        <receiver android:name=".service.NotificationReceiver">
-        </receiver>
+        <receiver android:name=".service.NotificationReceiver"></receiver>
         <receiver
             android:name=".service.DeviceBootReceiver"
             android:enabled="true"
@@ -87,13 +85,11 @@
         <receiver
             android:name=".controller.SendSmsController"
             android:enabled="true"
-            android:exported="true">
-        </receiver>
+            android:exported="true"></receiver>
 
         <service
             android:name=".service.FailedSMSService"
             android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE">
-        </service>
+            android:permission="android.permission.BIND_JOB_SERVICE"></service>
     </application>
 </manifest>

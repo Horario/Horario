@@ -10,11 +10,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
@@ -200,5 +197,7 @@ public class AcceptedEventDetailsFragment extends Fragment {
         eventToStringBuffer.append(selectedEvent.getCreator().getName());
 
         return eventToStringBuffer;
+
     }
+
 }
