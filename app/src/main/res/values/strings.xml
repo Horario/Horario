@@ -23,14 +23,14 @@
     <string name="noValidUsername">Benutzername darf nicht mit Leerzeichen anfangen.</string>
     <string name="event_Description">Beschreibung :</string>
     <string name="noValidUsername_peek">Der Benutzername darf nicht das Zeichen | enthalten.</string>
-    <string name="event_date">Datum:</string>
+    <string name="event_date">Datum:\u0020</string>
     <string name="event_startTime">Startzeit :</string>
     <string name="event_endtime">Endzeit :</string>
     <string name="event_serialEvent">Serientermin</string>
     <string name="event_endOfRepetition">Wiederholen bis :</string>
     <string name="event_save">Termin speichern</string>
     <string name="event_room">Raum :</string>
-    <string name="event_shortTitle">Kurztitel :</string>
+    <string name="event_shortTitle">Kurztitel :\u0020</string>
     <string name="empty_fields">Bitte fülle alle Felder aus.</string>
     <string name="endTime_before_startTime">Die Endzeit darf nicht vor der Startzeit liegen.</string>
     <string name="endOfRepetition_before_endTime">Das Enddatum der Wiederholung darf nicht vor der Endzeit liegen.</string>

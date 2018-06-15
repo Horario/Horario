@@ -242,7 +242,7 @@ public class SavedEventDetailsFragment extends Fragment {
         }
 
         // Event shortTitel in Headline with StartDate
-        savedEventDetailsOrganisatorText.setText(eventCreatorName + " (" + phNumber+ ")" +"\n" + shortTitle + ", " + currentDate);
+        savedEventDetailsOrganisatorText.setText(eventCreatorName + " (" + phNumber+ ")" + "\n" + shortTitle );
         savedEventphNumberText.setText("");
         // Check for a Repetition Event and Change the Description Output with and without
         // Repetition Element inside.

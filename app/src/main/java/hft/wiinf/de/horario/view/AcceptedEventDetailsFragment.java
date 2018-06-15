@@ -153,13 +153,13 @@ public class AcceptedEventDetailsFragment extends Fragment {
         }
 
         // Event shortTitel in Headline with StartDate
-        acceptedEventDetailsOrganisatorText.setText(eventCreatorName + " (" + phNumber+ ")" +"\n" + shortTitle + ", " + currentDate);
+        acceptedEventDetailsOrganisatorText.setText(eventCreatorName + " (" + phNumber+ ")" + "\n" + shortTitle );
         acceptedEventphNumberText.setText("");
         // Check for a Repetition Event and Change the Description Output with and without
         // Repetition Element inside.
         if (repetition.equals("")) {
-            acceptedEventeventDescription.setText(getString(R.string.time)+ startTime + getString(R.string.until)
-                    + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place +  "\n" + "\n" + getString(R.string.eventDetails)
+            acceptedEventeventDescription.setText(getString(R.string.event_date) + currentDate +"\n"+ getString(R.string.time)+ startTime + getString(R.string.until)
+                    + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place +  "\n" + "\n" +getString(R.string.eventDetails)
                     + description);
         } else {
             acceptedEventeventDescription.setText(getString(R.string.as_of) + startDate
