@@ -277,6 +277,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                             if (checkIfEventIsInPast()) {
                                 decideWhatToDo(afterScanningDialogAction);
                             }else{
+
                                 //Restart the TabActivity an Reload all Views
                                 Intent intent = getIntent();
                                 finish();
@@ -685,8 +686,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                             //if event is not in database
                         }
                         else {
-                            savePersonAndEvent();
-
+                                savePersonAndEvent();
                         }
                     }
                 });
@@ -745,19 +745,27 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 NotificationController.setAlarmForNotification(getApplicationContext(), event);
             }
             sendSMS(event);
+            //finish and restart the activity
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
         } else {
 
             if (singleEvent.getAccepted().equals(AcceptedState.REJECTED)) {
+                //finish and restart the activity
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
                 Toast.makeText(getContext(), R.string.haveToRejectEvent, Toast.LENGTH_SHORT).show();
-                EventRejectEventFragment eventRejectEventFragment = new EventRejectEventFragment();
-                Bundle bundleAcceptedEventId = new Bundle();
-                bundleAcceptedEventId.putString("fragment", "AcceptedEventDetails");
-                bundleAcceptedEventId.putLong("EventId", singleEvent.getId());
-                eventRejectEventFragment.setArguments(bundleAcceptedEventId);
-                FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
-                fr.replace(R.id.calendar_frameLayout, eventRejectEventFragment, "RejectEvent");
-                fr.addToBackStack("RejectEvent");
-                fr.commit();
+//                EventRejectEventFragment eventRejectEventFragment = new EventRejectEventFragment();
+//                Bundle bundleAcceptedEventId = new Bundle();
+//                bundleAcceptedEventId.putString("fragment", "AcceptedEventDetails");
+//                bundleAcceptedEventId.putLong("EventId", singleEvent.getId());
+//                eventRejectEventFragment.setArguments(bundleAcceptedEventId);
+//                FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
+//                fr.replace(R.id.calendar_frameLayout, eventRejectEventFragment, "RejectEvent");
+//                fr.addToBackStack("RejectEvent");
+//                fr.commit();
             } else {
                 Toast.makeText(getContext(), R.string.eventIsInDatabase, Toast.LENGTH_SHORT).show();
                 //finish and restart the activity
@@ -848,6 +856,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         Calendar now = Calendar.getInstance();
         now.set(Calendar.SECOND, 0);
         now.set(Calendar.MILLISECOND, 0);
+        Log.i("DATUM", now.getTime().toString());
+        Log.i("Startzeit", getStartTimeEvent().getTime().toString());
 //        if (getRepetition() != Repetition.NONE) {
             if (getStartTimeEvent().before(now)) {
                 Toast.makeText(this, R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();
@@ -858,6 +868,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             } else {
                 past = true;
             }
+//        } else{
+//            past = true;
 //        }
         return past;
     }
@@ -871,6 +883,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             } else if (buttonId == 3) {
                 saveEventAndPersonForRejection(afterScanningDialogActionn);
             }
+
     }
 
     private void checkPhonePermission() {

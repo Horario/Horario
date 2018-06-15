@@ -142,8 +142,6 @@ public class EventRejectEventFragment extends Fragment {
                         new Delete().from(Event.class).where("CreatorEventId=?",
                                 String.valueOf(event.getCreatorEventId())).execute();
 
-
-
                         //SMS
                         rejectMessage = spinner_reason.getSelectedItem().toString() + "!" + reason_for_rejection.getText().toString();
                         creatorEventId = event.getCreatorEventId();

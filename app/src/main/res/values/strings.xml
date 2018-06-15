@@ -79,7 +79,7 @@
     <string name="startTime_afterScanning_past">Der Termin hat schon in der Vergangenheit stattgefunden.</string>
     <string name="save_event">Der Termin wurde in die Datenbank geschrieben.</string>
     <string name="eventIsInDatabase">Der Termin wurde schon hinzugefügt</string>
-    <string name="haveToRejectEvent">Der Termin muss erst abgesagt werden!</string>
+    <string name="haveToRejectEvent">Leider nicht möglich</string>
     <string name="shortTitle_spaces">Der Kurztitel darf nicht mit Leerzeichen beginnen.</string>
     <string name="description_spaces">Die Beschreibung darf nicht mit Leerzeichen beginnen.</string>
     <string name="place_spaces">Der Raum darf nicht mit Leerzeichen beginnen.</string>
