@@ -61,7 +61,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.057"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/savedEventDetailsOrganisatorText" />
+            app:layout_constraintTop_toBottomOf="@+id/savedEventDetailsOrganisatorText"
+            />
 
         <Button
             android:id="@+id/savedEventDetailsButtonAcceptAppointment"
@@ -91,7 +92,6 @@
             android:layout_marginTop="8dp"
             android:background="@color/zentea_darkgreen"
             android:drawableEnd="@drawable/ic_mydate_rejected_white"
-            android:paddingEnd="5dp"
             android:paddingLeft="30dp"
             android:text="@string/refuseAppointment"
             android:textColor="@android:color/background_light"
