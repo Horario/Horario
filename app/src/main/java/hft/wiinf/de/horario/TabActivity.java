@@ -432,7 +432,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 //Close the keyboard on a tab change
                 //close keyboard
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                assert imm!=null;
+                assert imm != null;
                 imm.hideSoftInputFromWindow(Objects.requireNonNull(mSectionsPageAdapter.getItem(tab.getPosition())
                         .getView()).getApplicationWindowToken(), 0);
                 //check if settings Tab is unselected

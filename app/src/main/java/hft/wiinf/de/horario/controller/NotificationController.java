@@ -84,10 +84,10 @@ public class NotificationController {
 
     public static void deleteAlarmNotification(Context context, Event event) {
         List<Event> eventsToDelete;
-        if(event.getStartEvent() != null) {
+        if (event.getStartEvent() != null) {
             eventsToDelete = EventController.findRepeatingEvents(event.getStartEvent().getId());
             deleteStartEvent(context, event.getStartEvent());
-        } else{
+        } else {
             eventsToDelete = EventController.findRepeatingEvents(event.getId());
             deleteStartEvent(context, event);
         }
@@ -102,7 +102,7 @@ public class NotificationController {
         }
     }
 
-    public static void deleteStartEvent(Context context, Event event){
+    public static void deleteStartEvent(Context context, Event event) {
         Intent alarmIntent = new Intent(context, NotificationReceiver.class);
         alarmIntent.putExtra("ID", event.getId().intValue());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, event.getId().intValue(), alarmIntent, 0);

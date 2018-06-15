@@ -72,7 +72,7 @@ public class AcceptedEventDetailsFragment extends Fragment {
                     fr.replace(R.id.acceptedEvent_relativeLayout_main, eventRejectEventFragment, "RejectEvent");
                     fr.addToBackStack("RejectEvent");
                     fr.commit();
-                } else{
+                } else {
                     Toast.makeText(getContext(), R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();
                 }
             }

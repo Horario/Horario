@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="hft.wiinf.de.horario">
-    <uses-permission android:name="android.permission.READ_SMS" android:protectionLevel="normal" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" android:protectionLevel="normal" />
-    <uses-permission android:name="android.permission.RECEIVE_SMS" android:protectionLevel="normal"/>
+
+    <uses-permission
+        android:name="android.permission.READ_SMS"
+        android:protectionLevel="normal" />
+    <uses-permission
+        android:name="android.permission.READ_CONTACTS"
+        android:protectionLevel="normal" />
+    <uses-permission
+        android:name="android.permission.RECEIVE_SMS"
+        android:protectionLevel="normal" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.SEND_SMS" />
@@ -62,11 +69,9 @@
             android:name="com.activeandroid.content.ContentProvider"
             android:authorities="${applicationId}"
             android:enabled="true"
-            android:exported="false">
-        </provider>
+            android:exported="false"></provider>
 
-        <receiver android:name=".service.NotificationReceiver">
-        </receiver>
+        <receiver android:name=".service.NotificationReceiver"></receiver>
         <receiver
             android:name=".service.DeviceBootReceiver"
             android:enabled="true"
@@ -87,13 +92,11 @@
         <receiver
             android:name=".controller.SendSmsController"
             android:enabled="true"
-            android:exported="true">
-        </receiver>
+            android:exported="true"></receiver>
 
         <service
             android:name=".service.FailedSMSService"
             android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE">
-        </service>
+            android:permission="android.permission.BIND_JOB_SERVICE"></service>
     </application>
 </manifest>
