@@ -118,6 +118,7 @@
                 android:text="@string/back_where_user_comesFrom"
                 android:textColor="@android:color/background_light"
                 android:textSize="14sp"
+                android:layout_alignParentBottom="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -126,10 +127,6 @@
 
 
         </android.support.constraint.ConstraintLayout>
-
-
-
-
 
     </RelativeLayout>
 </RelativeLayout>
