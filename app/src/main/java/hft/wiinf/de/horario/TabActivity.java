@@ -112,9 +112,9 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_calendarview);
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_settings);
 
-        if (!EventController.createdEventsYet()) {
-            askForSMSPermissions();
-        }
+
+        askForSMSPermissions();
+
 
         if (personMe == null || personMe.getName().isEmpty()) {
             openDialogAskForUsername();
@@ -537,7 +537,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 Pattern pattern_username = Pattern.compile("^([\\S]).*");
                 Matcher matcher_username = pattern_username.matcher(dialog_inputUsername);
 
-                if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches() && !dialog_inputUsername.contains("|")) {
+                if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches() && !dialog_inputUsername.contains("|") && !dialog_inputUsername.contains(",")) {
                     personMe.setName(dialog_inputUsername);
                     PersonController.savePerson(personMe);
                     Toast toast = Toast.makeText(v.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT);
@@ -547,6 +547,10 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                     return true;
                 } else if (dialog_inputUsername.contains("|")) {
                     Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername_peek, Toast.LENGTH_SHORT);
+                    toast.show();
+                    return true;
+                } else if (dialog_inputUsername.contains(",")) {
+                    Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername_comma, Toast.LENGTH_SHORT);
                     toast.show();
                     return true;
                 } else {
@@ -1005,7 +1009,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                                         @Override
                                         public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
                                             if (keyCode == KeyEvent.KEYCODE_BACK) {
-                                                checkSMSPermissions();
                                                 dialog.cancel();
                                                 return true;
                                             }
@@ -1020,13 +1023,15 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                                             counterSMS++;
                                             checkSMSPermissions();
                                         }
+
                                     })
-//                                .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(DialogInterface dialog, int which) {
-//
-//                                    }
-//                                })
+                                    .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            checkContactsPermission();
+                                            counterSMS = 0;
+                                        }
+                                    })
                                     .create().show();
                         } else if (counterSMS == 1) {
                             new AlertDialog.Builder(this)
@@ -1034,7 +1039,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                                         @Override
                                         public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
                                             if (keyCode == KeyEvent.KEYCODE_BACK) {
-                                                checkSMSPermissions();
                                                 return true;
                                             }
                                             return false;
@@ -1049,12 +1053,13 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                                             checkSMSPermissions();
                                         }
                                     })
-//                                .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(DialogInterface dialog, int which) {
-//
-//                                    }
-//                                })
+                                    .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            checkContactsPermission();
+                                            counterSMS = 0;
+                                        }
+                                    })
                                     .create().show();
                         } else {
                         }
@@ -1112,7 +1117,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                                         @Override
                                         public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
                                             if (keyCode == KeyEvent.KEYCODE_BACK) {
-                                                checkSMSPermissions();
+
                                                 dialog.cancel();
                                                 return true;
                                             }
@@ -1125,15 +1130,16 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             counterCONTACTS++;
-                                            checkSMSPermissions();
+                                            checkContactsPermission();
                                         }
                                     })
-//                                .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(DialogInterface dialog, int which) {
-//
-//                                    }
-//                                })
+                                    .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+
+                                            counterCONTACTS = 0;
+                                        }
+                                    })
                                     .create().show();
                         } else if (counterCONTACTS == 1) {
                             new AlertDialog.Builder(this)
@@ -1141,7 +1147,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                                         @Override
                                         public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
                                             if (keyCode == KeyEvent.KEYCODE_BACK) {
-                                                checkSMSPermissions();
                                                 return true;
                                             }
                                             return false;
@@ -1153,15 +1158,15 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             counterCONTACTS++;
-                                            checkSMSPermissions();
+                                            checkContactsPermission();
                                         }
                                     })
-//                                .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(DialogInterface dialog, int which) {
-//
-//                                    }
-//                                })
+                                    .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            counterCONTACTS = 0;
+                                        }
+                                    })
                                     .create().show();
                         } else {
                         }

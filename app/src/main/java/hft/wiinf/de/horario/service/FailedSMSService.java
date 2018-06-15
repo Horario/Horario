@@ -24,9 +24,18 @@ import hft.wiinf.de.horario.model.FailedSMS;
 import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.utility.BundleUtility;
 
+/**
+ * The type Failed sms service.
+ */
 public class FailedSMSService extends JobService {
 
+    /**
+     * The Sms.
+     */
     Bundle sms;
+    /**
+     * The Phone state.
+     */
     int phone_state;
 
     @Override
@@ -55,6 +64,11 @@ public class FailedSMSService extends JobService {
         return true;
     }
 
+    /**
+     * Send sms.
+     *
+     * @param failedSMS the failed sms
+     */
     public void sendSMS(FailedSMS failedSMS) {
         try {
             String msg;
@@ -85,6 +99,13 @@ public class FailedSMSService extends JobService {
         }
     };
 
+    /**
+     * creates a notification for the user
+     * @param phoneNo, a {@link String}  of the phone number
+     * @param accepted, a {@code boolean} of the acceptedState of the event
+     * @param id, a {@code int} of the id
+     * @param eventShortDesc a {@link String} of the event description
+     */
     private void addNotification(String phoneNo, boolean accepted, int id, String eventShortDesc) {
         String contentText;
         if (accepted) {
