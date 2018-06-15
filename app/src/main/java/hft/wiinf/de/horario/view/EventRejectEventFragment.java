@@ -263,25 +263,24 @@ public class EventRejectEventFragment extends Fragment {
             Toast.makeText(getContext(), R.string.reject_event_reason, Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (reason_for_rejection.getText().toString().contains("|")) {
-            Toast.makeText(getContext(), R.string.reject_event_reason_contains_pipe, Toast.LENGTH_SHORT).show();
-            return false;
-        }
         if (reason_for_rejection.getText().toString().matches(" +.*")) {
             Toast.makeText(getContext(), R.string.reject_event_reason_free_text_field_empty, Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (reason_for_rejection.getText().length() > 50) {
+        if (reason_for_rejection.getText().length() > 140) {
             Toast.makeText(getContext(), R.string.reject_event_reason_free_text_field_to_long, Toast.LENGTH_SHORT).show();
             return false;
         }
-        //check if "," and "!" is not part of user input
+        //check if ",", "|", ":" and "!" is not part of user input
         //if they are: replace them with empty string " "
         if (reason_for_rejection.getText().toString().contains(",") ||
-                reason_for_rejection.getText().toString().contains("!") || reason_for_rejection.getText().toString().contains(":")) {
+                reason_for_rejection.getText().toString().contains("!") ||
+                reason_for_rejection.getText().toString().contains(":") ||
+                reason_for_rejection.getText().toString().contains("|")) {
             reason_for_rejection.setText(reason_for_rejection.getText().toString().replaceAll(",", ""));
             reason_for_rejection.setText(reason_for_rejection.getText().toString().replaceAll("!", ""));
             reason_for_rejection.setText(reason_for_rejection.getText().toString().replaceAll(":", ""));
+            reason_for_rejection.setText(reason_for_rejection.getText().toString().replaceAll("|", ""));
             return true;
         }
         return true;

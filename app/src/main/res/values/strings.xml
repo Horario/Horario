@@ -70,7 +70,7 @@
     <string name="accept_event_hint_single">Der Termin wurde zugesagt.</string>
     <string name="reject_event_hint_single">Der Termin wurde abgesagt.</string>
     <string name="reject_event_reason_free_text_field_empty">Die Beschreibung darf nicht mit einem Leerzeichen anfangen.</string>
-    <string name="reject_event_reason_free_text_field_to_long">Die Beschreibung darf nicht mehr als 60 Zeichen sein.</string>
+    <string name="reject_event_reason_free_text_field_to_long">Die Beschreibung darf nicht mehr als 140 Zeichen sein.</string>
     <string name="reject_event_reason_contains_pipe">Die Beschreibung darf kein "|" enthalten</string>
     <string name="reject_event_reason_contains_comma">Die Beschreibung darf kein "," enthalten</string>
     <string name="reject_event_reason_contains_exclamation_mark">Die Beschreibung darf kein "!" enthalten</string>
