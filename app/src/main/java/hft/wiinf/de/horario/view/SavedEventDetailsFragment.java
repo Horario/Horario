@@ -247,13 +247,14 @@ public class SavedEventDetailsFragment extends Fragment {
         // Check for a Repetition Event and Change the Description Output with and without
         // Repetition Element inside.
         if (repetition.equals("")) {
-            savedEventeventDescription.setText("Am " + startDate + " findet von " + startTime + " bis "
-                    + endTime + " Uhr in Raum " + place + " " + shortTitle + " statt." + "\n" + "Termindetails sind: "
+            savedEventeventDescription.setText(getString(R.string.time)+ startTime + getString(R.string.until)
+                    + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place + "\n" + "\n" + getString(R.string.eventDetails)
                     + description);
         } else {
-            savedEventeventDescription.setText("Vom " + startDate + " bis " + endDate +
-                    " findet " + repetition + " um " + startTime + "Uhr bis " + endTime + "Uhr in Raum "
-                    + place + " " + shortTitle + " statt." + "\n" + "Termindetails sind: " + description);
+            savedEventeventDescription.setText(getString(R.string.as_of) + startDate
+                    + getString(R.string.until) + endDate + "\n"+ getString(R.string.time) + startTime + getString(R.string.until)
+                    + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place + "\n" + "\n" + getString(R.string.eventDetails)
+                    + description);
         }
     }
 

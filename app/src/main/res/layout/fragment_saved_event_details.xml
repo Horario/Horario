@@ -109,6 +109,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="20dp"
             android:background="@color/zentea_darkgreen"
+            android:drawableEnd="@drawable/ic_qr1"
             android:text="@string/savingSuccessful_qrcode"
             android:textColor="@android:color/background_light"
             android:textSize="14sp"
