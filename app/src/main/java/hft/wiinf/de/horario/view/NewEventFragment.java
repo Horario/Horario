@@ -3,12 +3,14 @@ package hft.wiinf.de.horario.view;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -64,6 +66,9 @@ public class NewEventFragment extends Fragment {
     private Person me;
     int counter = 0;
     private int PERMISSION_REQUEST_READ_PHONE_STATE = 0;
+    private AlertDialog.Builder mAlertDialog;
+    private EditText mPhoneNumber;
+    private AlertDialog mDialog;
 
     @Nullable
     @Override
@@ -680,20 +685,20 @@ public class NewEventFragment extends Fragment {
 
 
     public void openDialogAskForPhoneNumber() {
-        final android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder(getActivity());
-        dialogBuilder.setView(R.layout.dialog_askingforphonenumber);
-        dialogBuilder.setCancelable(true);
-        final android.app.AlertDialog alertDialog = dialogBuilder.create();
-        alertDialog.show();
-        EditText phoneNumber = alertDialog.findViewById(R.id.dialog_EditText_telephonNumber);
-        phoneNumber.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        mAlertDialog = new android.app.AlertDialog.Builder(getActivity());
+        mAlertDialog.setView(R.layout.dialog_askingforphonenumber);
+        mAlertDialog.setCancelable(true);
+        mDialog = mAlertDialog.create();
+        mDialog.show();
+        mPhoneNumber = mDialog.findViewById(R.id.dialog_EditText_telephonNumber);
+        mPhoneNumber.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 String input = v.getText().toString().replaceAll(" ", "");
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     //regex: perhaps 0 + or 00 then 1-9 then numbers
                     if (input.matches("(0|\\+|00)[1-9][0-9]+")) {
-                        alertDialog.dismiss();
+                        mDialog.dismiss();
                         me.setPhoneNumber(input);
                         Toast.makeText(v.getContext(), R.string.thanksphoneNumber, Toast.LENGTH_SHORT).show();
                         saveEvent();
@@ -708,18 +713,21 @@ public class NewEventFragment extends Fragment {
             }
         });
         //if the dialog is canceled save nothing
-        alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+        mDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
                 Toast toast = Toast.makeText(getContext(), R.string.event_save_notSuccessful, Toast.LENGTH_SHORT);
                 toast.show();
             }
         });
+            }
+    public void onPause(){
+        if(mDialog != null){
+            mDialog.dismiss();
+        }
 
-    }
-
-    public void onPause() {
         super.onPause();
-        getActivity().finish();
+
     }
+
 }
