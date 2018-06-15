@@ -29,12 +29,24 @@ import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.model.ReceivedHorarioSMS;
 
+
+/**
+ * The type Sms receiver extends a {@link BroadcastReceiver} and reacts each time the phone of the user receives an SMS.
+ */
 public class SmsReceiver extends BroadcastReceiver {
     private String TAG = SmsReceiver.class.getSimpleName();
 
+    /**
+     * Instantiates a new Sms receiver.
+     */
     public SmsReceiver() {
     }
 
+    /**
+     * Checks if the SMS in question is relevant for the app and continues working on it.
+     * @param context, the {@link Context}
+     * @param intent, the {@link Intent}
+     */
     @Override
     public void onReceive(Context context, Intent intent) {
         // Get the data (SMS data) bound to intent
@@ -83,6 +95,12 @@ public class SmsReceiver extends BroadcastReceiver {
         }
     }
 
+    /**
+     *
+     * Takes the parameter and checks for eventual SQL Injections and other syntax problems relevant for the functionality of the app.
+     * @param smsTextSplitted, an {@link java.util.Arrays} of {@link String}
+     * @return {@code true} if the SMS in question is valid and ready for the next method.
+     */
     private boolean checkForRegexOk(String[] smsTextSplitted) {
         // RegEx: NO SQL Injections allowed PLUS check if SMS is valid
         // smsTextSplitted[0]= CreatorEventId, should be only number greater than 0
@@ -149,6 +167,13 @@ public class SmsReceiver extends BroadcastReceiver {
         }
     }
 
+    /**
+     *
+     * Iterates through the {@link List} and verifies possible entries in the database before saving the person and the accepted/rejected events
+     *
+     * @param unreadSMS, a {@link List} of {@link ReceivedHorarioSMS} to parse
+     * @param context, the {@link Context}
+     */
     private void parseHorarioSMSAndUpdate(List<ReceivedHorarioSMS> unreadSMS, Context context) {
         for (ReceivedHorarioSMS singleUnreadSMS : unreadSMS) {
             Person person = new Person(singleUnreadSMS.getPhonenumber(), singleUnreadSMS.getName());
@@ -320,6 +345,11 @@ public class SmsReceiver extends BroadcastReceiver {
         }
     }
 
+    /**
+     * looks for an eventual startEvent in the database
+     * @param eventIdInSMS, the {@link Long} number of the event
+     * @return {@code true} if it is a serial {@link Event}
+     */
     private boolean isSerialEvent(Long eventIdInSMS) {
         try {
             Event x = EventController.getEventById(eventIdInSMS).getStartEvent();
@@ -334,6 +364,11 @@ public class SmsReceiver extends BroadcastReceiver {
         }
     }
 
+    /**
+     * replaces all the symbols in a phone number
+     * @param number, a {@link String}
+     * @return a {@link String} of the shorter number
+     */
     private String shortifyPhoneNumber(String number) {
         /*Take out all the chars not being numbers and return the numbers after "1" (German mobile number!!!)*/
         number = number.replace("(", "");
@@ -352,6 +387,12 @@ public class SmsReceiver extends BroadcastReceiver {
         return "100000000";
     }
 
+    /**
+     * Get all the contacts, see if number is identical after "shortifying" it, if identical, replace the name
+     * @param address, a {@link String} of the number
+     * @param context, the {@link Context}
+     * @return a {@link String} of the renamed contact
+     */
     private String lookForSavedContact(String address, Context context) {
         /*Get all the contacts, see if number is identical after "shortifying" it, if identical, replace the name*/
         ContentResolver cr = context.getContentResolver();
@@ -381,7 +422,12 @@ public class SmsReceiver extends BroadcastReceiver {
         }
         return null;
     }
-
+    /**
+     * Creates a notification with the text
+     * @param context, a {@link Context}
+     * @param id, some {@link int} required
+     * @param person, a {@link String} of the name of the person in question
+     */
     private void addNotification(Context context, int id, String person, boolean isAcceptance) {
         String contentText = "";
         if (isAcceptance) {
