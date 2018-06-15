@@ -17,6 +17,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -27,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.activeandroid.ActiveAndroid;
+import com.activeandroid.query.Delete;
 import com.facebook.stetho.Stetho;
 
 import java.util.ArrayList;
@@ -272,8 +274,13 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         @Override
                         public void onClick(View v) {
                             buttonId = 1;
-                            if (!checkIfEventIsInPast()) {
+                            if (checkIfEventIsInPast()) {
                                 decideWhatToDo(afterScanningDialogAction);
+                            }else{
+                                //Restart the TabActivity an Reload all Views
+                                Intent intent = getIntent();
+                                finish();
+                                startActivity(intent);
                             }
                         }
                     });
@@ -284,8 +291,13 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         @Override
                         public void onClick(View v) {
                             buttonId = 2;
-                            if (!checkIfEventIsInPast()) {
+                            if (checkIfEventIsInPast()) {
                                 decideWhatToDo(afterScanningDialogAction);
+                            }else{
+                                //Restart the TabActivity an Reload all Views
+                                Intent intent = getIntent();
+                                finish();
+                                startActivity(intent);
                             }
                         }
                     });
@@ -296,8 +308,13 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         @Override
                         public void onClick(View v) {
                             buttonId = 3;
-                            if (!checkIfEventIsInPast()) {
+                            if (checkIfEventIsInPast()) {
                                 decideWhatToDo(afterScanningDialogAction);
+                            }else{
+                                //Restart the TabActivity an Reload all Views
+                                Intent intent = getIntent();
+                                finish();
+                                startActivity(intent);
                             }
                         }
                     });
@@ -439,7 +456,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 //Close the keyboard on a tab change
                 //close keyboard
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                assert imm!=null;
+                assert imm != null;
                 imm.hideSoftInputFromWindow(Objects.requireNonNull(mSectionsPageAdapter.getItem(tab.getPosition())
                         .getView()).getApplicationWindowToken(), 0);
                 //check if settings Tab is unselected
@@ -648,16 +665,26 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                                 shortTitle, place, checkStartTime, checkEndTime);
 
                         //if event is in database
-                        if (singleEvent != null) {
+                        if (singleEvent != null && singleEvent.getAccepted().equals(AcceptedState.ACCEPTED)) {
                             //finish and restart the activity
                             Intent intent = getIntent();
                             finish();
                             startActivity(intent);
                             //write Toast, event is in database
-                            Toast toast = Toast.makeText(v.getContext(), R.string.eventIsInDatabase, Toast.LENGTH_LONG);
+                            Toast toast = Toast.makeText(v.getContext(), R.string.eventIsInDatabaseAccepted, Toast.LENGTH_LONG);
                             toast.show();
                             //if event is not in database
-                        } else {
+                        } else if(singleEvent != null && singleEvent.getAccepted().equals(AcceptedState.WAITING)){
+                            //finish and restart the activity
+                            Intent intent = getIntent();
+                            finish();
+                            startActivity(intent);
+                            //write Toast, event is in database
+                            Toast toast = Toast.makeText(v.getContext(), R.string.eventIsInDatabaseWaiting, Toast.LENGTH_LONG);
+                            toast.show();
+                            //if event is not in database
+                        }
+                        else {
                             savePersonAndEvent();
 
                         }
@@ -681,51 +708,68 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
         checkIfPersonIsInDatabase(event, person);
 
-        //set all things for event
-        event.setCreatorEventId(Long.parseLong(creatorID));
-        event.setStartTime(getStartTimeEvent().getTime());
-        event.setEndTime(getEndTimeEvent().getTime());
-        event.setRepetition(getRepetition());
-        event.setShortTitle(shortTitle);
-        event.setPlace(place);
-        event.setDescription(description);
+        //Calendar variables for checking startTime and endTime
+        Calendar checkStartTime = getStartTimeEvent();
+        Calendar checkEndTime = getEndTimeEvent();
+        //check if Event is n Database or not
+        singleEvent = EventController.checkIfEventIsInDatabase(description,
+                shortTitle, place, checkStartTime, checkEndTime);
+        if (singleEvent == null) {
+            //set all things for event
+            event.setCreatorEventId(Long.parseLong(creatorID));
+            event.setStartTime(getStartTimeEvent().getTime());
+            event.setEndTime(getEndTimeEvent().getTime());
+            event.setRepetition(getRepetition());
+            event.setShortTitle(shortTitle);
+            event.setPlace(place);
+            event.setDescription(description);
 
-        //check which button got pressed and set acceptedState
-        if (buttonId == 1) {
-            event.setAccepted(AcceptedState.ACCEPTED);
-        } else if (buttonId == 2) {
-            event.setAccepted(AcceptedState.WAITING);
-        }
+            //check which button got pressed and set acceptedState
+            if (buttonId == 1) {
+                event.setAccepted(AcceptedState.ACCEPTED);
+            } else if (buttonId == 2) {
+                event.setAccepted(AcceptedState.WAITING);
+            }
 
-        //check if event is serialevent
-        if (event.getRepetition() != Repetition.NONE) {
-            event.setEndDate(getEndDateEvent().getTime());
-            //save serialevent
-            EventController.saveSerialevent(event);
-        } else {
-            //save the one event
-            EventController.saveEvent(event);
-        }
-
-        if (event.getAccepted().equals(AcceptedState.ACCEPTED)) {
-            NotificationController.setAlarmForNotification(getApplicationContext(), event);
-        }
-
-        //TODO: geht nicht weil die Dialoge noch im Vordergrund sind
-        if(event.getAccepted().equals(AcceptedState.REJECTED)){
-
-        }else {
+            //check if event is serialevent
+            if (event.getRepetition() != Repetition.NONE) {
+                event.setEndDate(getEndDateEvent().getTime());
+                //save serialevent
+                EventController.saveSerialevent(event);
+            } else {
+                //save the one event
+                EventController.saveEvent(event);
+            }
             Toast.makeText(getContext(), R.string.save_event, Toast.LENGTH_SHORT).show();
-
+            if (event.getAccepted().equals(AcceptedState.ACCEPTED)) {
+                NotificationController.setAlarmForNotification(getApplicationContext(), event);
+            }
             sendSMS(event);
-            //Restart the TabActivity an Reload all Views
-            Intent intent = getIntent();
-            finish();
-            startActivity(intent);
+        } else {
+
+            if (singleEvent.getAccepted().equals(AcceptedState.REJECTED)) {
+                Toast.makeText(getContext(), R.string.haveToRejectEvent, Toast.LENGTH_SHORT).show();
+                EventRejectEventFragment eventRejectEventFragment = new EventRejectEventFragment();
+                Bundle bundleAcceptedEventId = new Bundle();
+                bundleAcceptedEventId.putString("fragment", "AcceptedEventDetails");
+                bundleAcceptedEventId.putLong("EventId", singleEvent.getId());
+                eventRejectEventFragment.setArguments(bundleAcceptedEventId);
+                FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
+                fr.replace(R.id.calendar_frameLayout, eventRejectEventFragment, "RejectEvent");
+                fr.addToBackStack("RejectEvent");
+                fr.commit();
+            } else {
+                Toast.makeText(getContext(), R.string.eventIsInDatabase, Toast.LENGTH_SHORT).show();
+                //finish and restart the activity
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
+            }
         }
+
     }
 
-    private void saveEventAndPersonForRejection(Dialog afterScanningDialogAction){
+    private void saveEventAndPersonForRejection(Dialog afterScanningDialogAction) {
         Person person = new Person();
         Event event = new Event(person);
         //check if user who published the event is in database
@@ -765,11 +809,9 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 //save the one event
                 EventController.saveEvent(event);
             }
-
             bundleAcceptedEventId.putLong("EventId", event.getId());
 
         } else {
-            //finish and restart the activity
             bundleAcceptedEventId.putLong("EventId", singleEvent.getId());
         }
         bundleAcceptedEventId.putString("fragment", "AcceptedEventDetails");
@@ -786,7 +828,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         SendSmsController.sendSMS(getApplicationContext(), event.getCreator().getPhoneNumber(), reject_message, true, event.getCreatorEventId(), event.getShortTitle());
     }
 
-    private void checkIfPersonIsInDatabase(Event event, Person person){
+    private void checkIfPersonIsInDatabase(Event event, Person person) {
         //if publisher is in database
         if (personEventCreator != null) {
             event.setCreator(personEventCreator);
@@ -800,41 +842,35 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     }
 
     private boolean checkIfEventIsInPast() {
+        boolean past;
         //read the current date and time to compare if the End of the Event is in the past (Date & Time),
         // set seconds and milliseconds to 0 to ensure a ight compare (seonds and milliseconds doesn't matter)
         Calendar now = Calendar.getInstance();
         now.set(Calendar.SECOND, 0);
         now.set(Calendar.MILLISECOND, 0);
-        if (getRepetition() == Repetition.NONE) {
+//        if (getRepetition() != Repetition.NONE) {
             if (getStartTimeEvent().before(now)) {
                 Toast.makeText(this, R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();
-                return true;
+                past = false;
+            } else if (getEndDateEvent().before(now)) {
+                Toast.makeText(this, R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();
+                past = false;
             } else {
-                return false;
+                past = true;
             }
-        } else if (getEndDateEvent().before(now)) {
-            Toast.makeText(this, R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();
-            return true;
-        } else {
-            return false;
-        }
+//        }
+        return past;
     }
 
     private void decideWhatToDo(Dialog afterScanningDialogActionn) {
-        if (!checkIfEventIsInPast()) {
-            if (personMe.getName().isEmpty()) {
+            Person person = PersonController.getPersonWhoIam();
+            if (person.getName().isEmpty()) {
                 openDialogAskForUsername();
-            } else if(buttonId == 1 || buttonId == 2){
+            } else if (buttonId == 1 || buttonId == 2) {
                 dialogListener();
-            } else if(buttonId == 3){
+            } else if (buttonId == 3) {
                 saveEventAndPersonForRejection(afterScanningDialogActionn);
             }
-        } else {
-            //Restart the TabActivity an Reload all Views
-            Intent intent = getIntent();
-            finish();
-            startActivity(intent);
-        }
     }
 
     private void checkPhonePermission() {

@@ -78,6 +78,8 @@
     <string name="startTime_past">Der Termin darf nicht in der Vergangenheit beginnen.</string>
     <string name="startTime_afterScanning_past">Der Termin hat schon in der Vergangenheit stattgefunden.</string>
     <string name="save_event">Der Termin wurde in die Datenbank geschrieben.</string>
+    <string name="eventIsInDatabase">Der Termin wurde schon hinzugefügt</string>
+    <string name="haveToRejectEvent">Der Termin muss erst abgesagt werden!</string>
     <string name="shortTitle_spaces">Der Kurztitel darf nicht mit Leerzeichen beginnen.</string>
     <string name="description_spaces">Die Beschreibung darf nicht mit Leerzeichen beginnen.</string>
     <string name="place_spaces">Der Raum darf nicht mit Leerzeichen beginnen.</string>
@@ -93,7 +95,8 @@
     <string name="acceptEventAfterScan">Willst du wirklich zusagen?</string>
     <string name="rejectEventAfterScan">Willst du wirklich ablehnen?</string>
     <string name="saveEventAfterScan">Willst du wirklich speichern ohne zuzusagen?</string>
-    <string name="eventIsInDatabase">Termin ist schon in der Datenbank vorhanden!</string>
+    <string name="eventIsInDatabaseAccepted">Termin wurde schon akzeptiert!</string>
+    <string name="eventIsInDatabaseWaiting">Termin ist gespeichert ohne Zu-/Absage!</string>
 
 
     <string-array name="event_repetitions">
