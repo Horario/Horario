@@ -113,7 +113,7 @@ public class SavedEventDetailsFragment extends Fragment {
                 Bundle whichFragment = getArguments();
                 QRGeneratorFragment qrFrag = new QRGeneratorFragment();
                 Bundle bundle = new Bundle();
-                bundle.putLong("EventId", getEventID());
+                bundle.putLong("eventId", getEventID());
                 bundle.putString("fragment", whichFragment.getString("fragment"));
                 qrFrag.setArguments(bundle);
 

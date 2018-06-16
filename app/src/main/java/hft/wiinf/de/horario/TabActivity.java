@@ -723,6 +723,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         //check which button got pressed and set acceptedState
         if (buttonId == 1) {
             event.setAccepted(AcceptedState.ACCEPTED);
+            sendSMS(event);
         } else if (buttonId == 2) {
             event.setAccepted(AcceptedState.WAITING);
         }
@@ -747,7 +748,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         } else {
             Toast.makeText(getContext(), R.string.save_event, Toast.LENGTH_SHORT).show();
 
-            sendSMS(event);
             //Restart the TabActivity an Reload all Views
             Intent intent = getIntent();
             finish();
