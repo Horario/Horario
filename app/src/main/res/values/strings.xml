@@ -18,7 +18,7 @@
     <string name="username_hint">Benutzername</string>
     <string name="phoneNumber_hint">Telefonnummer</string>
     <string name="allowpush_text">Erinnerungen erlauben :</string>
-    <string name="reminder_text">Erinnerungen :</string>
+    <string name="reminder_text">Erinnerung :</string>
     <string name="minutesBefore_text">Minuten vorher</string>
     <string name="noValidUsername">Benutzername darf nicht mit Leerzeichen anfangen.</string>
     <string name="event_Description">Beschreibung :</string>
