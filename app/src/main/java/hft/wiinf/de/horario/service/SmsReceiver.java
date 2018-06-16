@@ -465,7 +465,7 @@ public class SmsReceiver extends BroadcastReceiver {
             manager.createNotificationChannel(mChannel);
             NotificationCompat.Builder builder =
                     new NotificationCompat.Builder(context, channel_id)
-                            .setSmallIcon(R.drawable.ic_android_black2_24dp)
+                            .setSmallIcon(R.drawable.ic_notification)
                             .setContentTitle(title)
                             .setContentText(contentText).setStyle(new NotificationCompat.BigTextStyle()
                             .bigText(contentText));
@@ -476,7 +476,7 @@ public class SmsReceiver extends BroadcastReceiver {
         } else {
             NotificationCompat.Builder builder =
                     new NotificationCompat.Builder(context, "")
-                            .setSmallIcon(R.drawable.ic_android_black2_24dp)
+                            .setSmallIcon(R.drawable.ic_notification)
                             .setContentTitle(title)
                             .setContentText(contentText).setStyle(new NotificationCompat.BigTextStyle()
                             .bigText(contentText));

@@ -48,7 +48,7 @@ public class NotificationReceiver extends BroadcastReceiver {
             manager.createNotificationChannel(mChannel);
             NotificationCompat.Builder builder =
                     new NotificationCompat.Builder(context, id)
-                            .setSmallIcon(R.drawable.ic_notification_h)
+                            .setSmallIcon(R.drawable.ic_notification)
                             .setContentTitle("Terminerinnerung")
                             .setAutoCancel(true)
                             .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
@@ -58,7 +58,7 @@ public class NotificationReceiver extends BroadcastReceiver {
         } else {
             NotificationCompat.Builder builder =
                     new NotificationCompat.Builder(context, "")
-                            .setSmallIcon(R.drawable.ic_notification_h)
+                            .setSmallIcon(R.drawable.ic_notification)
                             .setContentTitle("Terminerinnerung")
                             .setAutoCancel(true)
                             .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
