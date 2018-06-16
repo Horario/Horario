@@ -15,6 +15,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
+import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -97,6 +98,11 @@ public class NewEventFragment extends Fragment {
         textView_endofRepetiton = view.findViewById(R.id.newEvent_textView_endOfRepetiton);
 
         button_save = view.findViewById(R.id.newEvent_button_save);
+
+        //field description: multi-line
+        editText_description.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        editText_description.setRawInputType(InputType.TYPE_CLASS_TEXT);
+
         // when the keyboard is closed after the text edit room, there should be no focus
         edittext_room.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -177,7 +183,7 @@ public class NewEventFragment extends Fragment {
         //set the appearance of one choice possibility
         repetitionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_repetition.setAdapter(repetitionAdapter);
-        //set weekly selected until the user selects something different or it is overwritten by the loaded event
+        //set weekly selected until the user selects something different
         spinner_repetition.setSelection(2);
         //don't open keyboard on focus,
         editText_endOfRepetition.setShowSoftInputOnFocus(false);
@@ -245,8 +251,13 @@ public class NewEventFragment extends Fragment {
 
     public void getDate() {
         //close keyboard if it's open
-        if (getActivity().getCurrentFocus() != null)
-        ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+        if (getActivity()!=null&&getActivity().getCurrentFocus() != null) {
+            Context ctx = getContext();
+            assert ctx!=null;
+            InputMethodManager mngr =  (InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
+           assert mngr!=null;
+            mngr.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+        }
         // create a listener for the date picker dialog: update the date parts (year, month, date) of start and end time with the selected values
         DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -264,8 +275,13 @@ public class NewEventFragment extends Fragment {
 
     public void getStartTime() {
         //close keyboard if it's open
-        if (getActivity().getCurrentFocus() != null)
-        ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+        if (getActivity()!=null&&getActivity().getCurrentFocus() != null) {
+            Context ctx = getContext();
+            assert ctx!=null;
+            InputMethodManager mngr =  (InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
+            assert mngr!=null;
+            mngr.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+        }
         // create a listener for the time picker dialog: update the start time with the selected values
         TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
             @Override
@@ -284,8 +300,13 @@ public class NewEventFragment extends Fragment {
 
     public void getEndTime() {
         //close keyboard if it's open
-        if (getActivity().getCurrentFocus() != null)
-        ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+        if (getActivity()!=null&&getActivity().getCurrentFocus() != null) {
+            Context ctx = getContext();
+            assert ctx!=null;
+            InputMethodManager mngr =  (InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
+            assert mngr!=null;
+            mngr.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+        }
         // create a listener for the time picker dialog: update the end time and the time for the end of repetition (for the comparing later) with the selected values
         TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
             @Override
@@ -363,11 +384,11 @@ public class NewEventFragment extends Fragment {
     private void saveReadDate(String date) {
         FileOutputStream outputStream;
         try {
+            Context ctx = getContext();
+            assert ctx!=null;
             outputStream = getContext().openFileOutput("lastReadDate.txt", Context.MODE_PRIVATE);
             outputStream.write(date.getBytes());
             outputStream.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -376,7 +397,9 @@ public class NewEventFragment extends Fragment {
     //clear all entrys and open a dialog where the user can choose what to do next
     private void openSavedSuccessfulDialog(final long eventId) {
         clearEntrys();
-        final Dialog dialogSavingSuccessful = new Dialog(getContext());
+        Context ctx = getContext();
+        assert ctx!=null;
+        final Dialog dialogSavingSuccessful = new Dialog(ctx);
         dialogSavingSuccessful.setContentView(R.layout.dialog_savingsucessfull);
         dialogSavingSuccessful.setCancelable(true);
         dialogSavingSuccessful.show();
@@ -393,11 +416,13 @@ public class NewEventFragment extends Fragment {
                 Bundle whichFragment = getArguments();
                 dialogSavingSuccessful.dismiss();
                 QRGeneratorFragment qrFrag = new QRGeneratorFragment();
+                assert whichFragment!=null;
                 Bundle bundle = new Bundle();
                 bundle.putLong("eventId", eventId);
                 bundle.putString("fragment", whichFragment.getString("fragment"));
                 qrFrag.setArguments(bundle);
-
+assert whichFragment.getString("fragment")!=null;
+assert getActivity()!=null;
                 if (whichFragment.getString("fragment").equals("EventOverview")) {
                     getActivity().getSupportFragmentManager().beginTransaction()
                             .replace(R.id.eventOverview_frameLayout, qrFrag, "QrGeneratorEO")
