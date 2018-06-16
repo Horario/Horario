@@ -38,6 +38,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
@@ -63,8 +64,8 @@ public class NewEventFragment extends Fragment {
     private Button button_save;
     //person object of the user, to get the user name
     private Person me;
-    private DateFormat dateFormat = DateFormat.getDateInstance();
-    private DateFormat timeFormat = DateFormat.getTimeInstance();
+    private DateFormat dateFormat = new SimpleDateFormat("dd.MM.YYYY", Locale.GERMAN);
+    private DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.GERMAN);
     int counter = 0;
     private int PERMISSION_REQUEST_READ_PHONE_STATE = 0;
 
@@ -273,7 +274,7 @@ public class NewEventFragment extends Fragment {
                 startTime.set(year, month, dayOfMonth);
                 endTime.set(year, month, dayOfMonth);
                 //format the choosen time as HH:mm and write it into the date text field
-                edittext_date.setText(timeFormat.format(startTime.getTime()));
+                edittext_date.setText(dateFormat.format(startTime.getTime()));
             }
         };
         DatePickerDialog dialog = new DatePickerDialog(this.getContext(), listener, startTime.get(Calendar.YEAR), startTime.get(Calendar.MONTH), startTime.get(Calendar.DAY_OF_MONTH));
@@ -324,8 +325,7 @@ public class NewEventFragment extends Fragment {
                 endOfRepetition.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 endOfRepetition.set(Calendar.MINUTE, minute);
                 //format the choosen time as HH:mm and write it into the end time text field
-                DateFormat format = DateFormat.getDateInstance();
-                editText_endTime.setText(format.format(endTime.getTime()));
+                editText_endTime.setText(timeFormat.format(endTime.getTime()));
             }
         };
         //open a time picker to let the user choose a time, use the saved end time as initial value (initial value of endTime: now)
@@ -349,8 +349,7 @@ public class NewEventFragment extends Fragment {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
                 endOfRepetition.set(year, month, dayOfMonth);
-                DateFormat format = DateFormat.getDateInstance();
-                editText_endOfRepetition.setText(format.format(endOfRepetition.getTime()));
+                editText_endOfRepetition.setText(dateFormat.format(endOfRepetition.getTime()));
             }
         };
         //open a date picker to let the user choose a date, use the saved end of repetition as initial value (initial value of endTime: now)
