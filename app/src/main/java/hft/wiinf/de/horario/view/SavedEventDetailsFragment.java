@@ -71,20 +71,29 @@ public class SavedEventDetailsFragment extends Fragment {
         savedEventDetailsButtonRefuseAppointment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Code for cancelling an event eg. take it out of the DB and Calendar View
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(System.currentTimeMillis());
-                if (cal.getTime().before(EventController.getEventById(getEventID()).getEndTime())) {
-                    //Code for cancelling an event eg. take it out of the DB and Calendar View
+                if(EventController.getEventById(getEventID()).getEndTime().after(cal.getTime())) {
+                    Bundle whichFragment = getArguments();
                     EventRejectEventFragment eventRejectEventFragment = new EventRejectEventFragment();
-                    Bundle bundleAcceptedEventId = new Bundle();
-                    bundleAcceptedEventId.putLong("EventId", getEventID());
-                    bundleAcceptedEventId.putString("fragment", "AcceptedEventDetails");
-                    eventRejectEventFragment.setArguments(bundleAcceptedEventId);
-                    FragmentTransaction fr = getFragmentManager().beginTransaction();
-                    fr.replace(R.id.savedEvent_relativeLayout_main, eventRejectEventFragment, "RejectEvent");
-                    fr.addToBackStack("RejectEvent");
-                    fr.commit();
-                } else {
+                    Bundle bundle = new Bundle();
+                    bundle.putLong("EventId", getEventID());
+                    bundle.putString("fragment", whichFragment.getString("fragment"));
+                    eventRejectEventFragment.setArguments(bundle);
+
+                    if (whichFragment.getString("fragment").equals("EventOverview")) {
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.eventOverview_frameLayout, eventRejectEventFragment, "RejectEvent")
+                                .addToBackStack("RejectEvent")
+                                .commit();
+                    } else {
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.calendar_frameLayout, eventRejectEventFragment, "RejectEvent")
+                                .addToBackStack("RejectEvent")
+                                .commit();
+                    }
+                }else{
                     Toast.makeText(getContext(), R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();
                 }
             }

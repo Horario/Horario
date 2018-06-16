@@ -23,6 +23,7 @@
     <string name="noValidUsername">Benutzername darf nicht mit Leerzeichen anfangen.</string>
     <string name="event_Description">Beschreibung :</string>
     <string name="noValidUsername_peek">Der Benutzername darf nicht das Zeichen | enthalten.</string>
+    <string name="noValidUsername_comma">Der Benutzername darf nicht das Zeichen , enthalten.</string>
     <string name="event_date">Datum:</string>
     <string name="event_startTime">Startzeit :</string>
     <string name="event_endtime">Endzeit :</string>
@@ -64,16 +65,16 @@
     <string name="reject_event">Das Event wurde aus der Datenbank gelöscht</string>
     <string name="thanksForUsernameAndPhoneNumber">Benutzername und Telefonnummer wurde gespeichert. </string>
     <string name="description_too_long">Die Beschreibung darf nicht länger als 500 Zeichen sein.</string>
-    <string name="reject_event_hint">Der Termin wurde abgesagt und eine SMS versendet.</string>
+    <string name="reject_event_hint">Der Termin wurde abgesagt.</string>
     <string name="accept_event_hint">Die Termine wurde zugesagt.</string>
     <string name="accept_event_hint_single">Der Termin wurde zugesagt.</string>
     <string name="reject_event_hint_single">Der Termin wurde abgesagt.</string>
     <string name="reject_event_reason_free_text_field_empty">Die Beschreibung darf nicht mit einem Leerzeichen anfangen.</string>
-    <string name="reject_event_reason_free_text_field_to_long">Die Beschreibung darf nicht mehr als 60 Zeichen sein.</string>
+    <string name="reject_event_reason_free_text_field_to_long">Die Beschreibung darf nicht mehr als 140 Zeichen sein.</string>
     <string name="reject_event_reason_contains_pipe">Die Beschreibung darf kein "|" enthalten</string>
     <string name="reject_event_reason_contains_comma">Die Beschreibung darf kein "," enthalten</string>
     <string name="reject_event_reason_contains_exclamation_mark">Die Beschreibung darf kein "!" enthalten</string>
-    <string name="reject_event_reason">Bitte wähle einen Grund aus und gebe eine Begründung ein.</string>
+    <string name="reject_event_reason">Bitte gebe einen Grund ein, warum du nicht am Termin teilnehmen kannst.</string>
     <string name="shortTitle_too_long">Der Kurztitel darf nicht länger als 50 Zeichen sein.</string>
     <string name="startTime_past">Der Termin darf nicht in der Vergangenheit beginnen.</string>
     <string name="startTime_afterScanning_past">Der Termin hat schon in der Vergangenheit stattgefunden.</string>
@@ -94,6 +95,7 @@
     <string name="rejectEventAfterScan">Willst du wirklich ablehnen?</string>
     <string name="saveEventAfterScan">Willst du wirklich speichern ohne zuzusagen?</string>
     <string name="eventIsInDatabase">Termin ist schon in der Datenbank vorhanden!</string>
+    <string name="eventIsInDatabaseRejected">Termin muss erst abgesagt werden!</string>
 
 
     <string-array name="event_repetitions">
@@ -113,7 +115,6 @@
         <item name="push_time_120">120</item>
     </string-array>
     <string-array name="reason_for_rejection">
-        <item name="reason_0"></item>
         <item name="reason_1">Krank</item>
         <item name="reason_2">Zeitlich verhindert</item>
         <item name="reason_3">Schlafen</item>
@@ -187,6 +188,7 @@
 
     <string name="accept">Ja!</string>
     <string name="reject">Nein!</string>
+    <string name="reject_event_button">Termin absagen</string>
     <string name="sms_sent">SMS wurde erfolgreich versandt!</string>
     <string name="sms_fail">SMS Senden fehlgeschlagen! Es wird später automatisch erneut versucht!</string>
     <string name="cannot_send_sms">Bitte in den Einstellungen ändern</string>

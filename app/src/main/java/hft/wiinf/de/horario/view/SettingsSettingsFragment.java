@@ -170,7 +170,7 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
                 Pattern pattern_username = Pattern.compile("^([\\S]).*");
                 Matcher matcher_username = pattern_username.matcher(inputText);
 
-                if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches() && !inputText.contains("|")) {
+                if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches() && !inputText.contains("|") && !inputText.contains(",")) {
                     person.setName(inputText);
                     PersonController.savePerson(person);
                     InputMethodManager imm = (InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE);
@@ -182,9 +182,13 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
                 } else if (inputText.contains("|")) {
                     Toast toast = Toast.makeText(view.getContext(), R.string.noValidUsername_peek, Toast.LENGTH_SHORT);
                     toast.show();
-                    editTextUsername.setText(person.getName());
+                  //  editTextUsername.setText(person.getName());
                     return true;
-                } else {
+                }  else if (inputText.contains(",")) {
+                    Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername_comma, Toast.LENGTH_SHORT);
+                    toast.show();
+                    return true;
+                }else {
                     //if the user name is not valid show a toast
                     Toast toast = Toast.makeText(view.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
                     toast.show();
