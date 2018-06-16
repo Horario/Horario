@@ -18,12 +18,23 @@
                                 <PersistentState>
                                   <option name="children">
                                     <map>
+                                      <entry key="clipArt">
+                                        <value>
+                                          <PersistentState>
+                                            <option name="values">
+                                              <map>
+                                                <entry key="paddingPercent" value="35" />
+                                              </map>
+                                            </option>
+                                          </PersistentState>
+                                        </value>
+                                      </entry>
                                       <entry key="clipartAsset">
                                         <value>
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/C:/Program%20Files%20(x86)/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/image/ic_filter_center_focus_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/navigation/ic_close_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -45,7 +56,7 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="outputName" value="ic_qr1" />
+                                      <entry key="outputName" value="ic_mydate_rejected_rot" />
                                       <entry key="theme" value="HOLO_DARK" />
                                       <entry key="themeColor" value="ab0c08" />
                                     </map>
@@ -95,7 +106,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="ab110e" />
-                                                <entry key="paddingPercent" value="45" />
+                                                <entry key="paddingPercent" value="35" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -106,7 +117,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/C:/Program%20Files%20(x86)/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/content/ic_reply_all_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/navigation/ic_close_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -119,7 +130,7 @@
                                       <entry key="backgroundColor" value="f5f9db" />
                                       <entry key="iconShape" value="NONE" />
                                       <entry key="imageAsset" value="C:\Users\Christine\Documents\HKalender.png" />
-                                      <entry key="outputName" value="ic_qrcode" />
+                                      <entry key="outputName" value="ic_mydate_rejected_rot" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -142,7 +153,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputIconType" value="ACTIONBAR" />
+                            <entry key="outputIconType" value="LAUNCHER_LEGACY" />
                           </map>
                         </option>
                       </PersistentState>

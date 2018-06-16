@@ -82,9 +82,8 @@
         android:id="@+id/settings_settings_spinner_minutes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@id/settings_settings_textView_reminder"
         android:layout_alignTop="@+id/settings_settings_textView_reminder"
-        android:layout_centerHorizontal="true"
+        android:layout_toEndOf="@+id/settings_settings_textView_allowPush"
         android:entries="@array/push_times"
         android:prompt="@string/calendar"
         android:visibility="visible" />
