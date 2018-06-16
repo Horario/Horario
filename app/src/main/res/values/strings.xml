@@ -43,7 +43,7 @@
     <string name="later_text">Später</string>
     <string name="thanksForUsername">Benutzername wurde gespeichert. </string>
     <string name="titleDialogRejectEvent">Willst du den Termin wirklich absagen?</string>
-    <string name="titleDialogSaveEvent">Willst du den Termin wirklich speichern?</string>
+    <string name="titleDialogSaveEvent">Willst du dem Termin wirklich zusagen?</string>
     <string name="titleDialogFinalDecission">Bist du sicher?</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
@@ -113,14 +113,16 @@
         <item name="push_time_120">120</item>
     </string-array>
     <string-array name="reason_for_rejection">
-        <item name="reason_0"></item>
-        <item name="reason_1">Krank</item>
-        <item name="reason_2">Zeitlich verhindert</item>
-        <item name="reason_3">Schlafen</item>
-        <item name="reason_4">bli</item>
-        <item name="reason_5">bla</item>
-        <item name="reason_6">blub</item>
-        <item name="reason_7">Mittagessen</item>
+        <item name="reason_0">Entschuldigtes Fehlen</item>
+        <item name="reason_1">Krank (entschuldigt)</item>
+        <item name="reason_2">Krank (unentschuldigt)</item>
+        <item name="reason_3">Mittagessen</item>
+        <item name="reason_4">Paralleltermin</item>
+        <item name="reason_5">Privater Termin</item>
+        <item name="reason_6">Zeitlich verhindert</item>
+        <item name="reason_7">Sonstiges</item>
+
+
     </string-array>
     <string-array name="start_tab">
         <item name="overview">Terminübersicht</item>
@@ -137,7 +139,7 @@
     <string name="from">von\u0020</string>
     <string name="clock_at_room">\u0020Uhr in Raum\u0020</string>
     <string name="organizer">Organisator:\u0020</string>
-    <string name="eventDetails">Termindetails sind:\u0020</string>
+    <string name="eventDetails">Termindetails:\u0020</string>
     <string name="at">\u0020um\u0020</string>
     <string name="instead_of">\u0020statt.</string>
     <string name="as_of">Vom\u0020</string>
