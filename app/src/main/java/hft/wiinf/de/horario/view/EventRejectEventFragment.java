@@ -142,7 +142,6 @@ public class EventRejectEventFragment extends Fragment {
                         new Delete().from(Event.class).where("CreatorEventId=?",
                                 String.valueOf(event.getCreatorEventId())).execute();
 
-//                        EventController.deleteEvent(event);
                         //SMS
                         rejectMessage = spinner_reason.getSelectedItem().toString() + "!" + reason_for_rejection.getText().toString();
                         creatorEventId = event.getCreatorEventId();
@@ -152,7 +151,7 @@ public class EventRejectEventFragment extends Fragment {
                         Toast.makeText(getContext(), R.string.reject_event_hint, Toast.LENGTH_SHORT).show();
                         //restart Activity
                         Intent intent = new Intent(getActivity(), TabActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                     }
                 });
