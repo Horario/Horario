@@ -63,6 +63,8 @@ public class NewEventFragment extends Fragment {
     private Button button_save;
     //person object of the user, to get the user name
     private Person me;
+    private DateFormat dateFormat = DateFormat.getDateInstance();
+    private DateFormat timeFormat = DateFormat.getTimeInstance();
     int counter = 0;
     private int PERMISSION_REQUEST_READ_PHONE_STATE = 0;
 
@@ -76,7 +78,7 @@ public class NewEventFragment extends Fragment {
     }
 
 
-    public void onViewCreated(final View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull final View view, Bundle savedInstanceState) {
         // set the second and millisecond of the calendar objects to 0 as (dates and) times are only compared by hour and minute, seconds dont matter
         startTime.set(Calendar.SECOND, 0);
         startTime.set(Calendar.MILLISECOND, 0);
@@ -108,11 +110,13 @@ public class NewEventFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE))
-                            .hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+                    Context ctx = getContext();
+                    assert ctx!=null;
+                    InputMethodManager mngr = (InputMethodManager) ctx.getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    assert mngr!=null;
+                    mngr.hideSoftInputFromWindow(edittext_room.getWindowToken(), 0);
                     edittext_room.clearFocus();
                     return true;
-
                 }
                 return false;
             }
@@ -164,10 +168,13 @@ public class NewEventFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+                    Context ctx = getContext();
+                    assert ctx!=null;
+                    InputMethodManager mngr = (InputMethodManager) ctx.getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    assert mngr!=null;
+                    mngr.hideSoftInputFromWindow(edittext_userName.getWindowToken(), 0);
                     edittext_userName.clearFocus();
                     return true;
-
                 }
                 return false;
             }
@@ -180,6 +187,8 @@ public class NewEventFragment extends Fragment {
             }
         });
         // sets the choice possibilities of the repetition spinner (set in string resource-file as array event-repetition)
+        Context ctx = getContext();
+        assert ctx!=null;
         ArrayAdapter repetitionAdapter = ArrayAdapter.createFromResource(getContext(), R.array.event_repetitions, android.R.layout.simple_spinner_item);
         //set the appearance of one choice possibility
         repetitionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -207,10 +216,13 @@ public class NewEventFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+                    Context ctx = getContext();
+                    assert ctx!=null;
+                    InputMethodManager mngr = (InputMethodManager) ctx.getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    assert mngr!=null;
+                    mngr.hideSoftInputFromWindow(editText_endOfRepetition.getWindowToken(), 0);
                     editText_endOfRepetition.clearFocus();
                     return true;
-
                 }
                 return false;
             }
@@ -223,11 +235,6 @@ public class NewEventFragment extends Fragment {
                 CalendarFragment.updateCompactCalendar();
             }
         });
-
-        if (getArguments() != null) {
-            Long eventId = getArguments().getLong("eventId");
-            readGivenEvent(eventId);
-        }
         //get the user, if it is saved in the db, the user name is read
         me = PersonController.getPersonWhoIam();
         if (me == null)
@@ -266,8 +273,7 @@ public class NewEventFragment extends Fragment {
                 startTime.set(year, month, dayOfMonth);
                 endTime.set(year, month, dayOfMonth);
                 //format the choosen time as HH:mm and write it into the date text field
-                DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-                edittext_date.setText(format.format(startTime.getTime()));
+                edittext_date.setText(timeFormat.format(startTime.getTime()));
             }
         };
         DatePickerDialog dialog = new DatePickerDialog(this.getContext(), listener, startTime.get(Calendar.YEAR), startTime.get(Calendar.MONTH), startTime.get(Calendar.DAY_OF_MONTH));
@@ -290,8 +296,7 @@ public class NewEventFragment extends Fragment {
                 startTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 startTime.set(Calendar.MINUTE, minute);
                 //format the choosen time as HH:mm and write it into the start time text field
-                DateFormat format = new SimpleDateFormat("HH:mm");
-                edittext_startTime.setText(format.format(startTime.getTime()));
+                edittext_startTime.setText(timeFormat.format(startTime.getTime()));
             }
         };
         //open a time picker to let the user choose a time, use the saved start time as initial value (initial value of startTime: now)
@@ -301,12 +306,14 @@ public class NewEventFragment extends Fragment {
 
     public void getEndTime() {
         //close keyboard if it's open
-        if (getActivity()!=null&&getActivity().getCurrentFocus() != null) {
+        Activity activity = getActivity();
+        assert activity!=null;
+        if (activity.getCurrentFocus() != null) {
             Context ctx = getContext();
             assert ctx!=null;
             InputMethodManager mngr =  (InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
             assert mngr!=null;
-            mngr.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+            mngr.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
         }
         // create a listener for the time picker dialog: update the end time and the time for the end of repetition (for the comparing later) with the selected values
         TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
@@ -317,7 +324,7 @@ public class NewEventFragment extends Fragment {
                 endOfRepetition.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 endOfRepetition.set(Calendar.MINUTE, minute);
                 //format the choosen time as HH:mm and write it into the end time text field
-                DateFormat format = new SimpleDateFormat("HH:mm");
+                DateFormat format = DateFormat.getDateInstance();
                 editText_endTime.setText(format.format(endTime.getTime()));
             }
         };
@@ -328,19 +335,28 @@ public class NewEventFragment extends Fragment {
 
     public void getEndOfRepetition() {
         //close keyboard if it's open
-        if (getActivity().getCurrentFocus() != null)
-            ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+        Activity activity = getActivity();
+        assert activity!=null;
+        if (activity.getCurrentFocus() != null) {
+            Context ctx = getContext();
+            assert ctx!=null;
+            InputMethodManager mngr =  (InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
+            assert mngr!=null;
+            mngr.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+        }
         // create a listener for the time picker dialog: update the date part (year, month, day) of the end of repetition with the selected values
         DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
                 endOfRepetition.set(year, month, dayOfMonth);
-                DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+                DateFormat format = DateFormat.getDateInstance();
                 editText_endOfRepetition.setText(format.format(endOfRepetition.getTime()));
             }
         };
         //open a date picker to let the user choose a date, use the saved end of repetition as initial value (initial value of endTime: now)
-        DatePickerDialog dialog = new DatePickerDialog(this.getContext(), listener, endOfRepetition.get(Calendar.YEAR), endOfRepetition.get(Calendar.MONTH), endOfRepetition.get(Calendar.DAY_OF_MONTH));
+        Context ctx = getContext();
+        assert ctx!=null;
+        DatePickerDialog dialog = new DatePickerDialog(getContext(), listener, endOfRepetition.get(Calendar.YEAR), endOfRepetition.get(Calendar.MONTH), endOfRepetition.get(Calendar.DAY_OF_MONTH));
         dialog.show();
     }
 
@@ -545,46 +561,6 @@ assert getActivity()!=null;
         }
     }
 
-    //read the event of the given eventId and set the correct texts of the edit texts
-    public void readGivenEvent(long eventId) {
-        Event event = EventController.getEventById(eventId);
-        if (event != null) {
-            edittext_shortTitle.setText(event.getShortTitle());
-            editText_description.setText(event.getDescription());
-            startTime.setTime(event.getStartTime());
-            DateFormat format = new SimpleDateFormat("dd.MM.YYYY");
-            edittext_date.setText(format.format(event.getStartTime()));
-            format = new SimpleDateFormat("HH:mm");
-            edittext_startTime.setText(format.format(event.getStartTime()));
-            endTime.setTime(event.getEndTime());
-            editText_endTime.setText(format.format(event.getEndTime()));
-            edittext_room.setText(event.getPlace());
-            checkBox_serialEvent.setChecked(event.getRepetition() != Repetition.NONE);
-            checkSerialEvent();
-            switch (event.getRepetition()) {
-                case YEARLY:
-                    spinner_repetition.setSelection(0);
-                    break;
-                case MONTHLY:
-                    spinner_repetition.setSelection(1);
-                    break;
-                case WEEKLY:
-                    spinner_repetition.setSelection(2);
-                    break;
-                case DAILY:
-                    spinner_repetition.setSelection(3);
-                    break;
-                default:
-                    spinner_repetition.setSelected(false);
-            }
-            endOfRepetition.setTime(event.getEndDate());
-            if (endOfRepetition != null) {
-                format = new SimpleDateFormat("dd.MM.YYYY");
-                editText_endOfRepetition.setText(format.format(endOfRepetition));
-            }
-        }
-    }
-
     private void checkPhonePermission() {
         //Check if User has permission to start to scan, if not it's start a RequestLoop
         if (!isPhonePermissionGranted()) {
@@ -613,6 +589,8 @@ assert getActivity()!=null;
             for (int i = 0, len = permissions.length; i < len; i++) {
 
                 if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
+                    Activity activity = getActivity();
+                    assert activity !=null;
                     // user rejected the permission
                     boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.READ_PHONE_STATE);
                     if (!showRationale) {
@@ -620,7 +598,7 @@ assert getActivity()!=null;
                         // disable features of your app or open another dialog explaining again the
                         // permission and directing to the app setting
 
-                        new android.support.v7.app.AlertDialog.Builder(getActivity())
+                        new android.support.v7.app.AlertDialog.Builder(activity)
                                 .setTitle(R.string.accessWith_NeverAskAgain_deny)
                                 .setMessage(R.string.sendSMS_accessDenied_withCheckbox)
                                 .setPositiveButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
@@ -633,7 +611,7 @@ assert getActivity()!=null;
                     } else if (counter < 1) {
                         // user did NOT check "never ask again" this is a good place to explain the user
                         // why you need the permission and ask if he wants // to accept it (the rationale)
-                        new android.support.v7.app.AlertDialog.Builder(getActivity())
+                        new android.support.v7.app.AlertDialog.Builder(activity)
                                 .setTitle(R.string.requestPermission_firstTryRequest)
                                 .setMessage(R.string.phoneNumber_explanation)
                                 .setPositiveButton(R.string.oneMoreTime, new DialogInterface.OnClickListener() {
@@ -651,7 +629,7 @@ assert getActivity()!=null;
                                 })
                                 .create().show();
                     } else if (counter == 1) {
-                        new android.support.v7.app.AlertDialog.Builder(getActivity())
+                        new android.support.v7.app.AlertDialog.Builder(activity)
                                 .setTitle(R.string.sendSMS_lastTry)
                                 .setMessage(R.string.lastTry_phoneNumber)
                                 .setPositiveButton(R.string.oneMoreTime, new DialogInterface.OnClickListener() {
@@ -683,15 +661,22 @@ assert getActivity()!=null;
 
 
     // method to read the phone number of the user
-    public void readPhoneNumber() {
+    @SuppressLint({"MissingPermission", "HardwareIds"})
+    private void readPhoneNumber() {
         //if permission is granted read the phone number
-        TelephonyManager telephonyManager = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
-        @SuppressLint("MissingPermission") String phoneNumber = telephonyManager.getLine1Number();
+        Context ctx = getContext();
+        assert ctx!=null;
+        TelephonyManager telephonyManager = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
+        String phoneNumber="";
+        if (telephonyManager!=null)
+        phoneNumber = telephonyManager.getLine1Number();
         //delete spaces and add a + if phoneNumber starts without a 0
-        if (phoneNumber != null)
+        if (phoneNumber != null) {
             phoneNumber = phoneNumber.replaceAll(" ", "");
-        if (phoneNumber.matches("[1-9][0-9]+"))
-            phoneNumber = "+" + phoneNumber;
+            //phone number starts with county number but no + or 00 (rg 491023 for a german number)
+            if (phoneNumber.matches("[1-9][0-9]+"))
+                phoneNumber = "+" + phoneNumber;
+        }
         me.setPhoneNumber(phoneNumber);
         //if the number could not been read, open a dialog
         if (me.getPhoneNumber() == null || !me.getPhoneNumber().matches("(00|0|\\+)[1-9][0-9]+")) {
