@@ -3,14 +3,18 @@ package hft.wiinf.de.horario.view;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
@@ -32,6 +36,7 @@ public class AcceptedEventDetailsFragment extends Fragment {
     @SuppressLint("LongLogTag")
     public Long getEventID() {
         Bundle MYEventIdBundle = getArguments();
+        assert MYEventIdBundle != null;
         Long MYEventIdLongResult = MYEventIdBundle.getLong("EventId");
         return MYEventIdLongResult;
     }
@@ -54,30 +59,47 @@ public class AcceptedEventDetailsFragment extends Fragment {
         acceptedEventDetailsButtonRefuseAppointment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Code for cancelling an event eg. take it out of the DB and Calendar View
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(System.currentTimeMillis());
+                if (cal.getTime().before(EventController.getEventById(getEventID()).getEndTime())) {
+                    //Code for cancelling an event eg. take it out of the DB and Calendar View
+                    EventRejectEventFragment eventRejectEventFragment = new EventRejectEventFragment();
+                    Bundle bundleAcceptedEventId = new Bundle();
+                    bundleAcceptedEventId.putLong("EventId", getEventID());
+                    bundleAcceptedEventId.putString("fragment", "AcceptedEventDetails");
+                    eventRejectEventFragment.setArguments(bundleAcceptedEventId);
+                    FragmentTransaction fr = getFragmentManager().beginTransaction();
+                    fr.replace(R.id.acceptedEvent_relativeLayout_main, eventRejectEventFragment, "RejectEvent");
+                    fr.addToBackStack("RejectEvent");
+                    fr.commit();
+                } else {
+                    Toast.makeText(getContext(), R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();
+                }
             }
         });
+
+        // Open the QRGeneratorFragment to Show the QRCode form this Event.
         acceptedEventDetailsButtonShowQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO in another US uncomment and adapt with Class-Own variables
+                Bundle whichFragment = getArguments();
+                QRGeneratorFragment qrFrag = new QRGeneratorFragment();
+                Bundle bundle = new Bundle();
+                bundle.putLong("eventId", getEventID());
+                bundle.putString("fragment", whichFragment.getString("fragment"));
+                qrFrag.setArguments(bundle);
 
-//                //Create a Bundle to Send the Information to an other Fragment
-//                //The Bundle input is the StringBuffer with the EventInformation
-//                QRSharingActivity qrSharingBundle = new QRSharingActivity();
-//                Bundle bundle = new Bundle();
-//                bundle.putString("qrStringBufferDescription", String.valueOf(mQRGenerator_StringBuffer_Result));
-//                qrSharingBundle.setArguments(bundle);
-//
-//                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-//                fragmentTransaction.replace(R.id.generator_realtivLayout_show_qrSharingFragment, qrSharingBundle);
-//                fragmentTransaction.addToBackStack(null);
-//                fragmentTransaction.commit();
-//                mQRGenerator_textView_headline.setVisibility(View.GONE);
-//                mQRGenerator_textView_description.setVisibility(View.GONE);
-//                mQRGenerator_button_start_sharingFragment.setVisibility(View.GONE);
-//                mQRGenerator_button_start_eventFeedbackFragment.setVisibility(View.GONE);
-//                mQRGenerator_relativeLayout_show_newFragment.setVisibility(View.VISIBLE);
+                if (whichFragment.getString("fragment").equals("EventOverview")) {
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.eventOverview_frameLayout, qrFrag, "QrGeneratorEO")
+                            .addToBackStack("QrGeneratorEO")
+                            .commit();
+                } else {
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.calendar_frameLayout, qrFrag, "QrGeneratorCA")
+                            .addToBackStack("QrGeneratorCA")
+                            .commit();
+                }
             }
         });
         return view;
@@ -131,7 +153,7 @@ public class AcceptedEventDetailsFragment extends Fragment {
         }
 
         // Event shortTitel in Headline with StartDate
-        acceptedEventDetailsOrganisatorText.setText(eventCreatorName + "\n" + shortTitle + ", "+currentDate );
+        acceptedEventDetailsOrganisatorText.setText(eventCreatorName + "\n" + shortTitle + ", " + currentDate);
         acceptedEventphNumberText.setText(phNumber);
         // Check for a Repetition Event and Change the Description Output with and without
         // Repetition Element inside.
@@ -161,7 +183,7 @@ public class AcceptedEventDetailsFragment extends Fragment {
         // Place, Description and Name of EventCreator
         eventToStringBuffer = new StringBuffer();
         eventToStringBuffer.append(selectedEvent.getId() + stringSplitSymbol);
-        if (selectedEvent.getStartEvent()==null)
+        if (selectedEvent.getStartEvent() == null)
             eventToStringBuffer.append(simpleDateFormat.format(selectedEvent.getStartTime()) + stringSplitSymbol);
         else
             eventToStringBuffer.append(simpleDateFormat.format(selectedEvent.getStartEvent().getStartTime()) + stringSplitSymbol);
@@ -176,7 +198,5 @@ public class AcceptedEventDetailsFragment extends Fragment {
         eventToStringBuffer.append(selectedEvent.getCreator().getName());
 
         return eventToStringBuffer;
-
     }
-
 }

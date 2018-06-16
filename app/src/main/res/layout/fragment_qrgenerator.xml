@@ -30,7 +30,6 @@
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="58dp" />
 
-
     </RelativeLayout>
 
     <RelativeLayout

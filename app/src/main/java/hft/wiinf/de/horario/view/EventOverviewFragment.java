@@ -1,6 +1,5 @@
 package hft.wiinf.de.horario.view;
 
-
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -33,6 +32,7 @@ import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
 import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.AcceptedState;
+import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
 
 public class EventOverviewFragment extends Fragment {
@@ -49,6 +49,7 @@ public class EventOverviewFragment extends Fragment {
     Animation ActionButtonOpen, ActionButtonClose, ActionButtonRotateRight, ActionButtonRotateLeft;
     ConstraintLayout layout_eventOverview_main;
     ConstraintLayout layoutOverview;
+    static List<Event> eventList = new ArrayList<>();
 
 
     public static void update() {
@@ -60,17 +61,31 @@ public class EventOverviewFragment extends Fragment {
     public static ArrayAdapter iterateOverMonth(final Date date) {
         ArrayList<Appointment> eventArrayDay = new ArrayList<>();
         final ArrayList<Appointment> eventArray = new ArrayList<>();
+        List<Event> allEvents = EventController.getAllEvents();
+
         Calendar helper = Calendar.getInstance();
         helper.setTime(date);
         helper.set(Calendar.DAY_OF_MONTH, 1);
         helper.set(Calendar.HOUR_OF_DAY, 0);
         helper.set(Calendar.MINUTE, 0);
+        helper.set(Calendar.SECOND, 0);
+        helper.set(Calendar.MILLISECOND, 0);
         int endDate = helper.get(Calendar.MONTH);
         while (helper.get(Calendar.MONTH) == endDate) {
             Calendar endOfDay = Calendar.getInstance();
             endOfDay.setTime(helper.getTime());
-            endOfDay.add(Calendar.DAY_OF_MONTH, 1);
-            List<hft.wiinf.de.horario.model.Event> eventList = EventController.findEventsByTimePeriod(helper.getTime(), endOfDay.getTime());
+            endOfDay.set(Calendar.HOUR_OF_DAY, 23);
+            endOfDay.set(Calendar.MINUTE, 59);
+            endOfDay.set(Calendar.SECOND, 59);
+            endOfDay.set(Calendar.MILLISECOND, 59);
+
+            eventList.clear();
+            for (Event event : allEvents) {
+                if (event.getEndTime().after(helper.getTime()) && event.getEndTime().before(endOfDay.getTime())) {
+                    eventList.add(event);
+                }
+            }
+
             if (eventList.size() > 0) {
                 eventArrayDay.add(new Appointment(CalendarFragment.dayFormat.format(helper.getTime()), 0));
             }
@@ -89,11 +104,14 @@ public class EventOverviewFragment extends Fragment {
                 eventArray.addAll(eventArrayDay);
             }
             eventArrayDay.clear();
-            helper.setTime(endOfDay.getTime());
+            helper.add(Calendar.DAY_OF_MONTH, 1);
         }
-        if (eventArray.size() < 1) { //when no events this month do stuff
+        if (eventArray.size() < 1)
+
+        { //when no events this month do stuff
             eventArray.add(new Appointment("Du hast keine Termine diesen Monat", 0));
         }
+
         final ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1, eventArray) {
             @NonNull
             @Override
@@ -320,7 +338,6 @@ public class EventOverviewFragment extends Fragment {
             eventOverviewFcMenu.setImageResource(R.drawable.ic_plusmenu);
         }
     }
-
 }
 
 class Appointment {

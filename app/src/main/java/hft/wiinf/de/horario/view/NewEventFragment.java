@@ -48,9 +48,9 @@ import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.model.Repetition;
 
-
 //TODO Kommentieren und Java Doc Info Schreiben
 public class NewEventFragment extends Fragment {
+
     // calendar objects to save the startTime / end Time / endOfRepetition, default: values - today
     Calendar startTime = Calendar.getInstance();
     Calendar endTime = Calendar.getInstance();
@@ -63,8 +63,8 @@ public class NewEventFragment extends Fragment {
     private Button button_save;
     //person object of the user, to get the user name
     private Person me;
-    int counter=0;
-    private int PERMISSION_REQUEST_READ_PHONE_STATE=0;
+    int counter = 0;
+    private int PERMISSION_REQUEST_READ_PHONE_STATE = 0;
 
     @Nullable
     @Override
@@ -108,7 +108,8 @@ public class NewEventFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+                    ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE))
+                            .hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
                     edittext_room.clearFocus();
                     return true;
 
@@ -328,7 +329,7 @@ public class NewEventFragment extends Fragment {
     public void getEndOfRepetition() {
         //close keyboard if it's open
         if (getActivity().getCurrentFocus() != null)
-        ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+            ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
         // create a listener for the time picker dialog: update the date part (year, month, day) of the end of repetition with the selected values
         DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -410,6 +411,7 @@ public class NewEventFragment extends Fragment {
                 dialogSavingSuccessful.dismiss();
             }
         });
+
         dialogSavingSuccessful.findViewById(R.id.savingSuccessful_button_qrcode).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -582,6 +584,7 @@ assert getActivity()!=null;
             }
         }
     }
+
     private void checkPhonePermission() {
         //Check if User has permission to start to scan, if not it's start a RequestLoop
         if (!isPhonePermissionGranted()) {
@@ -678,19 +681,17 @@ assert getActivity()!=null;
 
     }
 
-    // }
-
 
     // method to read the phone number of the user
     public void readPhoneNumber() {
         //if permission is granted read the phone number
         TelephonyManager telephonyManager = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
-         @SuppressLint("MissingPermission") String phoneNumber = telephonyManager.getLine1Number();
+        @SuppressLint("MissingPermission") String phoneNumber = telephonyManager.getLine1Number();
         //delete spaces and add a + if phoneNumber starts without a 0
-         if (phoneNumber != null)
-            phoneNumber.replaceAll(" ", "");
+        if (phoneNumber != null)
+            phoneNumber = phoneNumber.replaceAll(" ", "");
         if (phoneNumber.matches("[1-9][0-9]+"))
-            phoneNumber="+"+phoneNumber;
+            phoneNumber = "+" + phoneNumber;
         me.setPhoneNumber(phoneNumber);
         //if the number could not been read, open a dialog
         if (me.getPhoneNumber() == null || !me.getPhoneNumber().matches("(00|0|\\+)[1-9][0-9]+")) {

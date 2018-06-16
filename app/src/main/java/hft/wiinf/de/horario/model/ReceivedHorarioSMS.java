@@ -17,6 +17,9 @@ public class ReceivedHorarioSMS {
 
     }
 
+    public ReceivedHorarioSMS() {
+    }
+
     public String getPhonenumber() {
         return phonenumber;
     }

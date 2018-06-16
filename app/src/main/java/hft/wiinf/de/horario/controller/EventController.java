@@ -13,13 +13,18 @@ import hft.wiinf.de.horario.model.AcceptedState;
 import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
 
-
 public class EventController {
     //saves (update or create)an event
     public static void saveEvent(@NonNull Event event) {
-        if (event.getCreatorEventId() < 0)
-            event.setCreatorEventId(event.save());
-        event.save();
+        if (event.getAccepted() != AcceptedState.REJECTED) {
+            if (event.getCreatorEventId() < 0)
+                event.setCreatorEventId(event.save());
+            event.save();
+        }
+        //if state is rejected and id!=null delete event from db
+        else if (event.getId() != null) {
+            EventController.deleteEvent(event);
+        }
     }
 
     public static void deleteEvent(@NonNull Event event) {
@@ -31,26 +36,23 @@ public class EventController {
         for (Person person : PersonController.getEventAcceptedPersons(event)) {
             PersonController.deletePerson(person);
         }
-        //if other events point to the deleted event set only accepted state to rejected
-        if (EventController.findRepeatingEvents(event.getId()).size() > 0) {
-            event.setAccepted(AcceptedState.REJECTED);
-            event.save();
-        } else {
-            event.delete();
+        //delete also the repeating events if applicable
+        List<Event> repeatingEvents = EventController.findRepeatingEvents(event.getId());
+        for (Event repeatingEvent : repeatingEvents) {
+            repeatingEvent.delete();
         }
+        event.delete();
     }
 
     public static Event getEventById(@NonNull Long id) {
         return Event.load(Event.class, id);
     }
 
-    public static Event getEventByCreatorEventId(@NonNull Long creatorEventId) {
-        Person myself = PersonController.getPersonWhoIam();
-        List<Event> resultSet = new Select().from(Event.class).where("creatorEventId=? AND creator=?", creatorEventId, myself).execute();
-        return resultSet.get(0);
+    public static List<Event> getMyEventsByCreatorEventId(@NonNull Long creatorEventId) {
+        return new Select().from(Event.class).where("creatorEventId=? AND startEvent=?", creatorEventId, creatorEventId).execute();
+
     }
 
-    //find the list of events that start in the given period (enddate is ecluded!)
     //find the list of events that start in the given period (enddate is not included!)
     public static List<Event> findEventsByTimePeriod(Date startDate, Date endDate) {
         return new Select().from(Event.class).where("starttime between ? AND ?", startDate.getTime(), endDate.getTime() - 1).orderBy("startTime,endTime,shortTitle").execute();
@@ -66,9 +68,12 @@ public class EventController {
         return new Select().from(Event.class).where("accepted=?", true).orderBy("startTime,endTime,shortTitle").execute();
     }
 
+    public static List<Event> getAllEvents() {
+        return new Select().from(Event.class).orderBy("startTime, endTime, shortTitle").execute();
+    }
+
     public static boolean createdEventsYet() {
-        Person myself = PersonController.getPersonWhoIam();
-        List<Event> resultSet = new Select().from(Event.class).where("creator=?", myself).execute();
+        List<Event> resultSet = new Select().from(Event.class).execute();
         if (resultSet.size() == 0) {
             return false;
         } else {
@@ -147,4 +152,12 @@ public class EventController {
     }
 
 
+    public static boolean checkIfEventIsInDatabaseThroughId(Long eventIdInSMS) {
+        List<Event> resultSet = new Select().from(Event.class).where("Id=?", eventIdInSMS).execute();
+        if (resultSet.size() == 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

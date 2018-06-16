@@ -43,21 +43,25 @@ public class NotificationReceiver extends BroadcastReceiver {
             mChannel.enableLights(true);
             // Sets the notification light color for notifications posted to this
             // channel, if the device supports this feature.
-            mChannel.setLightColor(Color.YELLOW);
+            mChannel.setLightColor(Color.GREEN);
             mChannel.enableVibration(false);
             manager.createNotificationChannel(mChannel);
             NotificationCompat.Builder builder =
                     new NotificationCompat.Builder(context, id)
-                            .setSmallIcon(R.drawable.ic_android_black2_24dp)
+                            .setSmallIcon(R.drawable.ic_notification_h)
                             .setContentTitle("Terminerinnerung")
+                            .setAutoCancel(true)
+                            .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
                             .setContentText(msg);
             builder.setContentIntent(contentIntent);
             manager.notify(intent.getIntExtra("ID", 0), builder.build());
         } else {
             NotificationCompat.Builder builder =
                     new NotificationCompat.Builder(context, "")
-                            .setSmallIcon(R.drawable.ic_android_black2_24dp)
+                            .setSmallIcon(R.drawable.ic_notification_h)
                             .setContentTitle("Terminerinnerung")
+                            .setAutoCancel(true)
+                            .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
                             .setContentText(msg);
 
             builder.setContentIntent(contentIntent);
