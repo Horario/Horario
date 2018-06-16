@@ -92,38 +92,36 @@
                 android:id="@+id/qrGenerator_button_shareWith"
                 android:layout_width="0dp"
                 android:layout_height="49dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:background="@color/zentea_darkgreen"
                 android:text="@string/share_with"
                 android:textColor="@android:color/background_light"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toTopOf="@+id/qrGenerator_button_goToWhereComesFrom"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/scrollView11"
-                app:layout_constraintVertical_chainStyle="packed" />
+                app:layout_constraintVertical_bias="1.0" />
 
             <Button
                 android:id="@+id/qrGenerator_button_goToWhereComesFrom"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
+
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
-
                 android:background="@color/zentea_darkgreen"
                 android:text="@string/back_where_user_comesFrom"
                 android:textColor="@android:color/background_light"
                 android:textSize="14sp"
-                android:layout_alignParentBottom="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/qrGenerator_button_shareWith" />
+                app:layout_constraintStart_toStartOf="parent" />
 
 
         </android.support.constraint.ConstraintLayout>
