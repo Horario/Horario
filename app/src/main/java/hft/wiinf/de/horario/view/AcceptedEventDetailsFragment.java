@@ -60,22 +60,28 @@ public class AcceptedEventDetailsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //Code for cancelling an event eg. take it out of the DB and Calendar View
-                Bundle whichFragment = getArguments();
-                EventRejectEventFragment eventRejectEventFragment = new EventRejectEventFragment();
-                Bundle bundleAcceptedEventId = new Bundle();
-                bundleAcceptedEventId.putLong("EventId", getEventID());
-                bundleAcceptedEventId.putString("fragment", "AcceptedEventDetails");
-                eventRejectEventFragment.setArguments(bundleAcceptedEventId);
-                if (whichFragment.getString("fragment").equals("EventOverview")) {
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.eventOverview_frameLayout, eventRejectEventFragment, "RejectEvent")
-                            .addToBackStack("RejectEvent")
-                            .commit();
-                } else {
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.calendar_frameLayout, eventRejectEventFragment, "RejectEvent")
-                            .addToBackStack("RejectEvent")
-                            .commit();
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(System.currentTimeMillis());
+                if(EventController.getEventById(getEventID()).getEndTime().after(cal.getTime())) {
+                    Bundle whichFragment = getArguments();
+                    EventRejectEventFragment eventRejectEventFragment = new EventRejectEventFragment();
+                    Bundle bundleAcceptedEventId = new Bundle();
+                    bundleAcceptedEventId.putLong("EventId", getEventID());
+                    bundleAcceptedEventId.putString("fragment", "AcceptedEventDetails");
+                    eventRejectEventFragment.setArguments(bundleAcceptedEventId);
+                    if (whichFragment.getString("fragment").equals("EventOverview")) {
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.eventOverview_frameLayout, eventRejectEventFragment, "RejectEvent")
+                                .addToBackStack("RejectEvent")
+                                .commit();
+                    } else {
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.calendar_frameLayout, eventRejectEventFragment, "RejectEvent")
+                                .addToBackStack("RejectEvent")
+                                .commit();
+                    }
+                }else{
+                    Toast.makeText(getContext(), R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();
                 }
             }
         });

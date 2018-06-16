@@ -152,6 +152,7 @@ public class EventRejectEventFragment extends Fragment {
                         Toast.makeText(getContext(), R.string.reject_event_hint, Toast.LENGTH_SHORT).show();
                         //restart Activity
                         Intent intent = new Intent(getActivity(), TabActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_USER_ACTION);
                         startActivity(intent);
                     }
                 });
