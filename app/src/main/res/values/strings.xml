@@ -116,10 +116,10 @@
         <item name="push_time_120">120</item>
     </string-array>
     <string-array name="reason_for_rejection">
-        <item name="reason_0">Entschuldigtes Fehlen</item>
-        <item name="reason_1">Krank (entschuldigt)</item>
-        <item name="reason_2">Krank (unentschuldigt)</item>
-        <item name="reason_3">Mittagessen</item>
+        <item name="reason_0"></item>
+        <item name="reason_1">Entschuldigtes Fehlen</item>
+        <item name="reason_2">Krank (entschuldigt)</item>
+        <item name="reason_3">Krank (unentschuldigt)</item>
         <item name="reason_4">Paralleltermin</item>
         <item name="reason_5">Privater Termin</item>
         <item name="reason_6">Zeitlich verhindert</item>
