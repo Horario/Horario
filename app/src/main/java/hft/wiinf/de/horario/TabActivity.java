@@ -859,7 +859,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     private void decideWhatToDo(Dialog afterScanningDialogActionn) {
         if (!checkIfEventIsInPast()) {
             Person person = PersonController.getPersonWhoIam();
-            if (person.getName().isEmpty()) {
+            if (person == null) {
                 openDialogAskForUsername();
             } else if (buttonId == 1 || buttonId == 2) {
                 dialogListener();
