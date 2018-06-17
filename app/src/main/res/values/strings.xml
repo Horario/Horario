@@ -177,7 +177,7 @@
     <string name="requestPermission_askForSMSPermission">Wir brauchen den SMS-Zugriff um die Teilnehmerlisten zu füllen und aktualisieren.</string>
     <string name="requestPermission_askForContactsPermission">Wir brauchen den Kontakte-Zugriff um die Teilnehmerlisten mit gespeicherten Kontaktnamen zu füllen und aktualisieren.</string>
     <string name="requestPermission_againButton">Nochmal</string>
-    <string name="requestPermission_lastTryRequest">Letzer Versuch!</string>
+    <string name="requestPermission_lastTryRequest">Letzter Versuch!</string>
     <string name="abort">ABBRUCH</string>
     <string name="setting_copyright_privacyPolicy">Privacy Policy</string>
     <string name="accessWith_NeverAskAgain_deny">Zugriff verweigert</string>
@@ -210,7 +210,7 @@
     <string name="PhoneNumberNotSaved">Die Telefonnummer wurde nicht gespeichert. Du kannst sie in den Einstellungen festlegen.</string>
     <string name="sendSMS_accessDenied_withCheckbox">Du hast mit dem Haken bei \"Nicht mehr fragen\"  dauerhaft den Zugiff auf deine Telefonnummer verweigert. Um Rückmeldungen zu nutzen, gib bitte nun deine Telefonnummer selbst ein. Alternativ kannst du Horario schließen und über deine Rechteverwaltung Horario das Senden von SMS erlauben. Dann gehen allerdings alle nicht gespeicherten Eingaben verloren.</string>
     <string name="sendSMS_manual">manuell eingeben</string>
-    <string name="sendSMS_lastTry">Letzter Versuch! Bitte erlaube den Zugriff auf die Telefonnummer.</string>
+    <string name="sendSMS_lastTry">Bitte erlaube den Zugriff auf die Telefonnummer!</string>
     <string name="requestPermission_userDontLike">TEST</string>
     <string name="phoneNumber">Telefonnummer :</string>
     <string name="phoneNumberHint">Telefonnummer</string>
