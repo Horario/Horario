@@ -79,18 +79,6 @@
             app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
 
         <Button
-            android:id="@+id/myOwnEventDetailsButtonDeleteEvent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="152dp"
-            android:text="@string/event_delete"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
-
-        <Button
             android:id="@+id/myOwnEventDetailsButtonShowAcceptances"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

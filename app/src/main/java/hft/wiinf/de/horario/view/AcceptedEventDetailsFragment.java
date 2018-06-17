@@ -5,16 +5,12 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.activeandroid.query.Delete;
 
 import java.text.SimpleDateFormat;
 import java.util.Objects;
@@ -52,7 +48,6 @@ public class AcceptedEventDetailsFragment extends Fragment {
 
         acceptedEventDetailsButtonRefuseAppointment = view.findViewById(R.id.acceptedEventDetailsButtonRefuseAppointment);
         acceptedEventDetailsButtonShowQR = view.findViewById(R.id.acceptedEventDetailsButtonShowQR);
-        acceptedEventDetailButtonDelete = view.findViewById(R.id.acceptedEventDetailsButtonDelete);
         rLayout_acceptedEvent_helper = view.findViewById(R.id.acceptedEvent_relativeLayout_helper);
         acceptedEventDetailsOrganisatorText = view.findViewById(R.id.acceptedEventDetailsOrganisatorText);
         acceptedEventphNumberText = view.findViewById(R.id.acceptedEventphNumberText);
@@ -73,38 +68,6 @@ public class AcceptedEventDetailsFragment extends Fragment {
                 fr.replace(R.id.acceptedEvent_relativeLayout_main, eventRejectEventFragment, "RejectEvent");
                 fr.addToBackStack("RejectEvent");
                 fr.commit();
-            }
-        });
-
-        acceptedEventDetailButtonDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final AlertDialog.Builder dialogAskForFinalDecission = new AlertDialog.Builder(getContext());
-                dialogAskForFinalDecission.setView(R.layout.dialog_afterrejectevent);
-                dialogAskForFinalDecission.setTitle(R.string.myOwnEventDetails_DeleteDialogMessage);
-                dialogAskForFinalDecission.setCancelable(true);
-
-                final AlertDialog alertDialogAskForFinalDecission = dialogAskForFinalDecission.create();
-                alertDialogAskForFinalDecission.show();
-                // YES Button to Delete the Event
-                alertDialogAskForFinalDecission.findViewById(R.id.dialog_button_event_delete)
-                        .setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                event = EventController.getEventById((getEventID()));
-                                new Delete().from(Event.class).where("CreatorEventId=?",
-                                        String.valueOf(event.getCreatorEventId())).execute();
-                                alertDialogAskForFinalDecission.dismiss();
-                                goWhereUserComesFrom();
-                            }
-                        });
-                alertDialogAskForFinalDecission.findViewById(R.id.dialog_button_event_back)
-                        .setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                alertDialogAskForFinalDecission.cancel();
-                            }
-                        });
             }
         });
 

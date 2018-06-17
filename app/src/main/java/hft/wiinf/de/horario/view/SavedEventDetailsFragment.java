@@ -14,8 +14,6 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 
 import java.text.SimpleDateFormat;
@@ -32,7 +30,7 @@ import hft.wiinf.de.horario.model.Event;
 public class SavedEventDetailsFragment extends Fragment {
 
     Button savedEventDetailsButtonRefuseAppointment, savedEventDetailsButtonAcceptAppointment,
-            savedEventDetailsButtonShowQr, savedEventDetailsButtonDelete;
+            savedEventDetailsButtonShowQr;
     RelativeLayout rLayout_savedEvent_helper;
     TextView savedEventDetailsOrganisatorText, savedEventphNumberText, savedEventeventDescription;
     Event selectedEvent, event;
@@ -62,7 +60,6 @@ public class SavedEventDetailsFragment extends Fragment {
         savedEventDetailsButtonRefuseAppointment = view.findViewById(R.id.savedEventDetailsButtonRefuseAppointment);
         savedEventDetailsButtonAcceptAppointment = view.findViewById(R.id.savedEventDetailsButtonAcceptAppointment);
         savedEventDetailsButtonShowQr = view.findViewById(R.id.savedEventDetailsButtonShowQr);
-        savedEventDetailsButtonDelete = view.findViewById(R.id.savedEventDetailsButtonDelete);
         rLayout_savedEvent_helper = view.findViewById(R.id.savedEvent_relativeLayout_helper);
         savedEventDetailsOrganisatorText = view.findViewById(R.id.savedEventDetailsOrganisatorText);
         savedEventphNumberText = view.findViewById(R.id.savedEventphNumberText);
@@ -94,39 +91,7 @@ public class SavedEventDetailsFragment extends Fragment {
             }
         });
 
-        savedEventDetailsButtonDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final AlertDialog.Builder dialogAskForFinalDecission = new AlertDialog.Builder(getContext());
-                dialogAskForFinalDecission.setView(R.layout.dialog_afterrejectevent);
-                dialogAskForFinalDecission.setTitle(R.string.myOwnEventDetails_DeleteDialogMessage);
-                dialogAskForFinalDecission.setCancelable(true);
-
-                final AlertDialog alertDialogAskForFinalDecission = dialogAskForFinalDecission.create();
-                alertDialogAskForFinalDecission.show();
-                // YES Button to Delete the Event
-                alertDialogAskForFinalDecission.findViewById(R.id.dialog_button_event_delete)
-                        .setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                event = EventController.getEventById((getEventID()));
-                                new Delete().from(Event.class).where("CreatorEventId=?",
-                                        String.valueOf(event.getCreatorEventId())).execute();
-                                alertDialogAskForFinalDecission.dismiss();
-                                goWhereUserComesFrom();
-                            }
-                        });
-                alertDialogAskForFinalDecission.findViewById(R.id.dialog_button_event_back)
-                        .setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                alertDialogAskForFinalDecission.cancel();
-                            }
-                        });
-            }
-        });
-
-        // Open the QRGeneratorFragment to Show the QRCode form this Event.
+             // Open the QRGeneratorFragment to Show the QRCode form this Event.
         savedEventDetailsButtonShowQr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

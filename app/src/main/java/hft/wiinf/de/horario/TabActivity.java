@@ -70,7 +70,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
     Event singleEvent;
     //Index: 0 = CreatorID; 1 = StartDate; 2 = EndDate; 3 = StartTime; 4 = EndTime;
-    //       5 = Repetition; 6 = ShortTitle; 7 = Place; 8 = Descriptoin;  9 = EventCreatorName
+    //       5 = Repetition; 6 = ShortTitle; 7 = Place; 8 = Description;  9 = EventCreatorName
     private String creatorID, startDate, endDate, startTime, endTime, repetition, shortTitle, place,
             description, eventCreatorName, creatorPhoneNumber;
     private String hourOfDay, minutesOfDay, year, month, day;
