@@ -39,7 +39,7 @@ public class EventRejectEventFragment extends Fragment {
     TextView reject_event_header, reject_event_description;
     Spinner spinner_reason;
     Button button_reject_event, button_dialog_delete, button_dialog_back;
-
+    AlertDialog mDialog;
     Event selectedEvent;
     Event event;
     StringBuffer eventToStringBuffer;
@@ -121,10 +121,10 @@ public class EventRejectEventFragment extends Fragment {
         dialogAskForFinalDecission.setTitle(R.string.titleDialogRejectEvent);
         dialogAskForFinalDecission.setCancelable(true);
 
-        final AlertDialog alertDialogAskForFinalDecission = dialogAskForFinalDecission.create();
-        alertDialogAskForFinalDecission.show();
+        mDialog = dialogAskForFinalDecission.create();
+        mDialog.show();
 
-        alertDialogAskForFinalDecission.findViewById(R.id.dialog_button_event_delete)
+        mDialog.findViewById(R.id.dialog_button_event_delete)
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -151,11 +151,11 @@ public class EventRejectEventFragment extends Fragment {
                         startActivity(intent);
                     }
                 });
-        alertDialogAskForFinalDecission.findViewById(R.id.dialog_button_event_back)
+        mDialog.findViewById(R.id.dialog_button_event_back)
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        alertDialogAskForFinalDecission.cancel();
+                        mDialog.cancel();
                     }
                 });
 
@@ -280,5 +280,15 @@ public class EventRejectEventFragment extends Fragment {
             return true;
         }
         return true;
+    }
+
+    @Override
+    public void onPause(){
+        if(mDialog != null){
+            mDialog.dismiss();
+        }
+
+        super.onPause();
+
     }
 }

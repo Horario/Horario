@@ -277,20 +277,4 @@ public class SavedEventDetailsFragment extends Fragment {
         return eventToStringBuffer;
 
     }
-
-    // Push the User where he/she comes from
-    private void goWhereUserComesFrom() {
-        Bundle whichFragment = getArguments();
-        Objects.requireNonNull(getFragmentManager()).popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        if (Objects.requireNonNull(whichFragment).getString("fragment").equals("EventOverview")) {
-            Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.eventOverview_frameLayout, new EventOverviewFragment(), "")
-                    .commit();
-        } else {
-            Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.calendar_frameLayout, new CalendarFragment(), "")
-                    .commit();
-        }
-    }
-
 }

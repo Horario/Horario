@@ -67,7 +67,8 @@ public class NewEventFragment extends Fragment {
     private int PERMISSION_REQUEST_READ_PHONE_STATE = 0;
     private AlertDialog.Builder mAlertDialog;
     private EditText mPhoneNumber;
-    private AlertDialog mDialog;
+    private AlertDialog mAlertDialog1;
+    private Dialog mDialog;
 
     @Nullable
     @Override
@@ -381,23 +382,23 @@ public class NewEventFragment extends Fragment {
     //clear all entrys and open a dialog where the user can choose what to do next
     private void openSavedSuccessfulDialog(final long eventId) {
         clearEntrys();
-        final Dialog dialogSavingSuccessful = new Dialog(getContext());
-        dialogSavingSuccessful.setContentView(R.layout.dialog_savingsucessfull);
-        dialogSavingSuccessful.setCancelable(true);
-        dialogSavingSuccessful.show();
+        mDialog = new Dialog(getContext());
+        mDialog.setContentView(R.layout.dialog_savingsucessfull);
+        mDialog.setCancelable(true);
+        mDialog.show();
         //create a new event: only close the dialog
-        dialogSavingSuccessful.findViewById(R.id.savingSuccessful_button_new).setOnClickListener(new View.OnClickListener() {
+        mDialog.findViewById(R.id.savingSuccessful_button_new).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialogSavingSuccessful.dismiss();
+                mDialog.dismiss();
             }
         });
 
-        dialogSavingSuccessful.findViewById(R.id.savingSuccessful_button_qrcode).setOnClickListener(new View.OnClickListener() {
+        mDialog.findViewById(R.id.savingSuccessful_button_qrcode).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle whichFragment = getArguments();
-                dialogSavingSuccessful.dismiss();
+                mDialog.dismiss();
                 QRGeneratorFragment qrFrag = new QRGeneratorFragment();
                 Bundle bundle = new Bundle();
                 bundle.putLong("eventId", eventId);
@@ -687,9 +688,9 @@ public class NewEventFragment extends Fragment {
         mAlertDialog = new android.app.AlertDialog.Builder(getActivity());
         mAlertDialog.setView(R.layout.dialog_askingforphonenumber);
         mAlertDialog.setCancelable(true);
-        mDialog = mAlertDialog.create();
-        mDialog.show();
-        mPhoneNumber = mDialog.findViewById(R.id.dialog_EditText_telephonNumber);
+        mAlertDialog1 = mAlertDialog.create();
+        mAlertDialog1.show();
+        mPhoneNumber = mAlertDialog1.findViewById(R.id.dialog_EditText_telephonNumber);
         mPhoneNumber.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -697,7 +698,7 @@ public class NewEventFragment extends Fragment {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     //regex: perhaps 0 + or 00 then 1-9 then numbers
                     if (input.matches("(0|\\+|00)[1-9][0-9]+")) {
-                        mDialog.dismiss();
+                        mAlertDialog1.dismiss();
                         me.setPhoneNumber(input);
                         Toast.makeText(v.getContext(), R.string.thanksphoneNumber, Toast.LENGTH_SHORT).show();
                         saveEvent();
@@ -712,7 +713,7 @@ public class NewEventFragment extends Fragment {
             }
         });
         //if the dialog is canceled save nothing
-        mDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+        mAlertDialog1.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
                 Toast toast = Toast.makeText(getContext(), R.string.event_save_notSuccessful, Toast.LENGTH_SHORT);
@@ -721,6 +722,9 @@ public class NewEventFragment extends Fragment {
         });
             }
     public void onPause(){
+        if(mAlertDialog1 != null){
+            mAlertDialog1.dismiss();
+        }
         if(mDialog != null){
             mDialog.dismiss();
         }

@@ -183,7 +183,7 @@
         dauerhaft den Zugriff zum Kalender verweigert. Um den QR Scanner zu nutzen aktiviere bitte das SMS Senden über deine Rechteverwaltung</string>
     <string name="requestPermission_firstTryRequest">Erster von zwei Versuchen</string>
     <string name="qrGenerator_button_showInEventOverView">In Terminübersicht anzeigen</string>
-    <string name="event_delete">Termin löschen</string>
+
 
 
     <string name="accept">Ja!</string>
@@ -207,6 +207,5 @@
     <string name="phoneNumber">Telefonnummer :</string>
     <string name="phoneNumberHint">Telefonnummer</string>
     <string name="thanksUserData">Die Eingaben wurden gespeichert.</string>
-    <string name="myOwnEventDetails_DeleteDialogMessage">Möchtest du wirklich diesen Termin löschen OHNE das eine Ab-/Zusage per SMS geschickt wird?</string>
 
 </resources>
