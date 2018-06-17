@@ -64,7 +64,7 @@ public class NewEventFragment extends Fragment {
     private Button button_save;
     //person object of the user, to get the user name
     private Person me;
-    private DateFormat dateFormat = new SimpleDateFormat("dd.MM.YYYY", Locale.GERMAN);
+    private DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN);
     private DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.GERMAN);
     int counter = 0;
     private int PERMISSION_REQUEST_READ_PHONE_STATE = 0;
