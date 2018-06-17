@@ -27,7 +27,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="50dp">
+        android:layout_marginTop="50dp"
+        android:paddingBottom="60dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -35,7 +36,8 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:focusable="false"
-            android:focusableInTouchMode="true">
+            android:focusableInTouchMode="true"
+            android:paddingBottom="60dp">
 
 
             <EditText
@@ -221,23 +223,6 @@
                 android:visibility="gone" />
 
 
-            <Button
-
-                android:id="@+id/newEvent_button_save"
-
-                android:layout_width="match_parent"
-
-                android:layout_height="60dp"
-
-                android:layout_alignParentBottom="true"
-
-                android:layout_below="@id/newEvent_textView_endOfRepetiton"
-                android:layout_centerHorizontal="true"
-                android:backgroundTint="@color/zentea_darkgreen"
-                android:text="@string/event_save"
-                android:textColor="@color/zentea_white" />
-
-
             <TextView
 
                 android:id="@+id/newEvent_textView_room"
@@ -312,4 +297,23 @@
 
         </RelativeLayout>
     </ScrollView>
+
+    <Button
+
+        android:id="@+id/newEvent_button_save"
+
+        android:layout_width="match_parent"
+
+        android:layout_height="60dp"
+
+        android:layout_alignParentBottom="true"
+
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:backgroundTint="@color/zentea_darkgreen"
+        android:text="@string/event_save"
+        android:textColor="@color/zentea_white" />
+
 </RelativeLayout>

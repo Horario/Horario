@@ -116,9 +116,9 @@
         <item name="push_time_120">120</item>
     </string-array>
     <string-array name="reason_for_rejection">
-        <item name="reason_0">Entschuldigtes Fehlen</item>
-        <item name="reason_1">Krank, entschuldigt</item>
-        <item name="reason_2">Krank, unentschuldigt</item>
+        <item name="reason_0">Entschuldigt</item>
+        <item name="reason_1">Krank entschuldigt</item>
+        <item name="reason_2">Krank unentschuldigt</item>
         <item name="reason_3">Paralleltermin</item>
         <item name="reason_4">Privater Termin</item>
         <item name="reason_5">Zeitlich verhindert</item>
@@ -208,9 +208,9 @@
     <string name="lastTry_phoneNumber">Ohne deine Telefonnummer kannnst du keine Rückmeldungen versenden und empfangen.</string>
     <string name="oneMoreTime">Nochmal</string>
     <string name="PhoneNumberNotSaved">Die Telefonnummer wurde nicht gespeichert. Du kannst sie in den Einstellungen festlegen.</string>
-    <string name="sendSMS_accessDenied_withCheckbox">Du hast mit dem Haken bei \"Nicht mehr fragen\"  dauerhaft den Zugiff auf deine Telefonnummer verweigert. Um Rückmeldungen zu nutzen, gibt bitte nun deine Telefonnummer selbst ein. Alternativ kannst du Horario schließen und über deine Rechteverwaltung Horario das Senden von SMS erlauben. Dann gehen allerdings alle nicht gespeicherten Eingaben verloren.</string>
+    <string name="sendSMS_accessDenied_withCheckbox">Du hast mit dem Haken bei \"Nicht mehr fragen\"  dauerhaft den Zugiff auf deine Telefonnummer verweigert. Um Rückmeldungen zu nutzen, gib bitte nun deine Telefonnummer selbst ein. Alternativ kannst du Horario schließen und über deine Rechteverwaltung Horario das Senden von SMS erlauben. Dann gehen allerdings alle nicht gespeicherten Eingaben verloren.</string>
     <string name="sendSMS_manual">manuell eingeben</string>
-    <string name="sendSMS_lastTry">Letzter Versuch! Bitte gestatte uns den Zugriff auf deine Telefonnummer.</string>
+    <string name="sendSMS_lastTry">Letzter Versuch! Bitte erlaube den Zugriff auf die Telefonnummer.</string>
     <string name="requestPermission_userDontLike">TEST</string>
     <string name="phoneNumber">Telefonnummer :</string>
     <string name="phoneNumberHint">Telefonnummer</string>
