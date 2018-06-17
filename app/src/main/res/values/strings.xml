@@ -50,30 +50,30 @@
     <string name="previous">Previous</string>
     <string name="titleParticipantsEvent">Rückmeldungen</string>
     <string name="notificationParticipantsBeingFetched">SMS werden ausgelesen...</string>
-    <string name="participantsUpdated">Teilnehmerlisten wurden aktualisiert</string>
+    <string name="participantsUpdated">Teilnehmerlisten wurden aktualisiert.</string>
     <string name="noNewTextMessages">Keine neuen Nachrichten gefunden</string>
     <string name="noTextMessagesAvailable">Keine Nachricht gefunden</string>
     <string name="appointmentIsFrom">Termin von </string>
     <string name="yourAppointment">Dein Termin </string>
     <string name="refuseAppointment">Termin ablehnen</string>
     <string name="acceptAppointment">Termin annehmen</string>
-    <string name="begForAcceptanceReadSMSAndContacts">Bitte erlaube Horario den Zugriff, um Teilnehmer zu sehen</string>
+    <string name="begForAcceptanceReadSMSAndContacts">Bitte erlaube Horario den Zugriff, um Teilnehmer zu sehen.</string>
     <string name="okayIWillAccept">Nochmal fragen</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="reject_event">Das Event wurde abgesagt und gelöscht</string>
+    <string name="reject_event">Der Termin wurde abgesagt.</string>
     <string name="thanksForUsernameAndPhoneNumber">Benutzername und Telefonnummer wurde gespeichert. </string>
     <string name="description_too_long">Die Beschreibung darf nicht länger als 500 Zeichen sein.</string>
-    <string name="reject_event_hint">Der Termin wurde abgesagt und eine SMS versendet.</string>
+    <string name="reject_event_hint">Der Termin wurde abgesagt.</string>
     <string name="accept_event_hint">Den Terminen wurde zugesagt.</string>
     <string name="accept_event_hint_single">Der Termin wurde zugesagt.</string>
     <string name="reject_event_hint_single">Der Termin wurde abgesagt.</string>
     <string name="reject_event_reason_free_text_field_empty">Die Beschreibung darf nicht mit einem Leerzeichen anfangen.</string>
     <string name="reject_event_reason_free_text_field_to_long">Die Beschreibung darf nicht mehr als 140 Zeichen sein.</string>
-    <string name="reject_event_reason_contains_pipe">Die Beschreibung darf kein "|" enthalten</string>
-    <string name="reject_event_reason_contains_comma">Die Beschreibung darf kein "," enthalten</string>
-    <string name="reject_event_reason_contains_exclamation_mark">Die Beschreibung darf kein "!" enthalten</string>
+    <string name="reject_event_reason_contains_pipe">Die Beschreibung darf kein "|" enthalten.</string>
+    <string name="reject_event_reason_contains_comma">Die Beschreibung darf kein "," enthalten.</string>
+    <string name="reject_event_reason_contains_exclamation_mark">Die Beschreibung darf kein "!" enthalten.</string>
     <string name="reject_event_reason">Bitte wähle einen Absagegrund und gebe eine Begründung ein.</string>
     <string name="shortTitle_too_long">Der Kurztitel darf nicht länger als 50 Zeichen sein.</string>
     <string name="startTime_past">Der Termin darf nicht in der Vergangenheit beginnen.</string>
@@ -116,14 +116,13 @@
         <item name="push_time_120">120</item>
     </string-array>
     <string-array name="reason_for_rejection">
-        <item name="reason_0"></item>
-        <item name="reason_1">Entschuldigtes Fehlen</item>
-        <item name="reason_2">Krank (entschuldigt)</item>
-        <item name="reason_3">Krank (unentschuldigt)</item>
-        <item name="reason_4">Paralleltermin</item>
-        <item name="reason_5">Privater Termin</item>
-        <item name="reason_6">Zeitlich verhindert</item>
-        <item name="reason_7">Sonstiges</item>
+        <item name="reason_0">Entschuldigtes Fehlen</item>
+        <item name="reason_1">Krank, entschuldigt</item>
+        <item name="reason_2">Krank, unentschuldigt</item>
+        <item name="reason_3">Paralleltermin</item>
+        <item name="reason_4">Privater Termin</item>
+        <item name="reason_5">Zeitlich verhindert</item>
+        <item name="reason_6">Sonstiges</item>
 
 
     </string-array>
@@ -171,7 +170,7 @@
     <string name="eventReject">Termin ablehnen</string>
     <string name="scannerOverlayer_qrCodeScan">Termincode scannen</string>
     <string name="scannerOverlay_positionYourScanner">Halte dein Smartphone vor den QR-Code und</string>
-    <string name="scannerOverlay_toShowTheEvent">scanne ihn ab um den Termin zu öffnen</string>
+    <string name="scannerOverlay_toShowTheEvent">scanne ihn ab um den Termin zu öffnen.</string>
     <string name="requestPermission_thankYou">Danke für die Zugriffsrechte auf die Kamera!</string>
     <string name="requestPermission_askForPermission">Wir brauchen den Kamerazugriff um den QR-Code einzuscannen.</string>
     <string name="requestPermission_askForPermission_sendSMS">Wir müssen SMS verschicken, um den Ersteller zu benachrichtigen.</string>
@@ -184,11 +183,11 @@
     <string name="accessWith_NeverAskAgain_deny">Zugriff verweigert</string>
     <string name="requestPermission_accessDenied_withCheckbox">Du hast mit dem Haken bei \"Nicht mehr fragen\"
         dauerhaft den Zugriff zum Kalender verweigert. Um den QR Scanner zu nutzen aktiviere bitte den
-        Kamerazugriff über deine Rechteverwaltung</string>
-    <string name="requestSMSPermission_accessDenied_withCheckbox">Du hast mit dem Haken bei \"Nicht mehr fragen\"  dauerhaft den Zugiff zu den SMS verweigert. Um Rückmeldungen zu nutzen aktiviere bitte den Lesezugriff über deine Rechteverwaltung</string>
-    <string name="requestContactPermission_accessDenied_withCheckbox">Du hast mit dem Haken bei \"Nicht mehr fragen\"  dauerhaft den Zugiff zu den Kontakten verweigert. Um Rückmeldungen mit Kontaktnamen zu nutzen aktiviere bitte den Lesezugriff über deine Rechteverwaltung</string>
+        Kamerazugriff über deine Rechteverwaltung.</string>
+    <string name="requestSMSPermission_accessDenied_withCheckbox">Du hast mit dem Haken bei \"Nicht mehr fragen\"  dauerhaft den Zugiff zu den SMS verweigert. Um Rückmeldungen zu nutzen aktiviere bitte den Lesezugriff über deine Rechteverwaltung.</string>
+    <string name="requestContactPermission_accessDenied_withCheckbox">Du hast mit dem Haken bei \"Nicht mehr fragen\"  dauerhaft den Zugiff zu den Kontakten verweigert. Um Rückmeldungen mit Kontaktnamen zu nutzen aktiviere bitte den Lesezugriff über deine Rechteverwaltung.</string>
     <string name="requestPermission_accessDenied_withCheckbox_SendSMS">Du hast mit dem Haken bei \"Nicht mehr fragen\"
-        dauerhaft den Zugriff zum Kalender verweigert. Um den QR Scanner zu nutzen aktiviere bitte das SMS Senden über deine Rechteverwaltung</string>
+        dauerhaft den Zugriff zum Kalender verweigert. Um den QR Scanner zu nutzen aktiviere bitte das SMS Senden über deine Rechteverwaltung.</string>
     <string name="requestPermission_firstTryRequest">Erster von zwei Versuchen</string>
     <string name="qrGenerator_button_showInEventOverView">In Terminübersicht anzeigen</string>
 
