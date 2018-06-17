@@ -100,11 +100,9 @@ public class NewEventFragment extends Fragment {
         editText_endOfRepetition = view.findViewById(R.id.newEvent_textEdit_endOfRepetition);
         textView_endofRepetiton = view.findViewById(R.id.newEvent_textView_endOfRepetiton);
 
-        button_save = view.findViewById(R.id.newEvent_button_save);
-
-        //field description: multi-line
-        editText_description.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        editText_description.setImeOptions(EditorInfo.IME_ACTION_NEXT);
         editText_description.setRawInputType(InputType.TYPE_CLASS_TEXT);
+        button_save = view.findViewById(R.id.newEvent_button_save);
 
         // when the keyboard is closed after the text edit room, there should be no focus
         edittext_room.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -503,7 +501,7 @@ assert getActivity()!=null;
             Toast.makeText(getContext(), R.string.room_peek, Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (edittext_userName.getText().toString().matches(" +.*")) {
+        if (!edittext_userName.getText().toString().matches("(\\w|\\s|\\.)*")) {
             Toast.makeText(getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT).show();
             return false;
         }

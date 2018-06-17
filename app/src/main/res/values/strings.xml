@@ -20,7 +20,7 @@
     <string name="allowpush_text">Erinnerungen erlauben :</string>
     <string name="reminder_text">Erinnerungen :</string>
     <string name="minutesBefore_text">Minuten vorher</string>
-    <string name="noValidUsername">Benutzername darf nicht mit Leerzeichen anfangen.</string>
+    <string name="noValidUsername">Der Benutzername darf keine Sonderzeichen außer . enthalten.</string>
     <string name="event_Description">Beschreibung :</string>
     <string name="noValidUsername_peek">Der Benutzername darf nicht das Zeichen | enthalten.</string>
     <string name="noValidUsername_comma">Der Benutzername darf nicht das Zeichen , enthalten.</string>
@@ -64,7 +64,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="reject_event">Das Event wurde aus der Datenbank gelöscht</string>
     <string name="thanksForUsernameAndPhoneNumber">Benutzername und Telefonnummer wurde gespeichert. </string>
-    <string name="description_too_long">Die Beschreibung darf nicht länger als 500 Zeichen sein.</string>
+    <string name="description_too_long">Die Beschreibung darf nicht länger als 200 Zeichen sein.</string>
     <string name="reject_event_hint">Der Termin wurde abgesagt.</string>
     <string name="accept_event_hint">Die Termine wurde zugesagt.</string>
     <string name="accept_event_hint_single">Der Termin wurde zugesagt.</string>
