@@ -53,7 +53,7 @@
         <Button
             android:id="@+id/reject_event_button_reject"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="20dp"
@@ -71,8 +71,8 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="30dp"
             android:ems="10"
+            android:hint="@string/furtherDetails"
             android:inputType="text|textMultiLine|textPersonName"
-        android:hint="@string/furtherDetails"
-        android:textSize="14sp" />
+            android:textSize="14sp" />
     </RelativeLayout>
 </FrameLayout>
