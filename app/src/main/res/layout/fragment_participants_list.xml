@@ -15,7 +15,7 @@
         <TextView
             android:id="@+id/textViewTitleParticipantsEvent"
             android:layout_width="246dp"
-            android:layout_height="35dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
@@ -32,7 +32,7 @@
         <TextView
             android:id="@+id/textViewEventData"
             android:layout_width="178dp"
-            android:layout_height="19dp"
+            android:layout_height="14dp"
             android:layout_marginBottom="12dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
