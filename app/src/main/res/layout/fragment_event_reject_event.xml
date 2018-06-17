@@ -71,8 +71,10 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="30dp"
             android:ems="10"
+            android:inputType="textMultiLine|textPersonName"
+            android:maxLines="3"
+            android:lines="2"
             android:hint="@string/furtherDetails"
-            android:inputType="text|textPersonName"
             android:textSize="14sp" />
     </RelativeLayout>
 </FrameLayout>
