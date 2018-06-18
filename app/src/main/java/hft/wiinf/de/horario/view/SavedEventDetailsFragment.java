@@ -35,7 +35,7 @@ public class SavedEventDetailsFragment extends Fragment {
     TextView savedEventDetailsOrganisatorText, savedEventphNumberText, savedEventeventDescription;
     Event selectedEvent, event;
     StringBuffer eventToStringBuffer;
-
+    AlertDialog mAlertDialog;
     Long creatorEventId;
     String shortTitle, phNumber;
 
@@ -126,10 +126,10 @@ public class SavedEventDetailsFragment extends Fragment {
         dialogAskForFinalDecission.setTitle(R.string.titleDialogSaveEvent);
         dialogAskForFinalDecission.setCancelable(true);
 
-        final AlertDialog alertDialogAskForFinalDecission = dialogAskForFinalDecission.create();
-        alertDialogAskForFinalDecission.show();
+        mAlertDialog = dialogAskForFinalDecission.create();
+        mAlertDialog.show();
 
-        alertDialogAskForFinalDecission.findViewById(R.id.dialog_button_event_delete)
+        mAlertDialog.findViewById(R.id.dialog_button_event_delete)
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -173,11 +173,11 @@ public class SavedEventDetailsFragment extends Fragment {
                     }
                 });
 
-        alertDialogAskForFinalDecission.findViewById(R.id.dialog_button_event_back)
+        mAlertDialog.findViewById(R.id.dialog_button_event_back)
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        alertDialogAskForFinalDecission.cancel();
+                        mAlertDialog.cancel();
                     }
                 });
     }
@@ -275,6 +275,14 @@ public class SavedEventDetailsFragment extends Fragment {
         eventToStringBuffer.append(selectedEvent.getCreator().getName());
 
         return eventToStringBuffer;
+
+    }
+    public void onPause(){
+        if(mAlertDialog != null){
+            mAlertDialog.dismiss();
+        }
+
+        super.onPause();
 
     }
 }
