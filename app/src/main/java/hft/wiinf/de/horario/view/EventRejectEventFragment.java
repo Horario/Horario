@@ -274,7 +274,7 @@ public class EventRejectEventFragment extends Fragment {
             Toast.makeText(getContext(), R.string.reject_event_reason_special_characters, Toast.LENGTH_SHORT).show();
             return false;
         }
-        
+
         return true;
     }
 }
