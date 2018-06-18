@@ -2,6 +2,7 @@ package hft.wiinf.de.horario.view;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
@@ -178,6 +179,12 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
                     PersonController.savePerson(person);
                     Toast toast = Toast.makeText(v.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT);
                     toast.show();
+                    //hide keyboard
+                    Activity activity = getActivity();
+                    assert activity!=null;
+                        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                        assert imm!=null;
+                        imm.hideSoftInputFromWindow(editTextUsername.getWindowToken(), 0);
                     editTextUsername.setFocusable(false);
                     editTextUsername.setFocusableInTouchMode(false);
                     return false;
@@ -425,7 +432,7 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
                     phoneNumber = "+" + phoneNumber;
             }
             }
-        if (phoneNumber!=null||!phoneNumber.matches("(00|0|\\+)[1-9][0-9]+")||person.getPhoneNumber().length()<=50) {
+        if (phoneNumber==null||!phoneNumber.matches("(00|0|\\+)[1-9][0-9]+")||phoneNumber.length()>50) {
             Toast.makeText(getContext(), R.string.telephonenumerNotRead, Toast.LENGTH_SHORT).show();
             editText_PhoneNumber.requestFocusFromTouch();
             //open keyboard
