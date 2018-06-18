@@ -140,6 +140,7 @@
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/settings_settings_editText_username"
         android:ems="8"
+        android:imeOptions="actionDone"
         android:hint="@string/phoneNumberHint"
         android:inputType="phone"
         android:textSize="14sp" />

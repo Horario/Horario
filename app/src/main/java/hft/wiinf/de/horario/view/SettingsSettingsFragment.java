@@ -235,7 +235,7 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
                     editText_PhoneNumber.setFocusableInTouchMode(false);
                     InputMethodManager imm = (InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                    Toast.makeText(getContext(), R.string.thanksphoneNumber, Toast.LENGTH_SHORT).show();
+                   Toast.makeText(getContext(), R.string.thanksphoneNumber, Toast.LENGTH_SHORT).show();
 
                 } else {
                     //show a toast if the number does not fit the regex
