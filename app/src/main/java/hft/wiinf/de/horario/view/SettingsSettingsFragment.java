@@ -215,9 +215,14 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
                 String inputText = v.getText().toString().replaceAll(" ", "");
                 //on click: read out the textfield, save the personand close the keyboard
                 //regex: perhaps + then numbers
+
                 if (actionId == EditorInfo.IME_ACTION_DONE && inputText.matches("(\\+|00|0)[1-9][0-9]+")) {
-                    person.setPhoneNumber(editText_PhoneNumber.getText().toString().replaceAll(" ", ""));
-                    editText_PhoneNumber.setText(person.getPhoneNumber());
+                    editText_PhoneNumber.setText(editText_PhoneNumber.getText().toString().replaceAll(" ", ""));
+                    if (editText_PhoneNumber.getText().length()>30){
+                        Toast.makeText(getContext(), R.string.phoneNumber_too_long, Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                    person.setPhoneNumber(editText_PhoneNumber.getText().toString());
                     PersonController.savePerson(person);
                     editText_PhoneNumber.setFocusable(false);
                     editText_PhoneNumber.setFocusableInTouchMode(false);
@@ -415,7 +420,7 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
         if (phoneNumber.matches("[1-9][0-9]+"))
             phoneNumber = "+" + phoneNumber;
         person.setPhoneNumber(phoneNumber);
-        if (person.getPhoneNumber() == null || !person.getPhoneNumber().matches("(00|0|\\+)[1-9][0-9]+")) {
+        if (person.getPhoneNumber() == null || !person.getPhoneNumber().matches("(00|0|\\+)[1-9][0-9]+")||person.getPhoneNumber().length()>50) {
             Toast.makeText(getContext(), R.string.telephonenumerNotRead, Toast.LENGTH_SHORT).show();
             editText_PhoneNumber.requestFocusFromTouch();
             //open keyboard

@@ -51,6 +51,8 @@ import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.model.Repetition;
 
+import static android.content.Context.INPUT_METHOD_SERVICE;
+
 //TODO Kommentieren und Java Doc Info Schreiben
 public class NewEventFragment extends Fragment {
 
@@ -704,27 +706,33 @@ assert getActivity()!=null;
         dialogBuilder.setCancelable(true);
         final android.app.AlertDialog alertDialog = dialogBuilder.create();
         alertDialog.show();
-        EditText phoneNumber = alertDialog.findViewById(R.id.dialog_EditText_telephonNumber);
+        final EditText phoneNumber = alertDialog.findViewById(R.id.dialog_EditText_telephonNumber);
         phoneNumber.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                String input = v.getText().toString().replaceAll(" ", "");
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    //regex: perhaps 0 + or 00 then 1-9 then numbers
-                    if (input.matches("(0|\\+|00)[1-9][0-9]+")) {
+                    String inputText = v.getText().toString().replaceAll(" ", "");
+                    //on click: read out the textfield, save the personand close the keyboard
+                    //regex: perhaps + then numbers
+
+                    if (actionId == EditorInfo.IME_ACTION_DONE && inputText.matches("(\\+|00|0)[1-9][0-9]+")) {
+                        phoneNumber.setText(phoneNumber.getText().toString().replaceAll(" ", ""));
+                        if (phoneNumber.getText().length()>30){
+                            Toast.makeText(getContext(), R.string.phoneNumber_too_long, Toast.LENGTH_SHORT).show();
+                            return true;
+                        }
+                        me.setPhoneNumber(phoneNumber.getText().toString());
+                        PersonController.savePerson(me);
+                        Toast.makeText(getContext(), R.string.thanksphoneNumber, Toast.LENGTH_SHORT).show();
                         alertDialog.dismiss();
-                        me.setPhoneNumber(input);
-                        Toast.makeText(v.getContext(), R.string.thanksphoneNumber, Toast.LENGTH_SHORT).show();
                         saveEvent();
-                        return false;
+
                     } else {
-                        Toast toast = Toast.makeText(v.getContext(), R.string.wrongNumberFormat, Toast.LENGTH_SHORT);
-                        toast.show();
+                        //show a toast if the number does not fit the regex
+                        Toast.makeText(getContext(), R.string.wrongNumberFormat, Toast.LENGTH_SHORT).show();
                         return true;
                     }
+                    return false;
                 }
-                return false;
-            }
         });
         //if the dialog is canceled save nothing
         alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -732,6 +740,15 @@ assert getActivity()!=null;
             public void onCancel(DialogInterface dialog) {
                 Toast toast = Toast.makeText(getContext(), R.string.event_save_notSuccessful, Toast.LENGTH_SHORT);
                 toast.show();
+                Activity activity = getActivity();
+                assert activity!=null;
+                if (activity.getCurrentFocus() != null) {
+                    Context ctx = getContext();
+                    assert ctx!=null;
+                    InputMethodManager mngr =  (InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    assert mngr!=null;
+                    mngr.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+                }
             }
         });
 

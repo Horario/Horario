@@ -210,4 +210,5 @@
     <string name="username_spaces">Der Nutzername darf nicht mit Leerzeichen beginnen.</string>
     <string name="username_too_long">Der Nutzername darf nicht länger als 50 Zeichen sein.</string>
     <string name="username_empty">Bitte gib einen Nutzernamen ein.</string>
+    <string name="phoneNumber_too_long">Die Telefonnummer darf nicht länger als 30 Zeichen sein.</string>
 </resources>
