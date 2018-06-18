@@ -56,7 +56,8 @@ public class NewEventFragment extends Fragment {
     Calendar endTime = Calendar.getInstance();
     Calendar endOfRepetition = Calendar.getInstance();
     // elements of the gui
-    private EditText editText_description, edittext_shortTitle, edittext_room, edittext_date, edittext_startTime, editText_endTime, edittext_userName, editText_endOfRepetition;
+    private EditText editText_description, edittext_shortTitle, edittext_room, edittext_date,
+            edittext_startTime, editText_endTime, edittext_userName, editText_endOfRepetition;
     private TextView textView_endofRepetiton;
     private Spinner spinner_repetition;
     private CheckBox checkBox_serialEvent;
@@ -69,6 +70,8 @@ public class NewEventFragment extends Fragment {
     private EditText mPhoneNumber;
     private AlertDialog mAlertDialog1;
     private Dialog mDialog;
+    private DatePickerDialog mDatePickerDialog;
+    private TimePickerDialog mTimePickerDialog;
 
     @Nullable
     @Override
@@ -81,7 +84,8 @@ public class NewEventFragment extends Fragment {
 
 
     public void onViewCreated(final View view, Bundle savedInstanceState) {
-        // set the second and millisecond of the calendar objects to 0 as (dates and) times are only compared by hour and minute, seconds dont matter
+        // set the second and millisecond of the calendar objects to 0 as (dates and) times are only
+        // compared by hour and minute, seconds dont matter
         startTime.set(Calendar.SECOND, 0);
         startTime.set(Calendar.MILLISECOND, 0);
         endTime.set(Calendar.SECOND, 0);
@@ -116,7 +120,8 @@ public class NewEventFragment extends Fragment {
                 return false;
             }
         });
-        //for each fields with a date: 1. don't open keyboard on focus, when it gets focus or the user clicks on the field: open date/time picker and save the date
+        //for each fields with a date: 1. don't open keyboard on focus, when it gets focus or the user
+        // clicks on the field: open date/time picker and save the date
         edittext_date.setShowSoftInputOnFocus(false);
         edittext_date.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -163,7 +168,8 @@ public class NewEventFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+                    ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).
+                            hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
                     edittext_userName.clearFocus();
                     return true;
 
@@ -179,7 +185,8 @@ public class NewEventFragment extends Fragment {
             }
         });
         // sets the choice possibilities of the repetition spinner (set in string resource-file as array event-repetition)
-        ArrayAdapter repetitionAdapter = ArrayAdapter.createFromResource(getContext(), R.array.event_repetitions, android.R.layout.simple_spinner_item);
+        ArrayAdapter repetitionAdapter = ArrayAdapter.createFromResource(getContext(), R.array.event_repetitions,
+                android.R.layout.simple_spinner_item);
         //set the appearance of one choice possibility
         repetitionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_repetition.setAdapter(repetitionAdapter);
@@ -206,7 +213,8 @@ public class NewEventFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+                    ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).
+                            hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
                     editText_endOfRepetition.clearFocus();
                     return true;
 
@@ -252,8 +260,10 @@ public class NewEventFragment extends Fragment {
     public void getDate() {
         //close keyboard if it's open
         if (getActivity().getCurrentFocus() != null)
-            ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
-        // create a listener for the date picker dialog: update the date parts (year, month, date) of start and end time with the selected values
+            ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).
+                    hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+        // create a listener for the date picker dialog: update the date parts (year, month, date)
+        // of start and end time with the selected values
         DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
@@ -264,14 +274,16 @@ public class NewEventFragment extends Fragment {
                 edittext_date.setText(format.format(startTime.getTime()));
             }
         };
-        DatePickerDialog dialog = new DatePickerDialog(this.getContext(), listener, startTime.get(Calendar.YEAR), startTime.get(Calendar.MONTH), startTime.get(Calendar.DAY_OF_MONTH));
-        dialog.show();
+        mDatePickerDialog = new DatePickerDialog(this.getContext(), listener, startTime.get(Calendar.YEAR),
+                startTime.get(Calendar.MONTH), startTime.get(Calendar.DAY_OF_MONTH));
+        mDatePickerDialog.show();
     }
 
     public void getStartTime() {
         //close keyboard if it's open
         if (getActivity().getCurrentFocus() != null)
-            ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+            ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).
+                    hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
         // create a listener for the time picker dialog: update the start time with the selected values
         TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
             @Override
@@ -283,16 +295,20 @@ public class NewEventFragment extends Fragment {
                 edittext_startTime.setText(format.format(startTime.getTime()));
             }
         };
-        //open a time picker to let the user choose a time, use the saved start time as initial value (initial value of startTime: now)
-        TimePickerDialog dialog = new TimePickerDialog(this.getContext(), listener, startTime.get(Calendar.HOUR_OF_DAY), startTime.get(Calendar.MINUTE), true);
-        dialog.show();
+        //open a time picker to let the user choose a time, use the saved start time as initial
+        // value (initial value of startTime: now)
+        mTimePickerDialog = new TimePickerDialog(this.getContext(), listener, startTime.get(Calendar.HOUR_OF_DAY),
+                startTime.get(Calendar.MINUTE), true);
+        mTimePickerDialog.show();
     }
 
     public void getEndTime() {
         //close keyboard if it's open
         if (getActivity().getCurrentFocus() != null)
-            ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
-        // create a listener for the time picker dialog: update the end time and the time for the end of repetition (for the comparing later) with the selected values
+            ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).
+                    hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+        // create a listener for the time picker dialog: update the end time and the time for the
+        // end of repetition (for the comparing later) with the selected values
         TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -305,16 +321,20 @@ public class NewEventFragment extends Fragment {
                 editText_endTime.setText(format.format(endTime.getTime()));
             }
         };
-        //open a time picker to let the user choose a time, use the saved end time as initial value (initial value of endTime: now)
-        TimePickerDialog dialog = new TimePickerDialog(this.getContext(), listener, endTime.get(Calendar.HOUR_OF_DAY), endTime.get(Calendar.MINUTE), true);
-        dialog.show();
+        //open a time picker to let the user choose a time, use the saved end time as initial value
+        // (initial value of endTime: now)
+        mTimePickerDialog = new TimePickerDialog(this.getContext(), listener, endTime.get(Calendar.HOUR_OF_DAY),
+                endTime.get(Calendar.MINUTE), true);
+        mTimePickerDialog.show();
     }
 
     public void getEndOfRepetition() {
         //close keyboard if it's open
         if (getActivity().getCurrentFocus() != null)
-            ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
-        // create a listener for the time picker dialog: update the date part (year, month, day) of the end of repetition with the selected values
+            ((InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).
+                    hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+        // create a listener for the time picker dialog: update the date part (year, month, day) of
+        // the end of repetition with the selected values
         DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
@@ -323,9 +343,11 @@ public class NewEventFragment extends Fragment {
                 editText_endOfRepetition.setText(format.format(endOfRepetition.getTime()));
             }
         };
-        //open a date picker to let the user choose a date, use the saved end of repetition as initial value (initial value of endTime: now)
-        DatePickerDialog dialog = new DatePickerDialog(this.getContext(), listener, endOfRepetition.get(Calendar.YEAR), endOfRepetition.get(Calendar.MONTH), endOfRepetition.get(Calendar.DAY_OF_MONTH));
-        dialog.show();
+        //open a date picker to let the user choose a date, use the saved end of repetition as initial
+        // value (initial value of endTime: now)
+        mDatePickerDialog = new DatePickerDialog(this.getContext(), listener, endOfRepetition.get(Calendar.YEAR),
+                endOfRepetition.get(Calendar.MONTH), endOfRepetition.get(Calendar.DAY_OF_MONTH));
+        mDatePickerDialog.show();
     }
 
     //if the save button is clicked check the entrys and save the event if everything is ok
@@ -352,7 +374,8 @@ public class NewEventFragment extends Fragment {
         event.setShortTitle(edittext_shortTitle.getText().toString());
         event.setRepetition(getRepetition());
         event.setPlace(edittext_room.getText().toString());
-        // only save the end of repetition if the repetition is not none, if it's an serial event (repetition not none) save it as an serial event, else as an "normal" event
+        // only save the end of repetition if the repetition is not none, if it's an serial event
+        // (repetition not none) save it as an serial event, else as an "normal" event
         if (event.getRepetition() != Repetition.NONE) {
             event.setEndDate(endOfRepetition.getTime());
             EventController.saveSerialevent(event);
@@ -655,12 +678,8 @@ public class NewEventFragment extends Fragment {
                     readPhoneNumber();
                 }
             }
-
         }
-
-
     }
-
 
     // method to read the phone number of the user
     public void readPhoneNumber() {
@@ -724,13 +743,14 @@ public class NewEventFragment extends Fragment {
     public void onPause(){
         if(mAlertDialog1 != null){
             mAlertDialog1.dismiss();
-        }
-        if(mDialog != null){
+        } else if(mDialog != null){
             mDialog.dismiss();
+        } else if(mDatePickerDialog !=null){
+            mDatePickerDialog.dismiss();
+        } else if (mTimePickerDialog != null){
+            mTimePickerDialog.dismiss();
         }
-
         super.onPause();
-
     }
 
 }
