@@ -20,10 +20,8 @@
     <string name="allowpush_text">Erinnerungen erlauben :</string>
     <string name="reminder_text">Erinnerungen :</string>
     <string name="minutesBefore_text">Minuten vorher</string>
-    <string name="noValidUsername">Der Benutzername darf keine Sonderzeichen außer . enthalten.</string>
+    <string name="noValidUsername">Der Benutzername darf keine Sonderzeichen außer . und _ enthalten.</string>
     <string name="event_Description">Beschreibung :</string>
-    <string name="noValidUsername_peek">Der Benutzername darf nicht das Zeichen | enthalten.</string>
-    <string name="noValidUsername_comma">Der Benutzername darf nicht das Zeichen , enthalten.</string>
     <string name="event_date">Datum:</string>
     <string name="event_startTime">Startzeit :</string>
     <string name="event_endtime">Endzeit :</string>
@@ -209,4 +207,7 @@
     <string name="phoneNumber">Telefonnummer :</string>
     <string name="phoneNumberHint">Telefonnummer</string>
     <string name="thanksUserData">Die Eingaben wurden gespeichert.</string>
+    <string name="username_spaces">Der Nutzername darf nicht mit Leerzeichen beginnen.</string>
+    <string name="username_too_long">Der Nutzername darf nicht länger als 50 Zeichen sein.</string>
+    <string name="username_empty">Bitte gib einen Nutzernamen ein.</string>
 </resources>

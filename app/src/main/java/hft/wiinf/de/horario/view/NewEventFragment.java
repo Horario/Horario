@@ -39,6 +39,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
@@ -467,7 +469,7 @@ assert getActivity()!=null;
         checkSerialEvent();
     }
 
-    //checks if the entrys are valid and opens a toast if not return value: coolean if everything is ok
+    //checks if the entrys are valid and opens a toast if not return value: boolean if everything is ok
     private boolean checkValidity() {
         if (editText_description.getText().toString().equals("") || edittext_shortTitle.getText().toString().equals("") || edittext_date.getText().toString().equals("") || edittext_startTime.getText().toString().equals("") || editText_endTime.getText().toString().equals("") || edittext_userName.getText().toString().equals("") || edittext_room.getText().toString().equals("")) {
             Toast.makeText(getContext(), R.string.empty_fields, Toast.LENGTH_SHORT).show();
@@ -501,10 +503,6 @@ assert getActivity()!=null;
             Toast.makeText(getContext(), R.string.room_peek, Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (!edittext_userName.getText().toString().matches("(\\w|\\s|\\.)*")) {
-            Toast.makeText(getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT).show();
-            return false;
-        }
 
         if (editText_description.getText().length() > 200) {
             Toast.makeText(getContext(), R.string.description_too_long, Toast.LENGTH_SHORT).show();
@@ -531,6 +529,20 @@ assert getActivity()!=null;
             Toast.makeText(getContext(), R.string.endTime_before_startTime, Toast.LENGTH_SHORT).show();
             return false;
         }
+        if (edittext_userName.length() > 50) {
+            Toast.makeText(getContext(), R.string.username_too_long, Toast.LENGTH_SHORT).show();
+            return false;
+
+        } if (edittext_userName.getText().toString().startsWith(" ")) {
+                Toast.makeText(getContext(), R.string.username_spaces, Toast.LENGTH_SHORT).show();
+                return false;
+
+
+        } if (!edittext_userName.getText().toString().matches("(\\w|\\.)(\\w|\\s|\\.)*")) {
+            Toast.makeText(getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
         //if it is and repeating event and the end of the repetition is before the end time of the first event
         if (getRepetition() != Repetition.NONE && endOfRepetition.before(endTime)) {
             Toast.makeText(getContext(), R.string.endOfRepetition_before_endTime, Toast.LENGTH_SHORT).show();

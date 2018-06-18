@@ -526,7 +526,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         final AlertDialog alertDialogAskForUsername = dialogAskForUsername.create();
         alertDialogAskForUsername.show();
 
-        EditText username = alertDialogAskForUsername.findViewById(R.id.dialog_EditText_Username);
+        final EditText username = alertDialogAskForUsername.findViewById(R.id.dialog_EditText_Username);
 
         Objects.requireNonNull(username).setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -535,30 +535,26 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 dialog_inputUsername = v.getText().toString();
 
                 //RegEx: no whitespace at the beginning
-                Pattern pattern_username = Pattern.compile("^([\\S]).*");
+                Pattern pattern_username = Pattern.compile("(\\w|\\.)(\\w|\\s|\\.)*");
                 Matcher matcher_username = pattern_username.matcher(dialog_inputUsername);
 
-                if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches() && !dialog_inputUsername.contains("|") && !dialog_inputUsername.contains(",")) {
+                if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches() && dialog_inputUsername.length()<=50) {
                     personMe.setName(dialog_inputUsername);
                     PersonController.savePerson(personMe);
                     Toast toast = Toast.makeText(v.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT);
                     toast.show();
-
                     alertDialogAskForUsername.dismiss();
-                    return true;
-                } else if (dialog_inputUsername.contains("|")) {
-                    Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername_peek, Toast.LENGTH_SHORT);
-                    toast.show();
-                    return true;
-                } else if (dialog_inputUsername.contains(",")) {
-                    Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername_comma, Toast.LENGTH_SHORT);
-                    toast.show();
-                    return true;
+                    return false;
+                }else if(dialog_inputUsername.isEmpty()) {
+                    Toast.makeText(getContext(), R.string.username_empty, Toast.LENGTH_SHORT).show();
+                } else if(dialog_inputUsername.length()>50){
+                    Toast.makeText(getContext(), R.string.username_too_long, Toast.LENGTH_SHORT).show();
+                }else if(dialog_inputUsername.startsWith(" ")){
+                    Toast.makeText(getContext(), R.string.username_spaces, Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
-                    toast.show();
-                    return true;
+                    Toast.makeText(v.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT).show();
                 }
+                return true;
             }
         });
     }

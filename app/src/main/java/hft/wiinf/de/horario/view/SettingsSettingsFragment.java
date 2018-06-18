@@ -37,6 +37,7 @@ import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.Person;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
+import static com.activeandroid.Cache.getContext;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -165,35 +166,32 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
             //on click: read out the textfield, ask for phone number and close the keyboard
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                String inputText = v.getText().toString();
-                //RegEx: no whitespace at the beginning
-                Pattern pattern_username = Pattern.compile("^([\\S]).*");
-                Matcher matcher_username = pattern_username.matcher(inputText);
+                String dialog_inputUsername;
+                dialog_inputUsername = v.getText().toString();
 
-                if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches() && !inputText.contains("|") && !inputText.contains(",")) {
-                    person.setName(inputText);
+                //RegEx: no whitespace at the beginning
+                Pattern pattern_username = Pattern.compile("(\\.|\\w)(\\w|\\s|\\.)*");
+                Matcher matcher_username = pattern_username.matcher(dialog_inputUsername);
+
+                if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches()&&dialog_inputUsername.length()<=50) {
+                    person.setName(dialog_inputUsername);
                     PersonController.savePerson(person);
-                    InputMethodManager imm = (InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                    Toast.makeText(getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT).show();
-                    editTextUsername.setFocusableInTouchMode(false);
+                    Toast toast = Toast.makeText(v.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT);
+                    toast.show();
                     editTextUsername.setFocusable(false);
+                    editTextUsername.setFocusableInTouchMode(false);
                     return false;
-                } else if (inputText.contains("|")) {
-                    Toast toast = Toast.makeText(view.getContext(), R.string.noValidUsername_peek, Toast.LENGTH_SHORT);
+                }else if(dialog_inputUsername.length()>50){
+                    Toast.makeText(getContext(), R.string.username_too_long, Toast.LENGTH_SHORT).show();
+                }else if(dialog_inputUsername.isEmpty()){
+                    Toast.makeText(getContext(), R.string.username_empty, Toast.LENGTH_SHORT).show();
+                }else if(dialog_inputUsername.startsWith(" ")){
+                    Toast.makeText(getContext(), R.string.username_spaces, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
                     toast.show();
-                  //  editTextUsername.setText(person.getName());
-                    return true;
-                }  else if (inputText.contains(",")) {
-                    Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername_comma, Toast.LENGTH_SHORT);
-                    toast.show();
-                    return true;
-                }else {
-                    //if the user name is not valid show a toast
-                    Toast toast = Toast.makeText(view.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
-                    toast.show();
-                    return true;
                 }
+                return true;
             }
         });
         editText_PhoneNumber.setOnFocusChangeListener(new View.OnFocusChangeListener() {
