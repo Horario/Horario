@@ -266,7 +266,7 @@ public class EventRejectEventFragment extends Fragment {
             Toast.makeText(getContext(), R.string.reject_event_reason_free_text_field_empty, Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (reason_for_rejection.getText().length() > 140) {
+        if (reason_for_rejection.getText().length() > 100) {
             Toast.makeText(getContext(), R.string.reject_event_reason_free_text_field_to_long, Toast.LENGTH_SHORT).show();
             return false;
         }
