@@ -84,8 +84,8 @@ public class ParticipantsListFragment extends Fragment {
                 } else {
                     //get rejection reason data, then show pop up
                     String[] reasonData = participant.getExcuse().split("!");
-                    String reason = participant.getName().substring(2) + " hat wegen " + reasonData[0] + " abgesagt";
-                    String note = "Notiz zur Absage: " + reasonData[1];
+                    String reason = participant.getName().substring(2) + " hat den Termin abgesagt. Grund: " + reasonData[0];
+                    String note = "Details zur Absage: " + reasonData[1];
                     //create popup with reason and note.
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setTitle(reason);
@@ -146,10 +146,10 @@ public class ParticipantsListFragment extends Fragment {
                 // Setting all values in listview
                 if (participantRow.charAt(0) == 'Y') {
                     participant.setText(participantRow.substring(2));
-                    presenceIndicator.setImageResource(R.drawable.ic_fiber_manual_record_green_24dp);
+                    presenceIndicator.setImageResource(R.mipmap.ic_mydate_approved_gruen);
                 } else {
                     participant.setText(participantRow.substring(2));
-                    presenceIndicator.setImageResource(R.drawable.ic_fiber_manual_record_red_24dp);
+                    presenceIndicator.setImageResource(R.mipmap.ic_mydate_rejected_rot);
                 }
 
                 return item;

@@ -220,12 +220,11 @@ public class EventRejectEventFragment extends Fragment {
         if (repetition.equals("")) {
             reject_event_description.setText("Am " + startDate + " findet von " + startTime + " bis "
                     + endTime + " Uhr in Raum " + place + " " + shortTitle + " statt." + "\n" + "Termindetails sind: "
-                    + description + "\n" + "\n" + "Organisator: " + eventCreatorName);
+                    + description);
         } else {
             reject_event_description.setText("Vom " + startDate + " bis " + endDate +
                     " findet " + repetition + " um " + startTime + "Uhr bis " + endTime + "Uhr in Raum "
-                    + place + " " + shortTitle + " statt." + "\n" + "Termindetails sind: " + description +
-                    "\n" + "\n" + "Organisator: " + eventCreatorName);
+                    + place + " " + shortTitle + " statt." + "\n" + "Termindetails sind: " + description);
         }
     }
 
@@ -267,7 +266,7 @@ public class EventRejectEventFragment extends Fragment {
             Toast.makeText(getContext(), R.string.reject_event_reason_free_text_field_empty, Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (reason_for_rejection.getText().length() > 140) {
+        if (reason_for_rejection.getText().length() > 100) {
             Toast.makeText(getContext(), R.string.reject_event_reason_free_text_field_to_long, Toast.LENGTH_SHORT).show();
             return false;
         }

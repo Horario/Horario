@@ -43,6 +43,7 @@ public class EventOverviewFragment extends Fragment {
     static Context context = null;
     static DateFormat timeFormat = new SimpleDateFormat("HH:mm");
     FloatingActionButton eventOverviewFcMenu, eventOverviewFcQrScan, eventOverviewFcNewEvent;
+    boolean fabIsOpened = false;
     ImageButton overviewBtNext;
     TextView eventOverview_HiddenIsFloatingMenuOpen;
     ImageButton overviewBtPrevious;
@@ -175,6 +176,8 @@ public class EventOverviewFragment extends Fragment {
         ActionButtonClose = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonclose);
         ActionButtonRotateRight = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonrotateright);
         ActionButtonRotateLeft = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonrotateleft);
+
+
         eventOverviewFcQrScan.hide();
         eventOverviewFcNewEvent.hide();
         //selectedMonth = CalendarFragment.selectedMonth; TODO connect selectedMonth of Calendar and Overview
@@ -209,7 +212,7 @@ public class EventOverviewFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Appointment selectedItem = (Appointment) parent.getItemAtPosition(position);
-                closeFABMenu();
+                if(fabIsOpened){closeFABMenu();};
                 // 0 = date, 1 = accepted, 2 = waiting, 3 = own
                 switch (selectedItem.getType()) {
                     case 1:
@@ -260,8 +263,10 @@ public class EventOverviewFragment extends Fragment {
                     showFABMenu();
                     eventOverview_HiddenIsFloatingMenuOpen.setText("true");
                 } else {
-                    closeFABMenu();
-                    eventOverview_HiddenIsFloatingMenuOpen.setText("false");
+                    if (fabIsOpened) {
+                        closeFABMenu();
+                        eventOverview_HiddenIsFloatingMenuOpen.setText("false");
+                    }
                 }
             }
         });
@@ -279,7 +284,7 @@ public class EventOverviewFragment extends Fragment {
                 fr.replace(R.id.eventOverview_frameLayout, newEventFragment);
                 fr.addToBackStack(null);
                 fr.commit();
-                closeFABMenu();
+                if(fabIsOpened){closeFABMenu();};
             }
         });
 
@@ -296,14 +301,14 @@ public class EventOverviewFragment extends Fragment {
                 fr.replace(R.id.eventOverview_frameLayout, qrScanFragment);
                 fr.addToBackStack(null);
                 fr.commit();
-                closeFABMenu();
+                if(fabIsOpened){closeFABMenu();};
             }
         });
 
         layoutOverview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                closeFABMenu();
+                if(fabIsOpened){closeFABMenu();};
             }
         });
 
@@ -313,30 +318,34 @@ public class EventOverviewFragment extends Fragment {
 
     //Show the menu Buttons
     public void showFABMenu() {
-        eventOverview_HiddenIsFloatingMenuOpen.setText("true");
-        eventOverviewFcQrScan.show();
-        eventOverviewFcNewEvent.show();
+
         eventOverviewFcQrScan.startAnimation(ActionButtonOpen);
         eventOverviewFcNewEvent.startAnimation(ActionButtonOpen);
         eventOverviewFcMenu.startAnimation(ActionButtonRotateRight);
         eventOverviewFcQrScan.setClickable(true);
         eventOverviewFcNewEvent.setClickable(true);
+        eventOverview_HiddenIsFloatingMenuOpen.setText("true");
+        eventOverviewFcQrScan.show();
+        eventOverviewFcNewEvent.show();
         eventOverviewFcMenu.setImageResource(R.drawable.ic_plusmenu);
+        fabIsOpened = true;
     }
 
     //Hide the menu Buttons
     public void closeFABMenu() {
-        eventOverview_HiddenIsFloatingMenuOpen.setText("false");
-        eventOverviewFcQrScan.hide();
-        eventOverviewFcNewEvent.hide();
-        if (eventOverviewFcNewEvent.isClickable()) {
-            eventOverviewFcQrScan.startAnimation(ActionButtonClose);
-            eventOverviewFcNewEvent.startAnimation(ActionButtonClose);
-            eventOverviewFcMenu.startAnimation(ActionButtonRotateLeft);
-            eventOverviewFcQrScan.setClickable(false);
-            eventOverviewFcNewEvent.setClickable(false);
-            eventOverviewFcMenu.setImageResource(R.drawable.ic_plusmenu);
-        }
+        if (fabIsOpened){
+            eventOverview_HiddenIsFloatingMenuOpen.setText("false");
+            eventOverviewFcQrScan.hide();
+            eventOverviewFcNewEvent.hide();
+            if (eventOverviewFcNewEvent.isClickable()) {
+                eventOverviewFcQrScan.startAnimation(ActionButtonClose);
+                eventOverviewFcNewEvent.startAnimation(ActionButtonClose);
+                eventOverviewFcMenu.startAnimation(ActionButtonRotateLeft);
+                eventOverviewFcQrScan.setClickable(false);
+                eventOverviewFcNewEvent.setClickable(false);
+                eventOverviewFcMenu.setImageResource(R.drawable.ic_plusmenu);
+                fabIsOpened=false;
+            }}
     }
 }
 

@@ -38,4 +38,5 @@ Design_US011, US050 and US068 pushed to Quality. Quality tested and pushed to ma
 US018, US019, US024, US025, US062 and Bug11 pushed to Quality. Quality tested and pushed to master on 11.06.2018.  
 Bug08, Bug14, BugsOnMaster07 and BugsOnMaster11 pushed to Quality. Quality tested and pushed to master on 15.06.2018.  
 Bug12, Bug13, Javadoc and BugsOnMaster01,02,03,06,08,10 pushed to Quality. Quality tested and pushed to master on 16.06.2018.  
+Design pushed to Quality. Quality tested and pushed to master on 18.06.2018. 
 
