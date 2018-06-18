@@ -679,6 +679,7 @@ assert getActivity()!=null;
         assert ctx!=null;
         TelephonyManager telephonyManager = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
         String phoneNumber="";
+       //check if the sim is in the phone
         if (telephonyManager!=null)
         phoneNumber = telephonyManager.getLine1Number();
         //delete spaces and add a + if phoneNumber starts without a 0
@@ -695,7 +696,6 @@ assert getActivity()!=null;
         } else {
             Toast.makeText(getContext(), R.string.thanksphoneNumber, Toast.LENGTH_SHORT).show();
             saveEvent();
-
         }
     }
 
