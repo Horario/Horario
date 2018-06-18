@@ -71,9 +71,6 @@
     <string name="reject_event_hint_single">Der Termin wurde abgesagt.</string>
     <string name="reject_event_reason_free_text_field_empty">Die Beschreibung darf nicht mit einem Leerzeichen anfangen.</string>
     <string name="reject_event_reason_free_text_field_to_long">Die Beschreibung darf nicht mehr als 100 Zeichen sein.</string>
-    <string name="reject_event_reason_contains_pipe">Die Beschreibung darf kein "|" enthalten.</string>
-    <string name="reject_event_reason_contains_comma">Die Beschreibung darf kein "," enthalten.</string>
-    <string name="reject_event_reason_contains_exclamation_mark">Die Beschreibung darf kein "!" enthalten.</string>
     <string name="reject_event_reason">Bitte wähle einen Absagegrund und gebe eine Begründung ein.</string>
     <string name="shortTitle_too_long">Der Kurztitel darf nicht länger als 50 Zeichen sein.</string>
     <string name="startTime_past">Der Termin darf nicht in der Vergangenheit beginnen.</string>
@@ -219,4 +216,5 @@
     <string name="username_too_long">Der Nutzername darf nicht länger als 50 Zeichen sein.</string>
     <string name="username_empty">Bitte gib einen Nutzernamen ein.</string>
     <string name="phoneNumber_too_long">Die Telefonnummer darf nicht länger als 30 Zeichen sein.</string>
+    <string name="reject_event_reason_special_characters">Der Absagegrund darf keine Sonderzeichen außer . und _ enthalten.</string>
 </resources>
