@@ -210,14 +210,14 @@ public class QRGeneratorFragment extends Fragment {
             mQRGenerator_textView_headline.setText(shortTitle + ", " + startDate);
             // Check for a Repetition Event and Change the Description Output with and without
             // Repetition Element inside.
-           if (repetition.equals("")) {
-                mQRGenerator_textView_description.setText(getString(R.string.time)+ startTime + getString(R.string.until)
-                        + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place + "\n" + getString(R.string.organizer) + eventCreatorName  + "\n" + "\n" + getString(R.string.eventDetails)
+            if (repetition.equals("")) {
+                mQRGenerator_textView_description.setText(getString(R.string.time) + startTime + getString(R.string.until)
+                        + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place + "\n" + getString(R.string.organizer) + eventCreatorName + "\n" + "\n" + getString(R.string.eventDetails)
                         + description);
             } else {
                 mQRGenerator_textView_description.setText(getString(R.string.as_of) + startDate
-                        + getString(R.string.until) + endDate + "\n"+ getString(R.string.time) + startTime + getString(R.string.until)
-                        + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place + "\n" + getString(R.string.organizer) + eventCreatorName  + "\n" + "\n" + getString(R.string.eventDetails)
+                        + getString(R.string.until) + endDate + "\n" + getString(R.string.time) + startTime + getString(R.string.until)
+                        + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place + "\n" + getString(R.string.organizer) + eventCreatorName + "\n" + "\n" + getString(R.string.eventDetails)
                         + description);
             }
             // In the CatchBlock the User see a SnackBar Information and was pushed where the User Comes From
