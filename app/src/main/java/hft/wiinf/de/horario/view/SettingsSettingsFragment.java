@@ -39,7 +39,6 @@ import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.Person;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
-import static com.activeandroid.Cache.getContext;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -177,25 +176,25 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
                 Pattern pattern_username = Pattern.compile("(\\.|\\w)(\\w|\\s|\\.)*");
                 Matcher matcher_username = pattern_username.matcher(dialog_inputUsername);
 
-                if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches()&&dialog_inputUsername.length()<=50) {
+                if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches() && dialog_inputUsername.length() <= 50) {
                     person.setName(dialog_inputUsername);
                     PersonController.savePerson(person);
                     Toast toast = Toast.makeText(v.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT);
                     toast.show();
                     //hide keyboard
                     Activity activity = getActivity();
-                    assert activity!=null;
-                        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-                        assert imm!=null;
-                        imm.hideSoftInputFromWindow(editTextUsername.getWindowToken(), 0);
+                    assert activity != null;
+                    InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    assert imm != null;
+                    imm.hideSoftInputFromWindow(editTextUsername.getWindowToken(), 0);
                     editTextUsername.setFocusable(false);
                     editTextUsername.setFocusableInTouchMode(false);
                     return false;
-                }else if(dialog_inputUsername.length()>50){
+                } else if (dialog_inputUsername.length() > 50) {
                     Toast.makeText(getContext(), R.string.username_too_long, Toast.LENGTH_SHORT).show();
-                }else if(dialog_inputUsername.isEmpty()){
+                } else if (dialog_inputUsername.isEmpty()) {
                     Toast.makeText(getContext(), R.string.username_empty, Toast.LENGTH_SHORT).show();
-                }else if(dialog_inputUsername.startsWith(" ")){
+                } else if (dialog_inputUsername.startsWith(" ")) {
                     Toast.makeText(getContext(), R.string.username_spaces, Toast.LENGTH_SHORT).show();
                 } else {
                     Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
@@ -228,7 +227,7 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
 
                 if (actionId == EditorInfo.IME_ACTION_DONE && inputText.matches("(\\+|00|0)[1-9][0-9]+")) {
                     editText_PhoneNumber.setText(editText_PhoneNumber.getText().toString().replaceAll(" ", ""));
-                    if (editText_PhoneNumber.getText().length()>30){
+                    if (editText_PhoneNumber.getText().length() > 30) {
                         Toast.makeText(getContext(), R.string.phoneNumber_too_long, Toast.LENGTH_SHORT).show();
                         return true;
                     }
@@ -238,7 +237,7 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
                     editText_PhoneNumber.setFocusableInTouchMode(false);
                     InputMethodManager imm = (InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                   Toast.makeText(getContext(), R.string.thanksphoneNumber, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.thanksphoneNumber, Toast.LENGTH_SHORT).show();
 
                 } else {
                     //show a toast if the number does not fit the regex
@@ -357,7 +356,7 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
                         // permission and directing to the app setting
 
                         mAlertDialogBuilder = new AlertDialog.Builder(getActivity());
-                                mAlertDialogBuilder.setTitle(R.string.accessWith_NeverAskAgain_deny)
+                        mAlertDialogBuilder.setTitle(R.string.accessWith_NeverAskAgain_deny)
                                 .setMessage(R.string.sendSMS_accessDenied_withCheckbox)
                                 .setPositiveButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
                                     @Override
@@ -366,12 +365,12 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
                                     }
                                 })
                                 .create();
-                                mAlertDialog = mAlertDialogBuilder.show();
+                        mAlertDialog = mAlertDialogBuilder.show();
                     } else if (counter < 1) {
                         // user did NOT check "never ask again" this is a good place to explain the user
                         // why you need the permission and ask if he wants // to accept it (the rationale)
                         mAlertDialogBuilder = new AlertDialog.Builder(getActivity());
-                                mAlertDialogBuilder.setTitle(R.string.requestPermission_firstTryRequest)
+                        mAlertDialogBuilder.setTitle(R.string.requestPermission_firstTryRequest)
                                 .setMessage(R.string.phoneNumber_explanation)
                                 .setPositiveButton(R.string.oneMoreTime, new DialogInterface.OnClickListener() {
                                     @Override
@@ -387,11 +386,11 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
                                         ((InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
                                     }
                                 })
-                                        .create();
+                                .create();
                         mAlertDialog = mAlertDialogBuilder.show();
                     } else if (counter == 1) {
                         mAlertDialogBuilder = new AlertDialog.Builder(getActivity());
-                                mAlertDialogBuilder.setTitle(R.string.sendSMS_lastTry)
+                        mAlertDialogBuilder.setTitle(R.string.sendSMS_lastTry)
                                 .setMessage(R.string.phoneNumber_explanation)
                                 .setPositiveButton(R.string.oneMoreTime, new DialogInterface.OnClickListener() {
                                     @Override
@@ -406,7 +405,7 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
                                         ((InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
                                     }
                                 })
-                                        .create();
+                                .create();
                         mAlertDialog = mAlertDialogBuilder.show();
                     } else {
                         ((InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
@@ -428,8 +427,8 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
         //if permission is granted read the phone number
         TelephonyManager telephonyManager = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
         //check if sim card is in phone
-        String phoneNumber="";
-        if (telephonyManager!=null) {
+        String phoneNumber = "";
+        if (telephonyManager != null) {
             phoneNumber = telephonyManager.getLine1Number();
             //delete spaces and add a plus before the number if it begins without a 0
             if (phoneNumber != null) {
@@ -437,8 +436,8 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
                 if (phoneNumber.matches("[1-9][0-9]+"))
                     phoneNumber = "+" + phoneNumber;
             }
-            }
-        if (phoneNumber==null||!phoneNumber.matches("(00|0|\\+)[1-9][0-9]+")||phoneNumber.length()>50) {
+        }
+        if (phoneNumber == null || !phoneNumber.matches("(00|0|\\+)[1-9][0-9]+") || phoneNumber.length() > 50) {
             Toast.makeText(getContext(), R.string.telephonenumerNotRead, Toast.LENGTH_SHORT).show();
             editText_PhoneNumber.requestFocusFromTouch();
             //open keyboard
@@ -455,8 +454,8 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
         }
     }
 
-    public void onPause(){
-        if(mAlertDialog != null){
+    public void onPause() {
+        if (mAlertDialog != null) {
             mAlertDialog.dismiss();
         }
         super.onPause();

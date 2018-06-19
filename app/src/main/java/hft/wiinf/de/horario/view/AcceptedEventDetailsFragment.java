@@ -3,8 +3,6 @@ package hft.wiinf.de.horario.view;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
-import java.util.Objects;
 import java.util.Calendar;
-import java.util.Date;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
@@ -64,7 +60,7 @@ public class AcceptedEventDetailsFragment extends Fragment {
                 //Code for cancelling an event eg. take it out of the DB and Calendar View
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(System.currentTimeMillis());
-                if(EventController.getEventById(getEventID()).getEndTime().after(cal.getTime())) {
+                if (EventController.getEventById(getEventID()).getEndTime().after(cal.getTime())) {
                     Bundle whichFragment = getArguments();
                     EventRejectEventFragment eventRejectEventFragment = new EventRejectEventFragment();
                     Bundle bundleAcceptedEventId = new Bundle();
@@ -82,7 +78,7 @@ public class AcceptedEventDetailsFragment extends Fragment {
                                 .addToBackStack("RejectEvent")
                                 .commit();
                     }
-                }else{
+                } else {
                     Toast.makeText(getContext(), R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();
                 }
             }
@@ -163,17 +159,17 @@ public class AcceptedEventDetailsFragment extends Fragment {
         }
 
         // Event shortTitel in Headline with StartDate
-        acceptedEventDetailsOrganisatorText.setText(eventCreatorName + " (" + phNumber+ ")" + "\n" + shortTitle );
+        acceptedEventDetailsOrganisatorText.setText(eventCreatorName + " (" + phNumber + ")" + "\n" + shortTitle);
         acceptedEventphNumberText.setText("");
         // Check for a Repetition Event and Change the Description Output with and without
         // Repetition Element inside.
         if (repetition.equals("")) {
-            acceptedEventeventDescription.setText(getString(R.string.event_date) + currentDate +"\n"+ getString(R.string.time)+ startTime + getString(R.string.until)
-                    + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place +  "\n" + "\n" +getString(R.string.eventDetails)
+            acceptedEventeventDescription.setText(getString(R.string.event_date) + currentDate + "\n" + getString(R.string.time) + startTime + getString(R.string.until)
+                    + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place + "\n" + "\n" + getString(R.string.eventDetails)
                     + description);
         } else {
             acceptedEventeventDescription.setText(getString(R.string.as_of) + startDate
-                    + getString(R.string.until) + endDate + "\n"+ getString(R.string.time) + startTime + getString(R.string.until)
+                    + getString(R.string.until) + endDate + "\n" + getString(R.string.time) + startTime + getString(R.string.until)
                     + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place + "\n" + "\n" + getString(R.string.eventDetails)
                     + description);
         }

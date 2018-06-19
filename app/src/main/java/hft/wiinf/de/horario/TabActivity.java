@@ -537,18 +537,18 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 Pattern pattern_username = Pattern.compile("(\\w|\\.)(\\w|\\s|\\.)*");
                 Matcher matcher_username = pattern_username.matcher(dialog_inputUsername);
 
-                if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches() && dialog_inputUsername.length()<=50) {
+                if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches() && dialog_inputUsername.length() <= 50) {
                     personMe.setName(dialog_inputUsername);
                     PersonController.savePerson(personMe);
                     Toast toast = Toast.makeText(v.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT);
                     toast.show();
                     alertDialogAskForUsername.dismiss();
                     return false;
-                }else if(dialog_inputUsername.isEmpty()) {
+                } else if (dialog_inputUsername.isEmpty()) {
                     Toast.makeText(getContext(), R.string.username_empty, Toast.LENGTH_SHORT).show();
-                } else if(dialog_inputUsername.length()>50){
+                } else if (dialog_inputUsername.length() > 50) {
                     Toast.makeText(getContext(), R.string.username_too_long, Toast.LENGTH_SHORT).show();
-                }else if(dialog_inputUsername.startsWith(" ")){
+                } else if (dialog_inputUsername.startsWith(" ")) {
                     Toast.makeText(getContext(), R.string.username_spaces, Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(v.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT).show();

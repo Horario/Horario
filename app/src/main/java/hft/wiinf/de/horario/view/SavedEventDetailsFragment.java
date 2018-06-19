@@ -4,10 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,13 +12,12 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.activeandroid.query.Select;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
@@ -76,7 +72,7 @@ public class SavedEventDetailsFragment extends Fragment {
                 //Code for cancelling an event eg. take it out of the DB and Calendar View
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(System.currentTimeMillis());
-                if(EventController.getEventById(getEventID()).getEndTime().after(cal.getTime())) {
+                if (EventController.getEventById(getEventID()).getEndTime().after(cal.getTime())) {
                     Bundle whichFragment = getArguments();
                     EventRejectEventFragment eventRejectEventFragment = new EventRejectEventFragment();
                     Bundle bundle = new Bundle();
@@ -95,7 +91,7 @@ public class SavedEventDetailsFragment extends Fragment {
                                 .addToBackStack("RejectEvent")
                                 .commit();
                     }
-                }else{
+                } else {
                     Toast.makeText(getContext(), R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();
                 }
             }
@@ -114,7 +110,7 @@ public class SavedEventDetailsFragment extends Fragment {
             }
         });
 
-             // Open the QRGeneratorFragment to Show the QRCode form this Event.
+        // Open the QRGeneratorFragment to Show the QRCode form this Event.
         savedEventDetailsButtonShowQr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -253,17 +249,17 @@ public class SavedEventDetailsFragment extends Fragment {
         }
 
         // Event shortTitel in Headline with StartDate
-        savedEventDetailsOrganisatorText.setText(eventCreatorName + " (" + phNumber+ ")" + "\n" + shortTitle );
+        savedEventDetailsOrganisatorText.setText(eventCreatorName + " (" + phNumber + ")" + "\n" + shortTitle);
         savedEventphNumberText.setText("");
         // Check for a Repetition Event and Change the Description Output with and without
         // Repetition Element inside.
         if (repetition.equals("")) {
-            savedEventeventDescription.setText(getString(R.string.time)+ startTime + getString(R.string.until)
+            savedEventeventDescription.setText(getString(R.string.time) + startTime + getString(R.string.until)
                     + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place + "\n" + "\n" + getString(R.string.eventDetails)
                     + description);
         } else {
             savedEventeventDescription.setText(getString(R.string.as_of) + startDate
-                    + getString(R.string.until) + endDate + "\n"+ getString(R.string.time) + startTime + getString(R.string.until)
+                    + getString(R.string.until) + endDate + "\n" + getString(R.string.time) + startTime + getString(R.string.until)
                     + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place + "\n" + "\n" + getString(R.string.eventDetails)
                     + description);
         }
@@ -300,8 +296,9 @@ public class SavedEventDetailsFragment extends Fragment {
         return eventToStringBuffer;
 
     }
-    public void onPause(){
-        if(mAlertDialog != null){
+
+    public void onPause() {
+        if (mAlertDialog != null) {
             mAlertDialog.dismiss();
         }
 

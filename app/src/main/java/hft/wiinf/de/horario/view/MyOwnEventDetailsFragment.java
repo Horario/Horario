@@ -11,8 +11,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import java.text.SimpleDateFormat;
 import java.util.Objects;
+
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
 import hft.wiinf.de.horario.controller.PersonController;
@@ -164,12 +166,12 @@ public class MyOwnEventDetailsFragment extends Fragment {
         // Check for a Repetition Event and Change the Description Output with and without
         // Repetition Element inside.
         if (repetition.equals("")) {
-            myOwnEventeventDescription.setText(getString(R.string.event_date) + currentDate +"\n"+ getString(R.string.time)+ startTime + getString(R.string.until)
+            myOwnEventeventDescription.setText(getString(R.string.event_date) + currentDate + "\n" + getString(R.string.time) + startTime + getString(R.string.until)
                     + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place + "\n" + "\n" + getString(R.string.eventDetails)
                     + description);
         } else {
             myOwnEventeventDescription.setText(getString(R.string.as_of) + startDate
-                    + getString(R.string.until) + endDate + "\n"+ getString(R.string.time) + startTime + getString(R.string.until)
+                    + getString(R.string.until) + endDate + "\n" + getString(R.string.time) + startTime + getString(R.string.until)
                     + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place + "\n" + "\n" + getString(R.string.eventDetails)
                     + description);
         }
