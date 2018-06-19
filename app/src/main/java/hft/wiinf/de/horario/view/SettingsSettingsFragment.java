@@ -2,6 +2,7 @@ package hft.wiinf.de.horario.view;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
@@ -51,6 +52,8 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
     Switch switch_enablePush;
     TextView textView_minutesBefore, textView_reminder;
     private int counter = 0;
+    private AlertDialog mAlertDialog;
+    private AlertDialog.Builder mAlertDialogBuilder;
 
     public SettingsSettingsFragment() {
         // Required empty public constructor
@@ -339,8 +342,8 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
                         // disable features of your app or open another dialog explaining again the
                         // permission and directing to the app setting
 
-                        new android.support.v7.app.AlertDialog.Builder(getActivity())
-                                .setTitle(R.string.accessWith_NeverAskAgain_deny)
+                        mAlertDialogBuilder = new AlertDialog.Builder(getActivity());
+                                mAlertDialogBuilder.setTitle(R.string.accessWith_NeverAskAgain_deny)
                                 .setMessage(R.string.sendSMS_accessDenied_withCheckbox)
                                 .setPositiveButton(R.string.sendSMS_manual, new DialogInterface.OnClickListener() {
                                     @Override
@@ -348,12 +351,13 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
                                         editText_PhoneNumber.requestFocusFromTouch();
                                     }
                                 })
-                                .create().show();
+                                .create();
+                                mAlertDialog = mAlertDialogBuilder.show();
                     } else if (counter < 1) {
                         // user did NOT check "never ask again" this is a good place to explain the user
                         // why you need the permission and ask if he wants // to accept it (the rationale)
-                        new android.support.v7.app.AlertDialog.Builder(getActivity())
-                                .setTitle(R.string.requestPermission_firstTryRequest)
+                        mAlertDialogBuilder = new AlertDialog.Builder(getActivity());
+                                mAlertDialogBuilder.setTitle(R.string.requestPermission_firstTryRequest)
                                 .setMessage(R.string.phoneNumber_explanation)
                                 .setPositiveButton(R.string.oneMoreTime, new DialogInterface.OnClickListener() {
                                     @Override
@@ -369,10 +373,11 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
                                         ((InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
                                     }
                                 })
-                                .create().show();
+                                        .create();
+                        mAlertDialog = mAlertDialogBuilder.show();
                     } else if (counter == 1) {
-                        new android.support.v7.app.AlertDialog.Builder(getActivity())
-                                .setTitle(R.string.sendSMS_lastTry)
+                        mAlertDialogBuilder = new AlertDialog.Builder(getActivity());
+                                mAlertDialogBuilder.setTitle(R.string.sendSMS_lastTry)
                                 .setMessage(R.string.phoneNumber_explanation)
                                 .setPositiveButton(R.string.oneMoreTime, new DialogInterface.OnClickListener() {
                                     @Override
@@ -387,7 +392,8 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
                                         ((InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
                                     }
                                 })
-                                .create().show();
+                                        .create();
+                        mAlertDialog = mAlertDialogBuilder.show();
                     } else {
                         ((InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
                     }
@@ -427,5 +433,12 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
             InputMethodManager imm = (InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
         }
+    }
+
+    public void onPause(){
+        if(mAlertDialog != null){
+            mAlertDialog.dismiss();
+        }
+        super.onPause();
     }
 }
