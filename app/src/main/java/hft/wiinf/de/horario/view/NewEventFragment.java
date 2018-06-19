@@ -659,22 +659,28 @@ public class NewEventFragment extends Fragment {
 
     // method to read the phone number of the user
     public void readPhoneNumber() {
-        //if permission is granted read the phone number
-        TelephonyManager telephonyManager = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
-        @SuppressLint("MissingPermission") String phoneNumber = telephonyManager.getLine1Number();
-        //delete spaces and add a + if phoneNumber starts without a 0
-        if (phoneNumber != null)
-            phoneNumber.replaceAll(" ", "");
-        if (phoneNumber.matches("[1-9][0-9]+"))
-            phoneNumber = "+" + phoneNumber;
-        me.setPhoneNumber(phoneNumber);
-        //if the number could not been read, open a dialog
-        if (me.getPhoneNumber() == null || !me.getPhoneNumber().matches("(00|0|\\+)[1-9][0-9]+")) {
-            openDialogAskForPhoneNumber();
-        } else {
-            Toast.makeText(getContext(), R.string.thanksphoneNumber, Toast.LENGTH_SHORT).show();
-            saveEvent();
-
+        if (getContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_TELEPHONY)) {
+            //if permission is granted read the phone number
+            TelephonyManager telephonyManager = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
+            @SuppressLint("MissingPermission") String phoneNumber = telephonyManager.getLine1Number();
+            //delete spaces and add a + if phoneNumber starts without a 0
+            if (phoneNumber != null)
+                phoneNumber.replaceAll(" ", "");
+            if (phoneNumber.matches("[1-9][0-9]+"))
+                phoneNumber = "+" + phoneNumber;
+            me.setPhoneNumber(phoneNumber);
+            //if the number could not been read, open a dialog
+            if (me.getPhoneNumber() == null || !me.getPhoneNumber().matches("(00|0|\\+)[1-9][0-9]+")) {
+                openDialogAskForPhoneNumber();
+            } else {
+                Toast.makeText(getContext(), R.string.thanksphoneNumber, Toast.LENGTH_SHORT).show();
+                saveEvent();
+            }
+        } else{
+            if (me.getPhoneNumber() == null || !me.getPhoneNumber().matches("(00|0|\\+)[1-9][0-9]+")) {
+                Toast.makeText(getContext(), R.string.sms_fail, Toast.LENGTH_SHORT).show();
+                openDialogAskForPhoneNumber();
+            }
         }
     }
 
