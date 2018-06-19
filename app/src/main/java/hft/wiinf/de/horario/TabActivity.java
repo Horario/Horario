@@ -17,6 +17,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -50,6 +51,7 @@ import hft.wiinf.de.horario.view.CalendarActivity;
 import hft.wiinf.de.horario.view.CalendarFragment;
 import hft.wiinf.de.horario.view.EventOverviewActivity;
 import hft.wiinf.de.horario.view.EventOverviewFragment;
+import hft.wiinf.de.horario.view.EventRejectEventFragment;
 import hft.wiinf.de.horario.view.SettingsActivity;
 
 import static com.activeandroid.Cache.getContext;
@@ -111,9 +113,9 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_calendarview);
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_settings);
 
-        if (!EventController.createdEventsYet()) {
-            askForSMSPermissions();
-        }
+
+        askForSMSPermissions();
+
 
         if (personMe == null || personMe.getName().isEmpty()) {
             openDialogAskForUsername();
@@ -271,7 +273,14 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         @Override
                         public void onClick(View v) {
                             buttonId = 1;
-                            decideWhatToDo();
+                            if (!checkIfEventIsInPast()) {
+                                decideWhatToDo(afterScanningDialogAction);
+                            } else {
+                                //Restart the TabActivity an Reload all Views
+                                Intent intent = getIntent();
+                                finish();
+                                startActivity(intent);
+                            }
                         }
                     });
 
@@ -281,7 +290,14 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         @Override
                         public void onClick(View v) {
                             buttonId = 2;
-                            decideWhatToDo();
+                            if (!checkIfEventIsInPast()) {
+                                decideWhatToDo(afterScanningDialogAction);
+                            } else {
+                                //Restart the TabActivity an Reload all Views
+                                Intent intent = getIntent();
+                                finish();
+                                startActivity(intent);
+                            }
                         }
                     });
 
@@ -291,7 +307,14 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         @Override
                         public void onClick(View v) {
                             buttonId = 3;
-                            decideWhatToDo();
+                            if (!checkIfEventIsInPast()) {
+                                decideWhatToDo(afterScanningDialogAction);
+                            } else {
+                                //Restart the TabActivity an Reload all Views
+                                Intent intent = getIntent();
+                                finish();
+                                startActivity(intent);
+                            }
                         }
                     });
 
@@ -364,14 +387,13 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         + getString(R.string.find) + getString(R.string.from) + startTime + getString(R.string.until)
                         + endTime + getString(R.string.clock_at_room) + place + " " + shortTitle
                         + getString(R.string.instead_of) + "\n" + "\n" + getString(R.string.eventDetails)
-                        + description + "\n" + "\n" + getString(R.string.organizer) + eventCreatorName);
+                        + description);
             } else {
                 qrScanner_result_description.setText(getString(R.string.as_of) + startDate
                         + getString(R.string.until) + endDate + getString(R.string.find)
                         + repetition + getString(R.string.at) + startTime + getString(R.string.clock_to)
                         + endTime + getString(R.string.clock_at_room) + place + " " + shortTitle
-                        + getString(R.string.instead_of) + "\n" + "\n" + getString(R.string.eventDetails) + description +
-                        "\n" + "\n" + getString(R.string.organizer) + eventCreatorName);
+                        + getString(R.string.instead_of) + "\n" + "\n" + getString(R.string.eventDetails) + description);
 
             }
             // In the CatchBlock the User see some Error Message and Restart after Clock on Button the TabActivity
@@ -422,20 +444,22 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             public void onTabSelected(TabLayout.Tab tab) {
                 if (tab.getPosition() == 1) {
                     CalendarFragment.update(CalendarFragment.selectedMonth);
+                    EventOverviewFragment.update();
                 }
             }
 
             //Do something if Tab is unselected. Parameters: selected Tab.--- Info: tab.getPosition() == x for check which Tab
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
+//Close the keyboard on a tab change
+                //close keyboard
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                assert imm != null;
+                imm.hideSoftInputFromWindow(Objects.requireNonNull(mSectionsPageAdapter.getItem(tab.getPosition())
+                        .getView()).getApplicationWindowToken(), 0);
                 //check if settings Tab is unselected
                 if (tab.getPosition() == 2) {
                     getSupportFragmentManager().popBackStack();
-                    //Close the keyboard on a tab change
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    assert imm != null;
-                    imm.hideSoftInputFromWindow(Objects.requireNonNull(mSectionsPageAdapter.getItem(2)
-                            .getView()).getApplicationWindowToken(), 0);
                 } else if (tab.getPosition() == 1) {
                     getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
@@ -455,13 +479,11 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 //check if settings Tab is unselected
                 //close keyboard
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(mSectionsPageAdapter.getItem(tab.getPosition()).getView().getApplicationWindowToken(), 0);
+                assert imm != null;
+                imm.hideSoftInputFromWindow(Objects.requireNonNull(mSectionsPageAdapter.getItem(tab.getPosition())
+                        .getView()).getApplicationWindowToken(), 0);
                 if (tab.getPosition() == 2) {
                     getSupportFragmentManager().popBackStack();
-                    //Close the keyboard on a tab change
-                    assert imm != null;
-                    imm.hideSoftInputFromWindow(Objects.requireNonNull(mSectionsPageAdapter.getItem(2)
-                            .getView()).getApplicationWindowToken(), 0);
                 } else if (tab.getPosition() == 1) {
                     getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
@@ -503,7 +525,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         final AlertDialog alertDialogAskForUsername = dialogAskForUsername.create();
         alertDialogAskForUsername.show();
 
-        EditText username = alertDialogAskForUsername.findViewById(R.id.dialog_EditText_Username);
+        final EditText username = alertDialogAskForUsername.findViewById(R.id.dialog_EditText_Username);
 
         Objects.requireNonNull(username).setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -512,26 +534,26 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 dialog_inputUsername = v.getText().toString();
 
                 //RegEx: no whitespace at the beginning
-                Pattern pattern_username = Pattern.compile("^([\\S]).*");
+                Pattern pattern_username = Pattern.compile("(\\w|\\.)(\\w|\\s|\\.)*");
                 Matcher matcher_username = pattern_username.matcher(dialog_inputUsername);
 
-                if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches() && !dialog_inputUsername.contains("|")) {
+                if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches() && dialog_inputUsername.length()<=50) {
                     personMe.setName(dialog_inputUsername);
                     PersonController.savePerson(personMe);
                     Toast toast = Toast.makeText(v.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT);
                     toast.show();
-
                     alertDialogAskForUsername.dismiss();
-                    return true;
-                } else if (dialog_inputUsername.contains("|")) {
-                    Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername_peek, Toast.LENGTH_SHORT);
-                    toast.show();
-                    return true;
+                    return false;
+                }else if(dialog_inputUsername.isEmpty()) {
+                    Toast.makeText(getContext(), R.string.username_empty, Toast.LENGTH_SHORT).show();
+                } else if(dialog_inputUsername.length()>50){
+                    Toast.makeText(getContext(), R.string.username_too_long, Toast.LENGTH_SHORT).show();
+                }else if(dialog_inputUsername.startsWith(" ")){
+                    Toast.makeText(getContext(), R.string.username_spaces, Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
-                    toast.show();
-                    return true;
+                    Toast.makeText(v.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT).show();
                 }
+                return true;
             }
         });
     }
@@ -619,7 +641,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     }
 
     //save Event and Person
-    private void saveEventAndPerson() {
+    private void dialogListener() {
         final AlertDialog.Builder dialogAskForFinalDecission = new AlertDialog.Builder(this);
         dialogAskForFinalDecission.setView(R.layout.dialog_afterscanningbuttonclick);
         dialogAskForFinalDecission.setTitle(R.string.titleDialogFinalDecission);
@@ -636,15 +658,13 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                         Calendar checkStartTime = getStartTimeEvent();
                         Calendar checkEndTime = getEndTimeEvent();
 
-                        Person person = new Person();
-                        Event event = new Event(person);
-
                         //check if Event is n Database or not
                         singleEvent = EventController.checkIfEventIsInDatabase(description,
                                 shortTitle, place, checkStartTime, checkEndTime);
 
-                        //if event is in  database
-                        if (singleEvent != null) {
+                        //if event is in database
+                        if (singleEvent != null && singleEvent.getAccepted().equals(AcceptedState.WAITING) ||
+                                singleEvent != null && singleEvent.getAccepted().equals(AcceptedState.ACCEPTED)) {
                             //finish and restart the activity
                             Intent intent = getIntent();
                             finish();
@@ -652,74 +672,19 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                             //write Toast, event is in database
                             Toast toast = Toast.makeText(v.getContext(), R.string.eventIsInDatabase, Toast.LENGTH_LONG);
                             toast.show();
-                            //if event is not in database
-                        } else {
-                            //check if user who published the event is in database
-                            personEventCreator = PersonController.checkforPhoneNumber(creatorPhoneNumber);
 
-                            //if publisher is in database
-                            if (personEventCreator != null) {
-                                event.setCreator(personEventCreator);
-                            } else {
-                                //if publisher is not in database: save a new person
-                                person.setName(eventCreatorName);
-                                person.setPhoneNumber(creatorPhoneNumber);
-                                person.save();
-                            }
-
-                            //set all things for event
-                            event.setCreatorEventId(Long.parseLong(creatorID));
-                            event.setStartTime(getStartTimeEvent().getTime());
-                            event.setEndTime(getEndTimeEvent().getTime());
-                            event.setRepetition(getRepetition());
-                            event.setShortTitle(shortTitle);
-                            event.setPlace(place);
-                            event.setDescription(description);
-
-                            //check which button got pressed and set acceptedState
-                            if (buttonId == 1) {
-                                event.setAccepted(AcceptedState.ACCEPTED);
-                            } else if (buttonId == 2) {
-                                event.setAccepted(AcceptedState.WAITING);
-                            } else if (buttonId == 3) {
-                                event.setAccepted(AcceptedState.REJECTED);
-                            }
-
-                            //check if event is serialevent
-                            if (event.getRepetition() != Repetition.NONE) {
-                                event.setEndDate(getEndDateEvent().getTime());
-                                //save serialevent
-                                EventController.saveSerialevent(event);
-                            } else {
-                                //save the one event
-                                EventController.saveEvent(event);
-                            }
-
-                            if (event.getAccepted().equals(AcceptedState.ACCEPTED)) {
-                                NotificationController.setAlarmForNotification(getApplicationContext(), event);
-                            }
-                            Toast.makeText(v.getContext(), R.string.save_event, Toast.LENGTH_SHORT).show();
-                            alertDialogAskForFinalDecission.dismiss();
-
-
-                            //SMS
-                            String reject_message;
-                            boolean accepted;
-                            if ((event.getAccepted().equals(AcceptedState.ACCEPTED) || (event.getAccepted().equals(AcceptedState.REJECTED)))) {
-                                if (event.getAccepted().equals(AcceptedState.ACCEPTED)) {
-                                    accepted = true;
-                                    reject_message = "";
-                                } else {
-                                    accepted = false;
-                                    reject_message = "ToDo!ToDO";
-                                }
-                                SendSmsController.sendSMS(getApplicationContext(), event.getCreator().getPhoneNumber(), reject_message, accepted, event.getCreatorEventId(), event.getShortTitle());
-                            }
-
-                            //Restart the TabActivity an Reload all Views
+                        } else if (singleEvent != null && singleEvent.getAccepted().equals(AcceptedState.REJECTED)) {
+                            //finish and restart the activity
                             Intent intent = getIntent();
                             finish();
                             startActivity(intent);
+                            //write Toast, event is in database
+                            Toast toast = Toast.makeText(v.getContext(), R.string.eventIsInDatabaseRejected, Toast.LENGTH_LONG);
+                            toast.show();
+                            //if event is not in database
+                        } else {
+                            savePersonAndEvent();
+
                         }
                     }
                 });
@@ -733,33 +698,168 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 });
     }
 
+    private void savePersonAndEvent() {
+        Person person = new Person();
+        Event event = new Event(person);
+        //check if user who published the event is in database
+        personEventCreator = PersonController.checkforPhoneNumber(creatorPhoneNumber);
+
+        checkIfPersonIsInDatabase(event, person);
+
+        //set all things for event
+        event.setCreatorEventId(Long.parseLong(creatorID));
+        event.setStartTime(getStartTimeEvent().getTime());
+        event.setEndTime(getEndTimeEvent().getTime());
+        event.setRepetition(getRepetition());
+        event.setShortTitle(shortTitle);
+        event.setPlace(place);
+        event.setDescription(description);
+
+        //check which button got pressed and set acceptedState
+        if (buttonId == 1) {
+            event.setAccepted(AcceptedState.ACCEPTED);
+            sendSMS(event);
+        } else if (buttonId == 2) {
+            event.setAccepted(AcceptedState.WAITING);
+        }
+
+        //check if event is serialevent
+        if (event.getRepetition() != Repetition.NONE) {
+            event.setEndDate(getEndDateEvent().getTime());
+            //save serialevent
+            EventController.saveSerialevent(event);
+        } else {
+            //save the one event
+            EventController.saveEvent(event);
+        }
+
+        if (event.getAccepted().equals(AcceptedState.ACCEPTED)) {
+            NotificationController.setAlarmForNotification(getApplicationContext(), event);
+        }
+
+        //TODO: geht nicht weil die Dialoge noch im Vordergrund sind
+        if (event.getAccepted().equals(AcceptedState.REJECTED)) {
+
+        } else {
+            Toast.makeText(getContext(), R.string.save_event, Toast.LENGTH_SHORT).show();
+
+            //Restart the TabActivity an Reload all Views
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
+        }
+    }
+
+    private void saveEventAndPersonForRejection(Dialog afterScanningDialogAction) {
+        Person person = new Person();
+        Event event = new Event(person);
+        //check if user who published the event is in database
+        personEventCreator = PersonController.checkforPhoneNumber(creatorPhoneNumber);
+
+        checkIfPersonIsInDatabase(event, person);
+
+        //Calendar variables for checking startTime and endTime
+        Calendar checkStartTime = getStartTimeEvent();
+        Calendar checkEndTime = getEndTimeEvent();
+        //check if Event is n Database or not
+        singleEvent = EventController.checkIfEventIsInDatabase(description,
+                shortTitle, place, checkStartTime, checkEndTime);
+
+        afterScanningDialogAction.cancel();
+        EventRejectEventFragment eventRejectEventFragment = new EventRejectEventFragment();
+        Bundle bundleAcceptedEventId = new Bundle();
+
+        //if event is in not database
+        if (singleEvent == null) {
+            //set all things for event
+            event.setCreatorEventId(Long.parseLong(creatorID));
+            event.setStartTime(getStartTimeEvent().getTime());
+            event.setEndTime(getEndTimeEvent().getTime());
+            event.setRepetition(getRepetition());
+            event.setShortTitle(shortTitle);
+            event.setPlace(place);
+            event.setDescription(description);
+            event.setAccepted(AcceptedState.REJECTED);
+
+            //check if event is serialevent
+            if (event.getRepetition() != Repetition.NONE) {
+                event.setEndDate(getEndDateEvent().getTime());
+                //save serialevent
+                EventController.saveSerialevent(event);
+            } else {
+                //save the one event
+                EventController.saveEvent(event);
+            }
+
+            bundleAcceptedEventId.putLong("EventId", event.getId());
+
+        } else {
+            //finish and restart the activity
+            bundleAcceptedEventId.putLong("EventId", singleEvent.getId());
+        }
+        bundleAcceptedEventId.putString("fragment", "AcceptedEventDetails");
+        eventRejectEventFragment.setArguments(bundleAcceptedEventId);
+        FragmentTransaction fr = getSupportFragmentManager().beginTransaction();
+        fr.replace(R.id.calendar_frameLayout, eventRejectEventFragment, "RejectEvent");
+        fr.addToBackStack("RejectEvent");
+        fr.commit();
+    }
+
+    private void sendSMS(Event event) {
+        //SMS
+        String reject_message = "";
+        SendSmsController.sendSMS(getApplicationContext(), event.getCreator().getPhoneNumber(), reject_message, true, event.getCreatorEventId(), event.getShortTitle());
+    }
+
+    private void checkIfPersonIsInDatabase(Event event, Person person) {
+        //if publisher is in database
+        if (personEventCreator != null) {
+            event.setCreator(personEventCreator);
+        } else {
+            //if publisher is not in database: save a new person
+            person.setName(eventCreatorName);
+            person.setPhoneNumber(creatorPhoneNumber);
+            person.save();
+        }
+
+    }
+
     private boolean checkIfEventIsInPast() {
         //read the current date and time to compare if the End of the Event is in the past (Date & Time),
         // set seconds and milliseconds to 0 to ensure a ight compare (seonds and milliseconds doesn't matter)
         Calendar now = Calendar.getInstance();
         now.set(Calendar.SECOND, 0);
         now.set(Calendar.MILLISECOND, 0);
+        boolean test = getStartTimeEvent().before(now);
+        Log.i("STARTZEIT", getStartTimeEvent().getTime().toString());
+        Log.i("EVENTZEIT", now.getTime().toString());
         if (getRepetition() == Repetition.NONE) {
-            if (getStartTimeEvent().before(now)) {
+            if (getStartTimeEvent().getTime().before(now.getTime())) {
                 Toast.makeText(this, R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();
                 return true;
             } else {
                 return false;
             }
-        } else if (getEndDateEvent().before(now)) {
-            Toast.makeText(this, R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();
-            return true;
+
         } else {
-            return false;
+            if (getEndDateEvent().getTime().before(now.getTime())) {
+                Toast.makeText(this, R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 
-    private void decideWhatToDo() {
+    private void decideWhatToDo(Dialog afterScanningDialogActionn) {
         if (!checkIfEventIsInPast()) {
-            if (personMe.getName().isEmpty()) {
+            Person person = PersonController.getPersonWhoIam();
+            if (person == null) {
                 openDialogAskForUsername();
-            } else {
-                saveEventAndPerson();
+            } else if (buttonId == 1 || buttonId == 2) {
+                dialogListener();
+            } else if (buttonId == 3) {
+                saveEventAndPersonForRejection(afterScanningDialogActionn);
             }
         } else {
             //Restart the TabActivity an Reload all Views
@@ -789,7 +889,8 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PERMISSION_REQUEST_READ_PHONE_STATE) {
             // for each permission check if the user granted/denied them you may want to group the
@@ -912,7 +1013,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                                         @Override
                                         public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
                                             if (keyCode == KeyEvent.KEYCODE_BACK) {
-                                                checkSMSPermissions();
                                                 dialog.cancel();
                                                 return true;
                                             }
@@ -927,13 +1027,15 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                                             counterSMS++;
                                             checkSMSPermissions();
                                         }
+
                                     })
-//                                .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(DialogInterface dialog, int which) {
-//
-//                                    }
-//                                })
+                                    .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            checkContactsPermission();
+                                            counterSMS = 0;
+                                        }
+                                    })
                                     .create().show();
                         } else if (counterSMS == 1) {
                             new AlertDialog.Builder(this)
@@ -941,7 +1043,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                                         @Override
                                         public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
                                             if (keyCode == KeyEvent.KEYCODE_BACK) {
-                                                checkSMSPermissions();
                                                 return true;
                                             }
                                             return false;
@@ -956,12 +1057,13 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                                             checkSMSPermissions();
                                         }
                                     })
-//                                .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(DialogInterface dialog, int which) {
-//
-//                                    }
-//                                })
+                                    .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            checkContactsPermission();
+                                            counterSMS = 0;
+                                        }
+                                    })
                                     .create().show();
                         } else {
                         }
@@ -1019,7 +1121,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                                         @Override
                                         public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
                                             if (keyCode == KeyEvent.KEYCODE_BACK) {
-                                                checkSMSPermissions();
+
                                                 dialog.cancel();
                                                 return true;
                                             }
@@ -1032,15 +1134,16 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             counterCONTACTS++;
-                                            checkSMSPermissions();
+                                            checkContactsPermission();
                                         }
                                     })
-//                                .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(DialogInterface dialog, int which) {
-//
-//                                    }
-//                                })
+                                    .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+
+                                            counterCONTACTS = 0;
+                                        }
+                                    })
                                     .create().show();
                         } else if (counterCONTACTS == 1) {
                             new AlertDialog.Builder(this)
@@ -1048,7 +1151,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                                         @Override
                                         public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
                                             if (keyCode == KeyEvent.KEYCODE_BACK) {
-                                                checkSMSPermissions();
                                                 return true;
                                             }
                                             return false;
@@ -1060,15 +1162,15 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             counterCONTACTS++;
-                                            checkSMSPermissions();
+                                            checkContactsPermission();
                                         }
                                     })
-//                                .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(DialogInterface dialog, int which) {
-//
-//                                    }
-//                                })
+                                    .setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            counterCONTACTS = 0;
+                                        }
+                                    })
                                     .create().show();
                         } else {
                         }
@@ -1109,7 +1211,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 openDialogAskForUsername();
             else {
                 PersonController.savePerson(personMe);
-                saveEventAndPerson();
+                dialogListener();
             }
         }
     }

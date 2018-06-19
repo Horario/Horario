@@ -11,9 +11,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Objects;
+import java.util.Calendar;
+import java.util.Date;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
@@ -59,15 +62,29 @@ public class AcceptedEventDetailsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //Code for cancelling an event eg. take it out of the DB and Calendar View
-                EventRejectEventFragment eventRejectEventFragment = new EventRejectEventFragment();
-                Bundle bundleAcceptedEventId = new Bundle();
-                bundleAcceptedEventId.putLong("EventId", getEventID());
-                bundleAcceptedEventId.putString("fragment", "AcceptedEventDetails");
-                eventRejectEventFragment.setArguments(bundleAcceptedEventId);
-                FragmentTransaction fr = getFragmentManager().beginTransaction();
-                fr.replace(R.id.acceptedEvent_relativeLayout_main, eventRejectEventFragment, "RejectEvent");
-                fr.addToBackStack("RejectEvent");
-                fr.commit();
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(System.currentTimeMillis());
+                if(EventController.getEventById(getEventID()).getEndTime().after(cal.getTime())) {
+                    Bundle whichFragment = getArguments();
+                    EventRejectEventFragment eventRejectEventFragment = new EventRejectEventFragment();
+                    Bundle bundleAcceptedEventId = new Bundle();
+                    bundleAcceptedEventId.putLong("EventId", getEventID());
+                    bundleAcceptedEventId.putString("fragment", "AcceptedEventDetails");
+                    eventRejectEventFragment.setArguments(bundleAcceptedEventId);
+                    if (whichFragment.getString("fragment").equals("EventOverview")) {
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.eventOverview_frameLayout, eventRejectEventFragment, "RejectEvent")
+                                .addToBackStack("RejectEvent")
+                                .commit();
+                    } else {
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.calendar_frameLayout, eventRejectEventFragment, "RejectEvent")
+                                .addToBackStack("RejectEvent")
+                                .commit();
+                    }
+                }else{
+                    Toast.makeText(getContext(), R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -146,19 +163,19 @@ public class AcceptedEventDetailsFragment extends Fragment {
         }
 
         // Event shortTitel in Headline with StartDate
-        acceptedEventDetailsOrganisatorText.setText(eventCreatorName + "\n" + shortTitle + ", " + currentDate);
-        acceptedEventphNumberText.setText(phNumber);
+        acceptedEventDetailsOrganisatorText.setText(eventCreatorName + " (" + phNumber+ ")" + "\n" + shortTitle );
+        acceptedEventphNumberText.setText("");
         // Check for a Repetition Event and Change the Description Output with and without
         // Repetition Element inside.
         if (repetition.equals("")) {
-            acceptedEventeventDescription.setText("Am " + startDate + " findet von " + startTime + " bis "
-                    + endTime + " Uhr in Raum " + place + " " + shortTitle + " statt." + "\n" + "Termindetails sind: "
-                    + description + "\n" + "\n" + "Organisator: " + eventCreatorName);
+            acceptedEventeventDescription.setText(getString(R.string.event_date) + currentDate +"\n"+ getString(R.string.time)+ startTime + getString(R.string.until)
+                    + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place +  "\n" + "\n" +getString(R.string.eventDetails)
+                    + description);
         } else {
-            acceptedEventeventDescription.setText("Vom " + startDate + " bis " + endDate +
-                    " findet " + repetition + " um " + startTime + "Uhr bis " + endTime + "Uhr in Raum "
-                    + place + " " + shortTitle + " statt." + "\n" + "Termindetails sind: " + description +
-                    "\n" + "\n" + "Organisator: " + eventCreatorName);
+            acceptedEventeventDescription.setText(getString(R.string.as_of) + startDate
+                    + getString(R.string.until) + endDate + "\n"+ getString(R.string.time) + startTime + getString(R.string.until)
+                    + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place + "\n" + "\n" + getString(R.string.eventDetails)
+                    + description);
         }
     }
 
@@ -191,23 +208,5 @@ public class AcceptedEventDetailsFragment extends Fragment {
         eventToStringBuffer.append(selectedEvent.getCreator().getName());
 
         return eventToStringBuffer;
-
     }
-
-    // Push the User where he/she comes from
-    private void goWhereUserComesFrom() {
-        Bundle whichFragment = getArguments();
-        Objects.requireNonNull(getFragmentManager()).popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        if (Objects.requireNonNull(whichFragment).getString("fragment").equals("EventOverview")) {
-            Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.eventOverview_frameLayout, new EventOverviewFragment(), "")
-                    .commit();
-        } else {
-            Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.calendar_frameLayout, new CalendarFragment(), "")
-                    .commit();
-        }
-    }
-
-
 }

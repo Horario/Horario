@@ -21,66 +21,120 @@
 
         <TextView
             android:id="@+id/savedEventappointmentIsFromText"
+
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="20dp"
             android:text="@string/appointmentIsFrom"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.07"
+            android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.061" />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <TextView
             android:id="@+id/savedEventDetailsOrganisatorText"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="188dp"
+            android:layout_marginEnd="20dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="20dp"
             android:text=""
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/savedEventappointmentIsFromText"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.06" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/savedEventphNumberText"
-            android:layout_width="wrap_content"
+            android:layout_width="228dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="10dp"
+            android:text=""
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@+id/scrollView2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.057"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/savedEventDetailsOrganisatorText" />
+
+        <Button
+            android:id="@+id/savedEventDetailsButtonAcceptAppointment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/zentea_darkgreen"
+            android:drawableEnd="@drawable/ic_mydate_approved_white"
+            android:paddingEnd="5dp"
+            android:paddingLeft="30dp"
+            android:text="@string/acceptAppointment"
+            android:textColor="@android:color/background_light"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/savedEventDetailsButtonShowQr" />
+
+        <Button
+            android:id="@+id/savedEventDetailsButtonRefuseAppointment"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text=""
+            android:background="@color/zentea_darkgreen"
+            android:drawableEnd="@drawable/ic_mydate_rejected_white"
+            android:paddingLeft="30dp"
+            android:text="@string/refuseAppointment"
+            android:textColor="@android:color/background_light"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.067"
+            app:layout_constraintHorizontal_bias="0.6"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.126" />
+            app:layout_constraintTop_toBottomOf="@+id/savedEventDetailsButtonAcceptAppointment"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <Button
+            android:id="@+id/savedEventDetailsButtonShowQr"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="20dp"
+            android:background="@color/zentea_darkgreen"
+            android:drawableEnd="@drawable/ic_qr1"
+            android:paddingEnd="5dp"
+            android:paddingStart="30dp"
+            android:text="@string/savingSuccessful_qrcode"
+            android:textColor="@android:color/background_light"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
 
         <ScrollView
             android:id="@+id/scrollView2"
-            android:layout_width="192dp"
-            android:layout_height="113dp"
-            android:layout_marginBottom="8dp"
+            android:layout_width="0dp"
+            android:layout_height="180dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="10dp"
             android:background="@drawable/rect_listview_frame"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:paddingBottom="10dp"
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp"
+            android:paddingTop="10dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.272">
+            app:layout_constraintTop_toBottomOf="@+id/savedEventphNumberText">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -95,46 +149,6 @@
                     android:text="Am bla findet bla termin statt mit bla details in dem zimmer etc pipapo" />
             </LinearLayout>
         </ScrollView>
-
-        <Button
-            android:id="@+id/savedEventDetailsButtonAcceptAppointment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="20dp"
-            android:text="@string/acceptAppointment"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
-
-        <Button
-            android:id="@+id/savedEventDetailsButtonRefuseAppointment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="@string/refuseAppointment"
-            app:layout_constraintBottom_toTopOf="@+id/savedEventDetailsButtonShowQr"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/savedEventDetailsButtonAcceptAppointment" />
-
-        <Button
-            android:id="@+id/savedEventDetailsButtonShowQr"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="140dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:text="@string/savingSuccessful_qrcode"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.502"
-            app:layout_constraintStart_toStartOf="parent" />
-
 
     </android.support.constraint.ConstraintLayout>
 </FrameLayout>

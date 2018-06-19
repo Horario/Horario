@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="hft.wiinf.de.horario">
-    <uses-permission android:name="android.permission.READ_SMS" android:protectionLevel="normal" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" android:protectionLevel="normal" />
-    <uses-permission android:name="android.permission.RECEIVE_SMS" android:protectionLevel="normal"/>
+
+    <uses-permission
+        android:name="android.permission.READ_SMS"
+        android:protectionLevel="normal" />
+    <uses-permission
+        android:name="android.permission.READ_CONTACTS"
+        android:protectionLevel="normal" />
+    <uses-permission
+        android:name="android.permission.RECEIVE_SMS"
+        android:protectionLevel="normal" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.SEND_SMS" />
@@ -30,10 +37,10 @@
 
         <activity
             android:name=".TabActivity"
-            android:label="@string/title_activity_tab"
+            android:label="Horario"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustNothing">
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

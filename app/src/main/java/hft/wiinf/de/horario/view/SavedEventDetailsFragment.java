@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,8 @@ import android.widget.Toast;
 import com.activeandroid.query.Select;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -71,23 +74,43 @@ public class SavedEventDetailsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //Code for cancelling an event eg. take it out of the DB and Calendar View
-                //Code for cancelling an event eg. take it out of the DB and Calendar View
-                EventRejectEventFragment eventRejectEventFragment = new EventRejectEventFragment();
-                Bundle bundleAcceptedEventId = new Bundle();
-                bundleAcceptedEventId.putLong("EventId", getEventID());
-                bundleAcceptedEventId.putString("fragment", "AcceptedEventDetails");
-                eventRejectEventFragment.setArguments(bundleAcceptedEventId);
-                FragmentTransaction fr = getFragmentManager().beginTransaction();
-                fr.replace(R.id.savedEvent_relativeLayout_main, eventRejectEventFragment, "RejectEvent");
-                fr.addToBackStack("RejectEvent");
-                fr.commit();
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(System.currentTimeMillis());
+                if(EventController.getEventById(getEventID()).getEndTime().after(cal.getTime())) {
+                    Bundle whichFragment = getArguments();
+                    EventRejectEventFragment eventRejectEventFragment = new EventRejectEventFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putLong("EventId", getEventID());
+                    bundle.putString("fragment", whichFragment.getString("fragment"));
+                    eventRejectEventFragment.setArguments(bundle);
+
+                    if (whichFragment.getString("fragment").equals("EventOverview")) {
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.eventOverview_frameLayout, eventRejectEventFragment, "RejectEvent")
+                                .addToBackStack("RejectEvent")
+                                .commit();
+                    } else {
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.calendar_frameLayout, eventRejectEventFragment, "RejectEvent")
+                                .addToBackStack("RejectEvent")
+                                .commit();
+                    }
+                }else{
+                    Toast.makeText(getContext(), R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         savedEventDetailsButtonAcceptAppointment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                askForPermissionToSave();
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(System.currentTimeMillis());
+                if (cal.getTime().before(EventController.getEventById(getEventID()).getEndTime())) {
+                    askForPermissionToSave();
+                } else {
+                    Toast.makeText(getContext(), R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -230,19 +253,19 @@ public class SavedEventDetailsFragment extends Fragment {
         }
 
         // Event shortTitel in Headline with StartDate
-        savedEventDetailsOrganisatorText.setText(eventCreatorName + "\n" + shortTitle + ", " + currentDate);
-        savedEventphNumberText.setText(phNumber);
+        savedEventDetailsOrganisatorText.setText(eventCreatorName + " (" + phNumber+ ")" + "\n" + shortTitle );
+        savedEventphNumberText.setText("");
         // Check for a Repetition Event and Change the Description Output with and without
         // Repetition Element inside.
         if (repetition.equals("")) {
-            savedEventeventDescription.setText("Am " + startDate + " findet von " + startTime + " bis "
-                    + endTime + " Uhr in Raum " + place + " " + shortTitle + " statt." + "\n" + "Termindetails sind: "
-                    + description + "\n" + "\n" + "Organisator: " + eventCreatorName);
+            savedEventeventDescription.setText(getString(R.string.time)+ startTime + getString(R.string.until)
+                    + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place + "\n" + "\n" + getString(R.string.eventDetails)
+                    + description);
         } else {
-            savedEventeventDescription.setText("Vom " + startDate + " bis " + endDate +
-                    " findet " + repetition + " um " + startTime + "Uhr bis " + endTime + "Uhr in Raum "
-                    + place + " " + shortTitle + " statt." + "\n" + "Termindetails sind: " + description +
-                    "\n" + "\n" + "Organisator: " + eventCreatorName);
+            savedEventeventDescription.setText(getString(R.string.as_of) + startDate
+                    + getString(R.string.until) + endDate + "\n"+ getString(R.string.time) + startTime + getString(R.string.until)
+                    + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place + "\n" + "\n" + getString(R.string.eventDetails)
+                    + description);
         }
     }
 

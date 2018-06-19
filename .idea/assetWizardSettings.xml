@@ -23,7 +23,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/C:/Program%20Files%20(x86)/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/navigation/ic_check_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/navigation/ic_close_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -34,8 +34,8 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="fontFamily" value="Lucida Calligraphy" />
-                                                <entry key="text" value="H" />
+                                                <entry key="fontFamily" value="Arial" />
+                                                <entry key="text" value="X" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -45,10 +45,9 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="assetType" value="TEXT" />
-                                      <entry key="outputName" value="ic_notification_h3" />
+                                      <entry key="outputName" value="ic_mydate_rejected_white" />
                                       <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="95ab63" />
+                                      <entry key="themeColor" value="ffffff" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -88,10 +87,52 @@
                             <entry key="launcherLegacy">
                               <value>
                                 <PersistentState>
+                                  <option name="children">
+                                    <map>
+                                      <entry key="clipArt">
+                                        <value>
+                                          <PersistentState>
+                                            <option name="values">
+                                              <map>
+                                                <entry key="color" value="ab110e" />
+                                                <entry key="paddingPercent" value="35" />
+                                              </map>
+                                            </option>
+                                          </PersistentState>
+                                        </value>
+                                      </entry>
+                                      <entry key="clipartAsset">
+                                        <value>
+                                          <PersistentState>
+                                            <option name="values">
+                                              <map>
+                                                <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/navigation/ic_close_black_24dp.xml" />
+                                              </map>
+                                            </option>
+                                          </PersistentState>
+                                        </value>
+                                      </entry>
+                                    </map>
+                                  </option>
                                   <option name="values">
                                     <map>
                                       <entry key="backgroundColor" value="f5f9db" />
-                                      <entry key="outputName" value="ic_setting_black" />
+                                      <entry key="iconShape" value="NONE" />
+                                      <entry key="imageAsset" value="C:\Users\Christine\Documents\HKalender.png" />
+                                      <entry key="outputName" value="ic_mydate_rejected_white" />
+                                    </map>
+                                  </option>
+                                </PersistentState>
+                              </value>
+                            </entry>
+                            <entry key="notification">
+                              <value>
+                                <PersistentState>
+                                  <option name="values">
+                                    <map>
+                                      <entry key="assetType" value="IMAGE" />
+                                      <entry key="imageAsset" value="C:\Users\Christine\Documents\HHHH.png" />
+                                      <entry key="outputName" value="ic_notification" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -127,7 +168,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files%20(x86)/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/social/ic_person_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/C:/Program%20Files%20(x86)/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/image/ic_center_focus_strong_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -137,8 +178,9 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="color" value="424242" />
-                            <entry key="outputName" value="ic_person_black_24dp" />
+                            <entry key="color" value="fefff2" />
+                            <entry key="outputName" value="ic_qr" />
+                            <entry key="overrideSize" value="true" />
                             <entry key="sourceFile" value="C:\Users\Christine" />
                           </map>
                         </option>

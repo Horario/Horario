@@ -5,11 +5,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:windowBackground"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+
+    <TextView
+        android:id="@+id/newEventTab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="10dp"
+        android:text="@string/newEvent"
+        android:textAlignment="center"
+        android:textColor="@color/zentea_darkgreen"
+        android:textSize="25sp" />
+
 
     <ScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="50dp"
+        android:paddingBottom="60dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -17,48 +38,32 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:focusable="false"
-            android:focusableInTouchMode="true">
-
-            <TextView
-                android:id="@+id/newEventTab"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="10dp"
-                android:text="@string/newEvent"
-                android:textAlignment="center"
-                android:textColor="@color/zentea_darkgreen"
-                android:textSize="25sp" />
+            android:focusableInTouchMode="true"
+            android:paddingBottom="60dp">
 
 
             <EditText
 
                 android:id="@+id/newEvent_editText_description"
-
                 android:layout_width="wrap_content"
-
                 android:layout_height="wrap_content"
-
                 android:layout_alignParentEnd="true"
                 android:layout_below="@+id/newEvent_textEdit_shortTitle"
                 android:ems="8"
-                android:inputType="textPersonName" />
-
+                android:textSize="16sp"
+                android:imeOptions="actionNext"
+                android:inputType="text|textMultiLine" />
 
             <TextView
 
                 android:id="@+id/newEvent_textView_Description"
-
                 android:layout_width="wrap_content"
-
                 android:layout_height="wrap_content"
-
                 android:layout_alignBaseline="@+id/newEvent_editText_description"
                 android:layout_alignParentStart="true"
                 android:layout_marginLeft="10dp"
-                android:text="@string/event_Description" />
+                android:text="@string/event_Description"
+                android:textSize="16sp" />
 
 
             <TextView
@@ -72,20 +77,18 @@
                 android:layout_alignBaseline="@+id/newEvent_editText_Date"
                 android:layout_alignParentStart="true"
                 android:layout_marginLeft="10dp"
-                android:text="@string/event_date" />
+                android:text="@string/event_date"
+                android:textSize="16sp" />
 
 
             <EditText
-
                 android:id="@+id/newEvent_editText_Date"
-
                 android:layout_width="wrap_content"
-
                 android:layout_height="wrap_content"
-
                 android:layout_alignParentEnd="true"
                 android:layout_below="@+id/newEvent_textEdit_room"
-                android:ems="8" />
+                android:ems="8"
+                android:textSize="16sp" />
 
 
             <TextView
@@ -95,25 +98,22 @@
                 android:layout_width="wrap_content"
 
                 android:layout_height="wrap_content"
-
                 android:layout_alignBaseline="@+id/newEvent_editText_startTime"
                 android:layout_alignParentStart="true"
                 android:layout_marginLeft="10dp"
-                android:text="@string/event_startTime" />
+                android:text="@string/event_startTime"
+                android:textSize="16sp" />
 
 
             <EditText
-
                 android:id="@+id/newEvent_editText_startTime"
-
                 android:layout_width="wrap_content"
-
                 android:layout_height="wrap_content"
-
                 android:layout_alignParentEnd="true"
                 android:layout_below="@+id/newEvent_editText_Date"
                 android:ems="8"
-                android:focusable="true" />
+                android:focusable="true"
+                android:textSize="16sp" />
 
 
             <TextView
@@ -129,7 +129,8 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="189dp"
-                android:text="@string/event_endtime" />
+                android:text="@string/event_endtime"
+                android:textSize="16sp" />
 
 
             <EditText
@@ -142,86 +143,56 @@
                 android:layout_alignParentEnd="true"
                 android:layout_below="@+id/newEvent_editText_startTime"
                 android:ems="8"
-                android:focusable="true" />
+                android:focusable="true"
+                android:textSize="16sp" />
 
 
             <CheckBox
 
                 android:id="@+id/newEvent_checkBox_SerialEvent"
-
                 android:layout_width="wrap_content"
-
                 android:layout_height="73dp"
-
                 android:layout_alignParentStart="true"
-
                 android:layout_below="@id/newEvent_textVire_userName"
-
                 android:checked="false"
-                android:text="@string/event_serialEvent" />
+                android:text="@string/event_serialEvent"
+                android:textSize="16sp" />
 
 
             <Spinner
 
                 android:id="@+id/newEvent_spinner_repetition"
-                android:layout_width="204dp"
+                android:layout_width="180dp"
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@id/newEvent_checkBox_SerialEvent"
-
                 android:layout_alignParentEnd="true"
-
-
                 android:entries="@string/event_repetition"
                 android:visibility="gone" />
 
 
             <TextView
-
                 android:id="@+id/newEvent_textView_endOfRepetiton"
-
                 android:layout_width="wrap_content"
-
                 android:layout_height="32dp"
-
                 android:layout_alignParentStart="true"
                 android:layout_below="@id/newEvent_checkBox_SerialEvent"
-
                 android:paddingLeft="10dp"
                 android:text="@string/event_endOfRepetition"
+                android:textSize="16sp"
                 android:visibility="gone" />
 
 
             <EditText
-
                 android:id="@+id/newEvent_textEdit_endOfRepetition"
-
                 android:layout_width="wrap_content"
-
                 android:layout_height="wrap_content"
-
                 android:layout_alignBottom="@id/newEvent_textView_endOfRepetiton"
                 android:layout_alignParentEnd="true"
                 android:ems="8"
                 android:focusable="false"
                 android:focusableInTouchMode="true"
+                android:textSize="16sp"
                 android:visibility="gone" />
-
-
-            <Button
-
-                android:id="@+id/newEvent_button_save"
-
-                android:layout_width="wrap_content"
-
-                android:layout_height="wrap_content"
-
-                android:layout_alignParentBottom="true"
-                android:layout_below="@id/newEvent_textView_endOfRepetiton"
-                android:layout_centerHorizontal="true"
-
-                android:backgroundTint="@color/zentea_darkgreen"
-                android:text="@string/event_save"
-                android:textColor="@color/ic_launcher_background" />
 
 
             <TextView
@@ -235,32 +206,32 @@
                 android:layout_alignBaseline="@+id/newEvent_textEdit_room"
                 android:layout_alignParentStart="true"
                 android:layout_marginLeft="10dp"
-                android:text="@string/event_room" />
+                android:text="@string/event_room"
+                android:textSize="16sp" />
 
 
             <EditText
-
                 android:id="@+id/newEvent_textEdit_room"
-
                 android:layout_width="wrap_content"
-
                 android:layout_height="wrap_content"
-
                 android:layout_alignParentEnd="true"
                 android:layout_below="@+id/newEvent_editText_description"
                 android:ems="8"
+                android:inputType="text"
+                android:textSize="16sp"
                 android:imeOptions="actionDone"
-                android:inputType="text" />
+                />
 
             <EditText
                 android:id="@+id/newEvent_textEdit_shortTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
+                android:layout_alignBaseline="@id/newEvent_textEdit_shortTitle"
                 android:layout_alignParentEnd="true"
-                android:layout_below="@+id/newEventTab"
                 android:ems="8"
-                android:inputType="text" />
+                android:inputType="text"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/newEvent_textView_shortTitle"
@@ -269,7 +240,8 @@
                 android:layout_alignBaseline="@+id/newEvent_textEdit_shortTitle"
                 android:layout_alignParentStart="true"
                 android:layout_marginLeft="10dp"
-                android:text="@string/event_shortTitle" />
+                android:text="@string/event_shortTitle"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/newEvent_textVire_userName"
@@ -278,7 +250,8 @@
                 android:layout_alignBaseline="@+id/unewEvent_textEdit_userName"
                 android:layout_alignParentStart="true"
                 android:layout_marginLeft="10dp"
-                android:text="@string/username_text" />
+                android:text="@string/username_text"
+                android:textSize="16sp" />
 
             <EditText
                 android:id="@+id/unewEvent_textEdit_userName"
@@ -287,9 +260,29 @@
                 android:layout_alignParentEnd="true"
                 android:layout_below="@+id/newEvent_textEdit_endTime"
                 android:ems="8"
-                android:inputType="text" />
+                android:inputType="text"
+                android:textSize="16sp" />
 
 
         </RelativeLayout>
     </ScrollView>
+
+    <Button
+
+        android:id="@+id/newEvent_button_save"
+
+        android:layout_width="match_parent"
+
+        android:layout_height="60dp"
+
+        android:layout_alignParentBottom="true"
+
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:backgroundTint="@color/zentea_darkgreen"
+        android:text="@string/event_save"
+        android:textColor="@color/zentea_white" />
+
 </RelativeLayout>

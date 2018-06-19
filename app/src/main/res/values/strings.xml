@@ -20,17 +20,18 @@
     <string name="allowpush_text">Erinnerungen erlauben :</string>
     <string name="reminder_text">Erinnerungen :</string>
     <string name="minutesBefore_text">Minuten vorher</string>
-    <string name="noValidUsername">Benutzername darf nicht mit Leerzeichen anfangen.</string>
+    <string name="noValidUsername">Der Benutzername darf keine Sonderzeichen außer . und _ enthalten.</string>
     <string name="event_Description">Beschreibung :</string>
     <string name="noValidUsername_peek">Der Benutzername darf nicht das Zeichen | enthalten.</string>
-    <string name="event_date">Datum:</string>
+    <string name="event_date">Datum :\u0020</string>
+    <string name="noValidUsername_comma">Der Benutzername darf nicht das Zeichen , enthalten.</string>
     <string name="event_startTime">Startzeit :</string>
     <string name="event_endtime">Endzeit :</string>
     <string name="event_serialEvent">Serientermin</string>
     <string name="event_endOfRepetition">Wiederholen bis :</string>
     <string name="event_save">Termin speichern</string>
     <string name="event_room">Raum :</string>
-    <string name="event_shortTitle">Kurztitel :</string>
+    <string name="event_shortTitle">Kurztitel :\u0020</string>
     <string name="empty_fields">Bitte fülle alle Felder aus.</string>
     <string name="endTime_before_startTime">Die Endzeit darf nicht vor der Startzeit liegen.</string>
     <string name="endOfRepetition_before_endTime">Das Enddatum der Wiederholung darf nicht vor der Endzeit liegen.</string>
@@ -42,42 +43,39 @@
     <string name="save_text">speichern</string>
     <string name="later_text">Später</string>
     <string name="thanksForUsername">Benutzername wurde gespeichert. </string>
-    <string name="titleDialogRejectEvent">Willst du den Termin wirklich absagen und eine SMS versenden?</string>
-    <string name="titleDialogSaveEvent">Willst du den Termin wirklich speichern und eine SMS versenden?</string>
-    <string name="titleDialogFinalDecission">Bist du dir sicher?</string>
+    <string name="titleDialogRejectEvent">Willst du den Termin wirklich absagen?</string>
+    <string name="titleDialogSaveEvent">Willst du dem Termin wirklich zusagen?</string>
+    <string name="titleDialogFinalDecission">Bist du sicher?</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="titleParticipantsEvent">Rückmeldungen</string>
     <string name="notificationParticipantsBeingFetched">SMS werden ausgelesen...</string>
-    <string name="participantsUpdated">Teilnehmerlisten wurden aktualisiert</string>
+    <string name="participantsUpdated">Teilnehmerlisten wurden aktualisiert.</string>
     <string name="noNewTextMessages">Keine neuen Nachrichten gefunden</string>
     <string name="noTextMessagesAvailable">Keine Nachricht gefunden</string>
     <string name="appointmentIsFrom">Termin von </string>
     <string name="yourAppointment">Dein Termin </string>
     <string name="refuseAppointment">Termin ablehnen</string>
     <string name="acceptAppointment">Termin annehmen</string>
-    <string name="begForAcceptanceReadSMSAndContacts">Bitte erlaube Horario den Zugriff, um Teilnehmer zu sehen</string>
+    <string name="begForAcceptanceReadSMSAndContacts">Bitte erlaube Horario den Zugriff, um Teilnehmer zu sehen.</string>
     <string name="okayIWillAccept">Nochmal fragen</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="reject_event">Das Event wurde aus der Datenbank gelöscht</string>
+    <string name="reject_event">Der Termin wurde abgesagt.</string>
     <string name="thanksForUsernameAndPhoneNumber">Benutzername und Telefonnummer wurde gespeichert. </string>
-    <string name="description_too_long">Die Beschreibung darf nicht länger als 500 Zeichen sein.</string>
-    <string name="reject_event_hint">Der Termin wurde abgesagt und eine SMS versendet.</string>
-    <string name="accept_event_hint">Die Termine wurde zugesagt.</string>
+    <string name="description_too_long">Die Beschreibung darf nicht länger als 200 Zeichen sein.</string>
+    <string name="reject_event_hint">Der Termin wurde abgesagt.</string>
+    <string name="accept_event_hint">Den Terminen wurde zugesagt.</string>
     <string name="accept_event_hint_single">Der Termin wurde zugesagt.</string>
     <string name="reject_event_hint_single">Der Termin wurde abgesagt.</string>
     <string name="reject_event_reason_free_text_field_empty">Die Beschreibung darf nicht mit einem Leerzeichen anfangen.</string>
-    <string name="reject_event_reason_free_text_field_to_long">Die Beschreibung darf nicht mehr als 60 Zeichen sein.</string>
-    <string name="reject_event_reason_contains_pipe">Die Beschreibung darf kein "|" enthalten</string>
-    <string name="reject_event_reason_contains_comma">Die Beschreibung darf kein "," enthalten</string>
-    <string name="reject_event_reason_contains_exclamation_mark">Die Beschreibung darf kein "!" enthalten</string>
-    <string name="reject_event_reason">Bitte wähle einen Grund aus und gebe eine Begründung ein.</string>
+    <string name="reject_event_reason_free_text_field_to_long">Die Beschreibung darf nicht mehr als 100 Zeichen sein.</string>
+    <string name="reject_event_reason">Bitte wähle einen Absagegrund und gebe eine Begründung ein.</string>
     <string name="shortTitle_too_long">Der Kurztitel darf nicht länger als 50 Zeichen sein.</string>
     <string name="startTime_past">Der Termin darf nicht in der Vergangenheit beginnen.</string>
     <string name="startTime_afterScanning_past">Der Termin hat schon in der Vergangenheit stattgefunden.</string>
-    <string name="save_event">Der Termin wurde in die Datenbank geschrieben.</string>
+    <string name="save_event">Der Termin wurde gespeichert.</string>
     <string name="shortTitle_spaces">Der Kurztitel darf nicht mit Leerzeichen beginnen.</string>
     <string name="description_spaces">Die Beschreibung darf nicht mit Leerzeichen beginnen.</string>
     <string name="place_spaces">Der Raum darf nicht mit Leerzeichen beginnen.</string>
@@ -93,8 +91,8 @@
     <string name="acceptEventAfterScan">Willst du wirklich zusagen?</string>
     <string name="rejectEventAfterScan">Willst du wirklich ablehnen?</string>
     <string name="saveEventAfterScan">Willst du wirklich speichern ohne zuzusagen?</string>
-    <string name="eventIsInDatabase">Termin ist schon in der Datenbank vorhanden!</string>
-
+    <string name="eventIsInDatabase">Termin ist schon gespeichert!</string>
+    <string name="eventIsInDatabaseRejected">Termin muss erst abgesagt werden!</string>
 
     <string-array name="event_repetitions">
         <item name="event_repetition_yearly">jährlich</item>
@@ -112,16 +110,17 @@
         <item name="push_time_90">90</item>
         <item name="push_time_120">120</item>
     </string-array>
+
     <string-array name="reason_for_rejection">
-        <item name="reason_0"></item>
-        <item name="reason_1">Krank</item>
-        <item name="reason_2">Zeitlich verhindert</item>
-        <item name="reason_3">Schlafen</item>
-        <item name="reason_4">bli</item>
-        <item name="reason_5">bla</item>
-        <item name="reason_6">blub</item>
-        <item name="reason_7">Mittagessen</item>
+        <item name="reason_0">Entschuldigt</item>
+        <item name="reason_1">Krank entschuldigt</item>
+        <item name="reason_2">Krank unentschuldigt</item>
+        <item name="reason_3">Paralleltermin</item>
+        <item name="reason_4">Privater Termin</item>
+        <item name="reason_5">Zeitlich verhindert</item>
+        <item name="reason_6">Sonstiges</item>
     </string-array>
+
     <string-array name="start_tab">
         <item name="overview">Terminübersicht</item>
         <item name="calendar">Kalenderansicht</item>
@@ -131,13 +130,13 @@
 
     <!-- QR Generator -->
     <string name="show_Response">Rückmeldungen anzeigen</string>
-    <string name="share_with">Teilen via…</string>
+    <string name="share_with">Teilen via</string>
     <string name="on">Am\u0020</string>
     <string name="find">\u0020findet\u0020</string>
     <string name="from">von\u0020</string>
     <string name="clock_at_room">\u0020Uhr in Raum\u0020</string>
     <string name="organizer">Organisator:\u0020</string>
-    <string name="eventDetails">Termindetails sind:\u0020</string>
+    <string name="eventDetails">Termindetails:\u0020</string>
     <string name="at">\u0020um\u0020</string>
     <string name="instead_of">\u0020statt.</string>
     <string name="as_of">Vom\u0020</string>
@@ -155,7 +154,10 @@
     <string name="toCalender">\u0020Zum Kalender\u0020</string>
     <string name="wrongQRCodeResult">Das ist der Inhalt des QR Codes:\u0020</string>
     <string name="notAsEventSaveable">Das kann leider nicht als Termin gespeichert werden!</string>
-    <string name="back_where_user_comesFrom">Zurück zum Kalendar</string>
+    <string name="back_where_user_comesFrom">Zur Übersicht</string>
+    <string name="time">Zeit:\u0020</string>
+    <string name="clock">\u0020Uhr</string>
+    <string name="place">Ort:\u0020</string>
 
     <!-- QR Scanner & Scanner PopUp -->
     <string name="eventSave">Termin zusagen</string>
@@ -163,36 +165,36 @@
     <string name="eventReject">Termin ablehnen</string>
     <string name="scannerOverlayer_qrCodeScan">Termincode scannen</string>
     <string name="scannerOverlay_positionYourScanner">Halte dein Smartphone vor den QR-Code und</string>
-    <string name="scannerOverlay_toShowTheEvent">scanne ihn ab um den Termin zu öffnen</string>
+    <string name="scannerOverlay_toShowTheEvent">scanne ihn ab um den Termin zu öffnen.</string>
     <string name="requestPermission_thankYou">Danke für die Zugriffsrechte auf die Kamera!</string>
     <string name="requestPermission_askForPermission">Wir brauchen den Kamerazugriff um den QR-Code einzuscannen.</string>
     <string name="requestPermission_askForPermission_sendSMS">Wir müssen SMS verschicken, um den Ersteller zu benachrichtigen.</string>
     <string name="requestPermission_askForSMSPermission">Wir brauchen den SMS-Zugriff um die Teilnehmerlisten zu füllen und aktualisieren.</string>
     <string name="requestPermission_askForContactsPermission">Wir brauchen den Kontakte-Zugriff um die Teilnehmerlisten mit gespeicherten Kontaktnamen zu füllen und aktualisieren.</string>
     <string name="requestPermission_againButton">Nochmal</string>
-    <string name="requestPermission_lastTryRequest">Letzer Versuch!</string>
+    <string name="requestPermission_lastTryRequest">Letzter Versuch!</string>
     <string name="abort">ABBRUCH</string>
     <string name="setting_copyright_privacyPolicy">Privacy Policy</string>
     <string name="accessWith_NeverAskAgain_deny">Zugriff verweigert</string>
-    <string name="requestPermission_accessDenied_withCheckbox">Du hast mit den Haken bei \"Nicht mehr fragen\"
+    <string name="requestPermission_accessDenied_withCheckbox">Du hast mit dem Haken bei \"Nicht mehr fragen\"
         dauerhaft den Zugriff zum Kalender verweigert. Um den QR Scanner zu nutzen aktiviere bitte den
-        Kamerazugriff über deine Rechteverwaltung</string>
-    <string name="requestSMSPermission_accessDenied_withCheckbox">Du hast mit den Hacken bei \"Nicht mehr fragen\"  dauerhaft den Zugiff zu den SMS verweigert. Um Rückmeldungen zu nutzen aktiviere bitte den Lesezugriff über deine Rechteverwaltung</string>
-    <string name="requestContactPermission_accessDenied_withCheckbox">Du hast mit den Hacken bei \"Nicht mehr fragen\"  dauerhaft den Zugiff zu den Kontakten verweigert. Um Rückmeldungen mit Kontaktnamen zu nutzen aktiviere bitte den Lesezugriff über deine Rechteverwaltung</string>
-    <string name="requestPermission_accessDenied_withCheckbox_SendSMS">Du hast mit den Haken bei \"Nicht mehr fragen\"
-        dauerhaft den Zugriff zum Kalender verweigert. Um den QR Scanner zu nutzen aktiviere bitte das SMS Senden über deine Rechteverwaltung</string>
+        Kamerazugriff über deine Rechteverwaltung.</string>
+    <string name="requestSMSPermission_accessDenied_withCheckbox">Du hast mit dem Haken bei \"Nicht mehr fragen\"  dauerhaft den Zugiff zu den SMS verweigert. Um Rückmeldungen zu nutzen aktiviere bitte den Lesezugriff über deine Rechteverwaltung.</string>
+    <string name="requestContactPermission_accessDenied_withCheckbox">Du hast mit dem Haken bei \"Nicht mehr fragen\"  dauerhaft den Zugiff zu den Kontakten verweigert. Um Rückmeldungen mit Kontaktnamen zu nutzen aktiviere bitte den Lesezugriff über deine Rechteverwaltung.</string>
+    <string name="requestPermission_accessDenied_withCheckbox_SendSMS">Du hast mit dem Haken bei \"Nicht mehr fragen\"
+        dauerhaft den Zugriff zum Kalender verweigert. Um den QR Scanner zu nutzen aktiviere bitte das SMS Senden über deine Rechteverwaltung.</string>
     <string name="requestPermission_firstTryRequest">Erster von zwei Versuchen</string>
     <string name="qrGenerator_button_showInEventOverView">In Terminübersicht anzeigen</string>
-
-
-
+    <string name="furtherDetails">Weitere Details</string>
     <string name="accept">Ja!</string>
     <string name="reject">Nein!</string>
+    <string name="reject_event_button">Termin absagen</string>
     <string name="sms_sent">SMS wurde erfolgreich versandt!</string>
     <string name="sms_fail">SMS Senden fehlgeschlagen! Es wird später automatisch erneut versucht!</string>
     <string name="cannot_send_sms">Bitte in den Einstellungen ändern</string>
     <string name="sms_exception">SMS fehlgeschlagen!</string>
-    <string name="event_save_notSuccessful">Die Daten wurden nicht gespeichert.</string>
+    <string name="event_save_notSuccessful">Der Termin wurde nicht gespeichert.</string>
+    <string name="sms_notAbleToSend">Rückmeldung fehlgeschlagen! Um dem Organisator die Rückmeldung zu senden benötigst du eine Sim Card.</string>
     <string name="telephonenumerNotRead">Deine Telefonnummer konnte leider nicht ausgelesen werden. Bitte trage sie hier ein. Bitte achte darauf, dass du die Telefonnummer richtig einträgst, da du sonst keine Rückmeldungen erhältst.</string>
     <string name="thanksphoneNumber">Deine Telefonnummer wurde gespeichert.</string>
     <string name="wrongNumberFormat">Diese Telefonnummer ist ungültig.</string>
@@ -200,12 +202,16 @@
     <string name="lastTry_phoneNumber">Ohne deine Telefonnummer kannnst du keine Rückmeldungen versenden und empfangen.</string>
     <string name="oneMoreTime">Nochmal</string>
     <string name="PhoneNumberNotSaved">Die Telefonnummer wurde nicht gespeichert. Du kannst sie in den Einstellungen festlegen.</string>
-    <string name="sendSMS_accessDenied_withCheckbox">Du hast mit den Haken bei \"Nicht mehr fragen\"  dauerhaft den Zugiff auf deine Telefonnummer verweigert. Um Rückmeldungen zu nutzen, gibt bitte nun deine Telefonnummer selbst ein. Alternativ kannst du Horario schließen und über deine Rechteverwaltung Horario das Senden von SMS erlauben. Dann gehen allerdings alle nicht gespeicherten Eingaben verloren.</string>
+    <string name="sendSMS_accessDenied_withCheckbox">Du hast mit dem Haken bei \"Nicht mehr fragen\"  dauerhaft den Zugiff auf deine Telefonnummer verweigert. Um Rückmeldungen zu nutzen, gib bitte nun deine Telefonnummer selbst ein. Alternativ kannst du Horario schließen und über deine Rechteverwaltung Horario das Senden von SMS erlauben. Dann gehen allerdings alle nicht gespeicherten Eingaben verloren.</string>
     <string name="sendSMS_manual">manuell eingeben</string>
-    <string name="sendSMS_lastTry">Letzter Versuch! Bitte gestatte uns den Zugriff auf deine Telefonnummer.</string>
+    <string name="sendSMS_lastTry">Bitte erlaube den Zugriff auf die Telefonnummer!</string>
     <string name="requestPermission_userDontLike">TEST</string>
     <string name="phoneNumber">Telefonnummer :</string>
     <string name="phoneNumberHint">Telefonnummer</string>
     <string name="thanksUserData">Die Eingaben wurden gespeichert.</string>
-
+    <string name="username_spaces">Der Nutzername darf nicht mit Leerzeichen beginnen.</string>
+    <string name="username_too_long">Der Nutzername darf nicht länger als 50 Zeichen sein.</string>
+    <string name="username_empty">Bitte gib einen Nutzernamen ein.</string>
+    <string name="phoneNumber_too_long">Die Telefonnummer darf nicht länger als 30 Zeichen sein.</string>
+    <string name="reject_event_reason_special_characters">Der Absagegrund darf keine Sonderzeichen außer . und _ enthalten.</string>
 </resources>

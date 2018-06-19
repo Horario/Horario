@@ -32,6 +32,7 @@ import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
 import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.AcceptedState;
+import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
 
 public class EventOverviewFragment extends Fragment {
@@ -42,12 +43,14 @@ public class EventOverviewFragment extends Fragment {
     static Context context = null;
     static DateFormat timeFormat = new SimpleDateFormat("HH:mm");
     FloatingActionButton eventOverviewFcMenu, eventOverviewFcQrScan, eventOverviewFcNewEvent;
+    boolean fabIsOpened = false;
     ImageButton overviewBtNext;
     TextView eventOverview_HiddenIsFloatingMenuOpen;
     ImageButton overviewBtPrevious;
     Animation ActionButtonOpen, ActionButtonClose, ActionButtonRotateRight, ActionButtonRotateLeft;
     ConstraintLayout layout_eventOverview_main;
     ConstraintLayout layoutOverview;
+    static List<Event> eventList = new ArrayList<>();
 
 
     public static void update() {
@@ -59,6 +62,8 @@ public class EventOverviewFragment extends Fragment {
     public static ArrayAdapter iterateOverMonth(final Date date) {
         ArrayList<Appointment> eventArrayDay = new ArrayList<>();
         final ArrayList<Appointment> eventArray = new ArrayList<>();
+        List<Event> allEvents = EventController.getAllEvents();
+
         Calendar helper = Calendar.getInstance();
         helper.setTime(date);
         helper.set(Calendar.DAY_OF_MONTH, 1);
@@ -74,7 +79,14 @@ public class EventOverviewFragment extends Fragment {
             endOfDay.set(Calendar.MINUTE, 59);
             endOfDay.set(Calendar.SECOND, 59);
             endOfDay.set(Calendar.MILLISECOND, 59);
-            List<hft.wiinf.de.horario.model.Event> eventList = EventController.findEventsByTimePeriod(helper.getTime(), endOfDay.getTime());
+
+            eventList.clear();
+            for (Event event : allEvents) {
+                if (event.getEndTime().after(helper.getTime()) && event.getEndTime().before(endOfDay.getTime())) {
+                    eventList.add(event);
+                }
+            }
+
             if (eventList.size() > 0) {
                 eventArrayDay.add(new Appointment(CalendarFragment.dayFormat.format(helper.getTime()), 0));
             }
@@ -95,9 +107,12 @@ public class EventOverviewFragment extends Fragment {
             eventArrayDay.clear();
             helper.add(Calendar.DAY_OF_MONTH, 1);
         }
-        if (eventArray.size() < 1) { //when no events this month do stuff
+        if (eventArray.size() < 1)
+
+        { //when no events this month do stuff
             eventArray.add(new Appointment("Du hast keine Termine diesen Monat", 0));
         }
+
         final ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1, eventArray) {
             @NonNull
             @Override
@@ -161,6 +176,8 @@ public class EventOverviewFragment extends Fragment {
         ActionButtonClose = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonclose);
         ActionButtonRotateRight = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonrotateright);
         ActionButtonRotateLeft = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonrotateleft);
+
+
         eventOverviewFcQrScan.hide();
         eventOverviewFcNewEvent.hide();
         //selectedMonth = CalendarFragment.selectedMonth; TODO connect selectedMonth of Calendar and Overview
@@ -195,7 +212,7 @@ public class EventOverviewFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Appointment selectedItem = (Appointment) parent.getItemAtPosition(position);
-                closeFABMenu();
+                if(fabIsOpened){closeFABMenu();};
                 // 0 = date, 1 = accepted, 2 = waiting, 3 = own
                 switch (selectedItem.getType()) {
                     case 1:
@@ -246,8 +263,10 @@ public class EventOverviewFragment extends Fragment {
                     showFABMenu();
                     eventOverview_HiddenIsFloatingMenuOpen.setText("true");
                 } else {
-                    closeFABMenu();
-                    eventOverview_HiddenIsFloatingMenuOpen.setText("false");
+                    if (fabIsOpened) {
+                        closeFABMenu();
+                        eventOverview_HiddenIsFloatingMenuOpen.setText("false");
+                    }
                 }
             }
         });
@@ -265,7 +284,7 @@ public class EventOverviewFragment extends Fragment {
                 fr.replace(R.id.eventOverview_frameLayout, newEventFragment);
                 fr.addToBackStack(null);
                 fr.commit();
-                closeFABMenu();
+                if(fabIsOpened){closeFABMenu();};
             }
         });
 
@@ -282,14 +301,14 @@ public class EventOverviewFragment extends Fragment {
                 fr.replace(R.id.eventOverview_frameLayout, qrScanFragment);
                 fr.addToBackStack(null);
                 fr.commit();
-                closeFABMenu();
+                if(fabIsOpened){closeFABMenu();};
             }
         });
 
         layoutOverview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                closeFABMenu();
+                if(fabIsOpened){closeFABMenu();};
             }
         });
 
@@ -299,32 +318,35 @@ public class EventOverviewFragment extends Fragment {
 
     //Show the menu Buttons
     public void showFABMenu() {
-        eventOverview_HiddenIsFloatingMenuOpen.setText("true");
-        eventOverviewFcQrScan.show();
-        eventOverviewFcNewEvent.show();
+
         eventOverviewFcQrScan.startAnimation(ActionButtonOpen);
         eventOverviewFcNewEvent.startAnimation(ActionButtonOpen);
         eventOverviewFcMenu.startAnimation(ActionButtonRotateRight);
         eventOverviewFcQrScan.setClickable(true);
         eventOverviewFcNewEvent.setClickable(true);
+        eventOverview_HiddenIsFloatingMenuOpen.setText("true");
+        eventOverviewFcQrScan.show();
+        eventOverviewFcNewEvent.show();
         eventOverviewFcMenu.setImageResource(R.drawable.ic_plusmenu);
+        fabIsOpened = true;
     }
 
     //Hide the menu Buttons
     public void closeFABMenu() {
-        eventOverview_HiddenIsFloatingMenuOpen.setText("false");
-        eventOverviewFcQrScan.hide();
-        eventOverviewFcNewEvent.hide();
-        if (eventOverviewFcNewEvent.isClickable()) {
-            eventOverviewFcQrScan.startAnimation(ActionButtonClose);
-            eventOverviewFcNewEvent.startAnimation(ActionButtonClose);
-            eventOverviewFcMenu.startAnimation(ActionButtonRotateLeft);
-            eventOverviewFcQrScan.setClickable(false);
-            eventOverviewFcNewEvent.setClickable(false);
-            eventOverviewFcMenu.setImageResource(R.drawable.ic_plusmenu);
-        }
+        if (fabIsOpened){
+            eventOverview_HiddenIsFloatingMenuOpen.setText("false");
+            eventOverviewFcQrScan.hide();
+            eventOverviewFcNewEvent.hide();
+            if (eventOverviewFcNewEvent.isClickable()) {
+                eventOverviewFcQrScan.startAnimation(ActionButtonClose);
+                eventOverviewFcNewEvent.startAnimation(ActionButtonClose);
+                eventOverviewFcMenu.startAnimation(ActionButtonRotateLeft);
+                eventOverviewFcQrScan.setClickable(false);
+                eventOverviewFcNewEvent.setClickable(false);
+                eventOverviewFcMenu.setImageResource(R.drawable.ic_plusmenu);
+                fabIsOpened=false;
+            }}
     }
-
 }
 
 class Appointment {

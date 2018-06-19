@@ -5,12 +5,14 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -65,13 +67,15 @@ public class EventRejectEventFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         //initialize GUI-Elements
-        reason_for_rejection = view.findViewById(R.id.reject_event_editText_note);
-        reject_event_description = view.findViewById(R.id.reject_event_textView_description);
-        reject_event_header = view.findViewById(R.id.reject_event_textView_header);
-        spinner_reason = view.findViewById(R.id.reject_event_spinner_reason);
-        button_reject_event = view.findViewById(R.id.reject_event_button_reject);
-        button_dialog_delete = view.findViewById(R.id.dialog_button_event_delete);
-        button_dialog_back = view.findViewById(R.id.dialog_button_event_back);
+        reason_for_rejection = (EditText) view.findViewById(R.id.reject_event_editText_note);
+        reason_for_rejection.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        reason_for_rejection.setRawInputType(InputType.TYPE_CLASS_TEXT);
+        reject_event_description = (TextView) view.findViewById(R.id.reject_event_textView_description);
+        reject_event_header = (TextView) view.findViewById(R.id.reject_event_textView_header);
+        spinner_reason = (Spinner) view.findViewById(R.id.reject_event_spinner_reason);
+        button_reject_event = (Button) view.findViewById(R.id.reject_event_button_reject);
+        button_dialog_delete = (Button) view.findViewById(R.id.dialog_button_event_delete);
+        button_dialog_back = (Button) view.findViewById(R.id.dialog_button_event_back);
         setSelectedEvent(EventController.getEventById(getEventID()));
         buildDescriptionEvent(EventController.getEventById(getEventID()));
 
@@ -130,14 +134,13 @@ public class EventRejectEventFragment extends Fragment {
                     public void onClick(View v) {
                         event = EventController.getEventById((getEventID()));
 
+                        //delete alarm for notification
+                        NotificationController.deleteAlarmNotification(getContext(), event);
                         //If an Event of a recurring event is cancelled, all events
                         // of the recurring event are deleted. This way the user can Scan the
                         // Event again and confirm it again.
                         new Delete().from(Event.class).where("CreatorEventId=?",
                                 String.valueOf(event.getCreatorEventId())).execute();
-
-                        //delete alarm for notification
-                        NotificationController.deleteAlarmNotification(getContext(), event);
 
                         //SMS
                         rejectMessage = spinner_reason.getSelectedItem().toString() + "!" + reason_for_rejection.getText().toString();
@@ -148,6 +151,7 @@ public class EventRejectEventFragment extends Fragment {
                         Toast.makeText(getContext(), R.string.reject_event_hint, Toast.LENGTH_SHORT).show();
                         //restart Activity
                         Intent intent = new Intent(getActivity(), TabActivity.class);
+                        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                     }
                 });
@@ -216,12 +220,11 @@ public class EventRejectEventFragment extends Fragment {
         if (repetition.equals("")) {
             reject_event_description.setText("Am " + startDate + " findet von " + startTime + " bis "
                     + endTime + " Uhr in Raum " + place + " " + shortTitle + " statt." + "\n" + "Termindetails sind: "
-                    + description + "\n" + "\n" + "Organisator: " + eventCreatorName);
+                    + description);
         } else {
             reject_event_description.setText("Vom " + startDate + " bis " + endDate +
                     " findet " + repetition + " um " + startTime + "Uhr bis " + endTime + "Uhr in Raum "
-                    + place + " " + shortTitle + " statt." + "\n" + "Termindetails sind: " + description +
-                    "\n" + "\n" + "Organisator: " + eventCreatorName);
+                    + place + " " + shortTitle + " statt." + "\n" + "Termindetails sind: " + description);
         }
     }
 
@@ -255,30 +258,23 @@ public class EventRejectEventFragment extends Fragment {
 
     //check for userinput
     private boolean checkForInput() {
-        if (reason_for_rejection.getText().length() == 0 || spinner_reason.getSelectedItemPosition() == 0) {
+        if (reason_for_rejection.getText().length() == 0) {
             Toast.makeText(getContext(), R.string.reject_event_reason, Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (reason_for_rejection.getText().toString().contains("|")) {
-            Toast.makeText(getContext(), R.string.reject_event_reason_contains_pipe, Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (reason_for_rejection.getText().toString().matches(" +.*")) {
-            Toast.makeText(getContext(), R.string.reject_event_reason_free_text_field_empty, Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (reason_for_rejection.getText().length() > 50) {
+        if (reason_for_rejection.getText().length() > 100) {
             Toast.makeText(getContext(), R.string.reject_event_reason_free_text_field_to_long, Toast.LENGTH_SHORT).show();
             return false;
         }
-        //check if "," and "!" is not part of user input
-        //if they are: replace them with empty string " "
-        if (reason_for_rejection.getText().toString().contains(",") ||
-                reason_for_rejection.getText().toString().contains("!")) {
-            reason_for_rejection.getText().toString().replaceAll(",", " ");
-            reason_for_rejection.getText().toString().replaceAll("!", " ");
-            return true;
+        if (reason_for_rejection.getText().toString().startsWith(" ")){
+            Toast.makeText(getContext(), R.string.reject_event_reason_free_text_field_empty, Toast.LENGTH_SHORT).show();
+            return false;
         }
+        if (!reason_for_rejection.getText().toString().matches("(\\w|\\.)(\\w|\\s|\\.)*")) {
+            Toast.makeText(getContext(), R.string.reject_event_reason_special_characters, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
         return true;
     }
 
