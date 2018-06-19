@@ -138,7 +138,7 @@
 
     <!-- Dialog_Event-->
     <string name="refuseAppointment">Termin ablehnen</string>
-    <string name="acceptAppointment">Termin annehmen</string>
+    <string name="acceptAppointment">Termin zusagen</string>
     <string name="event_save_notSuccessful">Der Termin wurde nicht gespeichert.</string>
 
     <!-- Dialog-Reject_Event-->
