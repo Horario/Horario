@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.PersistableBundle;
 import android.telephony.SmsManager;
-import android.telephony.TelephonyManager;
 import android.widget.Toast;
 
 import hft.wiinf.de.horario.R;

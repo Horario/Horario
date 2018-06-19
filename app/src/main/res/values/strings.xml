@@ -209,9 +209,9 @@
     <string name="phoneNumber">Telefonnummer :</string>
     <string name="phoneNumberHint">Telefonnummer</string>
     <string name="thanksUserData">Die Eingaben wurden gespeichert.</string>
-    <string name="username_spaces">Der Nutzername darf nicht mit Leerzeichen beginnen.</string>
-    <string name="username_too_long">Der Nutzername darf nicht länger als 50 Zeichen sein.</string>
-    <string name="username_empty">Bitte gib einen Nutzernamen ein.</string>
+    <string name="username_spaces">Der Benutzername darf nicht mit Leerzeichen beginnen.</string>
+    <string name="username_too_long">Der Benutzername darf nicht länger als 50 Zeichen sein.</string>
+    <string name="username_empty">Bitte gib einen Benutzernamen ein.</string>
     <string name="phoneNumber_too_long">Die Telefonnummer darf nicht länger als 30 Zeichen sein.</string>
     <string name="reject_event_reason_special_characters">Der Absagegrund darf keine Sonderzeichen außer . und _ enthalten.</string>
 </resources>
