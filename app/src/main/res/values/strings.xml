@@ -60,8 +60,6 @@
     <string name="begForAcceptanceReadSMSAndContacts">Bitte erlaube Horario den Zugriff, um Teilnehmer zu sehen.</string>
     <string name="okayIWillAccept">Nochmal fragen</string>
 
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="reject_event">Der Termin wurde abgesagt.</string>
     <string name="thanksForUsernameAndPhoneNumber">Benutzername und Telefonnummer wurde gespeichert. </string>
     <string name="description_too_long">Die Beschreibung darf nicht länger als 200 Zeichen sein.</string>

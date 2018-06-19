@@ -49,7 +49,6 @@ import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.model.Repetition;
 
-//TODO Kommentieren und Java Doc Info Schreiben
 public class NewEventFragment extends Fragment {
 
     // calendar objects to save the startTime / end Time / endOfRepetition, default: values - today
@@ -687,10 +686,10 @@ public class NewEventFragment extends Fragment {
     // method to read the phone number of the user
     @SuppressLint({"MissingPermission", "HardwareIds"})
     private void readPhoneNumber() {
-            //ifpermission is granted read the phone number
-            Context ctx = getContext();
-            assert ctx != null;
-        if (getContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_TELEPHONY)) {
+        //if permission is granted read the phone number
+        Context ctx = getContext();
+        assert ctx != null;
+        if (ctx.getPackageManager().hasSystemFeature(PackageManager.FEATURE_TELEPHONY)) {
             TelephonyManager telephonyManager = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
             String phoneNumber = "";
             //check if the sim is in the phone

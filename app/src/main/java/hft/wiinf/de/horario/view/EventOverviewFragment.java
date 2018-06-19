@@ -180,7 +180,7 @@ public class EventOverviewFragment extends Fragment {
 
         eventOverviewFcQrScan.hide();
         eventOverviewFcNewEvent.hide();
-        //selectedMonth = CalendarFragment.selectedMonth; TODO connect selectedMonth of Calendar and Overview
+        //selectedMonth = CalendarFragment.selectedMonth;
         selectedMonth = Calendar.getInstance().getTime();
         update();
 

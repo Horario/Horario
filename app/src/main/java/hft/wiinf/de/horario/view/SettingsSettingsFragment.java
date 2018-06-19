@@ -2,8 +2,8 @@ package hft.wiinf.de.horario.view;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
@@ -39,7 +39,6 @@ import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.Person;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
-import static com.activeandroid.Cache.getContext;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -425,7 +424,8 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
     // method to read the phone number of the user
     @SuppressLint({"MissingPermission", "HardwareIds"})
     public void readPhoneNumber() {
-        if (getContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_TELEPHONY)) {//if permission is granted read the phone number
+        if (getContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_TELEPHONY)) {
+            //if permission is granted read the phone number
             TelephonyManager telephonyManager = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
             //check if sim card is in phone String phoneNumber ="";
             String phoneNumber = "";
