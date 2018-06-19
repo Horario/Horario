@@ -32,7 +32,7 @@
                 android:paddingRight="20dp"
                 android:paddingTop="10dp"
                 android:textAlignment="gravity"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <ScrollView
@@ -67,7 +67,7 @@
                         android:layout_marginTop="0dp"
                         android:paddingLeft="0dp"
                         android:paddingRight="0dp"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         tools:layout_editor_absoluteX="0dp"
                         tools:layout_editor_absoluteY="58dp" />
 
