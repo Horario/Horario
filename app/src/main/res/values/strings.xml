@@ -1,26 +1,49 @@
 <resources>
+    <!-- Manifests -->
     <string name="app_name">Horario</string>
+
+    <!-- Calendar -->
     <string name="back">Zurück</string>
     <string name="title_activity_tab">TabActivity</string>
     <string name="newEventTabText">Tab_1</string>
     <string name="calendarTabText">Tab_2</string>
     <string name="settingTabText">Tab_3</string>
-    <string name="action_settings">Settings</string>
-    <string name="event_repetition">Wiederholungshäufigkeit</string>
-    <string name="setting">Setting</string>
-    <string name="newEvent">Termin anlegen</string>
     <string name="calendar">calendar</string>
+
+    <!-- Settings -->
+    <string name="action_settings">Settings</string>
+    <string name="setting">Setting</string>
     <string name="settings_text">Einstellungen</string>
     <string name="support_text">Support</string>
     <string name="copyright_text">Impressum</string>
     <string name="feedback_zur_app_text">Feedback zur App</string>
+
+    <!-- Settings-settings -->
     <string name="username_text">Benutzername :</string>
-    <string name="username_hint">Benutzername</string>
-    <string name="phoneNumber_hint">Telefonnummer</string>
     <string name="allowpush_text">Erinnerungen erlauben :</string>
     <string name="reminder_text">Erinnerungen :</string>
     <string name="minutesBefore_text">Minuten vorher</string>
-    <string name="noValidUsername">Benutzername darf nicht mit Leerzeichen anfangen.</string>
+
+    <string-array name="start_tab">
+        <item name="overview">Terminübersicht</item>
+        <item name="calendar">Kalenderansicht</item>
+        <item name="settings">Einstellungen</item>
+    </string-array>
+
+    <string-array name="push_times">
+        <item name="push_time_0">0</item>
+        <item name="push_time_5">5</item>
+        <item name="push_time_15">15</item>
+        <item name="push_time_30">30</item>
+        <item name="push_time_60">60</item>
+        <item name="push_time_90">90</item>
+        <item name="push_time_120">120</item>
+    </string-array>
+
+
+    <!-- new Event -->
+    <string name="event_repetition">Wiederholungshäufigkeit</string>
+    <string name="newEvent">Termin anlegen</string>
     <string name="event_Description">Beschreibung :</string>
     <string name="noValidUsername_peek">Der Benutzername darf nicht das Zeichen | enthalten.</string>
     <string name="event_date">Datum :\u0020</string>
@@ -35,19 +58,38 @@
     <string name="empty_fields">Bitte fülle alle Felder aus.</string>
     <string name="endTime_before_startTime">Die Endzeit darf nicht vor der Startzeit liegen.</string>
     <string name="endOfRepetition_before_endTime">Das Enddatum der Wiederholung darf nicht vor der Endzeit liegen.</string>
+    <string-array name="event_repetitions">
+        <item name="event_repetition_yearly">jährlich</item>
+        <item name="event_repetition_monthly">monatlich</item>
+        <item name="event_repetition_weekly">wöchentlich</item>
+        <item name="event_repetition_daily">täglich</item>
+    </string-array>
+
+    <!-- Dialog -->
+    <string name="username_hint">Benutzername</string>
+    <string name="phoneNumber_hint">Telefonnummer</string>
+    <string name="noValidUsername">Benutzername darf nicht mit Leerzeichen anfangen.</string>
     <string name="event_saving_successful">Der Termin wurde gespeichert. Was möchtest du nun tun?</string>
-    <string name="savingSuccessful_new">neuen Termin erstellen</string>
+    <string name="savingSuccessful_new">Weiteren Termin erstellen</string>
     <string name="savingSuccessful_qrcode">QRCode anzeigen</string>
     <string name="titleDialogUsername">Bitte vergib einen Benutzernamen! </string>
     <string name="titleDialogUsernamePhoneNumber">Bitte gib einen Benutzernamen und deine Telefonnummer ein! </string>
     <string name="save_text">speichern</string>
     <string name="later_text">Später</string>
-    <string name="thanksForUsername">Benutzername wurde gespeichert. </string>
     <string name="titleDialogRejectEvent">Willst du den Termin wirklich absagen?</string>
     <string name="titleDialogSaveEvent">Willst du dem Termin wirklich zusagen?</string>
     <string name="titleDialogFinalDecission">Bist du sicher?</string>
     <string name="next">Next</string>
+    <string name="refuseAppointment">Termin ablehnen</string>
+    <string name="acceptAppointment">Termin annehmen</string>
+    <string name="begForAcceptanceReadSMSAndContacts">Bitte erlaube Horario den Zugriff, um Teilnehmer zu sehen.</string>
+    <string name="okayIWillAccept">Nochmal fragen</string>
+
+
+
     <string name="previous">Previous</string>
+
+    <!--ParticipantsEvent  -->
     <string name="titleParticipantsEvent">Rückmeldungen</string>
     <string name="notificationParticipantsBeingFetched">SMS werden ausgelesen...</string>
     <string name="participantsUpdated">Teilnehmerlisten wurden aktualisiert.</string>
@@ -55,13 +97,14 @@
     <string name="noTextMessagesAvailable">Keine Nachricht gefunden</string>
     <string name="appointmentIsFrom">Termin von </string>
     <string name="yourAppointment">Dein Termin </string>
-    <string name="refuseAppointment">Termin ablehnen</string>
-    <string name="acceptAppointment">Termin annehmen</string>
-    <string name="begForAcceptanceReadSMSAndContacts">Bitte erlaube Horario den Zugriff, um Teilnehmer zu sehen.</string>
-    <string name="okayIWillAccept">Nochmal fragen</string>
+
+
 
 
     <!-- TODO: Remove or change this placeholder text -->
+    <!-- Toast -->
+    <string name="thanksForUsername">Benutzername wurde gespeichert. </string>
+
     <string name="reject_event">Der Termin wurde abgesagt.</string>
     <string name="thanksForUsernameAndPhoneNumber">Benutzername und Telefonnummer wurde gespeichert. </string>
     <string name="description_too_long">Die Beschreibung darf nicht länger als 500 Zeichen sein.</string>
@@ -99,22 +142,9 @@
 
 
 
-    <string-array name="event_repetitions">
-        <item name="event_repetition_yearly">jährlich</item>
-        <item name="event_repetition_monthly">monatlich</item>
-        <item name="event_repetition_weekly">wöchentlich</item>
-        <item name="event_repetition_daily">täglich</item>
-    </string-array>
 
-    <string-array name="push_times">
-        <item name="push_time_0">0</item>
-        <item name="push_time_5">5</item>
-        <item name="push_time_15">15</item>
-        <item name="push_time_30">30</item>
-        <item name="push_time_60">60</item>
-        <item name="push_time_90">90</item>
-        <item name="push_time_120">120</item>
-    </string-array>
+
+
     <string-array name="reason_for_rejection">
         <item name="reason_0">Entschuldigt</item>
         <item name="reason_1">Krank entschuldigt</item>
@@ -126,11 +156,7 @@
 
 
     </string-array>
-    <string-array name="start_tab">
-        <item name="overview">Terminübersicht</item>
-        <item name="calendar">Kalenderansicht</item>
-        <item name="settings">Einstellungen</item>
-    </string-array>
+
 
 
     <!-- QR Generator -->
@@ -191,7 +217,10 @@
     <string name="requestPermission_firstTryRequest">Erster von zwei Versuchen</string>
     <string name="qrGenerator_button_showInEventOverView">In Terminübersicht anzeigen</string>
 
+    <!-- Fragment reject -->
     <string name="furtherDetails">Weitere Details</string>
+
+    <!-- Dialog reject -->
     <string name="accept">Ja!</string>
     <string name="reject">Nein!</string>
     <string name="reject_event_button">Termin absagen</string>
