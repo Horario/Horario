@@ -180,7 +180,7 @@ public class EventOverviewFragment extends Fragment {
 
         eventOverviewFcQrScan.hide();
         eventOverviewFcNewEvent.hide();
-        //selectedMonth = CalendarFragment.selectedMonth; TODO connect selectedMonth of Calendar and Overview
+        //selectedMonth = CalendarFragment.selectedMonth;
         selectedMonth = Calendar.getInstance().getTime();
         update();
 
@@ -212,7 +212,10 @@ public class EventOverviewFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Appointment selectedItem = (Appointment) parent.getItemAtPosition(position);
-                if(fabIsOpened){closeFABMenu();};
+                if (fabIsOpened) {
+                    closeFABMenu();
+                }
+                ;
                 // 0 = date, 1 = accepted, 2 = waiting, 3 = own
                 switch (selectedItem.getType()) {
                     case 1:
@@ -284,7 +287,10 @@ public class EventOverviewFragment extends Fragment {
                 fr.replace(R.id.eventOverview_frameLayout, newEventFragment);
                 fr.addToBackStack(null);
                 fr.commit();
-                if(fabIsOpened){closeFABMenu();};
+                if (fabIsOpened) {
+                    closeFABMenu();
+                }
+                ;
             }
         });
 
@@ -301,14 +307,20 @@ public class EventOverviewFragment extends Fragment {
                 fr.replace(R.id.eventOverview_frameLayout, qrScanFragment);
                 fr.addToBackStack(null);
                 fr.commit();
-                if(fabIsOpened){closeFABMenu();};
+                if (fabIsOpened) {
+                    closeFABMenu();
+                }
+                ;
             }
         });
 
         layoutOverview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(fabIsOpened){closeFABMenu();};
+                if (fabIsOpened) {
+                    closeFABMenu();
+                }
+                ;
             }
         });
 
@@ -333,7 +345,7 @@ public class EventOverviewFragment extends Fragment {
 
     //Hide the menu Buttons
     public void closeFABMenu() {
-        if (fabIsOpened){
+        if (fabIsOpened) {
             eventOverview_HiddenIsFloatingMenuOpen.setText("false");
             eventOverviewFcQrScan.hide();
             eventOverviewFcNewEvent.hide();
@@ -344,8 +356,9 @@ public class EventOverviewFragment extends Fragment {
                 eventOverviewFcQrScan.setClickable(false);
                 eventOverviewFcNewEvent.setClickable(false);
                 eventOverviewFcMenu.setImageResource(R.drawable.ic_plusmenu);
-                fabIsOpened=false;
-            }}
+                fabIsOpened = false;
+            }
+        }
     }
 }
 

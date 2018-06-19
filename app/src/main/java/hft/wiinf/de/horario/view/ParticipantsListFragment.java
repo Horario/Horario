@@ -59,9 +59,9 @@ public class ParticipantsListFragment extends Fragment {
         context = this.getActivity();
         textViewEventData = view.findViewById(R.id.textViewEventData);
         setSelectedEvent(EventController.getEventById(getEventId()));
-        participantsListView = (ListView) view.findViewById(R.id.ParticipantsList);
+        participantsListView = view.findViewById(R.id.ParticipantsList);
         textViewEventData.setText(selectedEvent.getShortTitle() + " " + dayFormat.format(selectedEvent.getStartTime()));
-        swipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh);
+        swipeRefresh = view.findViewById(R.id.swiperefresh);
         update();
 
 

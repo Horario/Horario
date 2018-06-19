@@ -116,6 +116,8 @@ public class QRGeneratorFragment extends Fragment {
         //Splitting String Element is the Pipe Symbol (on the Keyboard ALT Gr + <> Button = |)
         String stringSplitSymbol = " | ";
 
+        Person creatorId = mEvent.getCreator();
+
         // Merge the Data Base Information to one Single StringBuffer with the Format:
         // CreatorID (not EventID!!), StartDate, EndDate, StartTime, EndTime, Repetition, ShortTitle
         // Place, Description, Name and PhoneNumber of EventCreator
@@ -129,8 +131,8 @@ public class QRGeneratorFragment extends Fragment {
         mQRGenerator_StringBuffer_Result.append(mEvent.getShortTitle()).append(stringSplitSymbol);
         mQRGenerator_StringBuffer_Result.append(mEvent.getPlace()).append(stringSplitSymbol);
         mQRGenerator_StringBuffer_Result.append(mEvent.getDescription()).append(stringSplitSymbol);
-        mQRGenerator_StringBuffer_Result.append(mPerson.getName()).append(stringSplitSymbol);
-        mQRGenerator_StringBuffer_Result.append(mPerson.getPhoneNumber());
+        mQRGenerator_StringBuffer_Result.append(mEvent.getCreator().getName()).append(stringSplitSymbol);
+        mQRGenerator_StringBuffer_Result.append(mEvent.getCreator().getPhoneNumber());
 
         return mQRGenerator_StringBuffer_Result;
 
@@ -200,7 +202,7 @@ public class QRGeneratorFragment extends Fragment {
             }
 
             // Check the EventCreatorName and is it itself Change the eventCreatorName to "Your Self"
-            if (eventCreatorName.equals(mPerson.getName())) {
+            if (eventCreatorName.equals(PersonController.getPersonWhoIam().getName())) {
                 eventCreatorName = getString(R.string.yourself);
             }
 
@@ -208,14 +210,14 @@ public class QRGeneratorFragment extends Fragment {
             mQRGenerator_textView_headline.setText(shortTitle + ", " + startDate);
             // Check for a Repetition Event and Change the Description Output with and without
             // Repetition Element inside.
-           if (repetition.equals("")) {
-                mQRGenerator_textView_description.setText(getString(R.string.time)+ startTime + getString(R.string.until)
-                        + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place + "\n" + getString(R.string.organizer) + eventCreatorName  + "\n" + "\n" + getString(R.string.eventDetails)
+            if (repetition.equals("")) {
+                mQRGenerator_textView_description.setText(getString(R.string.time) + startTime + getString(R.string.until)
+                        + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place + "\n" + getString(R.string.organizer) + eventCreatorName + "\n" + "\n" + getString(R.string.eventDetails)
                         + description);
             } else {
                 mQRGenerator_textView_description.setText(getString(R.string.as_of) + startDate
-                        + getString(R.string.until) + endDate + "\n"+ getString(R.string.time) + startTime + getString(R.string.until)
-                        + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place + "\n" + getString(R.string.organizer) + eventCreatorName  + "\n" + "\n" + getString(R.string.eventDetails)
+                        + getString(R.string.until) + endDate + "\n" + getString(R.string.time) + startTime + getString(R.string.until)
+                        + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place + "\n" + getString(R.string.organizer) + eventCreatorName + "\n" + "\n" + getString(R.string.eventDetails)
                         + description);
             }
             // In the CatchBlock the User see a SnackBar Information and was pushed where the User Comes From

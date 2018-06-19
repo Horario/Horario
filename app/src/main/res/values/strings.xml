@@ -230,4 +230,18 @@
     <string name="sms_exception">SMS fehlgeschlagen!</string>
     <string name="sms_notAbleToSend">Rückmeldung fehlgeschlagen! Um dem Organisator die Rückmeldung zu senden benötigst du eine Sim Card.</string>
 
+    <string name="requestPermission_userDontLike">TEST</string>
+    <string name="thanksUserData">Die Eingaben wurden gespeichert.</string>
+    <string name="username_spaces">Der Benutzername darf nicht mit Leerzeichen beginnen.</string>
+    <string name="username_too_long">Der Benutzername darf nicht länger als 50 Zeichen sein.</string>
+    <string name="username_empty">Bitte gib einen Benutzernamen ein.</string>
+    <string name="phoneNumber_too_long">Die Telefonnummer darf nicht länger als 30 Zeichen sein.</string>
+    <string name="reject_event_reason_special_characters">Der Absagegrund darf keine Sonderzeichen außer . und _ enthalten.</string>
+
+
+
+
+    <!-- Flo for Melli -->
+    <string name="notAbleToReadPhoneNumberCauseOfNoFunctionForThat">Gerät ist nicht in der Lage SMS zu senden usw.</string>
+
 </resources>

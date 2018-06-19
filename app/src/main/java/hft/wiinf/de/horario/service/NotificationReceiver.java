@@ -13,6 +13,9 @@ import android.support.v4.app.NotificationCompat;
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.TabActivity;
 
+/**
+ * will be called after a Alarm reached the specified goTime
+ */
 public class NotificationReceiver extends BroadcastReceiver {
 
     @Override
@@ -20,6 +23,11 @@ public class NotificationReceiver extends BroadcastReceiver {
         addNotification(context, intent);
     }
 
+    /**
+     * add the Notification. Check which api the device has because you need to set a NotificationChannel for api >=26.
+     * @param context of the active fragment/activity
+     * @param intent of the registered service
+     */
     private void addNotification(Context context, Intent intent) {
         String msg = "Erinnerung an \"" + intent.getStringExtra("Event") + "\" um " + intent.getIntExtra("Hour", 0) + ":" + intent.getStringExtra("Minute") + " Uhr";
 

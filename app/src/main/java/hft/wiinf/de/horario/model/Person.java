@@ -106,7 +106,7 @@ public class Person extends Model {
      *
      * @return the phone number
      */
-//getter-setter
+    //getter-setter
     public String getPhoneNumber() {
         return phoneNumber;
     }

@@ -8,7 +8,6 @@
     android:background="?android:windowBackground"
     tools:context=".view.SavedEventDetailsFragment">
 
-
     <RelativeLayout
         android:id="@+id/savedEvent_relativeLayout_helper"
         android:layout_width="match_parent"
@@ -21,7 +20,6 @@
 
         <TextView
             android:id="@+id/savedEventappointmentIsFromText"
-
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginStart="16dp"
@@ -31,7 +29,6 @@
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
 
         <TextView
             android:id="@+id/savedEventDetailsOrganisatorText"
@@ -140,7 +137,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
 
                 <TextView
                     android:id="@+id/savedEventeventDescription"

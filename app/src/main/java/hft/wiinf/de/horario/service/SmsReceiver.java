@@ -29,7 +29,6 @@ import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.model.ReceivedHorarioSMS;
 
-
 /**
  * The type Sms receiver extends a {@link BroadcastReceiver} and reacts each time the phone of the user receives an SMS.
  */
@@ -44,8 +43,9 @@ public class SmsReceiver extends BroadcastReceiver {
 
     /**
      * Checks if the SMS in question is relevant for the app and continues working on it.
+     *
      * @param context, the {@link Context}
-     * @param intent, the {@link Intent}
+     * @param intent,  the {@link Intent}
      */
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -96,8 +96,8 @@ public class SmsReceiver extends BroadcastReceiver {
     }
 
     /**
-     *
      * Takes the parameter and checks for eventual SQL Injections and other syntax problems relevant for the functionality of the app.
+     *
      * @param smsTextSplitted, an {@link java.util.Arrays} of {@link String}
      * @return {@code true} if the SMS in question is valid and ready for the next method.
      */
@@ -168,11 +168,10 @@ public class SmsReceiver extends BroadcastReceiver {
     }
 
     /**
-     *
      * Iterates through the {@link List} and verifies possible entries in the database before saving the person and the accepted/rejected events
      *
      * @param unreadSMS, a {@link List} of {@link ReceivedHorarioSMS} to parse
-     * @param context, the {@link Context}
+     * @param context,   the {@link Context}
      */
     private void parseHorarioSMSAndUpdate(List<ReceivedHorarioSMS> unreadSMS, Context context) {
         for (ReceivedHorarioSMS singleUnreadSMS : unreadSMS) {
@@ -224,7 +223,7 @@ public class SmsReceiver extends BroadcastReceiver {
                                 hasRejectedEarlier = true;
                             }
                         }
-                        for (Person personAccepted : allAcceptances){
+                        for (Person personAccepted : allAcceptances) {
                             personAccepted.setPhoneNumber(shortifyPhoneNumber(personAccepted.getPhoneNumber()));
                             personA.setPhoneNumber(shortifyPhoneNumber(personA.getPhoneNumber()));
                             if (personAccepted.getPhoneNumber().equals(personA.getPhoneNumber())) {
@@ -264,7 +263,7 @@ public class SmsReceiver extends BroadcastReceiver {
                                 hasAcceptedEarlier = true;
                             }
                         }
-                        for (Person personRejected : allRejections){
+                        for (Person personRejected : allRejections) {
                             personRejected.setPhoneNumber(shortifyPhoneNumber(personRejected.getPhoneNumber()));
                             personB.setPhoneNumber(shortifyPhoneNumber(personB.getPhoneNumber()));
                             if (personRejected.getPhoneNumber().equals(personB.getPhoneNumber())) {
@@ -298,7 +297,7 @@ public class SmsReceiver extends BroadcastReceiver {
                         }
 
                     }
-                    for (Person personAccepted : allAcceptances){
+                    for (Person personAccepted : allAcceptances) {
                         personAccepted.setPhoneNumber(shortifyPhoneNumber(personAccepted.getPhoneNumber()));
                         person.setPhoneNumber(shortifyPhoneNumber(person.getPhoneNumber()));
                         if (personAccepted.getPhoneNumber().equals(person.getPhoneNumber())) {
@@ -326,7 +325,7 @@ public class SmsReceiver extends BroadcastReceiver {
                         }
 
                     }
-                    for (Person personRejected : allRejections){
+                    for (Person personRejected : allRejections) {
                         personRejected.setPhoneNumber(shortifyPhoneNumber(personRejected.getPhoneNumber()));
                         person.setPhoneNumber(shortifyPhoneNumber(person.getPhoneNumber()));
                         if (personRejected.getPhoneNumber().equals(person.getPhoneNumber())) {
@@ -347,6 +346,7 @@ public class SmsReceiver extends BroadcastReceiver {
 
     /**
      * looks for an eventual startEvent in the database
+     *
      * @param eventIdInSMS, the {@link Long} number of the event
      * @return {@code true} if it is a serial {@link Event}
      */
@@ -366,6 +366,7 @@ public class SmsReceiver extends BroadcastReceiver {
 
     /**
      * replaces all the symbols in a phone number
+     *
      * @param number, a {@link String}
      * @return a {@link String} of the shorter number
      */
@@ -389,6 +390,7 @@ public class SmsReceiver extends BroadcastReceiver {
 
     /**
      * Get all the contacts, see if number is identical after "shortifying" it, if identical, replace the name
+     *
      * @param address, a {@link String} of the number
      * @param context, the {@link Context}
      * @return a {@link String} of the renamed contact
@@ -422,11 +424,13 @@ public class SmsReceiver extends BroadcastReceiver {
         }
         return null;
     }
+
     /**
      * Creates a notification with the text
+     *
      * @param context, a {@link Context}
-     * @param id, some {@link int} required
-     * @param person, a {@link String} of the name of the person in question
+     * @param id,      some {@link int} required
+     * @param person,  a {@link String} of the name of the person in question
      */
     private void addNotification(Context context, int id, String person, boolean isAcceptance) {
         String contentText = "";

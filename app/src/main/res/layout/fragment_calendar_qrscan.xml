@@ -14,8 +14,6 @@
         android:layout_height="182dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:orientation="vertical">
-
-    </RelativeLayout>
+        android:orientation="vertical"></RelativeLayout>
 
 </RelativeLayout>

@@ -58,7 +58,6 @@ import static com.activeandroid.Cache.getContext;
 
 public class TabActivity extends AppCompatActivity implements ScanResultReceiverController {
 
-    //TODO Kommentieren und Java Doc Info Schreiben
     private static final String TAG = "TabActivity";
     private static final int PERMISSION_REQUEST_READ_PHONE_STATE = 0;
     private int PERMISSION_REQUEST_RECEIVE_SMS = 1;
@@ -72,7 +71,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
     Event singleEvent;
     //Index: 0 = CreatorID; 1 = StartDate; 2 = EndDate; 3 = StartTime; 4 = EndTime;
-    //       5 = Repetition; 6 = ShortTitle; 7 = Place; 8 = Descriptoin;  9 = EventCreatorName
+    //       5 = Repetition; 6 = ShortTitle; 7 = Place; 8 = Description;  9 = EventCreatorName
     private String creatorID, startDate, endDate, startTime, endTime, repetition, shortTitle, place,
             description, eventCreatorName, creatorPhoneNumber;
     private String hourOfDay, minutesOfDay, year, month, day;
@@ -497,8 +496,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 }
             }
         });
-
-        //TODO
     }
 
     // Add the Fragments to the PageViewer
@@ -525,7 +522,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         final AlertDialog alertDialogAskForUsername = dialogAskForUsername.create();
         alertDialogAskForUsername.show();
 
-        EditText username = alertDialogAskForUsername.findViewById(R.id.dialog_EditText_Username);
+        final EditText username = alertDialogAskForUsername.findViewById(R.id.dialog_EditText_Username);
 
         Objects.requireNonNull(username).setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -534,30 +531,26 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 dialog_inputUsername = v.getText().toString();
 
                 //RegEx: no whitespace at the beginning
-                Pattern pattern_username = Pattern.compile("^([\\S]).*");
+                Pattern pattern_username = Pattern.compile("(\\w|\\.)(\\w|\\s|\\.)*");
                 Matcher matcher_username = pattern_username.matcher(dialog_inputUsername);
 
-                if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches() && !dialog_inputUsername.contains("|") && !dialog_inputUsername.contains(",")) {
+                if (actionId == EditorInfo.IME_ACTION_DONE && matcher_username.matches() && dialog_inputUsername.length() <= 50) {
                     personMe.setName(dialog_inputUsername);
                     PersonController.savePerson(personMe);
                     Toast toast = Toast.makeText(v.getContext(), R.string.thanksForUsername, Toast.LENGTH_SHORT);
                     toast.show();
-
                     alertDialogAskForUsername.dismiss();
-                    return true;
-                } else if (dialog_inputUsername.contains("|")) {
-                    Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername_peek, Toast.LENGTH_SHORT);
-                    toast.show();
-                    return true;
-                } else if (dialog_inputUsername.contains(",")) {
-                    Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername_comma, Toast.LENGTH_SHORT);
-                    toast.show();
-                    return true;
+                    return false;
+                } else if (dialog_inputUsername.isEmpty()) {
+                    Toast.makeText(getContext(), R.string.username_empty, Toast.LENGTH_SHORT).show();
+                } else if (dialog_inputUsername.length() > 50) {
+                    Toast.makeText(getContext(), R.string.username_too_long, Toast.LENGTH_SHORT).show();
+                } else if (dialog_inputUsername.startsWith(" ")) {
+                    Toast.makeText(getContext(), R.string.username_spaces, Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast toast = Toast.makeText(v.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT);
-                    toast.show();
-                    return true;
+                    Toast.makeText(v.getContext(), R.string.noValidUsername, Toast.LENGTH_SHORT).show();
                 }
+                return true;
             }
         });
     }
@@ -741,7 +734,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             NotificationController.setAlarmForNotification(getApplicationContext(), event);
         }
 
-        //TODO: geht nicht weil die Dialoge noch im Vordergrund sind
         if (event.getAccepted().equals(AcceptedState.REJECTED)) {
 
         } else {
@@ -1187,9 +1179,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         }
 
     }
-
-    // }
-
 
     // method to read the phone number of the user
     public void readPhoneNumber() {
