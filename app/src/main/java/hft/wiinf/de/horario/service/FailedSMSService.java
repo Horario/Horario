@@ -140,16 +140,20 @@ public class FailedSMSService extends JobService {
             manager.createNotificationChannel(mChannel);
             NotificationCompat.Builder builder =
                     new NotificationCompat.Builder(getApplicationContext(), channel_id)
-                            .setSmallIcon(R.drawable.ic_android_black2_24dp)
+                            .setSmallIcon(R.drawable.ic_notification)
                             .setContentTitle("SMS wurde erfolgreich versandt!")
+                            .setAutoCancel(true)
+                            .setStyle(new NotificationCompat.BigTextStyle().bigText(contentText))
                             .setContentText(contentText);
             builder.setContentIntent(contentIntent);
             manager.notify(id, builder.build());
         } else {
             NotificationCompat.Builder builder =
                     new NotificationCompat.Builder(this, "")
-                            .setSmallIcon(R.drawable.ic_android_black2_24dp)
+                            .setSmallIcon(R.drawable.ic_notification)
                             .setContentTitle("SMS wurde erfolgreich versandt!")
+                            .setAutoCancel(true)
+                            .setStyle(new NotificationCompat.BigTextStyle().bigText(contentText))
                             .setContentText(contentText);
             builder.setContentIntent(contentIntent);
 
