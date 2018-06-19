@@ -15,7 +15,7 @@ public class FailedSMSController {
      * This static Method can be called from anywhere in this application.
      * It will save a FailedSMS in the Database if there are no exceptions like a NullPointer.
      *
-     * @param failedSMS -> Object which Failed to sent
+     * @param failedSMS Object which Failed to sent
      * @throws Exception if there is a error which needs to be caught
      */
     public static void addFailedSMS(FailedSMS failedSMS) {

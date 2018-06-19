@@ -11,12 +11,12 @@ import com.activeandroid.annotation.Table;
 public class FailedSMS extends Model {
 
     /**
-     * The Message.
+     * The Message what should be sent.
      */
     @Column(name = "message")
     String message = "";
     /**
-     * The Phone no.
+     * The Phone no of the target
      */
     @Column(name = "phoneNo")
     String phoneNo = "";
@@ -26,7 +26,7 @@ public class FailedSMS extends Model {
     @Column(name = "creatorID")
     long creatorID;
     /**
-     * The Accepted.
+     * weather event is accepted or not
      */
     @Column(name = "accepted")
     boolean accepted;
