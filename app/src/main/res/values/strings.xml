@@ -1,8 +1,9 @@
 <resources>
+    <!-- View -->
     <!-- Manifests -->
     <string name="app_name">Horario</string>
 
-    <!-- Calendar -->
+    <!-- TabActivity -->
     <string name="back">Zurück</string>
     <string name="title_activity_tab">TabActivity</string>
     <string name="newEventTabText">Tab_1</string>
@@ -11,14 +12,14 @@
     <string name="calendar">calendar</string>
 
     <!-- Settings -->
-    <string name="action_settings">Settings</string>
-    <string name="setting">Setting</string>
     <string name="settings_text">Einstellungen</string>
     <string name="support_text">Support</string>
     <string name="copyright_text">Impressum</string>
     <string name="feedback_zur_app_text">Feedback zur App</string>
+    <string name="phoneNumber">Telefonnummer :</string>
+    <string name="phoneNumberHint">Telefonnummer</string>
 
-    <!-- Settings-settings -->
+    <!-- Fragment_Settings_settings -->
     <string name="username_text">Benutzername :</string>
     <string name="allowpush_text">Erinnerungen erlauben :</string>
     <string name="reminder_text">Erinnerungen :</string>
@@ -40,14 +41,11 @@
         <item name="push_time_120">120</item>
     </string-array>
 
-
-    <!-- new Event -->
+    <!-- Fragment_new Event -->
     <string name="event_repetition">Wiederholungshäufigkeit</string>
     <string name="newEvent">Termin anlegen</string>
     <string name="event_Description">Beschreibung :</string>
-    <string name="noValidUsername_peek">Der Benutzername darf nicht das Zeichen | enthalten.</string>
     <string name="event_date">Datum :\u0020</string>
-    <string name="noValidUsername_comma">Der Benutzername darf nicht das Zeichen , enthalten.</string>
     <string name="event_startTime">Startzeit :</string>
     <string name="event_endtime">Endzeit :</string>
     <string name="event_serialEvent">Serientermin</string>
@@ -65,85 +63,18 @@
         <item name="event_repetition_daily">täglich</item>
     </string-array>
 
-    <!-- Dialog -->
-    <string name="username_hint">Benutzername</string>
-    <string name="phoneNumber_hint">Telefonnummer</string>
-    <string name="noValidUsername">Benutzername darf nicht mit Leerzeichen anfangen.</string>
-    <string name="event_saving_successful">Der Termin wurde gespeichert. Was möchtest du nun tun?</string>
-    <string name="savingSuccessful_new">Weiteren Termin erstellen</string>
-    <string name="savingSuccessful_qrcode">QRCode anzeigen</string>
-    <string name="titleDialogUsername">Bitte vergib einen Benutzernamen! </string>
-    <string name="titleDialogUsernamePhoneNumber">Bitte gib einen Benutzernamen und deine Telefonnummer ein! </string>
-    <string name="save_text">speichern</string>
-    <string name="later_text">Später</string>
-    <string name="titleDialogRejectEvent">Willst du den Termin wirklich absagen?</string>
-    <string name="titleDialogSaveEvent">Willst du dem Termin wirklich zusagen?</string>
-    <string name="titleDialogFinalDecission">Bist du sicher?</string>
-    <string name="next">Next</string>
-    <string name="refuseAppointment">Termin ablehnen</string>
-    <string name="acceptAppointment">Termin annehmen</string>
-    <string name="begForAcceptanceReadSMSAndContacts">Bitte erlaube Horario den Zugriff, um Teilnehmer zu sehen.</string>
-    <string name="okayIWillAccept">Nochmal fragen</string>
-
-
-
-    <string name="previous">Previous</string>
-
-    <!--ParticipantsEvent  -->
+    <!--Fragment_ParticipantsEvent  -->
     <string name="titleParticipantsEvent">Rückmeldungen</string>
     <string name="notificationParticipantsBeingFetched">SMS werden ausgelesen...</string>
     <string name="participantsUpdated">Teilnehmerlisten wurden aktualisiert.</string>
-    <string name="noNewTextMessages">Keine neuen Nachrichten gefunden</string>
-    <string name="noTextMessagesAvailable">Keine Nachricht gefunden</string>
     <string name="appointmentIsFrom">Termin von </string>
     <string name="yourAppointment">Dein Termin </string>
 
-
-
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <!-- Toast -->
-    <string name="thanksForUsername">Benutzername wurde gespeichert. </string>
-
-    <string name="reject_event">Der Termin wurde abgesagt.</string>
-    <string name="thanksForUsernameAndPhoneNumber">Benutzername und Telefonnummer wurde gespeichert. </string>
-    <string name="description_too_long">Die Beschreibung darf nicht länger als 500 Zeichen sein.</string>
-    <string name="reject_event_hint">Der Termin wurde abgesagt.</string>
-    <string name="accept_event_hint">Den Terminen wurde zugesagt.</string>
-    <string name="accept_event_hint_single">Der Termin wurde zugesagt.</string>
-    <string name="reject_event_hint_single">Der Termin wurde abgesagt.</string>
-    <string name="reject_event_reason_free_text_field_empty">Die Beschreibung darf nicht mit einem Leerzeichen anfangen.</string>
-    <string name="reject_event_reason_free_text_field_to_long">Die Beschreibung darf nicht mehr als 100 Zeichen sein.</string>
-    <string name="reject_event_reason_contains_pipe">Die Beschreibung darf kein "|" enthalten.</string>
-    <string name="reject_event_reason_contains_comma">Die Beschreibung darf kein "," enthalten.</string>
-    <string name="reject_event_reason_contains_exclamation_mark">Die Beschreibung darf kein "!" enthalten.</string>
-    <string name="reject_event_reason">Bitte wähle einen Absagegrund und gebe eine Begründung ein.</string>
-    <string name="shortTitle_too_long">Der Kurztitel darf nicht länger als 50 Zeichen sein.</string>
-    <string name="startTime_past">Der Termin darf nicht in der Vergangenheit beginnen.</string>
-    <string name="startTime_afterScanning_past">Der Termin hat schon in der Vergangenheit stattgefunden.</string>
-    <string name="save_event">Der Termin wurde gespeichert.</string>
-    <string name="shortTitle_spaces">Der Kurztitel darf nicht mit Leerzeichen beginnen.</string>
-    <string name="description_spaces">Die Beschreibung darf nicht mit Leerzeichen beginnen.</string>
-    <string name="place_spaces">Der Raum darf nicht mit Leerzeichen beginnen.</string>
-    <string name="room_too_long">Der Raum darf nicht länger als 50 Zeichen sein.</string>
-    <string name="shortTitle_peek">Der Kurztitel darf nicht das Zeichen | enthalten.</string>
-    <string name="description_peek">Die Beschreibung darf nicht das Zeichen | enthalten.</string>
-    <string name="room_peek">Das Feld Raum darf nicht das Zeichen | enthalten.</string>
-    <string name="pushEnabled">Die Erinnerungen wurden eingeschaltet.</string>
-    <string name="pushDisabled">Die Erinnerungen wurden ausgeschaltet.</string>
-    <string name="pushMinutesSet" formatted="true">Die Erinnerungen erscheinen nun %1$d Minuten vor deinem Termin.</string>
-    <string name="startTab">Start-Tab :</string>
-    <string name="startTabChanged" formatted="true">Beim nächsten Start zeigt Horario nun den Tab %1$s.</string>
-    <string name="acceptEventAfterScan">Willst du wirklich zusagen?</string>
-    <string name="rejectEventAfterScan">Willst du wirklich ablehnen?</string>
-    <string name="saveEventAfterScan">Willst du wirklich speichern ohne zuzusagen?</string>
-    <string name="eventIsInDatabase">Termin ist schon gespeichert!</string>
-    <string name="eventIsInDatabaseRejected">Termin muss erst abgesagt werden!</string>
-
-
-
-
-
+    <!--EventRejectEventFragment  -->
+    <string name="furtherDetails">Weitere Details</string>
+    <string name="accept">Ja!</string>
+    <string name="reject">Nein!</string>
+    <string name="reject_event_button">Termin absagen</string>
 
     <string-array name="reason_for_rejection">
         <item name="reason_0">Entschuldigt</item>
@@ -153,11 +84,7 @@
         <item name="reason_4">Privater Termin</item>
         <item name="reason_5">Zeitlich verhindert</item>
         <item name="reason_6">Sonstiges</item>
-
-
     </string-array>
-
-
 
     <!-- QR Generator -->
     <string name="show_Response">Rückmeldungen anzeigen</string>
@@ -190,6 +117,35 @@
     <string name="clock">\u0020Uhr</string>
     <string name="place">Ort:\u0020</string>
 
+
+
+    <!-- Dialog -->
+    <!-- Dialog-TabActivity -->
+    <string name="titleDialogFinalDecission">Bist du sicher?</string>
+    <string name="oneMoreTime">Nochmal</string>
+    <string name="sendSMS_manual">manuell eingeben</string>
+
+    <!-- Dialog-Ask for number and username -->
+    <string name="username_hint">Benutzername</string>
+    <string name="phoneNumber_hint">Telefonnummer</string>
+    <string name="titleDialogUsername">Bitte vergib einen Benutzernamen! </string>
+    <string name="titleDialogUsernamePhoneNumber">Bitte gib einen Benutzernamen und deine Telefonnummer ein! </string>
+
+    <!-- Dialog-Savingsucessfull-->
+    <string name="event_saving_successful">Der Termin wurde gespeichert. Was möchtest du nun tun?</string>
+    <string name="savingSuccessful_new">Weiteren Termin erstellen</string>
+    <string name="savingSuccessful_qrcode">QRCode anzeigen</string>
+
+    <!-- Dialog_Event-->
+    <string name="refuseAppointment">Termin ablehnen</string>
+    <string name="acceptAppointment">Termin annehmen</string>
+    <string name="event_save_notSuccessful">Der Termin wurde nicht gespeichert.</string>
+
+    <!-- Dialog-Reject_Event-->
+    <string name="titleDialogRejectEvent">Willst du den Termin wirklich absagen?</string>
+    <string name="titleDialogSaveEvent">Willst du dem Termin wirklich zusagen?</string>
+
+
     <!-- QR Scanner & Scanner PopUp -->
     <string name="eventSave">Termin zusagen</string>
     <string name="eventSaveWithoutAssign">Termin ohne Zusage speichern</string>
@@ -217,31 +173,61 @@
     <string name="requestPermission_firstTryRequest">Erster von zwei Versuchen</string>
     <string name="qrGenerator_button_showInEventOverView">In Terminübersicht anzeigen</string>
 
-    <!-- Fragment reject -->
-    <string name="furtherDetails">Weitere Details</string>
 
-    <!-- Dialog reject -->
-    <string name="accept">Ja!</string>
-    <string name="reject">Nein!</string>
-    <string name="reject_event_button">Termin absagen</string>
+    <!-- Toast -->
+    <!-- Toast-User -->
+    <string name="thanksForUsername">Benutzername wurde gespeichert. </string>
+
+    <!-- Toast-Activity -->
+    <string name="telephonenumerNotRead">Deine Telefonnummer konnte leider nicht ausgelesen werden. Bitte trage sie hier ein. Bitte achte darauf, dass du die Telefonnummer richtig einträgst, da du sonst keine Rückmeldungen erhältst.</string>
+    <string name="thanksphoneNumber">Deine Telefonnummer wurde gespeichert.</string>
+    <string name="lastTry_phoneNumber">Ohne deine Telefonnummer kannnst du keine Rückmeldungen versenden und empfangen.</string>
+    <string name="sendSMS_accessDenied_withCheckbox">Du hast mit dem Haken bei \"Nicht mehr fragen\"  dauerhaft den Zugiff auf deine Telefonnummer verweigert. Um Rückmeldungen zu nutzen, gib bitte nun deine Telefonnummer selbst ein. Alternativ kannst du Horario schließen und über deine Rechteverwaltung Horario das Senden von SMS erlauben. Dann gehen allerdings alle nicht gespeicherten Eingaben verloren.</string>
+    <string name="sendSMS_lastTry">Bitte erlaube den Zugriff auf die Telefonnummer!</string>
+
+    <!-- Toast-Event -->
+    <string name="description_too_long">Die Beschreibung darf nicht länger als 500 Zeichen sein.</string>
+    <string name="reject_event_hint">Der Termin wurde abgesagt.</string>
+    <string name="accept_event_hint">Den Terminen wurde zugesagt.</string>
+    <string name="startTime_afterScanning_past">Der Termin hat schon in der Vergangenheit stattgefunden.</string>
+    <string name="save_event">Der Termin wurde gespeichert.</string>
+    <string name="phoneNumber_explanation">Wir brauchen deine Telefonnummer, um Rückmeldungen versenden können. Wir verwenden deine Telefonnummer nicht für andere Zwecke. Alternativ kannst du deine Telefonnummer auch selbst eingeben.</string>
+    <string name="wrongNumberFormat">Diese Telefonnummer ist ungültig.</string>
+
+    <!-- Toast-input conditions -->
+    <string name="reject_event_reason_free_text_field_empty">Die Beschreibung darf nicht mit einem Leerzeichen anfangen.</string>
+    <string name="reject_event_reason_free_text_field_to_long">Die Beschreibung darf nicht mehr als 100 Zeichen sein.</string>
+    <string name="reject_event_reason_contains_comma">Die Beschreibung darf kein "," enthalten.</string>
+    <string name="reject_event_reason">Bitte wähle einen Absagegrund und gebe eine Begründung ein.</string>
+    <string name="shortTitle_too_long">Der Kurztitel darf nicht länger als 50 Zeichen sein.</string>
+    <string name="startTime_past">Der Termin darf nicht in der Vergangenheit beginnen.</string>
+    <string name="shortTitle_spaces">Der Kurztitel darf nicht mit Leerzeichen beginnen.</string>
+    <string name="description_spaces">Die Beschreibung darf nicht mit Leerzeichen beginnen.</string>
+    <string name="place_spaces">Der Raum darf nicht mit Leerzeichen beginnen.</string>
+    <string name="room_too_long">Der Raum darf nicht länger als 50 Zeichen sein.</string>
+    <string name="shortTitle_peek">Der Kurztitel darf nicht das Zeichen | enthalten.</string>
+    <string name="description_peek">Die Beschreibung darf nicht das Zeichen | enthalten.</string>
+    <string name="room_peek">Das Feld Raum darf nicht das Zeichen | enthalten.</string>
+    <string name="noValidUsername_peek">Der Benutzername darf nicht das Zeichen | enthalten.</string>
+    <string name="noValidUsername_comma">Der Benutzername darf nicht das Zeichen , enthalten.</string>
+    <string name="noValidUsername">Benutzername darf nicht mit Leerzeichen anfangen.</string>
+
+    <!-- Toast-Settings -->
+    <string name="pushEnabled">Die Erinnerungen wurden eingeschaltet.</string>
+    <string name="pushDisabled">Die Erinnerungen wurden ausgeschaltet.</string>
+    <string name="pushMinutesSet" formatted="true">Die Erinnerungen erscheinen nun %1$d Minuten vor deinem Termin.</string>
+    <string name="startTab">Start-Tab :</string>
+    <string name="startTabChanged" formatted="true">Beim nächsten Start zeigt Horario nun den Tab %1$s.</string>
+
+    <!-- Toast-TabActivity -->
+    <string name="eventIsInDatabase">Termin ist schon gespeichert!</string>
+    <string name="eventIsInDatabaseRejected">Termin muss erst abgesagt werden!</string>
+
+    <!-- Toast-Send_SMS  -->
     <string name="sms_sent">SMS wurde erfolgreich versandt!</string>
     <string name="sms_fail">SMS Senden fehlgeschlagen! Es wird später automatisch erneut versucht!</string>
     <string name="cannot_send_sms">Bitte in den Einstellungen ändern</string>
     <string name="sms_exception">SMS fehlgeschlagen!</string>
-    <string name="event_save_notSuccessful">Der Termin wurde nicht gespeichert.</string>
     <string name="sms_notAbleToSend">Rückmeldung fehlgeschlagen! Um dem Organisator die Rückmeldung zu senden benötigst du eine Sim Card.</string>
-    <string name="telephonenumerNotRead">Deine Telefonnummer konnte leider nicht ausgelesen werden. Bitte trage sie hier ein. Bitte achte darauf, dass du die Telefonnummer richtig einträgst, da du sonst keine Rückmeldungen erhältst.</string>
-    <string name="thanksphoneNumber">Deine Telefonnummer wurde gespeichert.</string>
-    <string name="wrongNumberFormat">Diese Telefonnummer ist ungültig.</string>
-    <string name="phoneNumber_explanation">Wir brauchen deine Telefonnummer, um Rückmeldungen versenden können. Wir verwenden deine Telefonnummer nicht für andere Zwecke. Alternativ kannst du deine Telefonnummer auch selbst eingeben.</string>
-    <string name="lastTry_phoneNumber">Ohne deine Telefonnummer kannnst du keine Rückmeldungen versenden und empfangen.</string>
-    <string name="oneMoreTime">Nochmal</string>
-    <string name="PhoneNumberNotSaved">Die Telefonnummer wurde nicht gespeichert. Du kannst sie in den Einstellungen festlegen.</string>
-    <string name="sendSMS_accessDenied_withCheckbox">Du hast mit dem Haken bei \"Nicht mehr fragen\"  dauerhaft den Zugiff auf deine Telefonnummer verweigert. Um Rückmeldungen zu nutzen, gib bitte nun deine Telefonnummer selbst ein. Alternativ kannst du Horario schließen und über deine Rechteverwaltung Horario das Senden von SMS erlauben. Dann gehen allerdings alle nicht gespeicherten Eingaben verloren.</string>
-    <string name="sendSMS_manual">manuell eingeben</string>
-    <string name="sendSMS_lastTry">Bitte erlaube den Zugriff auf die Telefonnummer!</string>
-    <string name="requestPermission_userDontLike">TEST</string>
-    <string name="phoneNumber">Telefonnummer :</string>
-    <string name="phoneNumberHint">Telefonnummer</string>
-    <string name="thanksUserData">Die Eingaben wurden gespeichert.</string>
+
 </resources>
