@@ -8,7 +8,6 @@
     android:background="?android:windowBackground"
     tools:context=".view.AcceptedEventDetailsFragment">
 
-
     <RelativeLayout
         android:id="@+id/acceptedEvent_relativeLayout_helper"
         android:layout_width="match_parent"

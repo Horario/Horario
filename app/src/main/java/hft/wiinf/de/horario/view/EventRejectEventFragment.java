@@ -20,11 +20,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.activeandroid.query.Delete;
-
 import java.text.SimpleDateFormat;
-
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.TabActivity;
 import hft.wiinf.de.horario.controller.EventController;
@@ -41,7 +37,7 @@ public class EventRejectEventFragment extends Fragment {
     TextView reject_event_header, reject_event_description;
     Spinner spinner_reason;
     Button button_reject_event, button_dialog_delete, button_dialog_back;
-
+    AlertDialog mDialog;
     Event selectedEvent;
     Event event;
     StringBuffer eventToStringBuffer;
@@ -125,10 +121,10 @@ public class EventRejectEventFragment extends Fragment {
         dialogAskForFinalDecission.setTitle(R.string.titleDialogRejectEvent);
         dialogAskForFinalDecission.setCancelable(true);
 
-        final AlertDialog alertDialogAskForFinalDecission = dialogAskForFinalDecission.create();
-        alertDialogAskForFinalDecission.show();
+        mDialog = dialogAskForFinalDecission.create();
+        mDialog.show();
 
-        alertDialogAskForFinalDecission.findViewById(R.id.dialog_button_event_delete)
+        mDialog.findViewById(R.id.dialog_button_event_delete)
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -139,9 +135,14 @@ public class EventRejectEventFragment extends Fragment {
                         //If an Event of a recurring event is cancelled, all events
                         // of the recurring event are deleted. This way the user can Scan the
                         // Event again and confirm it again.
-                        new Delete().from(Event.class).where("CreatorEventId=?",
-                                String.valueOf(event.getCreatorEventId())).execute();
 
+                        if(event.getStartEvent()!= null){
+                            Event event1 = event.getStartEvent();
+                            EventController.deleteEvent(event1);
+                        }
+                        else {
+                            EventController.deleteEvent(event);
+                        }
                         //SMS
                         rejectMessage = spinner_reason.getSelectedItem().toString() + "!" + reason_for_rejection.getText().toString();
                         creatorEventId = event.getCreatorEventId();
@@ -155,11 +156,11 @@ public class EventRejectEventFragment extends Fragment {
                         startActivity(intent);
                     }
                 });
-        alertDialogAskForFinalDecission.findViewById(R.id.dialog_button_event_back)
+        mDialog.findViewById(R.id.dialog_button_event_back)
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        alertDialogAskForFinalDecission.cancel();
+                        mDialog.cancel();
                     }
                 });
 
@@ -262,26 +263,29 @@ public class EventRejectEventFragment extends Fragment {
             Toast.makeText(getContext(), R.string.reject_event_reason, Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (reason_for_rejection.getText().toString().matches(" +.*")) {
-            Toast.makeText(getContext(), R.string.reject_event_reason_free_text_field_empty, Toast.LENGTH_SHORT).show();
-            return false;
-        }
         if (reason_for_rejection.getText().length() > 100) {
             Toast.makeText(getContext(), R.string.reject_event_reason_free_text_field_to_long, Toast.LENGTH_SHORT).show();
             return false;
         }
-        //check if ",", "|", ":" and "!" is not part of user input
-        //if they are: replace them with empty string " "
-        if (reason_for_rejection.getText().toString().contains(",") ||
-                reason_for_rejection.getText().toString().contains("!") ||
-                reason_for_rejection.getText().toString().contains(":") ||
-                reason_for_rejection.getText().toString().contains("|")) {
-            reason_for_rejection.setText(reason_for_rejection.getText().toString().replaceAll(",", ""));
-            reason_for_rejection.setText(reason_for_rejection.getText().toString().replaceAll("!", ""));
-            reason_for_rejection.setText(reason_for_rejection.getText().toString().replaceAll(":", ""));
-            reason_for_rejection.setText(reason_for_rejection.getText().toString().replaceAll("|", ""));
-            return true;
+        if (reason_for_rejection.getText().toString().startsWith(" ")){
+            Toast.makeText(getContext(), R.string.reject_event_reason_free_text_field_empty, Toast.LENGTH_SHORT).show();
+            return false;
         }
+        if (!reason_for_rejection.getText().toString().matches("(\\w|\\.)(\\w|\\s|\\.)*")) {
+            Toast.makeText(getContext(), R.string.reject_event_reason_special_characters, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
         return true;
+    }
+
+    @Override
+    public void onPause(){
+        if(mDialog != null){
+            mDialog.dismiss();
+        }
+
+        super.onPause();
+
     }
 }

@@ -20,7 +20,7 @@
     <string name="allowpush_text">Erinnerungen erlauben :</string>
     <string name="reminder_text">Erinnerungen :</string>
     <string name="minutesBefore_text">Minuten vorher</string>
-    <string name="noValidUsername">Benutzername darf nicht mit Leerzeichen anfangen.</string>
+    <string name="noValidUsername">Der Benutzername darf keine Sonderzeichen außer . und _ enthalten.</string>
     <string name="event_Description">Beschreibung :</string>
     <string name="noValidUsername_peek">Der Benutzername darf nicht das Zeichen | enthalten.</string>
     <string name="event_date">Datum :\u0020</string>
@@ -64,16 +64,13 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="reject_event">Der Termin wurde abgesagt.</string>
     <string name="thanksForUsernameAndPhoneNumber">Benutzername und Telefonnummer wurde gespeichert. </string>
-    <string name="description_too_long">Die Beschreibung darf nicht länger als 500 Zeichen sein.</string>
+    <string name="description_too_long">Die Beschreibung darf nicht länger als 200 Zeichen sein.</string>
     <string name="reject_event_hint">Der Termin wurde abgesagt.</string>
     <string name="accept_event_hint">Den Terminen wurde zugesagt.</string>
     <string name="accept_event_hint_single">Der Termin wurde zugesagt.</string>
     <string name="reject_event_hint_single">Der Termin wurde abgesagt.</string>
     <string name="reject_event_reason_free_text_field_empty">Die Beschreibung darf nicht mit einem Leerzeichen anfangen.</string>
     <string name="reject_event_reason_free_text_field_to_long">Die Beschreibung darf nicht mehr als 100 Zeichen sein.</string>
-    <string name="reject_event_reason_contains_pipe">Die Beschreibung darf kein "|" enthalten.</string>
-    <string name="reject_event_reason_contains_comma">Die Beschreibung darf kein "," enthalten.</string>
-    <string name="reject_event_reason_contains_exclamation_mark">Die Beschreibung darf kein "!" enthalten.</string>
     <string name="reject_event_reason">Bitte wähle einen Absagegrund und gebe eine Begründung ein.</string>
     <string name="shortTitle_too_long">Der Kurztitel darf nicht länger als 50 Zeichen sein.</string>
     <string name="startTime_past">Der Termin darf nicht in der Vergangenheit beginnen.</string>
@@ -97,8 +94,6 @@
     <string name="eventIsInDatabase">Termin ist schon gespeichert!</string>
     <string name="eventIsInDatabaseRejected">Termin muss erst abgesagt werden!</string>
 
-
-
     <string-array name="event_repetitions">
         <item name="event_repetition_yearly">jährlich</item>
         <item name="event_repetition_monthly">monatlich</item>
@@ -115,6 +110,7 @@
         <item name="push_time_90">90</item>
         <item name="push_time_120">120</item>
     </string-array>
+
     <string-array name="reason_for_rejection">
         <item name="reason_0">Entschuldigt</item>
         <item name="reason_1">Krank entschuldigt</item>
@@ -123,9 +119,8 @@
         <item name="reason_4">Privater Termin</item>
         <item name="reason_5">Zeitlich verhindert</item>
         <item name="reason_6">Sonstiges</item>
-
-
     </string-array>
+
     <string-array name="start_tab">
         <item name="overview">Terminübersicht</item>
         <item name="calendar">Kalenderansicht</item>
@@ -190,7 +185,6 @@
         dauerhaft den Zugriff zum Kalender verweigert. Um den QR Scanner zu nutzen aktiviere bitte das SMS Senden über deine Rechteverwaltung.</string>
     <string name="requestPermission_firstTryRequest">Erster von zwei Versuchen</string>
     <string name="qrGenerator_button_showInEventOverView">In Terminübersicht anzeigen</string>
-
     <string name="furtherDetails">Weitere Details</string>
     <string name="accept">Ja!</string>
     <string name="reject">Nein!</string>
@@ -215,6 +209,11 @@
     <string name="phoneNumber">Telefonnummer :</string>
     <string name="phoneNumberHint">Telefonnummer</string>
     <string name="thanksUserData">Die Eingaben wurden gespeichert.</string>
+    <string name="username_spaces">Der Benutzername darf nicht mit Leerzeichen beginnen.</string>
+    <string name="username_too_long">Der Benutzername darf nicht länger als 50 Zeichen sein.</string>
+    <string name="username_empty">Bitte gib einen Benutzernamen ein.</string>
+    <string name="phoneNumber_too_long">Die Telefonnummer darf nicht länger als 30 Zeichen sein.</string>
+    <string name="reject_event_reason_special_characters">Der Absagegrund darf keine Sonderzeichen außer . und _ enthalten.</string>
 
 
 

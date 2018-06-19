@@ -101,9 +101,10 @@ public class FailedSMSService extends JobService {
 
     /**
      * creates a notification for the user
-     * @param phoneNo, a {@link String}  of the phone number
-     * @param accepted, a {@code boolean} of the acceptedState of the event
-     * @param id, a {@code int} of the id
+     *
+     * @param phoneNo,       a {@link String}  of the phone number
+     * @param accepted,      a {@code boolean} of the acceptedState of the event
+     * @param id,            a {@code int} of the id
      * @param eventShortDesc a {@link String} of the event description
      */
     private void addNotification(String phoneNo, boolean accepted, int id, String eventShortDesc) {

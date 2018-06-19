@@ -10,7 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
         <TextView
             android:id="@+id/reject_event_textView_header"
             android:layout_width="wrap_content"
@@ -29,9 +28,7 @@
             android:layout_below="@id/reject_event_textView_header"
             android:layout_marginEnd="20dp"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-
-            />
+            android:layout_marginTop="20dp" />
 
         <TextView
             android:id="@+id/reject_event_textView_reason"

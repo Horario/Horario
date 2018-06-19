@@ -3,6 +3,7 @@ package hft.wiinf.de.horario.view;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.Objects;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -22,10 +24,10 @@ import hft.wiinf.de.horario.model.Event;
 
 public class AcceptedEventDetailsFragment extends Fragment {
 
-    Button acceptedEventDetailsButtonShowQR, acceptedEventDetailsButtonRefuseAppointment;
+    Button acceptedEventDetailsButtonShowQR, acceptedEventDetailsButtonRefuseAppointment, acceptedEventDetailButtonDelete;
     TextView acceptedEventDetailsOrganisatorText, acceptedEventphNumberText, acceptedEventeventDescription;
     RelativeLayout rLayout_acceptedEvent_helper;
-    Event selectedEvent;
+    Event selectedEvent, event;
     StringBuffer eventToStringBuffer;
 
     public AcceptedEventDetailsFragment() {

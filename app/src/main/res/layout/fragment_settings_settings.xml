@@ -94,12 +94,10 @@
         android:id="@+id/settings_settings_textView_reminder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:layout_alignStart="@+id/settings_settings_textView_settings"
         android:layout_below="@id/settings_settings_textView_allowPush"
         android:layout_marginTop="35dp"
         android:text="@string/reminder_text"
-
         android:textSize="14sp" />
 
     <TextView
@@ -141,6 +139,7 @@
         android:layout_below="@+id/settings_settings_editText_username"
         android:ems="8"
         android:hint="@string/phoneNumberHint"
+        android:imeOptions="actionDone"
         android:inputType="phone"
         android:textSize="14sp" />
 
