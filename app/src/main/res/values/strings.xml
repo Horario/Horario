@@ -215,4 +215,11 @@
     <string name="phoneNumber">Telefonnummer :</string>
     <string name="phoneNumberHint">Telefonnummer</string>
     <string name="thanksUserData">Die Eingaben wurden gespeichert.</string>
+
+
+
+
+    <!-- Flo for Melli -->
+    <string name="notAbleToReadPhoneNumberCauseOfNoFunctionForThat">Gerät ist nicht in der Lage SMS zu senden usw.</string>
+
 </resources>

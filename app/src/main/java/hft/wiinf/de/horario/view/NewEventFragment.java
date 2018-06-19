@@ -650,10 +650,7 @@ public class NewEventFragment extends Fragment {
                     readPhoneNumber();
                 }
             }
-
         }
-
-
     }
 
 
@@ -676,9 +673,9 @@ public class NewEventFragment extends Fragment {
                 Toast.makeText(getContext(), R.string.thanksphoneNumber, Toast.LENGTH_SHORT).show();
                 saveEvent();
             }
-        } else{
+        } else {
             if (me.getPhoneNumber() == null || !me.getPhoneNumber().matches("(00|0|\\+)[1-9][0-9]+")) {
-                Toast.makeText(getContext(), R.string.sms_fail, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.notAbleToReadPhoneNumberCauseOfNoFunctionForThat, Toast.LENGTH_SHORT).show();
                 openDialogAskForPhoneNumber();
             }
         }
