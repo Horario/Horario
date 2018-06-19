@@ -1184,9 +1184,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
     }
 
-    // }
-
-
     // method to read the phone number of the user
     public void readPhoneNumber() {
         //if permission is granted read the phone number

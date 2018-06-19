@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,11 +15,12 @@ import java.text.SimpleDateFormat;
 import java.util.Objects;
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
+import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.Event;
 
 public class MyOwnEventDetailsFragment extends Fragment {
 
-    Button myOwnEventDetailsButtonShowQR, myOwnEventDetailsButtonShowAcceptances, myOwnEventDetailsButtonDelete;
+    Button myOwnEventDetailsButtonShowQR, myOwnEventDetailsButtonShowAcceptances;
     RelativeLayout rLayout_myOwnEvent_helper;
     ConstraintLayout myOwnEventDetails_constraintLayout;
     TextView myOwnEventeventDescription, myOwnEventYourAppointment;
@@ -137,27 +137,27 @@ public class MyOwnEventDetailsFragment extends Fragment {
         // like "Daily" into "täglich" and so on
         switch (repetition) {
             case "YEARLY":
-                repetition = "jährlich";
+                repetition = getString(R.string.yearly);
                 break;
             case "MONTHLY":
-                repetition = "monatlich";
+                repetition = getString(R.string.monthly);
                 break;
             case "WEEKLY":
-                repetition = "wöchentlich";
+                repetition = getString(R.string.weekly);
                 break;
             case "DAILY":
-                repetition = "täglich";
+                repetition = getString(R.string.daily);
                 break;
             case "NONE":
                 repetition = "";
                 break;
             default:
-                repetition = "ohne Wiederholung";
+                repetition = getString(R.string.without_repetition);
         }
 
         // Check the EventCreatorName and is it itself Change the eventCreaterName to "Your Self"
-        if (eventCreatorName.equals(selectedEvent.getCreator().getName())) {
-            eventCreatorName = "Du";
+        if (eventCreatorName.equals(PersonController.getPersonWhoIam().getName())) {
+            eventCreatorName = getString(R.string.yourself);
         }
         // Event shortTitel in Headline with StartDate
         myOwnEventYourAppointment.setText("Dein Termin" + "\n" + shortTitle);
@@ -206,21 +206,6 @@ public class MyOwnEventDetailsFragment extends Fragment {
         return eventToStringBuffer;
 
     }
-    // Push the User where he/she comes from
-    private void goWhereUserComesFrom() {
-        Bundle whichFragment = getArguments();
-        Objects.requireNonNull(getFragmentManager()).popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        if (Objects.requireNonNull(whichFragment).getString("fragment").equals("EventOverview")) {
-            Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.eventOverview_frameLayout, new EventOverviewFragment(), "")
-                    .commit();
-        } else {
-            Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.calendar_frameLayout, new CalendarFragment(), "")
-                    .commit();
-        }
-    }
-
 }
 
 
