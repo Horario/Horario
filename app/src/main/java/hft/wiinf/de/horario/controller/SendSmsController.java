@@ -84,7 +84,11 @@ public class SendSmsController extends BroadcastReceiver {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        cont.unregisterReceiver(smsUtils);
+                        try {
+                            cont.unregisterReceiver(smsUtils);
+                        }catch(Exception e){
+                            
+                        }
                     }
                 }, 10000);
             } catch (Exception e) {
