@@ -175,15 +175,16 @@
 
 
     <!-- Toast -->
-    <!-- Toast-User -->
-    <string name="thanksForUsername">Benutzername wurde gespeichert. </string>
-
     <!-- Toast-Activity -->
+    <string name="thanksForUsername">Benutzername wurde gespeichert. </string>
     <string name="telephonenumerNotRead">Deine Telefonnummer konnte leider nicht ausgelesen werden. Bitte trage sie hier ein. Bitte achte darauf, dass du die Telefonnummer richtig einträgst, da du sonst keine Rückmeldungen erhältst.</string>
     <string name="thanksphoneNumber">Deine Telefonnummer wurde gespeichert.</string>
     <string name="lastTry_phoneNumber">Ohne deine Telefonnummer kannnst du keine Rückmeldungen versenden und empfangen.</string>
     <string name="sendSMS_accessDenied_withCheckbox">Du hast mit dem Haken bei \"Nicht mehr fragen\"  dauerhaft den Zugiff auf deine Telefonnummer verweigert. Um Rückmeldungen zu nutzen, gib bitte nun deine Telefonnummer selbst ein. Alternativ kannst du Horario schließen und über deine Rechteverwaltung Horario das Senden von SMS erlauben. Dann gehen allerdings alle nicht gespeicherten Eingaben verloren.</string>
     <string name="sendSMS_lastTry">Bitte erlaube den Zugriff auf die Telefonnummer!</string>
+    <string name="eventIsInDatabase">Termin ist schon gespeichert!</string>
+    <string name="eventIsInDatabaseRejected">Termin muss erst abgesagt werden!</string>
+    <string name="username_empty">Bitte gib einen Benutzernamen ein.</string>
 
     <!-- Toast-Event -->
     <string name="description_too_long">Die Beschreibung darf nicht länger als 500 Zeichen sein.</string>
@@ -191,7 +192,7 @@
     <string name="accept_event_hint">Den Terminen wurde zugesagt.</string>
     <string name="startTime_afterScanning_past">Der Termin hat schon in der Vergangenheit stattgefunden.</string>
     <string name="save_event">Der Termin wurde gespeichert.</string>
-    <string name="phoneNumber_explanation">Wir brauchen deine Telefonnummer, um Rückmeldungen versenden können. Wir verwenden deine Telefonnummer nicht für andere Zwecke. Alternativ kannst du deine Telefonnummer auch selbst eingeben.</string>
+    <string name="phoneNumber_explanation">Wir brauchen deine Telefonnummer, um Rückmeldungen versenden zu können. Wir verwenden deine Telefonnummer nicht für andere Zwecke. Alternativ kannst du deine Telefonnummer auch selbst eingeben.</string>
     <string name="wrongNumberFormat">Diese Telefonnummer ist ungültig.</string>
 
     <!-- Toast-input conditions -->
@@ -211,6 +212,11 @@
     <string name="noValidUsername_peek">Der Benutzername darf nicht das Zeichen | enthalten.</string>
     <string name="noValidUsername_comma">Der Benutzername darf nicht das Zeichen , enthalten.</string>
     <string name="noValidUsername">Benutzername darf nicht mit Leerzeichen anfangen.</string>
+    <string name="username_spaces">Der Benutzername darf nicht mit Leerzeichen beginnen.</string>
+    <string name="username_too_long">Der Benutzername darf nicht länger als 50 Zeichen sein.</string>
+    <string name="phoneNumber_too_long">Die Telefonnummer darf nicht länger als 30 Zeichen sein.</string>
+    <string name="reject_event_reason_special_characters">Der Absagegrund darf keine Sonderzeichen außer . und _ enthalten.</string>
+
 
     <!-- Toast-Settings -->
     <string name="pushEnabled">Die Erinnerungen wurden eingeschaltet.</string>
@@ -219,9 +225,6 @@
     <string name="startTab">Start-Tab :</string>
     <string name="startTabChanged" formatted="true">Beim nächsten Start zeigt Horario nun den Tab %1$s.</string>
 
-    <!-- Toast-TabActivity -->
-    <string name="eventIsInDatabase">Termin ist schon gespeichert!</string>
-    <string name="eventIsInDatabaseRejected">Termin muss erst abgesagt werden!</string>
 
     <!-- Toast-Send_SMS  -->
     <string name="sms_sent">SMS wurde erfolgreich versandt!</string>
@@ -229,19 +232,5 @@
     <string name="cannot_send_sms">Bitte in den Einstellungen ändern</string>
     <string name="sms_exception">SMS fehlgeschlagen!</string>
     <string name="sms_notAbleToSend">Rückmeldung fehlgeschlagen! Um dem Organisator die Rückmeldung zu senden benötigst du eine Sim Card.</string>
-
-    <string name="requestPermission_userDontLike">TEST</string>
-    <string name="thanksUserData">Die Eingaben wurden gespeichert.</string>
-    <string name="username_spaces">Der Benutzername darf nicht mit Leerzeichen beginnen.</string>
-    <string name="username_too_long">Der Benutzername darf nicht länger als 50 Zeichen sein.</string>
-    <string name="username_empty">Bitte gib einen Benutzernamen ein.</string>
-    <string name="phoneNumber_too_long">Die Telefonnummer darf nicht länger als 30 Zeichen sein.</string>
-    <string name="reject_event_reason_special_characters">Der Absagegrund darf keine Sonderzeichen außer . und _ enthalten.</string>
-
-
-
-
-    <!-- Flo for Melli -->
-    <string name="notAbleToReadPhoneNumberCauseOfNoFunctionForThat">Gerät ist nicht in der Lage SMS zu senden usw.</string>
-
-</resources>
+    <string name="notAbleToReadPhoneNumberCauseOfNoFunctionForThat">Das Gerät ist nicht in der Lage eine SMS zu senden, da keine Sim Card hinterlegt ist.</string>
+  </resources>
