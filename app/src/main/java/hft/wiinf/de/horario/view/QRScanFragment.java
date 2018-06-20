@@ -30,6 +30,13 @@ import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.NoScanResultExceptionController;
 import hft.wiinf.de.horario.controller.ScanResultReceiverController;
 
+/**
+ * This class first checks whether the user has allowed or has already granted access to the camera.
+ * After the camera has been released for use, it is activated directly in full screen and is ready
+ * to scan and interpret the existing QR code using the ZXing library. Finally, this is packed in a
+ * bundle. This class accesses the interface ScanResultReciverController and/or
+ * NoScanResultExeptionController to pass the bundle.
+ */
 public class QRScanFragment extends Fragment implements ActivityCompat.OnRequestPermissionsResultCallback {
 
     private static final String TAG = "QRScanFragmentActivity";
@@ -46,6 +53,7 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
         super.onActivityCreated(savedInstanceState);
     }
 
+
     //The Scanner start with the Call form CalendarActivity directly
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -54,10 +62,12 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
         return view;
     }
 
+    /**
+     * Call a Method to start at first a permission Check and if this granted it start the Scanner
+     * in FullScreenMode
+     */
     @SuppressLint("ResourceType")
     public void onViewCreated(@NonNull final View view, Bundle savedInstanceState) {
-        //Call a Method to start at first a permission Check and if this granted it start the Scanner
-        //in FullScreenMode
         checkForSMSPermission();
     }
 
@@ -83,6 +93,10 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
         integrator.initiateScan();
     }
 
+    /**
+     * Checks whether the camera access has already been given and starts the query loop for the
+     * access authorization if the check result is negative.
+     */
     public void showCameraPreview() {
         //Check if User has permission to start to scan, if not it's start a RequestLoop
         if (!isCameraPermissionGranted()) {
@@ -91,6 +105,11 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
             startScanner();
         }
     }
+
+    /**
+     * Queries the access authorization in the manifest
+     * @return Existing access permission
+     */
 
     public boolean isCameraPermissionGranted() {
         return ContextCompat.checkSelfPermission(mActivity, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
@@ -112,6 +131,10 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
         requestPermissions(new String[]{Manifest.permission.SEND_SMS}, SEND_SMS_PERMISSION_CODE);
     }
 
+    /**
+     * If access authorization is missing, the query loop for querying the access authorization is
+     * started. If access is denied, the user is redirected back to his original staff.
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
@@ -329,9 +352,9 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
             }
         }
     }
-
-
-    // Push the User where he/she comes from
+    /**
+     * Checks from which tab the user comes to be returned to after closing
+     */
     private void goWhereUserComesFrom() {
         Bundle whichFragment = getArguments();
         if (getActivity() != null) {
@@ -359,8 +382,12 @@ public class QRScanFragment extends Fragment implements ActivityCompat.OnRequest
         }
     }
 
-
-    //Check the Scanner Result
+    /**
+     * Checks if there is a scan result or if the user has aborted. With a scanner result a bundle
+     * is created and packed with the scan information as well as the information from which tab the
+     * user originally came. The necessary content is defined by the controller interface
+     * ScanResultReceiverController.
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
