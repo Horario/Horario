@@ -211,7 +211,7 @@
     <string name="room_peek">Das Feld Raum darf nicht das Zeichen | enthalten.</string>
     <string name="noValidUsername_peek">Der Benutzername darf nicht das Zeichen | enthalten.</string>
     <string name="noValidUsername_comma">Der Benutzername darf nicht das Zeichen , enthalten.</string>
-    <string name="noValidUsername">Benutzername darf nicht mit Leerzeichen anfangen.</string>
+    <string name="noValidUsername">Benutzername darf keine Sonderzeichen außer . und _ enthalten..</string>
     <string name="username_spaces">Der Benutzername darf nicht mit Leerzeichen beginnen.</string>
     <string name="username_too_long">Der Benutzername darf nicht länger als 50 Zeichen sein.</string>
     <string name="phoneNumber_too_long">Die Telefonnummer darf nicht länger als 30 Zeichen sein.</string>

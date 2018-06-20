@@ -450,7 +450,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             //Do something if Tab is unselected. Parameters: selected Tab.--- Info: tab.getPosition() == x for check which Tab
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-//Close the keyboard on a tab change
+                //Close the keyboard on a tab change
                 //close keyboard
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 assert imm != null;
