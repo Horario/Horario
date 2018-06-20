@@ -42,6 +42,14 @@ import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
 
+/**
+ * This class takes the EventId from that of the NewEventFragment in a bundle and converts the Id
+ * into a StringBuffer after a database query. A QR image is then created from this StringBuffer
+ * using the ZXing library.
+ *
+ * @author Mario
+ * @version 1.0
+ */
 public class QRGeneratorFragment extends Fragment {
 
     private static final String TAG = "QRGeneratorFragmentActivity";
@@ -55,11 +63,18 @@ public class QRGeneratorFragment extends Fragment {
     private StringBuffer mQRGenerator_StringBuffer_Result;
     private Event mEvent;
 
+    /**
+     * Create an empty standard constructor
+     */
     public QRGeneratorFragment() {
         // Required empty public constructor
     }
 
-    // Get the EventIdResultBundle (Long) from the newEventActivity to Start later a DB Request
+    /**
+     * Get the EventIdResultBundle (Long) from the newEventActivity to Start later a DB Request
+     *
+     * @return qrEventIdLongResult returns the EventId of the new appointment
+     */
     @SuppressLint("LongLogTag")
     public Long eventIdDescription() {
         Bundle qrEventIdBundle = getArguments();
@@ -68,6 +83,9 @@ public class QRGeneratorFragment extends Fragment {
         return qrEventIdLongResult;
     }
 
+    /**
+     * Checks from which tab the user comes to be returned to after closing
+     */
     // Push the User where he/she comes from
     private void goWhereUserComesFrom() {
         Bundle whichFragment = getArguments();
@@ -83,7 +101,7 @@ public class QRGeneratorFragment extends Fragment {
         }
     }
 
-    @Override
+      @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_qrgenerator, container, false);
 
@@ -107,6 +125,13 @@ public class QRGeneratorFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Create the StringBuffer for the QR-Image
+     *
+     * @return  Merge the Data Base Information to one Single StringBuffer with the Format:
+     * CreatorID (not EventID!!), StartDate, EndDate, StartTime, EndTime, Repetition, ShortTitle,
+     * Place, Description, Name and PhoneNumber of EventCreator
+     */
     @SuppressLint("SimpleDateFormat")
     public StringBuffer stringBufferGenerator() {
         //Modify the DateFormat form den DB to get a more readable Form for Date and Time disjunct
@@ -116,9 +141,7 @@ public class QRGeneratorFragment extends Fragment {
         //Splitting String Element is the Pipe Symbol (on the Keyboard ALT Gr + <> Button = |)
         String stringSplitSymbol = " | ";
 
-        // Merge the Data Base Information to one Single StringBuffer with the Format:
-        // CreatorID (not EventID!!), StartDate, EndDate, StartTime, EndTime, Repetition, ShortTitle
-        // Place, Description, Name and PhoneNumber of EventCreator
+
         mQRGenerator_StringBuffer_Result = new StringBuffer();
         mQRGenerator_StringBuffer_Result.append(mEvent.getCreatorEventId()).append(stringSplitSymbol);
         mQRGenerator_StringBuffer_Result.append(simpleDateFormat.format(mEvent.getStartTime())).append(stringSplitSymbol);
@@ -136,7 +159,13 @@ public class QRGeneratorFragment extends Fragment {
 
     }
 
-    //Create the QR Code from StringBuffer Data and Show it as a Bitmap
+    /**
+     * Create the QR Code from a String based on the StringBuffer Data and Show it as a Bitmap with
+     * CorrectionLevelHashMap for the QRCode
+     * Level of Correction: L = 7%, M = 15%, Q = 25%, H = 30% (max!)
+     */
+
+
     public void qrBitMapGenerator() {
         //Create a CorrectionLevelHashMap for the QRCode
         // Level of Correction: L = 7%, M = 15%, Q = 25%, H = 30% (max!)
@@ -156,6 +185,17 @@ public class QRGeneratorFragment extends Fragment {
         }
     }
 
+    /**
+     * This method is called to display the event contents and the QR code. First the StringBufferGenerator
+     * method and QR-Generator method must create the respective content. Then the StringBuffer is split
+     * into a StringBufferArry and the individual contents are assigned to string variables. During a
+     * series appointment, the English repetition options are translated into German words and then
+     * prepared for output.
+     * @throws NullPointerException A NullPointerException occurs when you call a method on an object
+     * but that object does not exist.
+     * @throws ArrayIndexOutOfBoundsException is thrown when accessing an element in the array that does not exist
+     * @param savedInstanceState
+     */
     @SuppressLint("LongLogTag")
     @Override
     public void onViewCreated(@NonNull final View view, Bundle savedInstanceState) {
@@ -263,8 +303,10 @@ public class QRGeneratorFragment extends Fragment {
                 goWhereUserComesFrom();
             }
         });
+/**
+ * Open a Chooser to Share the QR-Code over one of the User Apps
+ */
 
-        //Open a Chooser to Share the QR-Code over one of the User Apps
         mQRGenerator_button_shareWith.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("LongLogTag")
             @Override
