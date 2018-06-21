@@ -232,5 +232,5 @@
     <string name="cannot_send_sms">Bitte in den Einstellungen ändern</string>
     <string name="sms_exception">SMS fehlgeschlagen!</string>
     <string name="sms_notAbleToSend">Rückmeldung fehlgeschlagen! Um dem Organisator die Rückmeldung zu senden benötigst du eine Sim Card.</string>
-    <string name="notAbleToReadPhoneNumberCauseOfNoFunctionForThat">Das Gerät ist nicht in der Lage eine SMS zu senden, da keine Sim Card hinterlegt ist.</string>
+    <string name="notAbleToReadPhoneNumberCauseOfNoFunctionForThat">Das Gerät ist nicht in der Lage eine SMS zu senden.</string>
   </resources>

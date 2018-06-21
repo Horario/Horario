@@ -28,7 +28,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.activeandroid.ActiveAndroid;
-import com.facebook.stetho.Stetho;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -92,7 +91,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
         //Start DB
         ActiveAndroid.initialize(this);
-        Stetho.initializeWithDefaults(this);
         //read startTab out of db, default=1(calendar tab)
         personMe = PersonController.getPersonWhoIam();
         if (personMe == null)
