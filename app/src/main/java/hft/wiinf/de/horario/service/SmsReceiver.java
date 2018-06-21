@@ -31,6 +31,8 @@ import hft.wiinf.de.horario.model.ReceivedHorarioSMS;
 
 /**
  * The type Sms receiver extends a {@link BroadcastReceiver} and reacts each time the phone of the user receives an SMS.
+ * The SMS itself is checked against typical RegEx in SQL Injections.
+ * After that, the SMS is parsed, for details, look in the methods.
  */
 public class SmsReceiver extends BroadcastReceiver {
     private String TAG = SmsReceiver.class.getSimpleName();
@@ -43,6 +45,8 @@ public class SmsReceiver extends BroadcastReceiver {
 
     /**
      * Checks if the SMS in question is relevant for the app and continues working on it.
+     * The SMS is relevant if the first characters are equal to ":Horario:".
+     * If it is relevant, it is put into an {@link ArrayList} of {@link ReceivedHorarioSMS}
      *
      * @param context, the {@link Context}
      * @param intent,  the {@link Intent}
@@ -169,7 +173,8 @@ public class SmsReceiver extends BroadcastReceiver {
 
     /**
      * Iterates through the {@link List} and verifies possible entries in the database before saving the person and the accepted/rejected events
-     *
+     * In case of a double acceptance or double rejection (QR-Code is scanned twice) then the person is not added.
+     * For more informations, look into the code comments.
      * @param unreadSMS, a {@link List} of {@link ReceivedHorarioSMS} to parse
      * @param context,   the {@link Context}
      */
@@ -200,6 +205,8 @@ public class SmsReceiver extends BroadcastReceiver {
                 List<Event> myEvents = EventController.getMyEventsByCreatorEventId(eventIdInSMS);
                 //Is it an acceptance? Then look
                 if (singleUnreadSMS.isAcceptance()) {
+                    //acceptance: look for possible preceding rejections. If yes, then delete person and create new. Else just save the person
+                    //do this for each event of the event series
                     for (Event event : myEvents) {
                         Person personA = new Person(singleUnreadSMS.getPhonenumber(), singleUnreadSMS.getName());
                         String savedContactExistingSerial = null;
@@ -239,6 +246,8 @@ public class SmsReceiver extends BroadcastReceiver {
 
                     }
                 } else {
+                    //cancellation: look for possible preceding acceptance. If yes, then delete person and create new. Else just save the person
+                    //do this for each event of the event series
                     for (Event event : myEvents) {
                         Person personB = new Person(singleUnreadSMS.getPhonenumber(), singleUnreadSMS.getName());
                         String savedContactExistingSerial = null;
@@ -279,6 +288,7 @@ public class SmsReceiver extends BroadcastReceiver {
                     }
                 }
             } else {
+                //it is a single event
                 /*Check if acceptance or cancellation*/
                 boolean hasAcceptedEarlier = false;
                 boolean hasRejectedEarlier = false;
@@ -426,7 +436,8 @@ public class SmsReceiver extends BroadcastReceiver {
     }
 
     /**
-     * Creates a notification with the text
+     * Creates a notification with the text in case of a mismatch between the creatorEventId in the SMS received and the DB.
+     *
      *
      * @param context, a {@link Context}
      * @param id,      some {@link int} required
