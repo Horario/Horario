@@ -576,7 +576,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
     /**
      * This method is called if event is not a serial Event
-     * This method converts a String (startDate & startTime: from scan result) to a Date
+     * This method converts a String (startDate and startTime: from scan result) to a Date
      * @return Date
      */
     private Calendar getStartTimeEvent() {
@@ -600,7 +600,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
     /**
      * This method is called if event is not a serial Event
-     * This method converts a String (startDate & endTime: from scan result) to a Date
+     * This method converts a String (startDate and endTime: from scan result) to a Date
      * @return Date
      */
     private Calendar getEndTimeEvent() {
@@ -621,7 +621,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
     /**
      * This method is called if event is a serial event
-     * This method converts a String (endDate & endTime: from scan result) to a Date
+     * This method converts a String (endDate and endTime: from scan result) to a Date
      * @return Date
      */
     private Calendar getEndDateEvent() {
