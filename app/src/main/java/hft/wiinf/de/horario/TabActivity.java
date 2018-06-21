@@ -671,7 +671,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                             toast.show();
 
                         } else if (singleEvent != null && singleEvent.getAccepted().equals(AcceptedState.REJECTED)) {
-                            //finish and restart the activity
+                            //finish and restart the activityeeee
                             Intent intent = getIntent();
                             finish();
                             startActivity(intent);
