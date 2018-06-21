@@ -5,28 +5,28 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
 /**
- * The type Failed sms.
+ * a sms thast could not been send.
  */
 @Table(name = "FailedSMS")
 public class FailedSMS extends Model {
 
     /**
-     * The Message.
+     * The Message of the sms.
      */
     @Column(name = "message")
     String message = "";
     /**
-     * The Phone no.
+     * The Phone no the sms should be send to.
      */
     @Column(name = "phoneNo")
     String phoneNo = "";
     /**
-     * The Creator id.
+     * The id of the creator.
      */
     @Column(name = "creatorID")
     long creatorID;
     /**
-     * The Accepted.
+     * of the event was accepted by the sender.
      */
     @Column(name = "accepted")
     boolean accepted;
@@ -40,10 +40,10 @@ public class FailedSMS extends Model {
     /**
      * Instantiates a new Failed sms.
      *
-     * @param message   the message
-     * @param phoneNo   the phone no
-     * @param creatorID the creator id
-     * @param accepted  the accepted
+     * @param message   the message of the sms
+     * @param phoneNo   the phone no the sms should be send to
+     * @param creatorID the id of the creator
+     * @param accepted  tif the event was accepted
      */
     public FailedSMS(String message, String phoneNo, long creatorID, boolean accepted) {
         this.message = message;

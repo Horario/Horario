@@ -13,7 +13,8 @@ import java.util.Date;
 //start and endtime are both dates, not as in the gui one date and two times
 
 /**
- * The type Event.
+ * represents an calendar event (both serial and one time).
+ * a serial event is reperesented as a collection of events in the database, the persons who accepted or denied the event are only stoered at the first event of the collection; all other events refer to the start event via the startEvent attribute
  */
 @Table(name = "events")
 public class Event extends Model {
@@ -44,17 +45,16 @@ public class Event extends Model {
     private long creatorEventId = -1;
 
     /**
-     * Instantiates a new Event.
+     * Instantiates a new Event with a creator.
      *
-     * @param creator the creator
+     * @param creator the creator of the event
      */
-//create a new event with a creator
     public Event(Person creator) {
         this.creator = creator;
     }
 
     /**
-     * Instantiates a new Event.
+     * Instantiates a new Event ONLY USED FOR INTERNAL REASONS, saving in DB.
      */
     public Event() {
         super();
@@ -63,7 +63,7 @@ public class Event extends Model {
     //getter-setter
 
     /**
-     * Gets creator.
+     * Gets the creator of the event.
      *
      * @return the creator
      */
@@ -74,14 +74,14 @@ public class Event extends Model {
     /**
      * Sets creator.
      *
-     * @param creator the creator
+     * @param creator the creator of the event, should not be null
      */
     public void setCreator(@NonNull Person creator) {
         this.creator = creator;
     }
 
     /**
-     * Gets short title.
+     * Gets the short title of the event.
      *
      * @return the short title
      */
@@ -92,16 +92,16 @@ public class Event extends Model {
     /**
      * Sets short title.
      *
-     * @param shortTitle the short title
+     * @param shortTitle the short title of the event
      */
-    public void setShortTitle(String shortTitle) {
+    public void setShortTitle(@NonNull String shortTitle) {
         this.shortTitle = shortTitle;
     }
 
     /**
      * Gets description.
      *
-     * @return the description
+     * @return the long description of the event
      */
     public String getDescription() {
         return description;
@@ -110,7 +110,7 @@ public class Event extends Model {
     /**
      * Sets description.
      *
-     * @param description the description
+     * @param description the description of the event (should not be null)
      */
     public void setDescription(@NonNull String description) {
         this.description = description;
@@ -119,7 +119,7 @@ public class Event extends Model {
     /**
      * Gets place.
      *
-     * @return the place
+     * @return the place of the event
      */
     public String getPlace() {
         return place;
@@ -128,7 +128,7 @@ public class Event extends Model {
     /**
      * Sets place.
      *
-     * @param place the place
+     * @param place the place of the event (not null)
      */
     public void setPlace(@NonNull String place) {
         this.place = place;
@@ -137,7 +137,7 @@ public class Event extends Model {
     /**
      * Gets start time.
      *
-     * @return the start time
+     * @return the start time of the event
      */
     public Date getStartTime() {
         return startTime;
@@ -146,7 +146,8 @@ public class Event extends Model {
     /**
      * Sets start time.
      *
-     * @param startTime the start time
+     * @param startTime the start time of the event (not null)
+     *                  it is concatenated of the start date and the start time of the gui
      */
     public void setStartTime(@NonNull Date startTime) {
         this.startTime = startTime;
@@ -155,7 +156,7 @@ public class Event extends Model {
     /**
      * Gets end time.
      *
-     * @return the end time
+     * @return the end time of the event  it is concatenated of the date and the end time of the gui
      */
     public Date getEndTime() {
         return endTime;
@@ -164,7 +165,7 @@ public class Event extends Model {
     /**
      * Sets end time.
      *
-     * @param endTime the end time
+     * @param endTime the end time of the event  it is concatenated of the date and the end time of the gui (not null)
      */
     public void setEndTime(@NonNull Date endTime) {
         this.endTime = endTime;
@@ -173,7 +174,7 @@ public class Event extends Model {
     /**
      * Gets end date.
      *
-     * @return the end date
+     * @return the end date of a repeating event (null if it is a single event)
      */
     public Date getEndDate() {
         return endDate;
@@ -182,7 +183,7 @@ public class Event extends Model {
     /**
      * Sets end date.
      *
-     * @param endDate the end date
+     * @param endDate the end date of a repeating event (null if it is a single event)
      */
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
@@ -191,7 +192,7 @@ public class Event extends Model {
     /**
      * Gets repetition.
      *
-     * @return the repetition
+     * @return the repetition of the event (none to yearly)
      */
     public Repetition getRepetition() {
         return repetition;
@@ -200,7 +201,7 @@ public class Event extends Model {
     /**
      * Sets repetition.
      *
-     * @param repetition the repetition
+     * @param repetition the repetition of the event (none to yearly)
      */
     public void setRepetition(Repetition repetition) {
         this.repetition = repetition;
@@ -210,7 +211,7 @@ public class Event extends Model {
     /**
      * Gets accepted.
      *
-     * @return the accepted
+     * @return the accepted state of the event
      */
     public AcceptedState getAccepted() {
         return accepted;
@@ -219,7 +220,7 @@ public class Event extends Model {
     /**
      * Sets accepted.
      *
-     * @param accepted the accepted
+     * @param accepted the accepted state of the event
      */
     public void setAccepted(AcceptedState accepted) {
         this.accepted = accepted;
@@ -228,7 +229,7 @@ public class Event extends Model {
     /**
      * Gets start event.
      *
-     * @return the start event
+     * @return the start event, if the event is part of a serial event and not the start event itself
      */
     public Event getStartEvent() {
         return startEvent;
@@ -237,7 +238,7 @@ public class Event extends Model {
     /**
      * Sets start event.
      *
-     * @param startEvent the start event
+     * @param startEvent the start event, if the event is part of a serial event and not the start event itself
      */
     public void setStartEvent(Event startEvent) {
         this.startEvent = startEvent;
@@ -246,7 +247,7 @@ public class Event extends Model {
     /**
      * Gets creator event id.
      *
-     * @return the creator event id
+     * @return the event id at the creators table; used for accepting and rejecting
      */
     public long getCreatorEventId() {
         return creatorEventId;
@@ -255,7 +256,7 @@ public class Event extends Model {
     /**
      * Sets creator event id.
      *
-     * @param creatorEventId the creator event id
+     * @param creatorEventId the event id at the creators table; used for accepting and rejecting
      */
     public void setCreatorEventId(long creatorEventId) {
         this.creatorEventId = creatorEventId;

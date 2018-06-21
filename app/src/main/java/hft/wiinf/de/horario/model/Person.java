@@ -5,21 +5,18 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
 /**
- * The type Person.
+ * class for a person with can (not) participate at an appointment or be the creator of an appointment
+ * NOTE: 1. event-person is an 1:n relation-ship (accepted or rejected event), therfore the same person could be serversl times in the database.
+ * 2. because of 1 only accepted event or cacelled event could be set - one person could not cacel AND acept an event
+ * 3. enable push, notification time, start tab should only be read out for the app user
  */
-//class for a person with can (not) participate at an appointment or be the creator of an appointment
+//
 @Table(name = "persons")
 public class Person extends Model {
-    /**
-     * The Phone number.
-     */
     @Column
-    String phoneNumber = "";
-    /**
-     * The Name.
-     */
+    private String phoneNumber = "";
     @Column
-    String name = "";
+    private String name = "";
     @Column(name = "event_Accepted")
     private Event acceptedEvent = null;
     @Column(name = "event_canceled")
@@ -36,13 +33,12 @@ public class Person extends Model {
     private String rejectionReason = "";
 
     /**
-     * Instantiates a new Person.
+     * Instantiates a new Person. Use this constructor for person that using this specific app (owner)
      *
-     * @param isItMe      the is it me
-     * @param phoneNumber the phone number
-     * @param name        the name
+     * @param isItMe      if the person is the app user
+     * @param phoneNumber the phone number of the user
+     * @param name        the name of ther user
      */
-//Use this constructor for person that using this specific app (owner)
     public Person(boolean isItMe, String phoneNumber, String name) {
         super();
         this.isItMe = isItMe;
@@ -51,12 +47,11 @@ public class Person extends Model {
     }
 
     /**
-     * Instantiates a new Person.
+     * Instantiates a new Person. Use this constructor for persons that is not the current(real) user of this specific app
      *
-     * @param phoneNumber the phone number
-     * @param name        the name
+     * @param phoneNumber the phone number of the user
+     * @param name        the name of the user
      */
-//Use this constructor for persons that is not the current(real) user of this specific app
     public Person(String phoneNumber, String name) {
         super();
         this.isItMe = false;
@@ -67,8 +62,8 @@ public class Person extends Model {
     /**
      * Instantiates a new Person.
      *
-     * @param phoneNumber      the phone number
-     * @param notificationTime the notification time
+     * @param phoneNumber      the phone number of the user
+     * @param notificationTime the notification time in minutes before the event
      */
     public Person(String phoneNumber, int notificationTime) {
         super();
@@ -84,27 +79,27 @@ public class Person extends Model {
     }
 
     /**
-     * Is it me boolean.
+     * get If the person is the app user
      *
-     * @return the boolean
+     * @return If the person is the app user
      */
     public boolean isItMe() {
         return isItMe;
     }
 
     /**
-     * Sets it me.
+     * set If the person is the app user
      *
-     * @param itMe the it me
+     * @param itMe If the person is the app user
      */
     public void setItMe(boolean itMe) {
         this.isItMe = itMe;
     }
 
     /**
-     * Gets phone number.
+     * Gets the phone number of the user. the number is only a string, and no specific format - this should be ensured by the application
      *
-     * @return the phone number
+     * @return the phone number of the user
      */
     //getter-setter
     public String getPhoneNumber() {
@@ -112,43 +107,43 @@ public class Person extends Model {
     }
 
     /**
-     * Sets phone number.
+     * sets the phone number of the user. The number is only a string, and no specific format - this should be ensured by the application
      *
-     * @param phoneNumber the phone number
+     * @param phoneNumber the phone number of the user. The number is only a string, and no specific format - this should be ensured by the application
      */
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
     /**
-     * Sets canceled event.
+     * Sets the event the person has cacelled
      *
-     * @param canceledEvent the canceled event
+     * @param canceledEvent the event the person has cacelled
      */
     public void setCanceledEvent(Event canceledEvent) {
         this.canceledEvent = canceledEvent;
     }
 
     /**
-     * Gets name.
+     * Gets the name of the user
      *
-     * @return the name
+     * @return the name of the user
      */
     public String getName() {
         return name;
     }
 
     /**
-     * Sets name.
+     * Sets the name of the user.
      *
-     * @param name the name
+     * @param name the name of the user
      */
     public void setName(String name) {
         this.name = name;
     }
 
     /**
-     * Sets accepted event.
+     * Sets the event the user has accepted.
      *
      * @param acceptedEvent the accepted event
      */
@@ -157,9 +152,9 @@ public class Person extends Model {
     }
 
     /**
-     * Gets notification time.
+     * Gets notification time of this user.
      *
-     * @return the notification time
+     * @return the notification time in minutes before the event
      */
     public int getNotificationTime() {
         return notificationTime;
@@ -168,43 +163,43 @@ public class Person extends Model {
     /**
      * Sets notification time.
      *
-     * @param notificationTime the notification time
+     * @param notificationTime the notification time in minutes before the event
      */
     public void setNotificationTime(int notificationTime) {
         this.notificationTime = notificationTime;
     }
 
     /**
-     * Is enable push boolean.
+     * If push is enabled
      *
-     * @return the boolean
+     * @return if push is enabled
      */
     public boolean isEnablePush() {
         return enablePush;
     }
 
     /**
-     * Sets enable push.
+     * Set if push is enabled
      *
-     * @param enablePush the enable push
+     * @param enablePush if push is enabled
      */
     public void setEnablePush(boolean enablePush) {
         this.enablePush = enablePush;
     }
 
     /**
-     * Gets start tab.
+     * Gets the start tab of the user.
      *
-     * @return the start tab
+     * @return the start tab of the user (0 based from left (0) to right (2))
      */
     public int getStartTab() {
         return startTab;
     }
 
     /**
-     * Sets start tab.
+     * Sets the start tab of the user.
      *
-     * @param startTab the start tab
+     * @param startTab the start tab of the user (0 based from left (0) to right (2)
      */
     public void setStartTab(int startTab) {
         this.startTab = startTab;
@@ -213,14 +208,14 @@ public class Person extends Model {
     /**
      * Gets rejection reason.
      *
-     * @return the rejection reason
+     * @return the rejection reason of the user
      */
     public String getRejectionReason() {
         return rejectionReason;
     }
 
     /**
-     * Sets rejection reason.
+     * Sets rejection reason of the user (should only be set if the user rejected an event).
      *
      * @param rejectionReason the rejection reason
      */

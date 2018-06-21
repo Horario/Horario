@@ -1,10 +1,10 @@
 package hft.wiinf.de.horario.model;
 
 /**
- * The enum Repetition.
+ * Types of repetition for an event
  */
 public enum Repetition {
-    //Types of repetition serial appointment
+
     /**
      * No repetition.
      */
