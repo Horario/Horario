@@ -2,8 +2,8 @@ package hft.wiinf.de.horario.view;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
@@ -424,33 +424,42 @@ public class SettingsSettingsFragment extends Fragment implements ActivityCompat
     // method to read the phone number of the user
     @SuppressLint({"MissingPermission", "HardwareIds"})
     public void readPhoneNumber() {
-        //if permission is granted read the phone number
-        TelephonyManager telephonyManager = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
-        //check if sim card is in phone
-        String phoneNumber = "";
-        if (telephonyManager != null) {
-            phoneNumber = telephonyManager.getLine1Number();
-            //delete spaces and add a plus before the number if it begins without a 0
-            if (phoneNumber != null) {
-                phoneNumber = phoneNumber.replaceAll(" ", "");
-                if (phoneNumber.matches("[1-9][0-9]+"))
-                    phoneNumber = "+" + phoneNumber;
+        if (getContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_TELEPHONY)) {
+            //if permission is granted read the phone number
+            TelephonyManager telephonyManager = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
+            //check if sim card is in phone String phoneNumber ="";
+            String phoneNumber = "";
+            if (telephonyManager != null) {
+                phoneNumber = telephonyManager.getLine1Number();
+                //delete spaces and add a plus before the number if it begins without a 0
+                if (phoneNumber != null) {
+                    phoneNumber = phoneNumber.replaceAll(" ", "");
+                    if (phoneNumber.matches("[1-9][0-9]+"))
+                        phoneNumber = "+" + phoneNumber;
+                }
             }
-        }
-        if (phoneNumber == null || !phoneNumber.matches("(00|0|\\+)[1-9][0-9]+") || phoneNumber.length() > 50) {
-            Toast.makeText(getContext(), R.string.telephonenumerNotRead, Toast.LENGTH_SHORT).show();
-            editText_PhoneNumber.requestFocusFromTouch();
-            //open keyboard
-            ((InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+            if (phoneNumber == null || !phoneNumber.matches("(00|0|\\+)[1-9][0-9]+") || phoneNumber.length() > 50) {
+                Toast.makeText(getContext(), R.string.telephonenumerNotRead, Toast.LENGTH_SHORT).show();
+                editText_PhoneNumber.requestFocusFromTouch();
+                //open keyboard
+                ((InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+            } else {
+                person.setPhoneNumber(phoneNumber);
+                PersonController.savePerson(person);
+                Toast.makeText(getContext(), R.string.thanksphoneNumber, Toast.LENGTH_SHORT).show();
+                editText_PhoneNumber.setText(phoneNumber);
+                editText_PhoneNumber.setFocusable(false);
+                editText_PhoneNumber.setFocusableInTouchMode(false);
+                InputMethodManager imm = (InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+            }
         } else {
-            person.setPhoneNumber(phoneNumber);
-            PersonController.savePerson(person);
-            Toast.makeText(getContext(), R.string.thanksphoneNumber, Toast.LENGTH_SHORT).show();
-            editText_PhoneNumber.setText(phoneNumber);
-            editText_PhoneNumber.setFocusable(false);
-            editText_PhoneNumber.setFocusableInTouchMode(false);
-            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+            if (person.getPhoneNumber() == null || !person.getPhoneNumber().matches("(00|0|\\+)[1-9][0-9]+")) {
+                Toast.makeText(getContext(), R.string.notAbleToReadPhoneNumberCauseOfNoFunctionForThat, Toast.LENGTH_SHORT).show();
+                editText_PhoneNumber.requestFocusFromTouch();
+                //open keyboard
+                ((InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+            }
         }
     }
 

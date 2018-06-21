@@ -30,15 +30,15 @@
                 android:paddingRight="20dp"
                 android:paddingTop="10dp"
                 android:textAlignment="gravity"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <ScrollView
                 android:id="@+id/scrollView11"
                 android:layout_width="0dp"
-                android:layout_height="364dp"
+                android:layout_height="396dp"
                 android:layout_marginStart="10dp"
-                android:paddingBottom="60dp"
+                android:paddingBottom="10dp"
                 android:paddingEnd="10dp"
                 android:paddingStart="10dp"
                 android:paddingTop="0dp"
@@ -51,7 +51,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="30dp"
+                    android:layout_marginBottom="10dp"
                     android:layout_marginTop="10dp"
                     android:orientation="vertical"
                     android:paddingBottom="40dp">
@@ -65,7 +65,7 @@
                         android:layout_marginTop="0dp"
                         android:paddingLeft="0dp"
                         android:paddingRight="0dp"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         tools:layout_editor_absoluteX="0dp"
                         tools:layout_editor_absoluteY="58dp" />
 
@@ -96,6 +96,9 @@
                 android:text="@string/share_with"
                 android:textColor="@android:color/background_light"
                 android:textSize="14sp"
+                android:drawableEnd="@drawable/ic_share"
+                android:paddingEnd="5dp"
+                 android:paddingStart="30dp"
                 app:layout_constraintBottom_toTopOf="@+id/qrGenerator_button_goToWhereComesFrom"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -114,6 +117,9 @@
                 android:text="@string/back_where_user_comesFrom"
                 android:textColor="@android:color/background_light"
                 android:textSize="14sp"
+                android:drawableEnd="@drawable/ic_uebersicht"
+                android:paddingEnd="5dp"
+                android:paddingStart="30dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />

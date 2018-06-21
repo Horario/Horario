@@ -25,7 +25,7 @@ import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.utility.BundleUtility;
 
 /**
- * The type Failed sms service.
+ * try to send failed SMS again
  */
 public class FailedSMSService extends JobService {
 
@@ -34,10 +34,16 @@ public class FailedSMSService extends JobService {
      */
     Bundle sms;
     /**
-     * The Phone state.
+     * The Phone state, to check weather it is in service or not
      */
     int phone_state;
 
+    /**
+     * job will check if there is service and if the sim is ready (everything what needs to be checked for sending sms)
+     * after that it will send the SMS and set a notification
+     * @param params
+     * @return boolean if the job has finished successfully
+     */
     @Override
     public boolean onStartJob(JobParameters params) {
         TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
@@ -74,14 +80,8 @@ public class FailedSMSService extends JobService {
             String msg;
             Person me = PersonController.getPersonWhoIam();
             if (failedSMS.isAccepted()) {
-                //SMS: :Horario:123,1,Lucas
-                //(":Horario:" als Kennzeichner, 123 als creatorEventId, 1 für Zusage, Lucas als Name der Person im Handy)
                 msg = ":Horario:" + failedSMS.getCreatorID() + ",1," + me.getName();
             } else {
-                //SMS: :Horario:123,0,Lucas,Krankheit!habe die Grippe
-                //(":Horario:" als Kennzeichner, 123 als creatorEventId, 0
-                // für Absage, Lucas als Name der Person im Handy, Krankheit als Absagekategorie, !
-                // als Kennzeichner (drin lassen!!!), habe die Grippe als persönliche Notiz)
                 msg = ":Horario:" + failedSMS.getCreatorID() + ",0," + me.getName() + "," + failedSMS.getMessage();
             }
             SmsManager smsManager = SmsManager.getDefault();
@@ -140,16 +140,20 @@ public class FailedSMSService extends JobService {
             manager.createNotificationChannel(mChannel);
             NotificationCompat.Builder builder =
                     new NotificationCompat.Builder(getApplicationContext(), channel_id)
-                            .setSmallIcon(R.drawable.ic_android_black2_24dp)
+                            .setSmallIcon(R.drawable.ic_notification)
                             .setContentTitle("SMS wurde erfolgreich versandt!")
+                            .setAutoCancel(true)
+                            .setStyle(new NotificationCompat.BigTextStyle().bigText(contentText))
                             .setContentText(contentText);
             builder.setContentIntent(contentIntent);
             manager.notify(id, builder.build());
         } else {
             NotificationCompat.Builder builder =
                     new NotificationCompat.Builder(this, "")
-                            .setSmallIcon(R.drawable.ic_android_black2_24dp)
+                            .setSmallIcon(R.drawable.ic_notification)
                             .setContentTitle("SMS wurde erfolgreich versandt!")
+                            .setAutoCancel(true)
+                            .setStyle(new NotificationCompat.BigTextStyle().bigText(contentText))
                             .setContentText(contentText);
             builder.setContentIntent(contentIntent);
 

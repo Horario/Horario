@@ -58,7 +58,6 @@ import static com.activeandroid.Cache.getContext;
 
 public class TabActivity extends AppCompatActivity implements ScanResultReceiverController {
 
-    //TODO Kommentieren und Java Doc Info Schreiben
     private static final String TAG = "TabActivity";
     private static final int PERMISSION_REQUEST_READ_PHONE_STATE = 0;
     private int PERMISSION_REQUEST_RECEIVE_SMS = 1;
@@ -451,7 +450,7 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             //Do something if Tab is unselected. Parameters: selected Tab.--- Info: tab.getPosition() == x for check which Tab
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-//Close the keyboard on a tab change
+                //Close the keyboard on a tab change
                 //close keyboard
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 assert imm != null;
@@ -497,8 +496,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 }
             }
         });
-
-        //TODO
     }
 
     // Add the Fragments to the PageViewer
@@ -737,7 +734,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
             NotificationController.setAlarmForNotification(getApplicationContext(), event);
         }
 
-        //TODO: geht nicht weil die Dialoge noch im Vordergrund sind
         if (event.getAccepted().equals(AcceptedState.REJECTED)) {
 
         } else {

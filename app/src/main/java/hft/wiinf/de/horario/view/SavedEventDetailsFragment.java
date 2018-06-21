@@ -175,7 +175,6 @@ public class SavedEventDetailsFragment extends Fragment {
                             //Create a List with all Events with the same CreatorEventId an set the State
                             //to Accepted
                             List<Event> findMyEventsByEventCreatorId =
-                                    //ToDo Creator EventId are not unique so its necessary to Enlarge the Select Statement
                                     new Select().from(Event.class).where("CreatorEventId=?",
                                             String.valueOf(event.getCreatorEventId())).execute();
                             for (Event x : findMyEventsByEventCreatorId) {

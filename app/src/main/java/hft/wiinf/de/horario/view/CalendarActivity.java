@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 
 import hft.wiinf.de.horario.R;
 
-//TODO Kommentieren und Java Doc Info Schreiben
 public class CalendarActivity extends Fragment {
     private static final String TAG = "CalendarFragmentActivity";
 

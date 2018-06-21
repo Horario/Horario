@@ -49,7 +49,6 @@ import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.model.Repetition;
 
-//TODO Kommentieren und Java Doc Info Schreiben
 public class NewEventFragment extends Fragment {
 
     // calendar objects to save the startTime / end Time / endOfRepetition, default: values - today
@@ -690,25 +689,30 @@ public class NewEventFragment extends Fragment {
         //if permission is granted read the phone number
         Context ctx = getContext();
         assert ctx != null;
-        TelephonyManager telephonyManager = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
-        String phoneNumber = "";
-        //check if the sim is in the phone
-        if (telephonyManager != null)
-            phoneNumber = telephonyManager.getLine1Number();
-        //delete spaces and add a + if phoneNumber starts without a 0
-        if (phoneNumber != null) {
-            phoneNumber = phoneNumber.replaceAll(" ", "");
-            //phone number starts with county number but no + or 00 (rg 491023 for a german number)
-            if (phoneNumber.matches("[1-9][0-9]+"))
+        if (ctx.getPackageManager().hasSystemFeature(PackageManager.FEATURE_TELEPHONY)) {
+            TelephonyManager telephonyManager = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
+            String phoneNumber = "";
+            //check if the sim is in the phone
+            if (telephonyManager != null) phoneNumber = telephonyManager.getLine1Number();
+            //delete spaces and add a + if phoneNumber starts without a 0
+            if (phoneNumber != null) {
+                phoneNumber = phoneNumber.replaceAll(" ", "");
+                //phone number starts with county number but no + or 00 (rg 491023 for a german number)if (phoneNumber.matches("[1-9][0-9]+"))
                 phoneNumber = "+" + phoneNumber;
-        }
-        me.setPhoneNumber(phoneNumber);
-        //if the number could not been read, open a dialog
-        if (me.getPhoneNumber() == null || !me.getPhoneNumber().matches("(00|0|\\+)[1-9][0-9]+")) {
-            openDialogAskForPhoneNumber();
+            }
+            me.setPhoneNumber(phoneNumber);
+            //if the number could not been read, open a dialog
+            if (me.getPhoneNumber() == null || !me.getPhoneNumber().matches("(00|0|\\+)[1-9][0-9]+")) {
+                openDialogAskForPhoneNumber();
+            } else {
+                Toast.makeText(getContext(), R.string.thanksphoneNumber, Toast.LENGTH_SHORT).show();
+                saveEvent();
+            }
         } else {
-            Toast.makeText(getContext(), R.string.thanksphoneNumber, Toast.LENGTH_SHORT).show();
-            saveEvent();
+            if (me.getPhoneNumber() == null || !me.getPhoneNumber().matches("(00|0|\\+)[1-9][0-9]+")) {
+                Toast.makeText(getContext(), R.string.notAbleToReadPhoneNumberCauseOfNoFunctionForThat, Toast.LENGTH_SHORT).show();
+                openDialogAskForPhoneNumber();
+            }
         }
     }
 
