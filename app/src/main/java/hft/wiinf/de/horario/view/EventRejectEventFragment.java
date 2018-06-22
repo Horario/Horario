@@ -1,3 +1,8 @@
+/**
+ * This is a fragment to reject an event and try to send a message (sms) to organizer.
+ * @author Team: Horario
+ */
+
 package hft.wiinf.de.horario.view;
 
 import android.content.Intent;
@@ -116,6 +121,13 @@ public class EventRejectEventFragment extends Fragment {
         });
     }
 
+    /**
+     * This method creates an AlertDialog to ask for final decision (yes or no).
+     * This method return nothing. Next Steps depends on what is clicked (yes or no).
+     * If "yes", method is restarting the TabActivity and calendar shows up.
+     * If "no", method is going back to layout from EventRejectEventFragment.
+     *
+     */
     public void askForPermissionToDelete() {
         //Build dialog
         final AlertDialog.Builder dialogAskForFinalDecission = new AlertDialog.Builder(getContext());
@@ -126,6 +138,7 @@ public class EventRejectEventFragment extends Fragment {
         mDialog = dialogAskForFinalDecission.create();
         mDialog.show();
 
+        //button listener on both buttons
         mDialog.findViewById(R.id.dialog_button_event_delete)
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -157,6 +170,7 @@ public class EventRejectEventFragment extends Fragment {
                         startActivity(intent);
                     }
                 });
+        //if button "no" has been clicked, cancel dialog.
         mDialog.findViewById(R.id.dialog_button_event_back)
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -167,6 +181,11 @@ public class EventRejectEventFragment extends Fragment {
 
     }
 
+    /**
+     * Method to get Arguments from SavedEventDetailsFragment, AcceptedEventDetailsFragment or TabActivity
+     * This Method checks which value is for EventId
+     * @return the creatorEventId: Id which the event has in the database of organizer
+     */
     public Long getEventID() {
         Bundle MYEventIdBundle = getArguments();
         Long MYEventIdLongResult = MYEventIdBundle.getLong("EventId");
@@ -177,6 +196,11 @@ public class EventRejectEventFragment extends Fragment {
         this.selectedEvent = selectedEvent;
     }
 
+    /**
+     * This method formats the output which is shown on Dialog
+     *
+     * @param selectedEvent: Id which the event has in the database of organizer
+     */
     private void buildDescriptionEvent(Event selectedEvent) {
         //Put StringBuffer in an Array and split the Values to new String Variables
         //Index: 0 = CreatorID; 1 = StartDate; 2 = EndDate; 3 = StartTime; 4 = EndTime;
@@ -258,7 +282,11 @@ public class EventRejectEventFragment extends Fragment {
 
     }
 
-    //check for userinput
+    /**
+     * This method checks if user input is valid. If input is not valid show Toast
+     * @return false: if input is not valid
+     * @return true: if input is valid
+     */
     private boolean checkForInput() {
         if (reason_for_rejection.getText().length() == 0) {
             Toast.makeText(getContext(), R.string.reject_event_reason, Toast.LENGTH_SHORT).show();

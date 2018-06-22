@@ -28,7 +28,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.activeandroid.ActiveAndroid;
-import com.facebook.stetho.Stetho;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -92,7 +91,6 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
         //Start DB
         ActiveAndroid.initialize(this);
-        Stetho.initializeWithDefaults(this);
         //read startTab out of db, default=1(calendar tab)
         personMe = PersonController.getPersonWhoIam();
         if (personMe == null)
@@ -230,7 +228,13 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
     }
 
 
-    //After Scanning it was opened a Dialog where the user can choose what to do next
+    /**
+     * This method creates a Dialog after scanning is successfull. After that, the user has three choices to click on.
+     * To save and accept event, save without accept and reject event. A Listener checks with button has been
+     * clicked. After click, checkIfEventIsInPast() is called.
+     * @param qrScannContentResult
+     * @param whichFragmentTag
+     */
     @SuppressLint({"ResourceType", "SetTextI18n"})
     private void openActionDialogAfterScanning(final String qrScannContentResult, final String whichFragmentTag) {
         //Create the Dialog with the GUI Elements initial
@@ -512,7 +516,9 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    //Method calls a Dialog when the User has not added a username
+    /**
+     * this method opens a Dialog to ask for username if that has not already happened.
+     */
     public void openDialogAskForUsername() {
         final AlertDialog.Builder dialogAskForUsername = new AlertDialog.Builder(this);
         dialogAskForUsername.setView(R.layout.dialog_askforusername);
@@ -566,7 +572,11 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         }
     }
 
-    //convert startDate-String from QR-Scanner into Calendar format
+    /**
+     * This method is called if event is not a serial Event
+     * This method converts a String (startDate and startTime: from scan result) to a Date
+     * @return Date
+     */
     private Calendar getStartTimeEvent() {
         //startDate from qr scanner
         String[] startDateStringBufferArray = startDate.split("\\.");
@@ -586,7 +596,11 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         return myStartTime;
     }
 
-    //convert endDate-String from QR-Scanner into Calendar format
+    /**
+     * This method is called if event is not a serial Event
+     * This method converts a String (startDate and endTime: from scan result) to a Date
+     * @return Date
+     */
     private Calendar getEndTimeEvent() {
         String[] startDateStringBufferArray = startDate.split("\\.");
         day = startDateStringBufferArray[0].trim();
@@ -603,8 +617,11 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         return myEndTime;
     }
 
-    //if serialevent
-    //get end of Repetition Date
+    /**
+     * This method is called if event is a serial event
+     * This method converts a String (endDate and endTime: from scan result) to a Date
+     * @return Date
+     */
     private Calendar getEndDateEvent() {
         String[] endDateStringBufferArray = endDate.split("\\.");
         day = endDateStringBufferArray[0].trim();
@@ -621,7 +638,10 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         return myEndDate;
     }
 
-    //convert Repetition string into Repetition format
+    /**
+     * This method checks which Repetition (none, daily, weekly, monthly, yearly) the event has.
+     * @return which Repetition the event has
+     */
     private Repetition getRepetition() {
         switch (repetition) {
             case "jährlich":
@@ -637,7 +657,9 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         }
     }
 
-    //save Event and Person
+    /**
+     * This method decides if event can be saved, rejected or accepted
+     */
     private void dialogListener() {
         final AlertDialog.Builder dialogAskForFinalDecission = new AlertDialog.Builder(this);
         dialogAskForFinalDecission.setView(R.layout.dialog_afterscanningbuttonclick);
@@ -695,6 +717,9 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
                 });
     }
 
+    /**
+     * This method saves and accepts or just saves the event
+     */
     private void savePersonAndEvent() {
         Person person = new Person();
         Event event = new Event(person);
@@ -746,6 +771,12 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         }
     }
 
+    /**
+     * This method is called only if after scanning and the button for rejection has been clicked.
+     * It rejects the event. For that it checks whether event is in database or not. If it is not, it saves
+     * the event with AcceptedState.REJECTED. This method calls "EventRejectEventFragment" for rejection
+     * @param afterScanningDialogAction to close this Dialog
+     */
     private void saveEventAndPersonForRejection(Dialog afterScanningDialogAction) {
         Person person = new Person();
         Event event = new Event(person);
@@ -807,6 +838,12 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         SendSmsController.sendSMS(getApplicationContext(), event.getCreator().getPhoneNumber(), reject_message, true, event.getCreatorEventId(), event.getShortTitle());
     }
 
+    /**
+     * This method checks if organizer is in database or not. If not, save new person. If it is in
+     * database then set Creator with his id.
+     * @param event to know which event has to be checked
+     * @param person new Person to save
+     */
     private void checkIfPersonIsInDatabase(Event event, Person person) {
         //if publisher is in database
         if (personEventCreator != null) {
@@ -820,6 +857,11 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
 
     }
 
+    /**
+     * This method checks if event is in past.
+     * @return true if event is in past
+     * @return false if event is in future
+     */
     private boolean checkIfEventIsInPast() {
         //read the current date and time to compare if the End of the Event is in the past (Date & Time),
         // set seconds and milliseconds to 0 to ensure a ight compare (seonds and milliseconds doesn't matter)
@@ -847,6 +889,10 @@ public class TabActivity extends AppCompatActivity implements ScanResultReceiver
         }
     }
 
+    /**
+     * This method decides what to do after click on save, accept or reject event.
+     * @param afterScanningDialogActionn
+     */
     private void decideWhatToDo(Dialog afterScanningDialogActionn) {
         if (!checkIfEventIsInPast()) {
             Person person = PersonController.getPersonWhoIam();
