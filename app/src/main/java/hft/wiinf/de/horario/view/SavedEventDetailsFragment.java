@@ -4,9 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +17,6 @@ import com.activeandroid.query.Select;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import hft.wiinf.de.horario.R;
@@ -31,12 +28,13 @@ import hft.wiinf.de.horario.model.Event;
 
 public class SavedEventDetailsFragment extends Fragment {
 
-    Button savedEventDetailsButtonRefuseAppointment, savedEventDetailsButtonAcceptAppointment, savedEventDetailsButtonShowQr;
+    Button savedEventDetailsButtonRefuseAppointment, savedEventDetailsButtonAcceptAppointment,
+            savedEventDetailsButtonShowQr;
     RelativeLayout rLayout_savedEvent_helper;
     TextView savedEventDetailsOrganisatorText, savedEventphNumberText, savedEventeventDescription;
-    Event selectedEvent;
+    Event selectedEvent, event;
     StringBuffer eventToStringBuffer;
-
+    AlertDialog mAlertDialog;
     Long creatorEventId;
     String shortTitle, phNumber;
 
@@ -71,19 +69,28 @@ public class SavedEventDetailsFragment extends Fragment {
         savedEventDetailsButtonRefuseAppointment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Code for cancelling an event eg. take it out of the DB and Calendar View
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(System.currentTimeMillis());
-                if (cal.getTime().before(EventController.getEventById(getEventID()).getEndTime())) {
-                    //Code for cancelling an event eg. take it out of the DB and Calendar View
+                if (EventController.getEventById(getEventID()).getEndTime().after(cal.getTime())) {
+                    Bundle whichFragment = getArguments();
                     EventRejectEventFragment eventRejectEventFragment = new EventRejectEventFragment();
-                    Bundle bundleAcceptedEventId = new Bundle();
-                    bundleAcceptedEventId.putLong("EventId", getEventID());
-                    bundleAcceptedEventId.putString("fragment", "AcceptedEventDetails");
-                    eventRejectEventFragment.setArguments(bundleAcceptedEventId);
-                    FragmentTransaction fr = getFragmentManager().beginTransaction();
-                    fr.replace(R.id.savedEvent_relativeLayout_main, eventRejectEventFragment, "RejectEvent");
-                    fr.addToBackStack("RejectEvent");
-                    fr.commit();
+                    Bundle bundle = new Bundle();
+                    bundle.putLong("EventId", getEventID());
+                    bundle.putString("fragment", whichFragment.getString("fragment"));
+                    eventRejectEventFragment.setArguments(bundle);
+
+                    if (whichFragment.getString("fragment").equals("EventOverview")) {
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.eventOverview_frameLayout, eventRejectEventFragment, "RejectEvent")
+                                .addToBackStack("RejectEvent")
+                                .commit();
+                    } else {
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.calendar_frameLayout, eventRejectEventFragment, "RejectEvent")
+                                .addToBackStack("RejectEvent")
+                                .commit();
+                    }
                 } else {
                     Toast.makeText(getContext(), R.string.startTime_afterScanning_past, Toast.LENGTH_SHORT).show();
                 }
@@ -138,10 +145,10 @@ public class SavedEventDetailsFragment extends Fragment {
         dialogAskForFinalDecission.setTitle(R.string.titleDialogSaveEvent);
         dialogAskForFinalDecission.setCancelable(true);
 
-        final AlertDialog alertDialogAskForFinalDecission = dialogAskForFinalDecission.create();
-        alertDialogAskForFinalDecission.show();
+        mAlertDialog = dialogAskForFinalDecission.create();
+        mAlertDialog.show();
 
-        alertDialogAskForFinalDecission.findViewById(R.id.dialog_button_event_delete)
+        mAlertDialog.findViewById(R.id.dialog_button_event_delete)
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -168,7 +175,6 @@ public class SavedEventDetailsFragment extends Fragment {
                             //Create a List with all Events with the same CreatorEventId an set the State
                             //to Accepted
                             List<Event> findMyEventsByEventCreatorId =
-                                    //ToDo Creator EventId are not unique so its necessary to Enlarge the Select Statement
                                     new Select().from(Event.class).where("CreatorEventId=?",
                                             String.valueOf(event.getCreatorEventId())).execute();
                             for (Event x : findMyEventsByEventCreatorId) {
@@ -185,11 +191,11 @@ public class SavedEventDetailsFragment extends Fragment {
                     }
                 });
 
-        alertDialogAskForFinalDecission.findViewById(R.id.dialog_button_event_back)
+        mAlertDialog.findViewById(R.id.dialog_button_event_back)
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        alertDialogAskForFinalDecission.cancel();
+                        mAlertDialog.cancel();
                     }
                 });
     }
@@ -242,19 +248,19 @@ public class SavedEventDetailsFragment extends Fragment {
         }
 
         // Event shortTitel in Headline with StartDate
-        savedEventDetailsOrganisatorText.setText(eventCreatorName + "\n" + shortTitle + ", " + currentDate);
-        savedEventphNumberText.setText(phNumber);
+        savedEventDetailsOrganisatorText.setText(eventCreatorName + " (" + phNumber + ")" + "\n" + shortTitle);
+        savedEventphNumberText.setText("");
         // Check for a Repetition Event and Change the Description Output with and without
         // Repetition Element inside.
         if (repetition.equals("")) {
-            savedEventeventDescription.setText("Am " + startDate + " findet von " + startTime + " bis "
-                    + endTime + " Uhr in Raum " + place + " " + shortTitle + " statt." + "\n" + "Termindetails sind: "
-                    + description + "\n" + "\n" + "Organisator: " + eventCreatorName);
+            savedEventeventDescription.setText(getString(R.string.time) + startTime + getString(R.string.until)
+                    + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place + "\n" + "\n" + getString(R.string.eventDetails)
+                    + description);
         } else {
-            savedEventeventDescription.setText("Vom " + startDate + " bis " + endDate +
-                    " findet " + repetition + " um " + startTime + "Uhr bis " + endTime + "Uhr in Raum "
-                    + place + " " + shortTitle + " statt." + "\n" + "Termindetails sind: " + description +
-                    "\n" + "\n" + "Organisator: " + eventCreatorName);
+            savedEventeventDescription.setText(getString(R.string.as_of) + startDate
+                    + getString(R.string.until) + endDate + "\n" + getString(R.string.time) + startTime + getString(R.string.until)
+                    + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place + "\n" + "\n" + getString(R.string.eventDetails)
+                    + description);
         }
     }
 
@@ -290,4 +296,12 @@ public class SavedEventDetailsFragment extends Fragment {
 
     }
 
+    public void onPause() {
+        if (mAlertDialog != null) {
+            mAlertDialog.dismiss();
+        }
+
+        super.onPause();
+
+    }
 }

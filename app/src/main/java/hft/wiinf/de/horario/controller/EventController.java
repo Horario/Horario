@@ -16,15 +16,9 @@ import hft.wiinf.de.horario.model.Person;
 public class EventController {
     //saves (update or create)an event
     public static void saveEvent(@NonNull Event event) {
-        if (event.getAccepted() != AcceptedState.REJECTED) {
-            if (event.getCreatorEventId() < 0)
-                event.setCreatorEventId(event.save());
-            event.save();
-        }
-        //if state is rejected and id!=null delete event from db
-        else if (event.getId() != null) {
-            EventController.deleteEvent(event);
-        }
+        if (event.getCreatorEventId() < 0)
+            event.setCreatorEventId(event.save());
+        event.save();
     }
 
     public static void deleteEvent(@NonNull Event event) {

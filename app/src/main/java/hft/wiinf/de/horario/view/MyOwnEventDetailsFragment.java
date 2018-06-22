@@ -17,6 +17,7 @@ import java.util.Objects;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
+import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.Event;
 
 public class MyOwnEventDetailsFragment extends Fragment {
@@ -25,7 +26,7 @@ public class MyOwnEventDetailsFragment extends Fragment {
     RelativeLayout rLayout_myOwnEvent_helper;
     ConstraintLayout myOwnEventDetails_constraintLayout;
     TextView myOwnEventeventDescription, myOwnEventYourAppointment;
-    Event selectedEvent;
+    Event selectedEvent, event;
     StringBuffer eventToStringBuffer;
 
     public MyOwnEventDetailsFragment() {
@@ -138,41 +139,41 @@ public class MyOwnEventDetailsFragment extends Fragment {
         // like "Daily" into "täglich" and so on
         switch (repetition) {
             case "YEARLY":
-                repetition = "jährlich";
+                repetition = getString(R.string.yearly);
                 break;
             case "MONTHLY":
-                repetition = "monatlich";
+                repetition = getString(R.string.monthly);
                 break;
             case "WEEKLY":
-                repetition = "wöchentlich";
+                repetition = getString(R.string.weekly);
                 break;
             case "DAILY":
-                repetition = "täglich";
+                repetition = getString(R.string.daily);
                 break;
             case "NONE":
                 repetition = "";
                 break;
             default:
-                repetition = "ohne Wiederholung";
+                repetition = getString(R.string.without_repetition);
         }
 
         // Check the EventCreatorName and is it itself Change the eventCreaterName to "Your Self"
-        if (eventCreatorName.equals(selectedEvent.getCreator().getName())) {
-            eventCreatorName = "Du";
+        if (eventCreatorName.equals(PersonController.getPersonWhoIam().getName())) {
+            eventCreatorName = getString(R.string.yourself);
         }
         // Event shortTitel in Headline with StartDate
-        myOwnEventYourAppointment.setText("Dein Termin" + "\n" + shortTitle + ", " + currentDate);
+        myOwnEventYourAppointment.setText("Dein Termin" + "\n" + shortTitle);
         // Check for a Repetition Event and Change the Description Output with and without
         // Repetition Element inside.
         if (repetition.equals("")) {
-            myOwnEventeventDescription.setText("Am " + startDate + " findet von " + startTime + " bis "
-                    + endTime + " Uhr in Raum " + place + " " + shortTitle + " statt." + "\n" + "Termindetails sind: "
-                    + description + "\n" + "\n" + "Organisator: " + eventCreatorName);
+            myOwnEventeventDescription.setText(getString(R.string.event_date) + currentDate + "\n" + getString(R.string.time) + startTime + getString(R.string.until)
+                    + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place + "\n" + "\n" + getString(R.string.eventDetails)
+                    + description);
         } else {
-            myOwnEventeventDescription.setText("Vom " + startDate + " bis " + endDate +
-                    " findet " + repetition + " um " + startTime + "Uhr bis " + endTime + "Uhr in Raum "
-                    + place + " " + shortTitle + " statt." + "\n" + "Termindetails sind: " + description +
-                    "\n" + "\n" + "Organisator: " + eventCreatorName);
+            myOwnEventeventDescription.setText(getString(R.string.as_of) + startDate
+                    + getString(R.string.until) + endDate + "\n" + getString(R.string.time) + startTime + getString(R.string.until)
+                    + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place + "\n" + "\n" + getString(R.string.eventDetails)
+                    + description);
         }
     }
 
@@ -207,6 +208,6 @@ public class MyOwnEventDetailsFragment extends Fragment {
         return eventToStringBuffer;
 
     }
-
-
 }
+
+

@@ -3,21 +3,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/list_selector"
+    android:layout_centerVertical="true"
     android:orientation="horizontal"
-    android:padding="5dip">
-
+    android:padding="5dip"
+    android:textAlignment="center">
 
     <!-- Name of participant-->
     <TextView
         android:id="@+id/participantName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
-        android:textColor="#040404"
+        android:layout_centerVertical="true"
+        android:textAlignment="center"
+        android:textAllCaps="true"
         android:textSize="15dip"
         android:textStyle="bold"
-        android:typeface="sans" />
+        android:typeface="normal" />
 
     <!-- Rightend Arrow -->
     <ImageView

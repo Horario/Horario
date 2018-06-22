@@ -59,9 +59,9 @@ public class ParticipantsListFragment extends Fragment {
         context = this.getActivity();
         textViewEventData = view.findViewById(R.id.textViewEventData);
         setSelectedEvent(EventController.getEventById(getEventId()));
-        participantsListView = (ListView) view.findViewById(R.id.ParticipantsList);
+        participantsListView = view.findViewById(R.id.ParticipantsList);
         textViewEventData.setText(selectedEvent.getShortTitle() + " " + dayFormat.format(selectedEvent.getStartTime()));
-        swipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh);
+        swipeRefresh = view.findViewById(R.id.swiperefresh);
         update();
 
 
@@ -84,12 +84,13 @@ public class ParticipantsListFragment extends Fragment {
                 } else {
                     //get rejection reason data, then show pop up
                     String[] reasonData = participant.getExcuse().split("!");
-                    String reason = participant.getName().substring(2) + " hat wegen " + reasonData[0] + " abgesagt";
-                    String note = "Notiz zur Absage: " + reasonData[1];
+                    String reason = participant.getName().substring(2) + " hat den Termin abgesagt.";
+                    String note = "Grund: " + reasonData[0] + "\n \nDetails zur Absage: " + reasonData[1];
                     //create popup with reason and note.
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setTitle(reason);
                     builder.setMessage(note);
+
                     // Add the button
                     builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
@@ -146,10 +147,10 @@ public class ParticipantsListFragment extends Fragment {
                 // Setting all values in listview
                 if (participantRow.charAt(0) == 'Y') {
                     participant.setText(participantRow.substring(2));
-                    presenceIndicator.setImageResource(R.drawable.ic_fiber_manual_record_green_24dp);
+                    presenceIndicator.setImageResource(R.mipmap.ic_mydate_approved_gruen);
                 } else {
                     participant.setText(participantRow.substring(2));
-                    presenceIndicator.setImageResource(R.drawable.ic_fiber_manual_record_red_24dp);
+                    presenceIndicator.setImageResource(R.mipmap.ic_mydate_rejected_rot);
                 }
 
                 return item;
@@ -189,5 +190,3 @@ class Participant {
         this.excuse = excuse;
     }
 }
-/*Zwischenablage wegen Schreibfaulheit etc
- */

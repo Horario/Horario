@@ -1,3 +1,8 @@
+/**
+ * This is a fragment to reject an event and try to send a message (sms) to organizer.
+ * @author Team: Horario
+ */
+
 package hft.wiinf.de.horario.view;
 
 import android.content.Intent;
@@ -5,12 +10,14 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -18,8 +25,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.activeandroid.query.Delete;
 
 import java.text.SimpleDateFormat;
 
@@ -39,7 +44,7 @@ public class EventRejectEventFragment extends Fragment {
     TextView reject_event_header, reject_event_description;
     Spinner spinner_reason;
     Button button_reject_event, button_dialog_delete, button_dialog_back;
-
+    AlertDialog mDialog;
     Event selectedEvent;
     Event event;
     StringBuffer eventToStringBuffer;
@@ -66,6 +71,8 @@ public class EventRejectEventFragment extends Fragment {
 
         //initialize GUI-Elements
         reason_for_rejection = view.findViewById(R.id.reject_event_editText_note);
+        reason_for_rejection.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        reason_for_rejection.setRawInputType(InputType.TYPE_CLASS_TEXT);
         reject_event_description = view.findViewById(R.id.reject_event_textView_description);
         reject_event_header = view.findViewById(R.id.reject_event_textView_header);
         spinner_reason = view.findViewById(R.id.reject_event_spinner_reason);
@@ -114,6 +121,13 @@ public class EventRejectEventFragment extends Fragment {
         });
     }
 
+    /**
+     * This method creates an AlertDialog to ask for final decision (yes or no).
+     * This method return nothing. Next Steps depends on what is clicked (yes or no).
+     * If "yes", method is restarting the TabActivity and calendar shows up.
+     * If "no", method is going back to layout from EventRejectEventFragment.
+     *
+     */
     public void askForPermissionToDelete() {
         //Build dialog
         final AlertDialog.Builder dialogAskForFinalDecission = new AlertDialog.Builder(getContext());
@@ -121,10 +135,11 @@ public class EventRejectEventFragment extends Fragment {
         dialogAskForFinalDecission.setTitle(R.string.titleDialogRejectEvent);
         dialogAskForFinalDecission.setCancelable(true);
 
-        final AlertDialog alertDialogAskForFinalDecission = dialogAskForFinalDecission.create();
-        alertDialogAskForFinalDecission.show();
+        mDialog = dialogAskForFinalDecission.create();
+        mDialog.show();
 
-        alertDialogAskForFinalDecission.findViewById(R.id.dialog_button_event_delete)
+        //button listener on both buttons
+        mDialog.findViewById(R.id.dialog_button_event_delete)
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -135,10 +150,13 @@ public class EventRejectEventFragment extends Fragment {
                         //If an Event of a recurring event is cancelled, all events
                         // of the recurring event are deleted. This way the user can Scan the
                         // Event again and confirm it again.
-                        new Delete().from(Event.class).where("CreatorEventId=?",
-                                String.valueOf(event.getCreatorEventId())).execute();
 
-
+                        if (event.getStartEvent() != null) {
+                            Event event1 = event.getStartEvent();
+                            EventController.deleteEvent(event1);
+                        } else {
+                            EventController.deleteEvent(event);
+                        }
                         //SMS
                         rejectMessage = spinner_reason.getSelectedItem().toString() + "!" + reason_for_rejection.getText().toString();
                         creatorEventId = event.getCreatorEventId();
@@ -148,19 +166,26 @@ public class EventRejectEventFragment extends Fragment {
                         Toast.makeText(getContext(), R.string.reject_event_hint, Toast.LENGTH_SHORT).show();
                         //restart Activity
                         Intent intent = new Intent(getActivity(), TabActivity.class);
+                        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                     }
                 });
-        alertDialogAskForFinalDecission.findViewById(R.id.dialog_button_event_back)
+        //if button "no" has been clicked, cancel dialog.
+        mDialog.findViewById(R.id.dialog_button_event_back)
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        alertDialogAskForFinalDecission.cancel();
+                        mDialog.cancel();
                     }
                 });
 
     }
 
+    /**
+     * Method to get Arguments from SavedEventDetailsFragment, AcceptedEventDetailsFragment or TabActivity
+     * This Method checks which value is for EventId
+     * @return the creatorEventId: Id which the event has in the database of organizer
+     */
     public Long getEventID() {
         Bundle MYEventIdBundle = getArguments();
         Long MYEventIdLongResult = MYEventIdBundle.getLong("EventId");
@@ -171,6 +196,11 @@ public class EventRejectEventFragment extends Fragment {
         this.selectedEvent = selectedEvent;
     }
 
+    /**
+     * This method formats the output which is shown on Dialog
+     *
+     * @param selectedEvent: Id which the event has in the database of organizer
+     */
     private void buildDescriptionEvent(Event selectedEvent) {
         //Put StringBuffer in an Array and split the Values to new String Variables
         //Index: 0 = CreatorID; 1 = StartDate; 2 = EndDate; 3 = StartTime; 4 = EndTime;
@@ -216,12 +246,11 @@ public class EventRejectEventFragment extends Fragment {
         if (repetition.equals("")) {
             reject_event_description.setText("Am " + startDate + " findet von " + startTime + " bis "
                     + endTime + " Uhr in Raum " + place + " " + shortTitle + " statt." + "\n" + "Termindetails sind: "
-                    + description + "\n" + "\n" + "Organisator: " + eventCreatorName);
+                    + description);
         } else {
             reject_event_description.setText("Vom " + startDate + " bis " + endDate +
                     " findet " + repetition + " um " + startTime + "Uhr bis " + endTime + "Uhr in Raum "
-                    + place + " " + shortTitle + " statt." + "\n" + "Termindetails sind: " + description +
-                    "\n" + "\n" + "Organisator: " + eventCreatorName);
+                    + place + " " + shortTitle + " statt." + "\n" + "Termindetails sind: " + description);
         }
     }
 
@@ -253,32 +282,39 @@ public class EventRejectEventFragment extends Fragment {
 
     }
 
-    //check for userinput
+    /**
+     * This method checks if user input is valid. If input is not valid show Toast
+     * @return false: if input is not valid
+     * @return true: if input is valid
+     */
     private boolean checkForInput() {
-        if (reason_for_rejection.getText().length() == 0 || spinner_reason.getSelectedItemPosition() == 0) {
+        if (reason_for_rejection.getText().length() == 0) {
             Toast.makeText(getContext(), R.string.reject_event_reason, Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (reason_for_rejection.getText().toString().contains("|")) {
-            Toast.makeText(getContext(), R.string.reject_event_reason_contains_pipe, Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (reason_for_rejection.getText().toString().matches(" +.*")) {
-            Toast.makeText(getContext(), R.string.reject_event_reason_free_text_field_empty, Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (reason_for_rejection.getText().length() > 50) {
+        if (reason_for_rejection.getText().length() > 100) {
             Toast.makeText(getContext(), R.string.reject_event_reason_free_text_field_to_long, Toast.LENGTH_SHORT).show();
             return false;
         }
-        //check if "," and "!" is not part of user input
-        //if they are: replace them with empty string " "
-        if (reason_for_rejection.getText().toString().contains(",") ||
-                reason_for_rejection.getText().toString().contains("!")) {
-            reason_for_rejection.getText().toString().replaceAll(",", " ");
-            reason_for_rejection.getText().toString().replaceAll("!", " ");
-            return true;
+        if (reason_for_rejection.getText().toString().startsWith(" ")) {
+            Toast.makeText(getContext(), R.string.reject_event_reason_free_text_field_empty, Toast.LENGTH_SHORT).show();
+            return false;
         }
+        if (!reason_for_rejection.getText().toString().matches("(\\w|\\.)(\\w|\\s|\\.)*")) {
+            Toast.makeText(getContext(), R.string.reject_event_reason_special_characters, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
         return true;
+    }
+
+    @Override
+    public void onPause() {
+        if (mDialog != null) {
+            mDialog.dismiss();
+        }
+
+        super.onPause();
+
     }
 }

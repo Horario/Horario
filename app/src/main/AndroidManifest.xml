@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="hft.wiinf.de.horario">
 
+    <!-- All Permissions needed to use all functions of this app -->
     <uses-permission
         android:name="android.permission.READ_SMS"
         android:protectionLevel="normal" />
@@ -16,6 +17,8 @@
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
+
+    <!-- Overall application details like the theme or the name -->
     <application
         android:name="com.activeandroid.app.Application"
         android:allowBackup="false"
@@ -35,19 +38,21 @@
                 android:resource="@xml/filepaths" />
         </provider>
 
+        <!-- define the start activity here - TabActivity is our mainActivity which will load
+        all Activities (Tabs) and in these activities the fragments -->
         <activity
             android:name=".TabActivity"
-            android:label="@string/title_activity_tab"
+            android:label="Horario"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustNothing">
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
 
+        <!-- Define the activity for the qrScanner -->
         <activity
             android:name=".CaptureActivityPortrait"
             android:screenOrientation="sensor"
@@ -55,6 +60,7 @@
             android:theme="@style/zxing_CaptureTheme"
             android:windowSoftInputMode="stateAlwaysHidden" />
 
+        <!-- Some DB stuff - DB-Name, Version and the models (Tables) -->
         <meta-data
             android:name="AA_DB_NAME"
             android:value="horario.db" />
@@ -69,9 +75,14 @@
             android:name="com.activeandroid.content.ContentProvider"
             android:authorities="${applicationId}"
             android:enabled="true"
-            android:exported="false"></provider>
+            android:exported="false">
+        </provider>
 
-        <receiver android:name=".service.NotificationReceiver"></receiver>
+        <!-- Receiver which is needed to get the Alarm and do sth with it (here: display Notification) -->
+        <receiver android:name=".service.NotificationReceiver">
+        </receiver>
+
+        <!-- Receiver will listen for a DeviceBoot and then do sth.-->
         <receiver
             android:name=".service.DeviceBootReceiver"
             android:enabled="true"
@@ -81,6 +92,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
+
+        <!-- Receiver will listen for incoming sms-->
         <receiver
             android:name=".service.SmsReceiver"
             android:enabled="true"
@@ -89,14 +102,18 @@
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
-        <receiver
-            android:name=".controller.SendSmsController"
-            android:enabled="true"
-            android:exported="true"></receiver>
 
+        <!-- Receiver will send sms and to everything which needs to happen like schedule job for FailedSMS-->
+        <receiver android:name=".controller.SendSmsController"
+            android:enabled="true"
+            android:exported="true">
+        </receiver>
+
+        <!-- Service will send FailedSMS if the device has all needed functions like sim-card-->
         <service
             android:name=".service.FailedSMSService"
             android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE"></service>
+            android:permission="android.permission.BIND_JOB_SERVICE">
+        </service>
     </application>
 </manifest>
