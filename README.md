@@ -41,4 +41,5 @@ Bug12, Bug13, Javadoc and BugsOnMaster01,02,03,06,08,10 pushed to Quality. Quali
 Design pushed to Quality. Quality tested and pushed to master on 18.06.2018.  
 BugsOnMaster04,09,12,13 pushed to Quality. Quality tested and pushed to master on 19.06.2018.  
 Javadoc and Design pushed to Quality. Quality tested and pushed to master on 20.06.2018.  
-Javadoc pushed to Quality. Quality pushed to master on 21.06.2018.  
+Javadoc pushed to Quality. Quality pushed to master on 21.06.2018.   
+Javadoc pushed to Quality. Quality pushed to master on 22.06.2018.   
