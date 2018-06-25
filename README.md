@@ -1,7 +1,7 @@
 # Horario
 
 ## Projektbeschreibung
-Bei Horario handelt es sich um eine mobile Android-Applikation zur Termin- und Studenplanverwaltung für Schüler und Dozenten.
+Bei Horario handelt es sich um eine mobile Android-Applikation zur Termin- und Stundenplanverwaltung für Schüler und Dozenten.
 Entwickelt wurde das Projekt für den Einsatz in der Paulinenpflege Winnenden. Das Hauptaugenmerk dabei liegt in der Verwendung von QR-
 Codes, die für jeden Termin individuell generiert werden. Diese können von den gewünschten Teilnehmern direkt in der App gescannt 
 werden. 
@@ -18,7 +18,10 @@ Applied Sciences Stuttgart under the direction of Prof. Dr. Keller.
 The project team consisted of Benedikt, Christine, Daniel, Dennis, Florian, Henri, Lucas, Mariam, Mario, Melanie und Tanja.
 
 ## Download
-Follow the link https://github.com/Horario/Horario/releases and download the attached Horario.apk. Next you have to copy it from your pc to your android phone. Last step is to insall it by searching it on your phone and executing it.   
+Follow the link https://github.com/Horario/Horario/releases and download the attached Horario.apk. Next you have to copy it from your pc to your android phone. Last step is to install it by searching it on your phone and executing it. 
+
+## HfT Website
+http://www.hft-stuttgart.de/
 
 
 ## Test Documentation
