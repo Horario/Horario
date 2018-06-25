@@ -15,7 +15,7 @@ appointment which can then be shared with potential participants. It has been de
 Paulinenpflege Winnenden. 
 The application was developed as a project work in the 6th semester of the Business Informatics degree program at the University of 
 Applied Sciences Stuttgart under the direction of Prof. Dr. Keller.
-The project team consisted of Benedikt, Christine, Daniel, Dennis, Florian, Henri, Lucas, Mariam, Mario, Melanie und Tanja.
+The project team consisted of Benedikt, Christine, Daniel, Dennis, Florian, Henri, Lucas, Mariam, Mario, Melanie and Tanja.
 
 ## Download
 Follow the link https://github.com/Horario/Horario/releases and download the attached Horario.apk. Next you have to copy it from your pc to your android phone. Last step is to install it by searching it on your phone and executing it. 
