@@ -1,5 +1,23 @@
 # Horario
 
+## Projektbeschreibung
+Bei Horario handelt es sich um eine mobile Android-Applikation zur Termin- und Studenplanverwaltung für Schüler und Dozenten.
+Entwickelt wurde das Projekt für den Einsatz in der Paulinenpflege Winnenden. Das Hauptaugenmerk dabei liegt in der Verwendung von QR-
+Codes, die für jeden Termin individuell generiert werden. Diese können von den gewünschten Teilnehmern direkt in der App gescannt 
+werden. 
+Die Applikation entstand als Projektarbeit im 6. Semester des Studiengangs Wirtschaftsinformatik an der Hochschule für Technik unter 
+der Leitung von Prof. Dr. Keller. Beteiligt waren Benedikt, Christine, Daniel, Dennis, Florian, Henri, Lucas, Mariam, Mario, Melanie 
+und Tanja.
+
+Horario is a android application with a calender and a timetable function. The main objective is to generate a QR-Code for every 
+appointment which can then be shared with potential participants. It has been developed for usage by students and teachers of the 
+Paulinenpflege Winnenden. 
+The application was developed as a project work in the 6th semester of the Business Informatics degree program at the University of 
+Applied Sciences Stuttgart under the direction of Prof. Dr. Keller.
+The project team consisted of Benedikt, Christine, Daniel, Dennis, Florian, Henri, Lucas, Mariam, Mario, Melanie und Tanja.
+
+
+
 ## Test Documentation
 US003 pushed to Quality. Quality tested and pushed to master on 12.04.2018.  
 US002 pushed to Quality. Quality tested and pushed to master on 13.04.2018.  
