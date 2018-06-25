@@ -20,7 +20,7 @@ The project team consisted of Benedikt, Christine, Daniel, Dennis, Florian, Henr
 ## Download
 Follow the link https://github.com/Horario/Horario/releases and download the attached Horario.apk. Next you have to copy it from your pc to your android phone. Last step is to install it by searching it on your phone and executing it. 
 
-## HfT Website
+## Hochschule für Technik Stuttgart Website
 http://www.hft-stuttgart.de/
 
 
