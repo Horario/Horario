@@ -18,7 +18,7 @@ Applied Sciences Stuttgart under the direction of Prof. Dr. Keller.
 The project team consisted of Benedikt, Christine, Daniel, Dennis, Florian, Henri, Lucas, Mariam, Mario, Melanie und Tanja.
 
 ## Download
-Follow the link https://github.com/Horario/Horario/releases and download the attached Horario.apk.
+Follow the link https://github.com/Horario/Horario/releases and download the attached Horario.apk. Next you have to copy it from your pc to your android phone. Last step is to insall it by searching it on your phone and executing it.   
 
 
 ## Test Documentation
