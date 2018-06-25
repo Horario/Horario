@@ -17,6 +17,8 @@ The application was developed as a project work in the 6th semester of the Busin
 Applied Sciences Stuttgart under the direction of Prof. Dr. Keller.
 The project team consisted of Benedikt, Christine, Daniel, Dennis, Florian, Henri, Lucas, Mariam, Mario, Melanie und Tanja.
 
+## Download
+Follow the link https://github.com/Horario/Horario/releases and download the attached Horario.apk.
 
 
 ## Test Documentation
