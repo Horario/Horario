@@ -25,6 +25,7 @@ import hft.wiinf.de.horario.controller.NotificationController;
 import hft.wiinf.de.horario.controller.SendSmsController;
 import hft.wiinf.de.horario.model.AcceptedState;
 import hft.wiinf.de.horario.model.Event;
+import hft.wiinf.de.horario.model.Repetition;
 
 public class SavedEventDetailsFragment extends Fragment {
 
@@ -47,8 +48,7 @@ public class SavedEventDetailsFragment extends Fragment {
     public Long getEventID() {
         Bundle MYEventIdBundle = getArguments();
         assert MYEventIdBundle != null;
-        Long MYEventIdLongResult = MYEventIdBundle.getLong("EventId");
-        return MYEventIdLongResult;
+        return MYEventIdBundle.getLong("EventId");
     }
 
     @Override
@@ -160,11 +160,11 @@ public class SavedEventDetailsFragment extends Fragment {
 
                         //Check the Event if its a SingleEvent it set Accepted State just for this Event
                         //and send a SMS
-                        if (event.getRepetition().equals("NONE")) {
+                        if (event.getRepetition() == Repetition.NONE) {
                             Toast.makeText(getContext(), R.string.accept_event_hint, Toast.LENGTH_SHORT).show();
                             event.setAccepted(AcceptedState.ACCEPTED);
                             EventController.saveEvent(event);
-                            SendSmsController.sendSMS(getContext(), phNumber, null, true,
+                            new SendSmsController().sendSMS(getContext(), phNumber, null, true,
                                     creatorEventId, shortTitle);
                             NotificationController.setAlarmForNotification(getContext(), event);
                             Intent intent = new Intent(getActivity(), hft.wiinf.de.horario.TabActivity.class);
@@ -182,7 +182,7 @@ public class SavedEventDetailsFragment extends Fragment {
                                 NotificationController.setAlarmForNotification(getContext(), x);
                                 EventController.saveEvent(x);
                             }
-                            SendSmsController.sendSMS(getContext(), phNumber, null, true,
+                            new SendSmsController().sendSMS(getContext(), phNumber, null, true,
                                     creatorEventId, shortTitle);
 
                             Intent intent = new Intent(getActivity(), hft.wiinf.de.horario.TabActivity.class);
@@ -224,21 +224,22 @@ public class SavedEventDetailsFragment extends Fragment {
         String description = eventStringBufferArray[9].trim();
         String eventCreatorName = eventStringBufferArray[10].trim();
         phNumber = selectedEvent.getCreator().getPhoneNumber();
+        String text;
 
         // Change the DataBase Repetition Information in a German String for the Repetition Element
         // like "Daily" into "täglich" and so on
         switch (repetition) {
             case "YEARLY":
-                repetition = "jährlich";
+                repetition = "Jährlich";
                 break;
             case "MONTHLY":
-                repetition = "monatlich";
+                repetition = "Monatlich";
                 break;
             case "WEEKLY":
-                repetition = "wöchentlich";
+                repetition = "Wöchentlich";
                 break;
             case "DAILY":
-                repetition = "täglich";
+                repetition = "Täglich";
                 break;
             case "NONE":
                 repetition = "";
@@ -248,19 +249,22 @@ public class SavedEventDetailsFragment extends Fragment {
         }
 
         // Event shortTitel in Headline with StartDate
-        savedEventDetailsOrganisatorText.setText(eventCreatorName + " (" + phNumber + ")" + "\n" + shortTitle);
+        text = eventCreatorName + " (" + phNumber + ")" + "\n" + shortTitle;
+        savedEventDetailsOrganisatorText.setText(text);
         savedEventphNumberText.setText("");
         // Check for a Repetition Event and Change the Description Output with and without
         // Repetition Element inside.
         if (repetition.equals("")) {
-            savedEventeventDescription.setText(getString(R.string.time) + startTime + getString(R.string.until)
+            text = getString(R.string.time) + startTime + getString(R.string.until)
                     + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place + "\n" + "\n" + getString(R.string.eventDetails)
-                    + description);
+                    + description;
+            savedEventeventDescription.setText(text);
         } else {
-            savedEventeventDescription.setText(getString(R.string.as_of) + startDate
-                    + getString(R.string.until) + endDate + "\n" + getString(R.string.time) + startTime + getString(R.string.until)
-                    + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place + "\n" + "\n" + getString(R.string.eventDetails)
-                    + description);
+            text =  getString(R.string.event_date) + startDate
+                    + "\n" + getString(R.string.time) + startTime + getString(R.string.until)
+                    + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place + "\n" +"Wiederholung: " + repetition + getString(R.string.until) + endDate + "\n\n" + getString(R.string.eventDetails)
+                    + description;
+            savedEventeventDescription.setText(text);
         }
     }
 

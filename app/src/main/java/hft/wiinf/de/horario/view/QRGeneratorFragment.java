@@ -39,6 +39,7 @@ import java.util.Objects;
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
 import hft.wiinf.de.horario.controller.PersonController;
+import hft.wiinf.de.horario.controller.SendSmsController;
 import hft.wiinf.de.horario.model.Event;
 import hft.wiinf.de.horario.model.Person;
 
@@ -64,8 +65,7 @@ public class QRGeneratorFragment extends Fragment {
     public Long eventIdDescription() {
         Bundle qrEventIdBundle = getArguments();
         assert qrEventIdBundle != null;
-        Long qrEventIdLongResult = qrEventIdBundle.getLong("eventId");
-        return qrEventIdLongResult;
+        return qrEventIdBundle.getLong("eventId");
     }
 
     // Push the User where he/she comes from
@@ -134,6 +134,7 @@ public class QRGeneratorFragment extends Fragment {
         mQRGenerator_StringBuffer_Result.append(mEvent.getCreator().getName()).append(stringSplitSymbol);
         mQRGenerator_StringBuffer_Result.append(mEvent.getCreator().getPhoneNumber());
 
+        Log.d("louis", mQRGenerator_StringBuffer_Result.toString());
         return mQRGenerator_StringBuffer_Result;
 
     }
@@ -207,18 +208,21 @@ public class QRGeneratorFragment extends Fragment {
             }
 
             // Event shortTitle in Headline with StartDate
-            mQRGenerator_textView_headline.setText(shortTitle + ", " + startDate);
+            String concat = shortTitle + ", " + startDate;
+            mQRGenerator_textView_headline.setText(concat);
             // Check for a Repetition Event and Change the Description Output with and without
             // Repetition Element inside.
             if (repetition.equals("")) {
-                mQRGenerator_textView_description.setText(getString(R.string.time) + startTime + getString(R.string.until)
+                concat = getString(R.string.time) + startTime + getString(R.string.until)
                         + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place + "\n" + getString(R.string.organizer) + eventCreatorName + "\n" + "\n" + getString(R.string.eventDetails)
-                        + description);
+                        + description;
+                mQRGenerator_textView_description.setText(concat);
             } else {
-                mQRGenerator_textView_description.setText(getString(R.string.as_of) + startDate
+                concat = getString(R.string.as_of) + startDate
                         + getString(R.string.until) + endDate + "\n" + getString(R.string.time) + startTime + getString(R.string.until)
                         + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place + "\n" + getString(R.string.organizer) + eventCreatorName + "\n" + "\n" + getString(R.string.eventDetails)
-                        + description);
+                        + description;
+                mQRGenerator_textView_description.setText(concat);
             }
             // In the CatchBlock the User see a SnackBar Information and was pushed where the User Comes From
         } catch (NullPointerException e) {
@@ -241,8 +245,9 @@ public class QRGeneratorFragment extends Fragment {
             mQRGenerator_textView_headline.setVisibility(View.GONE);
             mQRGenerator_button_shareWith.setVisibility(View.GONE);
             mQRGenerator_button_goToWhereComesFrom.setVisibility(View.GONE);
-            mQRGenerator_textView_description.setText(getString(R.string.wrongQRCodeResult) + "\n" + "\n"
-                    + mQRGenerator_StringBuffer_Result + "\n" + "\n" + getString(R.string.notAsEventSaveable));
+            String concat = getString(R.string.wrongQRCodeResult) + "\n" + "\n"
+                    + mQRGenerator_StringBuffer_Result + "\n" + "\n" + getString(R.string.notAsEventSaveable);
+            mQRGenerator_textView_description.setText(concat);
 
             Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(R.id.qrGenerator_relativeLayout_textViewFrame),
                     getString(R.string.ups_an_error),

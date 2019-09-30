@@ -21,6 +21,8 @@ public class Person extends Model {
     private Event acceptedEvent = null;
     @Column(name = "event_canceled")
     private Event canceledEvent = null;
+    @Column(name = "event_pending")
+    private Event pendingEvent = null;
     @Column
     private boolean isItMe = false;
     @Column
@@ -221,6 +223,10 @@ public class Person extends Model {
      */
     public void setRejectionReason(String rejectionReason) {
         this.rejectionReason = rejectionReason;
+    }
+
+    public void setPendingEvent(Event pendingEvent) {
+        this.pendingEvent = pendingEvent;
     }
 }
 

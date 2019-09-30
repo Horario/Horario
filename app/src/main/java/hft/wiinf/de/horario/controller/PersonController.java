@@ -2,6 +2,7 @@ package hft.wiinf.de.horario.controller;
 
 import android.util.Log;
 
+import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 
 import java.util.List;
@@ -30,7 +31,22 @@ public class PersonController {
         return new Select()
                 .from(Person.class)
                 .where("phoneNumber = ?", phoneNumber)
+                .and("event_pending = ?", "")
                 .executeSingle();
+    }
+
+    public static boolean personIsInvited(String phoneNumber, Event event){
+        return new Select().from(Person.class)
+                .where("event_pending = ?", String.valueOf(event.getId()))
+                .and("phoneNumber = ?", phoneNumber)
+                .exists();
+    }
+
+    public static void deleteInvitedPerson(String phoneNumber, String eventID){
+        new Delete().from(Person.class)
+                .where("event_pending = ?", eventID)
+                .and("phoneNumber = ?", phoneNumber)
+                .execute();
     }
 
     //get all persons

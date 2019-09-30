@@ -8,23 +8,23 @@ public class ReceivedHorarioSMS {
     /**
      * The Phonenumber of the sms.
      */
-    String phonenumber;
+    private String phonenumber;
     /**
      * if the event is accepted or rejected.
      */
-    boolean acceptance;
+    private boolean acceptance;
     /**
      * The event id in the creator's table.
      */
-    int creatorEventId;
+    private int creatorEventId;
     /**
      * The Excuse if the event was rejected.
      */
-    String excuse;
+    private String excuse;
     /**
      * The Name of the sender.
      */
-    String name;
+    private String name;
 
     /**
      * Instantiates a new Received horario sms.

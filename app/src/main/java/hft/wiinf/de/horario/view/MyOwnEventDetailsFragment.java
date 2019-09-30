@@ -1,33 +1,48 @@
 package hft.wiinf.de.horario.view;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
 import hft.wiinf.de.horario.controller.PersonController;
+import hft.wiinf.de.horario.controller.SendSmsController;
 import hft.wiinf.de.horario.model.Event;
+import hft.wiinf.de.horario.model.Person;
 
 public class MyOwnEventDetailsFragment extends Fragment {
 
-    Button myOwnEventDetailsButtonShowQR, myOwnEventDetailsButtonShowAcceptances;
+    Button myOwnEventDetailsButtonShowQR, myOwnEventDetailsButtonShowAcceptances, myOwnEventDetailsButtonSendInvite;
     RelativeLayout rLayout_myOwnEvent_helper;
     ConstraintLayout myOwnEventDetails_constraintLayout;
     TextView myOwnEventeventDescription, myOwnEventYourAppointment;
     Event selectedEvent, event;
     StringBuffer eventToStringBuffer;
+    Activity activity;
+    String sendToNumber = null;
 
     public MyOwnEventDetailsFragment() {
         // Required empty public constructor
@@ -38,8 +53,7 @@ public class MyOwnEventDetailsFragment extends Fragment {
     public Long getEventID() {
         Bundle MYEventIdBundle = getArguments();
         assert MYEventIdBundle != null;
-        Long MYEventIdLongResult = MYEventIdBundle.getLong("EventId");
-        return MYEventIdLongResult;
+        return MYEventIdBundle.getLong("EventId");
     }
 
     @Override
@@ -49,14 +63,66 @@ public class MyOwnEventDetailsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_my_own_event_details, container, false);
         myOwnEventDetailsButtonShowAcceptances = view.findViewById(R.id.myOwnEventDetailsButtonShowAcceptances);
         myOwnEventDetailsButtonShowQR = view.findViewById(R.id.myOwnEventDetailsButtonShowQR);
+        myOwnEventDetailsButtonSendInvite = view.findViewById(R.id.myOwnEventDetailsButtonSendInvite);
         rLayout_myOwnEvent_helper = view.findViewById(R.id.myOwnEvent_relativeLayout_helper);
         myOwnEventeventDescription = view.findViewById(R.id.myOwnEventeventDescription);
         myOwnEventYourAppointment = view.findViewById(R.id.myOwnEventyourAppointmentText);
         myOwnEventDetails_constraintLayout = view.findViewById(R.id.myOwnEventDetails_constraintLayout);
         setSelectedEvent(EventController.getEventById(getEventID()));
         buildDescriptionEvent(EventController.getEventById(getEventID()));
+        activity = getActivity();
 
 
+        myOwnEventDetailsButtonSendInvite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (selectedEvent.getStartTime().after(new Date())) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setView(R.layout.dialog_askingforphonenumber);
+                    builder.setCancelable(true);
+                    final AlertDialog dialog = builder.create();
+                    dialog.show();
+                    TextView text = dialog.findViewById(R.id.dialog_textView_telephoneNumber);
+                    text.setText(R.string.enter_recipient_number);
+                    EditText numberView = dialog.findViewById(R.id.dialog_EditText_telephonNumber);
+                    numberView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                        @Override
+                        public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                            String inputText = textView.getText().toString().replaceAll("\\s", "");
+                            if (actionId == EditorInfo.IME_ACTION_DONE && inputText.matches("\\+(9[976]\\d|8[987530]\\d|6[987]\\d|5[90]\\d|42\\d|3[875]\\d|2[98654321]\\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\\d{1,14}$") || inputText.matches("(\\(555\\)521-5554|\\(555\\)521-5556)")) {
+                                sendToNumber = inputText;
+                                dialog.dismiss();
+                                if (ContextCompat.checkSelfPermission(activity, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+                                    requestPermissions(new String[]{Manifest.permission.SEND_SMS}, 2);
+                                }
+                                if (ContextCompat.checkSelfPermission(activity, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED && getContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_TELEPHONY)) {
+                                    List<Person> participants = PersonController.getEventAcceptedPersons(selectedEvent);
+                                    participants.addAll(PersonController.getEventCancelledPersons(selectedEvent));
+                                    boolean alreadyInvited = false;
+                                    for(Person participant : participants){
+                                        if(participant.getPhoneNumber().equals(sendToNumber)){
+                                            alreadyInvited = true;
+                                        }
+                                    }
+                                    if(alreadyInvited || PersonController.personIsInvited(sendToNumber,selectedEvent)){
+                                        Toast.makeText(getContext(),"Person nimmt bereits teil, hat abgesagt oder wurde bereits eingeladen.",Toast.LENGTH_SHORT).show();
+                                        dialog.cancel();
+                                    }else {
+                                        new SendSmsController().sendInvitationSMS(getContext(), selectedEvent, sendToNumber);
+                                    }
+                                } else {
+                                    Toast.makeText(getContext(), R.string.sending_sms_impossible, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                            return false;
+                        }
+                    });
+                }else{
+                    Toast.makeText(getContext(), R.string.event_is_in_past,Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         myOwnEventDetailsButtonShowAcceptances.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -139,16 +205,16 @@ public class MyOwnEventDetailsFragment extends Fragment {
         // like "Daily" into "täglich" and so on
         switch (repetition) {
             case "YEARLY":
-                repetition = getString(R.string.yearly);
+                repetition = "Jährlich";
                 break;
             case "MONTHLY":
-                repetition = getString(R.string.monthly);
+                repetition = "Monatlich";
                 break;
             case "WEEKLY":
-                repetition = getString(R.string.weekly);
+                repetition = "Wöchentlich";
                 break;
             case "DAILY":
-                repetition = getString(R.string.daily);
+                repetition = "Täglich";
                 break;
             case "NONE":
                 repetition = "";
@@ -162,18 +228,20 @@ public class MyOwnEventDetailsFragment extends Fragment {
             eventCreatorName = getString(R.string.yourself);
         }
         // Event shortTitel in Headline with StartDate
-        myOwnEventYourAppointment.setText("Dein Termin" + "\n" + shortTitle);
+        String yourEvent = "Dein Termin" + "\n" + shortTitle;
+        myOwnEventYourAppointment.setText(yourEvent);
         // Check for a Repetition Event and Change the Description Output with and without
         // Repetition Element inside.
         if (repetition.equals("")) {
-            myOwnEventeventDescription.setText(getString(R.string.event_date) + currentDate + "\n" + getString(R.string.time) + startTime + getString(R.string.until)
+            String text = getString(R.string.event_date) + currentDate + "\n" + getString(R.string.time) + startTime + getString(R.string.until)
                     + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place + "\n" + "\n" + getString(R.string.eventDetails)
-                    + description);
+                    + description;
+            myOwnEventeventDescription.setText(text);
         } else {
-            myOwnEventeventDescription.setText(getString(R.string.as_of) + startDate
-                    + getString(R.string.until) + endDate + "\n" + getString(R.string.time) + startTime + getString(R.string.until)
-                    + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place + "\n" + "\n" + getString(R.string.eventDetails)
-                    + description);
+            String text = getString(R.string.event_date) + startDate
+                    + "\n" + getString(R.string.time) + startTime + getString(R.string.until) + endTime + getString(R.string.clock) + "\n" + getString(R.string.place) + place + "\n" + "Wiederholung: " + repetition + getString(R.string.until) + endDate + "\n\n" + getString(R.string.eventDetails)
+                    + description;
+            myOwnEventeventDescription.setText(text);
         }
     }
 

@@ -37,7 +37,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import hft.wiinf.de.horario.R;
@@ -80,8 +82,7 @@ public class NewEventFragment extends Fragment {
     //create the view
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_new_event, container, false);
-        return view;
+        return inflater.inflate(R.layout.fragment_new_event, container, false);
     }
 
 
@@ -237,7 +238,7 @@ public class NewEventFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 onButtonClickSave();
-                EventOverviewFragment.update();
+                new EventOverviewFragment().update();
                 CalendarFragment.updateCompactCalendar();
             }
         });
@@ -375,7 +376,7 @@ public class NewEventFragment extends Fragment {
     //if the save button is clicked check the entrys and save the event if everything is ok
     public void onButtonClickSave() {
         if (checkValidity()) {
-            if (me.getPhoneNumber() == null || !me.getPhoneNumber().matches("(\\+|0|00)[1-9][0-9]+"))
+            if (me.getPhoneNumber() == null || !me.getPhoneNumber().matches("\\+(9[976]\\d|8[987530]\\d|6[987]\\d|5[90]\\d|42\\d|3[875]\\d|2[98654321]\\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\\d{1,14}$"))
                 checkPhonePermission();
             else
                 saveEvent();
@@ -563,6 +564,31 @@ public class NewEventFragment extends Fragment {
             Toast.makeText(getContext(), R.string.endOfRepetition_before_endTime, Toast.LENGTH_SHORT).show();
             return false;
         }
+        Calendar minEndDate = (Calendar)startTime.clone();
+        minEndDate.set(Calendar.HOUR,0);
+        minEndDate.set(Calendar.MINUTE, 0);
+        minEndDate.set(Calendar.SECOND,0);
+        minEndDate.set(Calendar.MILLISECOND, 0);
+        switch (getRepetition()) {
+            case DAILY:
+                minEndDate.add(Calendar.DAY_OF_MONTH,1);
+                break;
+            case WEEKLY:
+                minEndDate.add(Calendar.WEEK_OF_YEAR, 1);
+                break;
+            case MONTHLY:
+                minEndDate.add(Calendar.MONTH, 1);
+                break;
+            case YEARLY:
+                minEndDate.add(Calendar.YEAR, 1);
+                break;
+            default:
+                break;
+        }
+        if(getRepetition() != Repetition.NONE && endOfRepetition.before(minEndDate)){
+            Toast.makeText(getContext(), "Das Ende der Wiederholung liegt vor Ende der Mindestlänge des Wiederholungsintervalls", Toast.LENGTH_SHORT).show();
+            return false;
+        }
         return true;
     }
 
@@ -605,7 +631,7 @@ public class NewEventFragment extends Fragment {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
         if (requestCode == PERMISSION_REQUEST_READ_PHONE_STATE) {
             // for each permission check if the user granted/denied them you may want to group the
@@ -684,6 +710,10 @@ public class NewEventFragment extends Fragment {
     }
 
     // method to read the phone number of the user
+
+    /**
+     * @// TODO: 05.09.19 remove test regex (\\(555\\)521-5554|\\(555\\)521-5556)
+     */
     @SuppressLint({"MissingPermission", "HardwareIds"})
     private void readPhoneNumber() {
         //if permission is granted read the phone number
@@ -702,20 +732,27 @@ public class NewEventFragment extends Fragment {
             }
             me.setPhoneNumber(phoneNumber);
             //if the number could not been read, open a dialog
-            if (me.getPhoneNumber() == null || !me.getPhoneNumber().matches("(00|0|\\+)[1-9][0-9]+")) {
+            if (me.getPhoneNumber() == null || !me.getPhoneNumber().matches("\\+(9[976]\\d|8[987530]\\d|6[987]\\d|5[90]\\d|42\\d|3[875]\\d|\n" +
+                    "2[98654321]\\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|\n" +
+                    "4[987654310]|3[9643210]|2[70]|7|1)\\d{1,14}$") && !me.getPhoneNumber().matches("(\\(555\\)521-5554|\\(555\\)521-5556)")) {
                 openDialogAskForPhoneNumber();
             } else {
                 Toast.makeText(getContext(), R.string.thanksphoneNumber, Toast.LENGTH_SHORT).show();
                 saveEvent();
             }
         } else {
-            if (me.getPhoneNumber() == null || !me.getPhoneNumber().matches("(00|0|\\+)[1-9][0-9]+")) {
+            if (me.getPhoneNumber() == null || !me.getPhoneNumber().matches("\\+(9[976]\\d|8[987530]\\d|6[987]\\d|5[90]\\d|42\\d|3[875]\\d|\n" +
+                    "2[98654321]\\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|\n" +
+                    "4[987654310]|3[9643210]|2[70]|7|1)\\d{1,14}$")) {
                 Toast.makeText(getContext(), R.string.notAbleToReadPhoneNumberCauseOfNoFunctionForThat, Toast.LENGTH_SHORT).show();
                 openDialogAskForPhoneNumber();
             }
         }
     }
 
+    /**
+     * @// TODO: 05.09.19 remove test regex (\\(555\\)521-5554|\\(555\\)521-5556)
+     */
     public void openDialogAskForPhoneNumber() {
         mAlertDialogBuilder = new android.app.AlertDialog.Builder(getActivity());
         mAlertDialogBuilder.setView(R.layout.dialog_askingforphonenumber);
@@ -726,16 +763,12 @@ public class NewEventFragment extends Fragment {
         mPhoneNumber.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                String inputText = v.getText().toString().replaceAll(" ", "");
+                String inputText = v.getText().toString().replaceAll("\\s", "");
                 //on click: read out the textfield, save the personand close the keyboard
                 //regex: perhaps + then numbers
 
-                if (actionId == EditorInfo.IME_ACTION_DONE && inputText.matches("(\\+|00|0)[1-9][0-9]+")) {
-                    mPhoneNumber.setText(mPhoneNumber.getText().toString().replaceAll(" ", ""));
-                    if (mPhoneNumber.getText().length() > 30) {
-                        Toast.makeText(getContext(), R.string.phoneNumber_too_long, Toast.LENGTH_SHORT).show();
-                        return true;
-                    }
+
+                if (actionId == EditorInfo.IME_ACTION_DONE && inputText.matches("\\+(9[976]\\d|8[987530]\\d|6[987]\\d|5[90]\\d|42\\d|3[875]\\d|2[98654321]\\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\\d{1,14}$") || inputText.matches("(\\(555\\)521-5554|\\(555\\)521-5556)")) {
                     me.setPhoneNumber(mPhoneNumber.getText().toString());
                     PersonController.savePerson(me);
                     Toast.makeText(getContext(), R.string.thanksphoneNumber, Toast.LENGTH_SHORT).show();

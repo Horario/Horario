@@ -15,5 +15,6 @@
     <color name="zentea_green1">#bdd684</color>
     <color name="zentea_lightgreen">#e2f0d6</color>
     <color name="zentea_white">#ffffff</color>
+    <color name="alert_red">#ED1300</color>
 
 </resources>

@@ -118,7 +118,6 @@
     <string name="place">Ort:\u0020</string>
 
 
-
     <!-- Dialog -->
     <!-- Dialog-TabActivity -->
     <string name="titleDialogFinalDecission">Bist du sicher?</string>
@@ -127,7 +126,7 @@
 
     <!-- Dialog-Ask for number and username -->
     <string name="username_hint">Benutzername</string>
-    <string name="phoneNumber_hint">Telefonnummer</string>
+    <string name="phoneNumber_hint">+49123456789</string>
     <string name="titleDialogUsername">Bitte vergib einen Benutzernamen! </string>
     <string name="titleDialogUsernamePhoneNumber">Bitte gib einen Benutzernamen und deine Telefonnummer ein! </string>
 
@@ -187,13 +186,13 @@
     <string name="username_empty">Bitte gib einen Benutzernamen ein.</string>
 
     <!-- Toast-Event -->
-    <string name="description_too_long">Die Beschreibung darf nicht länger als 500 Zeichen sein.</string>
+    <string name="description_too_long">Die Beschreibung darf nicht länger als 200 Zeichen sein.</string>
     <string name="reject_event_hint">Der Termin wurde abgesagt.</string>
     <string name="accept_event_hint">Den Terminen wurde zugesagt.</string>
     <string name="startTime_afterScanning_past">Der Termin hat schon in der Vergangenheit stattgefunden.</string>
     <string name="save_event">Der Termin wurde gespeichert.</string>
     <string name="phoneNumber_explanation">Wir brauchen deine Telefonnummer, um Rückmeldungen versenden zu können. Wir verwenden deine Telefonnummer nicht für andere Zwecke. Alternativ kannst du deine Telefonnummer auch selbst eingeben.</string>
-    <string name="wrongNumberFormat">Diese Telefonnummer ist ungültig.</string>
+    <string name="wrongNumberFormat">Bitte gib eine gültige Nummer mit Ländervorwahl, Nationaler Vorwahl und Anschlusskennung an.</string>
 
     <!-- Toast-input conditions -->
     <string name="reject_event_reason_free_text_field_empty">Die Beschreibung darf nicht mit einem Leerzeichen anfangen.</string>
@@ -233,4 +232,19 @@
     <string name="sms_exception">SMS fehlgeschlagen!</string>
     <string name="sms_notAbleToSend">Rückmeldung fehlgeschlagen! Um dem Organisator die Rückmeldung zu senden benötigst du eine Sim Card.</string>
     <string name="notAbleToReadPhoneNumberCauseOfNoFunctionForThat">Das Gerät ist nicht in der Lage eine SMS zu senden.</string>
-  </resources>
+    <string name="feature_telephony_unavailable">Das Gerät scheint keine SMS Funktion zu unterstützen. Bitte wähle eine andere Möglichkeit.</string>
+    <string name="teilnehmer_einladen">Teilnehmer einladen</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="invitation_sent">Die Einladung wurde versendet</string>
+    <string name="enter_recipient_number">Gib die Telefonummer des Empfängers ein.</string>
+    <string name="event_is_in_past">Dieses Event liegt in der Vergangenheit</string>
+    <string name="sending_sms_impossible">Kann keine SMS senden</string>
+    <string name="einladungen">Einladungen</string>
+    <string name="falsch">false</string>
+    <string name="wahr">true</string>
+    <string name="textview">TextView</string>
+    <string name="textview_month">TextView Month</string>
+    <string name="textview_day">TextView Day</string>
+</resources>

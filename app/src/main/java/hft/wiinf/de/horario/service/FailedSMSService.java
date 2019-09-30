@@ -80,9 +80,9 @@ public class FailedSMSService extends JobService {
             String msg;
             Person me = PersonController.getPersonWhoIam();
             if (failedSMS.isAccepted()) {
-                msg = ":Horario:" + failedSMS.getCreatorID() + ",1," + me.getName();
+                msg = ":Horario:" + failedSMS.getCreatorID() + ",1," + me.getName() + ":Horario:";
             } else {
-                msg = ":Horario:" + failedSMS.getCreatorID() + ",0," + me.getName() + "," + failedSMS.getMessage();
+                msg = ":Horario:" + failedSMS.getCreatorID() + ",0," + me.getName() + "," + failedSMS.getMessage() + ":Horario:";
             }
             SmsManager smsManager = SmsManager.getDefault();
             smsManager.sendTextMessage(failedSMS.getPhoneNo(), null, msg, null, null);

@@ -26,7 +26,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:clickable="false"
-            android:text="TextView"
+            android:text="@string/textview"
             android:textAlignment="center"
             android:textColor="@color/zentea_darkgreen"
             android:textSize="18sp"
@@ -51,7 +51,7 @@
             android:id="@+id/eventOverview_floatingActionButtonNewEvent"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_gravity="top|right"
+            android:layout_gravity="top|end"
             android:layout_marginBottom="16dp"
             android:layout_marginEnd="22dp"
             android:layout_marginStart="8dp"
@@ -66,7 +66,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0"
-            app:srcCompat="@android:drawable/ic_menu_today" />
+            app:srcCompat="@drawable/ic_menu_add" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/eventOverview_floatingActionButtonMenu"
@@ -88,7 +88,28 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.997"
-            app:srcCompat="@drawable/ic_plusmenu" />
+            app:srcCompat="@drawable/ic_menu_newevent" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/eventOverview_floatingActionButtonInvites"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="22dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:visibility="invisible"
+            app:backgroundTint="@color/zentea_darkgreen"
+            app:elevation="6dp"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toTopOf="@+id/eventOverview_floatingActionButtonScan"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.981"
+            app:srcCompat="@drawable/ic_menu_invitation" />
 
         <ListView
             android:id="@+id/overviewTvList"
@@ -134,7 +155,23 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.979"
-            app:srcCompat="@android:drawable/ic_menu_camera" />
+            app:srcCompat="@drawable/ic_menu_scan_qr" />
+
+        <TextView
+            android:id="@+id/eventOverview_tvInvitationNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/ic_menu_circle"
+            android:elevation="7dp"
+            android:visibility="invisible"
+            android:gravity="center"
+            android:textSize="10sp"
+            android:textColor="#fff"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/eventOverview_floatingActionButtonInvites"
+            app:layout_constraintEnd_toEndOf="@+id/eventOverview_floatingActionButtonInvites" />
 
         <TextView
             android:id="@+id/eventOverviewFabClosed"
@@ -143,7 +180,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="false"
+            android:text="@string/falsch"
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

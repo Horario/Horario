@@ -44,10 +44,9 @@
             android:layout_marginRight="5dp"
             android:layout_marginStart="5dp"
             android:layout_marginTop="5dp"
-            android:layout_weight="0.5"
             android:background="@color/zentea_darkgreen"
 
-            android:drawableEnd="@android:drawable/ic_menu_today"
+            android:drawableEnd="@drawable/ic_addevent"
             android:text="@string/savingSuccessful_new"
             android:textColor="@color/zxing_status_text"
             android:visibility="visible" />
@@ -63,7 +62,6 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_marginStart="5dp"
-            android:layout_weight="0.5"
             android:background="@color/zentea_darkgreen"
             android:drawableEnd="@drawable/ic_qr1"
             android:text="@string/savingSuccessful_qrcode"

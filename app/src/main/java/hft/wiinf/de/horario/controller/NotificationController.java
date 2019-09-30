@@ -1,16 +1,27 @@
 package hft.wiinf.de.horario.controller;
 
 import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
+import android.util.Log;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Random;
 
+import hft.wiinf.de.horario.R;
+import hft.wiinf.de.horario.TabActivity;
 import hft.wiinf.de.horario.model.Event;
+import hft.wiinf.de.horario.model.Invitation;
 import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.model.Repetition;
 import hft.wiinf.de.horario.service.NotificationReceiver;
@@ -24,6 +35,44 @@ import hft.wiinf.de.horario.service.NotificationReceiver;
  *  If you like to start/delete one/more notifications you just have to use the specified static method and give it the right parameters
  */
 public class NotificationController {
+    private static final String CHANNEL_ID = "Invitations";
+
+    private static void createNotificationChannel(Context context) {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "Horario";
+            String description = "Beschreibung";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+
+    public static void sendInvitationNotification(Context context, Invitation invitation){
+        Intent intent = new Intent(context, TabActivity.class);
+        intent.putExtra("id",String.valueOf(invitation.getId()));
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent,PendingIntent.FLAG_CANCEL_CURRENT);
+        createNotificationChannel(context);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context,CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_menu_invitation)
+                .setContentTitle("Horario")
+                .setContentText(invitation.getTitle() + " " + invitation.getStartDate() + " " + invitation.getStartTime())
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+
+// notificationId is a unique int for each notification that you must define
+        notificationManager.notify(invitation.getId().intValue(), builder.build());
+    }
 
     /**
      * Method is going to set the alarm x (depends on the user settings) minutes before the event
@@ -59,7 +108,7 @@ public class NotificationController {
                     alarmIntent.putExtra("Hour", calendar.get(Calendar.HOUR_OF_DAY));
                     //Calculation of the remaining minutes, if minute is less than 10 it would show xx:5 instead of xx:05 --> add a zero (string)
                     if (calendar.get(Calendar.MINUTE) < 10) {
-                        alarmIntent.putExtra("Minute", "0" + String.valueOf(calendar.get(Calendar.MINUTE)));
+                        alarmIntent.putExtra("Minute", "0" + calendar.get(Calendar.MINUTE));
                     } else {
                         alarmIntent.putExtra("Minute", String.valueOf(calendar.get(Calendar.MINUTE)));
                     }
@@ -85,7 +134,7 @@ public class NotificationController {
                             alarmIntent.putExtra("Event", repEvent.getShortTitle());
                             alarmIntent.putExtra("Hour", calendar.get(Calendar.HOUR_OF_DAY));
                             if (calendar.get(Calendar.MINUTE) < 10) {
-                                alarmIntent.putExtra("Minute", "0" + String.valueOf(calendar.get(Calendar.MINUTE)));
+                                alarmIntent.putExtra("Minute", "0" + calendar.get(Calendar.MINUTE));
                             } else {
                                 alarmIntent.putExtra("Minute", String.valueOf(calendar.get(Calendar.MINUTE)));
                             }
@@ -140,7 +189,7 @@ public class NotificationController {
      * @param context of the active fragment/activity
      * @param event where alarm should be deleted
      */
-    public static void deleteStartEvent(Context context, Event event) {
+    private static void deleteStartEvent(Context context, Event event) {
         Intent alarmIntent = new Intent(context, NotificationReceiver.class);
         alarmIntent.putExtra("ID", event.getId().intValue());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, event.getId().intValue(), alarmIntent, 0);
@@ -189,7 +238,7 @@ public class NotificationController {
             alarmIntent.putExtra("Event", event.getShortTitle());
             alarmIntent.putExtra("Hour", calendar.get(Calendar.HOUR_OF_DAY));
             if (calendar.get(Calendar.MINUTE) < 10) {
-                alarmIntent.putExtra("Minute", "0" + String.valueOf(calendar.get(Calendar.MINUTE)));
+                alarmIntent.putExtra("Minute", "0" + calendar.get(Calendar.MINUTE));
             } else {
                 alarmIntent.putExtra("Minute", String.valueOf(calendar.get(Calendar.MINUTE)));
             }
@@ -208,7 +257,7 @@ public class NotificationController {
      * @param person the person Who I am (owner of the app)
      * @return
      */
-    public static long calcNotificationTime(Calendar cal, Person person) {
+    private static long calcNotificationTime(Calendar cal, Person person) {
         cal.add(Calendar.MINUTE, ((-1) * person.getNotificationTime()));
         return cal.getTimeInMillis();
     }

@@ -1,5 +1,6 @@
 package hft.wiinf.de.horario.service;
 
+import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -16,16 +17,24 @@ import android.support.v4.app.NotificationCompat;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.TabActivity;
 import hft.wiinf.de.horario.controller.EventController;
+import hft.wiinf.de.horario.controller.InvitationController;
+import hft.wiinf.de.horario.controller.NotificationController;
 import hft.wiinf.de.horario.controller.PersonController;
+import hft.wiinf.de.horario.controller.ScanResultReceiverController;
 import hft.wiinf.de.horario.model.Event;
+import hft.wiinf.de.horario.model.Invitation;
 import hft.wiinf.de.horario.model.Person;
 import hft.wiinf.de.horario.model.ReceivedHorarioSMS;
 
@@ -45,7 +54,7 @@ public class SmsReceiver extends BroadcastReceiver {
 
     /**
      * Checks if the SMS in question is relevant for the app and continues working on it.
-     * The SMS is relevant if the first characters are equal to ":Horario:".
+     * The SMS is relevant if the first and last characters are equal to ":Horario: or :HorarioInvitation:".
      * If it is relevant, it is put into an {@link ArrayList} of {@link ReceivedHorarioSMS}
      *
      * @param context, the {@link Context}
@@ -55,9 +64,9 @@ public class SmsReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         // Get the data (SMS data) bound to intent
         Bundle bundle = intent.getExtras();
-        SmsMessage[] receivedSMSArray = null;
+        SmsMessage[] receivedSMSArray;
         ArrayList<ReceivedHorarioSMS> unreadHorarioSMS = new ArrayList<ReceivedHorarioSMS>();
-        String isSMSValidAndParseable = null;
+        boolean isSMSValidAndParseable = false;
         if (bundle != null) {
 
             // Retrieve the SMS Messages received
@@ -69,15 +78,15 @@ public class SmsReceiver extends BroadcastReceiver {
                 // Convert Object array
                 receivedSMSArray[i] = SmsMessage.createFromPdu((byte[]) pdus[i], "3gpp");
             }
+            List<String> previousMessages = new ArrayList<>();
             for (int i = 0; i < receivedSMSArray.length; i++) {
                 /*collect all the Horario SMS*/
-                if (receivedSMSArray[i].getMessageBody().toString().substring(0, 9).equals(":Horario:")) {
-
+                String message = receivedSMSArray[i].getMessageBody();
+                if (message.length() > 9 && message.substring(0, 9).equals(":Horario:") && message.substring(message.length() - 9).equals(":Horario:")) {
                     String number = (receivedSMSArray[i].getOriginatingAddress());
-                    String[] parsedSMS = receivedSMSArray[i].getMessageBody().toString().substring(9).split(",");
-                    if (!checkForRegexOk(parsedSMS)) {
-                        Log.d("Corrupt SMS Occurence!", receivedSMSArray[i].getMessageBody().toString());
-                        isSMSValidAndParseable = "No";
+                    String[] parsedSMS = message.substring(9, message.length() -9).split(",");
+                    if (!checkForResponseRegexOk(parsedSMS)) {
+                        Log.d("Corrupt SMS Occurence!", message);
                         break;
                     }
                     if (parsedSMS[1].equalsIgnoreCase("1")) {
@@ -89,38 +98,149 @@ public class SmsReceiver extends BroadcastReceiver {
                             unreadHorarioSMS.add(new ReceivedHorarioSMS(number, false, Integer.parseInt(parsedSMS[0]), parsedSMS[3], parsedSMS[2]));
                         }
                     }
-                    isSMSValidAndParseable = "Yes";
+                    isSMSValidAndParseable = true;
+                }else if(message.length() > 9 && message.substring(0, 19).equals(":HorarioInvitation:")){
+                    previousMessages.add(message);
+                    StringBuilder fullmessageBuilder = new StringBuilder();
+                    for(String previousMessage : previousMessages){
+                        fullmessageBuilder.append(previousMessage);
+                    }
+                    if(checkForInvitationRegexOk(fullmessageBuilder.toString())){
+                        Invitation newInvitation = new Invitation(fullmessageBuilder.toString().replaceAll(":HorarioInvitation:", ""), new Date());
+                        String eventDateTimeString  = newInvitation.getStartTime() + " " + newInvitation.getStartDate();
+                        SimpleDateFormat format = new SimpleDateFormat("HH:mm dd.MM.yyyy");
+                        try {
+                            Date eventDateTime = format.parse(eventDateTimeString);
+                            if(eventDateTime.after(newInvitation.getDateReceived())){
+
+                                if(!InvitationController.alreadyInvited(newInvitation) && !InvitationController.eventAlreadySaved(newInvitation)) {
+                                    InvitationController.saveInvitation(newInvitation);
+                                    NotificationController.sendInvitationNotification(context, newInvitation);
+                                }else{
+                                    Log.d("louis", "already invited");
+                                }
+                            }else{
+                                Log.d("louis", "received expired invitation");
+                                Log.d("louis", eventDateTimeString + " " + newInvitation.getDateReceived());
+                            }
+                        }catch(ParseException e){
+                            e.printStackTrace();
+                        }
+
+                    }
+                }else if(previousMessages.size() != 0){
+                    previousMessages.add(message);
+                    StringBuilder fullmessageBuilder = new StringBuilder();
+                    for(String previousMessage : previousMessages){
+                        fullmessageBuilder.append(previousMessage);
+                    }
+                    if(checkForInvitationRegexOk(fullmessageBuilder.toString())){
+                        Invitation newInvitation = new Invitation(fullmessageBuilder.toString().replaceAll(":HorarioInvitation:", ""), new Date());
+                        String eventDateTimeString  = newInvitation.getStartTime() + " " + newInvitation.getStartDate();
+                        SimpleDateFormat format = new SimpleDateFormat("HH:mm dd.MM.yyyy");
+                        try {
+                            Date eventDateTime = format.parse(eventDateTimeString);
+                            if(eventDateTime.after(newInvitation.getDateReceived())){
+                                if(!InvitationController.alreadyInvited(newInvitation)&& !InvitationController.eventAlreadySaved(newInvitation)) {
+                                    InvitationController.saveInvitation(newInvitation);
+                                    NotificationController.sendInvitationNotification(context, newInvitation);
+                                }
+                            }else{
+                                Log.d("louis", "received expired invitation" + "test");
+
+                            }
+                        }catch(ParseException e){
+                            e.printStackTrace();
+                        }
+
+                        previousMessages.clear();
+                    }
                 }
             }
-            if (isSMSValidAndParseable != null && isSMSValidAndParseable.equals("Yes")) {
+            if (isSMSValidAndParseable) {
                 parseHorarioSMSAndUpdate(unreadHorarioSMS, context);
             }
 
         }
     }
 
+    private boolean checkForInvitationRegexOk(String message){
+        if(!message.matches(":HorarioInvitation:.*:HorarioInvitation:")){
+            return false;
+        }
+        message = message.replaceAll(":HorarioInvitation:", "");
+        String[] splitMessage = message.split(" \\| ");
+        if(splitMessage.length == 11) {
+            //check if id is valid
+            if(!splitMessage[0].matches("^[^0\\D]\\d*$")){
+                Log.d("", splitMessage[0]);
+                return false;
+            }
+            //check if startDate is valid
+            if(!splitMessage[1].matches("^(?:(?:31(\\.)(?:0?[13578]|1[02]))\\1|(?:(?:29|30)(\\.)(?:0?[1,3-9]|1[0-2])\\2))(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$|^(?:29(\\.)0?2\\3(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\\d|2[0-8])(\\.)(?:(?:0?[1-9])|(?:1[0-2]))\\4(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$")){
+                Log.d("louis", splitMessage[1]);
+                return false;
+            }
+            // check if endDate is valid. Pattern only matches valid dates in DD.MM.YYYY format and
+            // includes a check for leap years so it correctly matches 29.02.YYYY
+            if(!splitMessage[2].matches("^(?:(?:31(\\.)(?:0?[13578]|1[02]))\\1|(?:(?:29|30)(\\.)(?:0?[1,3-9]|1[0-2])\\2))(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$|^(?:29(\\.)0?2\\3(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\\d|2[0-8])(\\.)(?:(?:0?[1-9])|(?:1[0-2]))\\4(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$")){
+                Log.d("louis", splitMessage[2]);
+                return false;
+            }
+            if(!splitMessage[3].matches("^([01]\\d|2[0-3]):([0-5]\\d)$")){
+                Log.d("louis", splitMessage[3]);
+                return false;
+            }
+            if(!splitMessage[4].matches("^([01]\\d|2[0-3]):([0-5]\\d)$")){
+                Log.d("louis", splitMessage[4]);
+                return false;
+            }
+            if(!splitMessage[5].matches("^[^\\s|][^|]*$")){
+                Log.d("louis", splitMessage[5]);
+                return false;
+            }
+            if(!splitMessage[6].matches("^[^\\s|][^|]*$")){
+                Log.d("louis", splitMessage[6]);
+                return false;
+            }
+            if(!splitMessage[7].matches("^[^\\s|][^|]*$")){
+                Log.d("louis", splitMessage[7]);
+                return false;
+            }
+            if(!splitMessage[8].matches("^[^\\s|][^|]*$")){
+                Log.d("louis", splitMessage[8]);
+                return false;
+            }
+            if(!splitMessage[9].matches("^[^\\s|][^|]*$")){
+                Log.d("louis", splitMessage[9]);
+                return false;
+            }
+            if(!splitMessage[10].matches("^\\+(9[976]\\d|8[987530]\\d|6[987]\\d|5[90]\\d|42\\d|3[875]\\d|2[98654321]\\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\\d{1,14}$")){
+                Log.d("louis", splitMessage[10]);
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
     /**
      * Takes the parameter and checks for eventual SQL Injections and other syntax problems relevant for the functionality of the app.
      *
      * @param smsTextSplitted, an {@link java.util.Arrays} of {@link String}
      * @return {@code true} if the SMS in question is valid and ready for the next method.
      */
-    private boolean checkForRegexOk(String[] smsTextSplitted) {
+    private boolean checkForResponseRegexOk(String[] smsTextSplitted) {
         // RegEx: NO SQL Injections allowed PLUS check if SMS is valid
         // smsTextSplitted[0]= CreatorEventId, should be only number greater than 0
         // smsTextSplitted[1]= boolean for acceptance, should be only 0 or 1
         // smsTextSplitted[2]= String for name, only Chars and points
         // smsTextSplitted[3]= Excuse asString, needs to be splitted again by "!" and checked on two strings
         if (smsTextSplitted.length == 3 || smsTextSplitted.length == 4) {
-            boolean isAcceptance = true;
-            if (smsTextSplitted.length == 3) {
-                isAcceptance = true;
-            } else {
-                isAcceptance = false;
-            }
+            boolean isAcceptance = smsTextSplitted.length == 3;
+
             //Make Patterns
-            Pattern pattern_onlyGreatherThan0 = Pattern.compile("(\\d+)", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
-            Pattern pattern_only0Or1 = Pattern.compile("(0|1)", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+            Pattern pattern_onlyGreatherThan0 = Pattern.compile("^[^0\\D]\\d*$", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+            Pattern pattern_only0Or1 = Pattern.compile("([01])", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
             Pattern pattern_onlyAlphanumsAndPointsAndWhitespaces = Pattern.compile("(\\w|\\s|\\.)*", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
             //Make the matchers
             Matcher m_pattern_onlyGreatherThan0 = pattern_onlyGreatherThan0.matcher(smsTextSplitted[0]);
@@ -181,7 +301,7 @@ public class SmsReceiver extends BroadcastReceiver {
     private void parseHorarioSMSAndUpdate(List<ReceivedHorarioSMS> unreadSMS, Context context) {
         for (ReceivedHorarioSMS singleUnreadSMS : unreadSMS) {
             Person person = new Person(singleUnreadSMS.getPhonenumber(), singleUnreadSMS.getName());
-            String savedContactExisting = null;
+            String savedContactExisting;
             savedContactExisting = lookForSavedContact(singleUnreadSMS.getPhonenumber(), context);
 
             /*Replace name if saved in contacts*/
@@ -191,13 +311,12 @@ public class SmsReceiver extends BroadcastReceiver {
                 person.setName(person.getName() + " (" + singleUnreadSMS.getPhonenumber() + ")");
             }
             Long eventIdInSMS = Long.valueOf(singleUnreadSMS.getCreatorEventId());
-            if (EventController.checkIfEventIsInDatabaseThroughId(eventIdInSMS)) {
-                //continue
-            } else {
-                // Create an explicit intent for an Activity in your app
+            if (!EventController.checkIfEventIsInDatabaseThroughId(eventIdInSMS)) {
                 addNotification(context, 1, person.getName(), singleUnreadSMS.isAcceptance());
                 break;
             }
+            //Deletes the invited placeholder person
+            PersonController.deleteInvitedPerson(singleUnreadSMS.getPhonenumber(),String.valueOf(eventIdInSMS));
             //Check if is SerialEvent or not
             if (isSerialEvent(eventIdInSMS)) {
                 boolean hasAcceptedEarlier = false;
@@ -209,7 +328,7 @@ public class SmsReceiver extends BroadcastReceiver {
                     //do this for each event of the event series
                     for (Event event : myEvents) {
                         Person personA = new Person(singleUnreadSMS.getPhonenumber(), singleUnreadSMS.getName());
-                        String savedContactExistingSerial = null;
+                        String savedContactExistingSerial;
                         savedContactExistingSerial = lookForSavedContact(singleUnreadSMS.getPhonenumber(), context);
 
                         /*Replace name if saved in contacts*/
@@ -250,7 +369,7 @@ public class SmsReceiver extends BroadcastReceiver {
                     //do this for each event of the event series
                     for (Event event : myEvents) {
                         Person personB = new Person(singleUnreadSMS.getPhonenumber(), singleUnreadSMS.getName());
-                        String savedContactExistingSerial = null;
+                        String savedContactExistingSerial;
                         savedContactExistingSerial = lookForSavedContact(singleUnreadSMS.getPhonenumber(), context);
 
                         /*Replace name if saved in contacts*/
@@ -363,11 +482,7 @@ public class SmsReceiver extends BroadcastReceiver {
     private boolean isSerialEvent(Long eventIdInSMS) {
         try {
             Event x = EventController.getEventById(eventIdInSMS).getStartEvent();
-            if (x != null) {
-                return true;
-            } else {
-                return false;
-            }
+                return x != null;
 
         } catch (Exception e) {
             return false;
@@ -444,7 +559,7 @@ public class SmsReceiver extends BroadcastReceiver {
      * @param person,  a {@link String} of the name of the person in question
      */
     private void addNotification(Context context, int id, String person, boolean isAcceptance) {
-        String contentText = "";
+        String contentText;
         if (isAcceptance) {
             contentText = "Horario hat festgestellt, dass Du eine Benachrichtigung zu einem Termin bekommen hast, der nicht mehr vorhanden ist." +
                     "Vermutlich hast Du Horario neu installiert, bitte kontaktiere doch folgende Person, um ihren zuletzt zugesagten Termin zu überprüfen: " +
@@ -465,13 +580,10 @@ public class SmsReceiver extends BroadcastReceiver {
             // The id of the channel.
             String channel_id = String.valueOf(id);
             //The user-visible name of the channel.
-            CharSequence name = title;
-            // The user-visible description of the channel.
-            String description = contentText;
             int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel mChannel = new NotificationChannel(channel_id, name, importance);
+            NotificationChannel mChannel = new NotificationChannel(channel_id, title, importance);
             // Configure the notification channel.
-            mChannel.setDescription(description);
+            mChannel.setDescription(contentText);
             mChannel.enableLights(true);
             // Sets the notification light color for notifications posted to this
             // channel, if the device supports this feature.
@@ -484,7 +596,6 @@ public class SmsReceiver extends BroadcastReceiver {
                             .setContentTitle(title)
                             .setContentText(contentText).setStyle(new NotificationCompat.BigTextStyle()
                             .bigText(contentText));
-            ;
 
             builder.setContentIntent(contentIntent);
             manager.notify(id, builder.build());
@@ -495,7 +606,7 @@ public class SmsReceiver extends BroadcastReceiver {
                             .setContentTitle(title)
                             .setContentText(contentText).setStyle(new NotificationCompat.BigTextStyle()
                             .bigText(contentText));
-            ;
+
             builder.setContentIntent(contentIntent);
 
             // Add as notification

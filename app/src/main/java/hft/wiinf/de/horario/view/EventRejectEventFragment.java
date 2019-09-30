@@ -161,7 +161,7 @@ public class EventRejectEventFragment extends Fragment {
                         rejectMessage = spinner_reason.getSelectedItem().toString() + "!" + reason_for_rejection.getText().toString();
                         creatorEventId = event.getCreatorEventId();
                         Log.i("Absagegrund", rejectMessage);
-                        SendSmsController.sendSMS(getContext(), phNumber, rejectMessage, false, creatorEventId, shortTitle);
+                        new SendSmsController().sendSMS(getContext(), phNumber, rejectMessage, false, creatorEventId, shortTitle);
 
                         Toast.makeText(getContext(), R.string.reject_event_hint, Toast.LENGTH_SHORT).show();
                         //restart Activity

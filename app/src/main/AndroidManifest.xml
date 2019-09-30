@@ -69,7 +69,7 @@
             android:value="18" />
         <meta-data
             android:name="AA_MODELS"
-            android:value="hft.wiinf.de.horario.model.Event, hft.wiinf.de.horario.model.Person, hft.wiinf.de.horario.model.FailedSMS" />
+            android:value="hft.wiinf.de.horario.model.Event, hft.wiinf.de.horario.model.Person, hft.wiinf.de.horario.model.FailedSMS, hft.wiinf.de.horario.model.Invitation" />
 
         <provider
             android:name="com.activeandroid.content.ContentProvider"
@@ -97,7 +97,8 @@
         <receiver
             android:name=".service.SmsReceiver"
             android:enabled="true"
-            android:exported="true">
+            android:exported="true"
+            android:permission="android.permission.BROADCAST_SMS">
             <intent-filter android:priority="999">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>

@@ -68,11 +68,7 @@ public class EventController {
 
     public static boolean createdEventsYet() {
         List<Event> resultSet = new Select().from(Event.class).execute();
-        if (resultSet.size() == 0) {
-            return false;
-        } else {
-            return true;
-        }
+            return resultSet.size() != 0;
     }
 
     public static List<Event> findMyAcceptedEventsInTheFuture() {
@@ -148,10 +144,8 @@ public class EventController {
 
     public static boolean checkIfEventIsInDatabaseThroughId(Long eventIdInSMS) {
         List<Event> resultSet = new Select().from(Event.class).where("Id=?", eventIdInSMS).execute();
-        if (resultSet.size() == 0) {
-            return false;
-        } else {
-            return true;
-        }
+            return resultSet.size() != 0;
     }
+
+
 }

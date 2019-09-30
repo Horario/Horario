@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
@@ -19,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.activeandroid.query.Select;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
 
@@ -32,20 +34,22 @@ import java.util.Locale;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
+import hft.wiinf.de.horario.controller.InvitationController;
 import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.AcceptedState;
+import hft.wiinf.de.horario.model.Invitation;
 
 public class CalendarFragment extends Fragment {
     private static final String TAG = "CalendarFragmentActivity";
 
     public static CompactCalendarView calendarCvCalendar;
-    static ListView calendarLvList;
-    static TextView calendarTvMonth;
-    static TextView calendarTvDay;
-    TextView calendarIsFloatMenuOpen;
-    FloatingActionButton calendarFcMenu, calendarFcQrScan, calendarFcNewEvent;
+    ListView calendarLvList;
+    TextView calendarTvMonth;
+    TextView calendarTvDay;
+    TextView calendarIsFloatMenuOpen, calendarTvInvitationNumber;
+    FloatingActionButton calendarFcMenu, calendarFcQrScan, calendarFcNewEvent, calendarFcInvitations;
     ConstraintLayout cLayout_calendar_main;
-    static Context context = null;
+    Context context = null;
 
     static DateFormat monthFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
     static DateFormat dayFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
@@ -56,8 +60,9 @@ public class CalendarFragment extends Fragment {
     static List<hft.wiinf.de.horario.model.Event> allEvents = new ArrayList<>();
 
     Animation ActionButtonOpen, ActionButtonClose, ActionButtonRotateRight, ActionButtonRotateLeft;
+    AlphaAnimation fadeIn, fadeOut;
 
-    public static void update(Date date) {
+    public void update(Date date) {
         calendarTvDay.setText(dayFormat.format(date));
         calendarLvList.setAdapter(getAdapter(date));
         calendarTvMonth.setText(monthFormat.format(date));
@@ -75,21 +80,27 @@ public class CalendarFragment extends Fragment {
         calendarTvMonth = view.findViewById(R.id.calendarTvMonth);
         calendarLvList = view.findViewById(R.id.calendarLvList);
         calendarTvDay = view.findViewById(R.id.calendarTvDay);
+        calendarTvInvitationNumber = view.findViewById(R.id.calendar_tvInvitationNumber);
         context = this.getActivity();
         //FloatingButton
         calendarFcMenu = view.findViewById(R.id.calendar_floatingActionButtonMenu);
         calendarFcNewEvent = view.findViewById(R.id.calendar_floatingActionButtonNewEvent);
         calendarFcQrScan = view.findViewById(R.id.calendar_floatingActionButtonScan);
+        calendarFcInvitations = view.findViewById(R.id.calendar_floatingActionButtonInvites);
         cLayout_calendar_main = view.findViewById(R.id.calendar_constrainLayout_main);
         calendarIsFloatMenuOpen = view.findViewById(R.id.calendar_hiddenField);
 
+        //Animations
         ActionButtonOpen = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonopen);
         ActionButtonClose = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonclose);
         ActionButtonRotateRight = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonrotateright);
         ActionButtonRotateLeft = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonrotateleft);
+        fadeIn = new AlphaAnimation(0.0f, 1.0f);
+        fadeOut= new AlphaAnimation(1.0f, 0.0f);
 
         calendarFcQrScan.hide();
         calendarFcNewEvent.hide();
+        calendarFcInvitations.hide();
 
         Calendar today = Calendar.getInstance();
         today.set(Calendar.HOUR_OF_DAY, 0);
@@ -168,10 +179,10 @@ public class CalendarFragment extends Fragment {
             public void onClick(View view) {
                 if (calendarIsFloatMenuOpen.getText().equals("false")) {
                     showFABMenu();
-                    calendarIsFloatMenuOpen.setText("true");
+                    calendarIsFloatMenuOpen.setText(R.string.wahr);
                 } else {
                     closeFABMenu();
-                    calendarIsFloatMenuOpen.setText("false");
+                    calendarIsFloatMenuOpen.setText(R.string.falsch);
                 }
             }
         });
@@ -187,6 +198,22 @@ public class CalendarFragment extends Fragment {
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
                 fr.replace(R.id.calendar_frameLayout, newEventFragment, "NewEvent");
                 fr.addToBackStack("NewEvent");
+                fr.commit();
+                closeFABMenu();
+            }
+        });
+
+        calendarFcInvitations.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                InvitationFragment invitationFragment = new InvitationFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("fragment", "Calendar");
+                invitationFragment.setArguments(bundle);
+
+                FragmentTransaction fr = getFragmentManager().beginTransaction();
+                fr.replace(R.id.calendar_frameLayout, invitationFragment);
+                fr.addToBackStack(null);
                 fr.commit();
                 closeFABMenu();
             }
@@ -214,6 +241,7 @@ public class CalendarFragment extends Fragment {
                 closeFABMenu();
             }
         });
+        calendarTvInvitationNumber.setText(String.valueOf(InvitationController.getNumberOfInvitations()));
         return view;
     }
 
@@ -229,7 +257,7 @@ public class CalendarFragment extends Fragment {
         }
     }
 
-    public static ArrayAdapter getAdapter(Date date) {
+    public ArrayAdapter getAdapter(Date date) {
         final ArrayList<Appointment> eventsAsAppointments = new ArrayList<>();
 
         Calendar endOfDay = Calendar.getInstance();
@@ -257,7 +285,7 @@ public class CalendarFragment extends Fragment {
                 }
             }
         }
-        final ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1, eventsAsAppointments) {
+        return new ArrayAdapter<Appointment>(context, android.R.layout.simple_list_item_1, eventsAsAppointments) {
             @NonNull
             @Override
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -281,32 +309,49 @@ public class CalendarFragment extends Fragment {
                 return textView;
             }
         };
-        return adapter;
     }
 
     public void showFABMenu() {
         calendarFcQrScan.startAnimation(ActionButtonOpen);
         calendarFcNewEvent.startAnimation(ActionButtonOpen);
+        calendarFcInvitations.startAnimation(ActionButtonOpen);
         calendarFcMenu.startAnimation(ActionButtonRotateRight);
         calendarFcQrScan.setClickable(true);
+        calendarFcInvitations.setClickable(true);
         calendarFcNewEvent.setClickable(true);
-        calendarIsFloatMenuOpen.setText("true");
+        calendarIsFloatMenuOpen.setText(R.string.wahr);
         calendarFcQrScan.show();
         calendarFcNewEvent.show();
+        calendarFcInvitations.show();
         calendarFcMenu.setImageResource(R.drawable.ic_plusmenu);
+        if(InvitationController.getNumberOfInvitations() > 0){
+            calendarTvInvitationNumber.startAnimation(fadeIn);
+            fadeIn.setDuration(300);
+            calendarTvInvitationNumber.setVisibility(View.VISIBLE);
+        }
     }
 
     public void closeFABMenu() {
         if (calendarIsFloatMenuOpen.getText().equals("true")) {
             calendarFcQrScan.startAnimation(ActionButtonClose);
             calendarFcNewEvent.startAnimation(ActionButtonClose);
+            calendarFcInvitations.startAnimation(ActionButtonClose);
             calendarFcMenu.startAnimation(ActionButtonRotateLeft);
             calendarFcQrScan.setClickable(false);
+            calendarFcInvitations.setClickable(false);
             calendarFcNewEvent.setClickable(false);
-            calendarIsFloatMenuOpen.setText("false");
+            calendarIsFloatMenuOpen.setText(R.string.falsch);
+            calendarFcInvitations.hide();
             calendarFcQrScan.hide();
             calendarFcNewEvent.hide();
             calendarFcMenu.setImageResource(R.drawable.ic_plusmenu);
+            calendarTvInvitationNumber.setVisibility(View.INVISIBLE);
         }
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        calendarTvInvitationNumber.setText(String.valueOf(InvitationController.getNumberOfInvitations()));
     }
 }

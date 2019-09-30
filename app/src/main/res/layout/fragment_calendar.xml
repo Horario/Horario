@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/calendar_constrainLayout_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -19,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.github.sundeepk.compactcalendarview.CompactCalendarView xmlns:app="http://schemas.android.com/apk/res-auto"
+        <com.github.sundeepk.compactcalendarview.CompactCalendarView
             android:id="@+id/calendarCvCalendar"
             android:layout_width="0dp"
             android:layout_height="246dp"
@@ -46,7 +45,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="12dp"
             android:lines="@android:integer/config_longAnimTime"
-            android:text="TextView Day"
+            android:text="@string/textview_day"
             android:textColor="@color/zentea_darkgreyblue"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -62,8 +61,9 @@
             android:background="@color/zentea_darkgreen"
             android:backgroundTintMode="src_atop"
             android:clickable="true"
+            android:focusable="true"
             android:paddingTop="8dp"
-            android:text="TextView Month"
+            android:text="@string/textview_month"
             android:textAlignment="center"
             android:textColor="@color/ic_launcher_background"
             android:textSize="18sp"
@@ -84,7 +84,12 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/calendarTvDay"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintVertical_bias="1.0" >
+
+
+
+        </ListView>
+
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/calendar_floatingActionButtonMenu"
@@ -106,14 +111,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.989"
-            app:srcCompat="@drawable/ic_plusmenu" />
+            app:srcCompat="@drawable/ic_menu_newevent" />
 
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/calendar_floatingActionButtonNewEvent"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_gravity="top|right"
+            android:layout_gravity="top|end"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="22dp"
             android:layout_marginStart="8dp"
@@ -128,7 +133,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.988"
-            app:srcCompat="@android:drawable/ic_menu_today" />
+            app:srcCompat="@drawable/ic_menu_add" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/calendar_floatingActionButtonScan"
@@ -149,7 +154,45 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.981"
-            app:srcCompat="@android:drawable/ic_menu_camera" />
+            app:srcCompat="@drawable/ic_menu_scan_qr" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/calendar_floatingActionButtonInvites"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="22dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:visibility="invisible"
+            app:backgroundTint="@color/zentea_darkgreen"
+            app:elevation="6dp"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toTopOf="@+id/calendar_floatingActionButtonScan"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.981"
+            app:srcCompat="@drawable/ic_menu_invitation" />
+
+        <TextView
+            android:id="@+id/calendar_tvInvitationNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/ic_menu_circle"
+            android:elevation="7dp"
+            android:visibility="invisible"
+            android:gravity="center"
+            android:textSize="10sp"
+            android:textColor="#fff"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/calendar_floatingActionButtonInvites"
+            app:layout_constraintEnd_toEndOf="@+id/calendar_floatingActionButtonInvites" />
+
 
         <TextView
             android:id="@+id/calendar_hiddenField"
@@ -158,7 +201,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="false"
+            android:text="@string/falsch"
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

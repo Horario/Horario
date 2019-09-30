@@ -7,11 +7,14 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
@@ -20,6 +23,8 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+
+import com.activeandroid.query.Select;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -30,38 +35,43 @@ import java.util.List;
 
 import hft.wiinf.de.horario.R;
 import hft.wiinf.de.horario.controller.EventController;
+import hft.wiinf.de.horario.controller.InvitationController;
 import hft.wiinf.de.horario.controller.PersonController;
 import hft.wiinf.de.horario.model.AcceptedState;
 import hft.wiinf.de.horario.model.Event;
+import hft.wiinf.de.horario.model.Invitation;
 import hft.wiinf.de.horario.model.Person;
 
 public class EventOverviewFragment extends Fragment {
 
     public static Date selectedMonth = new Date();
-    static ListView overviewLvList;
-    static TextView overviewTvMonth;
-    static Context context = null;
+    ListView overviewLvList;
+    TextView overviewTvMonth;
+    Context context = null;
     static DateFormat timeFormat = new SimpleDateFormat("HH:mm");
-    FloatingActionButton eventOverviewFcMenu, eventOverviewFcQrScan, eventOverviewFcNewEvent;
+    FloatingActionButton eventOverviewFcMenu, eventOverviewFcQrScan, eventOverviewFcNewEvent, eventOverviewFcInvites;
     boolean fabIsOpened = false;
     ImageButton overviewBtNext;
-    TextView eventOverview_HiddenIsFloatingMenuOpen;
+    TextView eventOverview_HiddenIsFloatingMenuOpen, eventOverviewTvInvitationNumber;
     ImageButton overviewBtPrevious;
     Animation ActionButtonOpen, ActionButtonClose, ActionButtonRotateRight, ActionButtonRotateLeft;
+    AlphaAnimation fadeIn, fadeOut;
     ConstraintLayout layout_eventOverview_main;
     ConstraintLayout layoutOverview;
     static List<Event> eventList = new ArrayList<>();
 
 
-    public static void update() {
-        overviewTvMonth.setText(CalendarFragment.monthFormat.format(selectedMonth));
-        overviewLvList.setAdapter(iterateOverMonth(selectedMonth));
+    public void update() {
+        if(overviewTvMonth != null && overviewLvList != null) {
+            overviewTvMonth.setText(CalendarFragment.monthFormat.format(selectedMonth));
+            overviewLvList.setAdapter(iterateOverMonth(selectedMonth));
+        }
     }
 
     //get all events for the selected month and save them in a adapter
-    public static ArrayAdapter iterateOverMonth(final Date date) {
-        ArrayList<Appointment> eventArrayDay = new ArrayList<>();
-        final ArrayList<Appointment> eventArray = new ArrayList<>();
+    public ArrayAdapter iterateOverMonth(final Date date) {
+        ArrayList<Appointment> appointmentArrayDay = new ArrayList<>();
+        final ArrayList<Appointment> appointmentArray = new ArrayList<>();
         List<Event> allEvents = EventController.getAllEvents();
 
         Calendar helper = Calendar.getInstance();
@@ -88,32 +98,29 @@ public class EventOverviewFragment extends Fragment {
             }
 
             if (eventList.size() > 0) {
-                eventArrayDay.add(new Appointment(CalendarFragment.dayFormat.format(helper.getTime()), 0));
+                appointmentArrayDay.add(new Appointment(CalendarFragment.dayFormat.format(helper.getTime()), 0));
             }
             for (int i = 0; i < eventList.size(); i++) {
                 if (eventList.get(i).getCreator().equals(PersonController.getPersonWhoIam())) {
-                    eventArrayDay.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 3, eventList.get(i).getId(), eventList.get(i).getCreator()));
+                    appointmentArrayDay.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 3, eventList.get(i).getId(), eventList.get(i).getCreator()));
                 } else {
                     if (eventList.get(i).getAccepted().equals(AcceptedState.ACCEPTED)) {
-                        eventArrayDay.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 1, eventList.get(i).getId(), eventList.get(i).getCreator()));
+                        appointmentArrayDay.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 1, eventList.get(i).getId(), eventList.get(i).getCreator()));
                     } else if (eventList.get(i).getAccepted().equals(AcceptedState.WAITING)) {
-                        eventArrayDay.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 2, eventList.get(i).getId(), eventList.get(i).getCreator()));
+                        appointmentArrayDay.add(new Appointment(timeFormat.format(eventList.get(i).getStartTime()) + " - " + timeFormat.format(eventList.get(i).getEndTime()) + " " + eventList.get(i).getShortTitle(), 2, eventList.get(i).getId(), eventList.get(i).getCreator()));
                     }
                 }
             }
-            if (eventArrayDay.size() > 1) {
-                eventArray.addAll(eventArrayDay);
+            if (appointmentArrayDay.size() > 1) {
+                appointmentArray.addAll(appointmentArrayDay);
             }
-            eventArrayDay.clear();
+            appointmentArrayDay.clear();
             helper.add(Calendar.DAY_OF_MONTH, 1);
         }
-        if (eventArray.size() < 1)
-
-        { //when no events this month do stuff
-            eventArray.add(new Appointment("Du hast keine Termine diesen Monat", 0));
+        if (appointmentArray.size() < 1) { //when no events this month do stuff
+            appointmentArray.add(new Appointment("Du hast keine Termine diesen Monat", 0));
         }
-
-        final ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1, eventArray) {
+        return new ArrayAdapter<Appointment>(context, android.R.layout.simple_list_item_1, appointmentArray) {
             @NonNull
             @Override
 
@@ -126,29 +133,29 @@ public class EventOverviewFragment extends Fragment {
                 return position;
             }
 
+            @NonNull
             @Override
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
                 // 0 = date, 1 = accepted, 2 = waiting, 3 = own
-                if (eventArray.get(position).getType() == 1) {
+                if (appointmentArray.get(position).getType() == 1) {
                     textView.setTextColor(Color.DKGRAY);
                     textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_mydate_approved, 0);
-                } else if (eventArray.get(position).getType() == 2) {
+                } else if (appointmentArray.get(position).getType() == 2) {
                     textView.setTextColor(Color.DKGRAY);
                     textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_mydate_questionmark, 0);
-                } else if (eventArray.get(position).getType() == 3) {
+                } else if (appointmentArray.get(position).getType() == 3) {
                     textView.setTextColor(Color.DKGRAY);
                     textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_mydate, 0);
-                } else if (eventArray.get(position).getType() == 0) {
+                } else if (appointmentArray.get(position).getType() == 0) {
                     textView.setTextColor(Color.BLACK);
                     textView.setBackgroundColor(Color.WHITE);
                     textView.setFocusable(false);
                 }
-                textView.setText(eventArray.get(position).getDescription());
+                textView.setText(appointmentArray.get(position).getDescription());
                 return textView;
             }
         };
-        return adapter;
     }
 
     @Nullable
@@ -164,22 +171,26 @@ public class EventOverviewFragment extends Fragment {
         overviewBtNext = view.findViewById(R.id.overviewBtNext);
         overviewBtPrevious = view.findViewById(R.id.overviewBtPrevious);
         layoutOverview = view.findViewById(R.id.layoutOverview);
+        eventOverviewTvInvitationNumber = view.findViewById(R.id.eventOverview_tvInvitationNumber);
         context = this.getActivity();
 
         //Floating Button
         eventOverviewFcMenu = view.findViewById(R.id.eventOverview_floatingActionButtonMenu);
         eventOverviewFcNewEvent = view.findViewById(R.id.eventOverview_floatingActionButtonNewEvent);
         eventOverviewFcQrScan = view.findViewById(R.id.eventOverview_floatingActionButtonScan);
+        eventOverviewFcInvites = view.findViewById(R.id.eventOverview_floatingActionButtonInvites);
         layout_eventOverview_main = view.findViewById(R.id.eventOverview_Layout_main);
         eventOverview_HiddenIsFloatingMenuOpen = view.findViewById(R.id.eventOverviewFabClosed);
         ActionButtonOpen = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonopen);
         ActionButtonClose = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonclose);
         ActionButtonRotateRight = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonrotateright);
         ActionButtonRotateLeft = AnimationUtils.loadAnimation(getContext(), R.anim.actionbuttonrotateleft);
-
+        fadeIn = new AlphaAnimation(0.0f, 1.0f);
+        fadeOut= new AlphaAnimation(1.0f, 0.0f);
 
         eventOverviewFcQrScan.hide();
         eventOverviewFcNewEvent.hide();
+        eventOverviewFcInvites.hide();
         //selectedMonth = CalendarFragment.selectedMonth;
         selectedMonth = Calendar.getInstance().getTime();
         update();
@@ -215,7 +226,7 @@ public class EventOverviewFragment extends Fragment {
                 if (fabIsOpened) {
                     closeFABMenu();
                 }
-                ;
+
                 // 0 = date, 1 = accepted, 2 = waiting, 3 = own
                 switch (selectedItem.getType()) {
                     case 1:
@@ -264,11 +275,11 @@ public class EventOverviewFragment extends Fragment {
             public void onClick(View view) {
                 if (eventOverview_HiddenIsFloatingMenuOpen.getText().equals("false")) {
                     showFABMenu();
-                    eventOverview_HiddenIsFloatingMenuOpen.setText("true");
+                    eventOverview_HiddenIsFloatingMenuOpen.setText(R.string.wahr);
                 } else {
                     if (fabIsOpened) {
                         closeFABMenu();
-                        eventOverview_HiddenIsFloatingMenuOpen.setText("false");
+                        eventOverview_HiddenIsFloatingMenuOpen.setText(R.string.falsch);
                     }
                 }
             }
@@ -282,7 +293,6 @@ public class EventOverviewFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putString("fragment", "EventOverview");
                 newEventFragment.setArguments(bundle);
-
                 FragmentTransaction fr = getFragmentManager().beginTransaction();
                 fr.replace(R.id.eventOverview_frameLayout, newEventFragment);
                 fr.addToBackStack(null);
@@ -290,10 +300,27 @@ public class EventOverviewFragment extends Fragment {
                 if (fabIsOpened) {
                     closeFABMenu();
                 }
-                ;
+
             }
         });
 
+        eventOverviewFcInvites.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                InvitationFragment invitationFragment = new InvitationFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("fragment", "EventOverview");
+                invitationFragment.setArguments(bundle);
+
+                FragmentTransaction fr = getFragmentManager().beginTransaction();
+                fr.replace(R.id.eventOverview_frameLayout, invitationFragment);
+                fr.addToBackStack(null);
+                fr.commit();
+                if (fabIsOpened){
+                    closeFABMenu();
+                }
+            }
+        });
         //Open new Fragment "QRCodeScan"
         eventOverviewFcQrScan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -310,7 +337,7 @@ public class EventOverviewFragment extends Fragment {
                 if (fabIsOpened) {
                     closeFABMenu();
                 }
-                ;
+
             }
         });
 
@@ -320,10 +347,11 @@ public class EventOverviewFragment extends Fragment {
                 if (fabIsOpened) {
                     closeFABMenu();
                 }
-                ;
+
             }
         });
 
+        eventOverviewTvInvitationNumber.setText(String.valueOf(InvitationController.getNumberOfInvitations()));
         return view;
     }
 
@@ -334,31 +362,48 @@ public class EventOverviewFragment extends Fragment {
         eventOverviewFcQrScan.startAnimation(ActionButtonOpen);
         eventOverviewFcNewEvent.startAnimation(ActionButtonOpen);
         eventOverviewFcMenu.startAnimation(ActionButtonRotateRight);
+        eventOverviewFcInvites.startAnimation(ActionButtonOpen);
         eventOverviewFcQrScan.setClickable(true);
+        eventOverviewFcInvites.setClickable(true);
         eventOverviewFcNewEvent.setClickable(true);
-        eventOverview_HiddenIsFloatingMenuOpen.setText("true");
+        eventOverview_HiddenIsFloatingMenuOpen.setText(R.string.wahr);
         eventOverviewFcQrScan.show();
+        eventOverviewFcInvites.show();
         eventOverviewFcNewEvent.show();
         eventOverviewFcMenu.setImageResource(R.drawable.ic_plusmenu);
+        if(InvitationController.getNumberOfInvitations() > 0){
+            eventOverviewTvInvitationNumber.startAnimation(fadeIn);
+            fadeIn.setDuration(300);
+            eventOverviewTvInvitationNumber.setVisibility(View.VISIBLE);
+        }
         fabIsOpened = true;
     }
 
     //Hide the menu Buttons
     public void closeFABMenu() {
         if (fabIsOpened) {
-            eventOverview_HiddenIsFloatingMenuOpen.setText("false");
+            eventOverview_HiddenIsFloatingMenuOpen.setText(R.string.falsch);
             eventOverviewFcQrScan.hide();
+            eventOverviewFcInvites.hide();
             eventOverviewFcNewEvent.hide();
             if (eventOverviewFcNewEvent.isClickable()) {
                 eventOverviewFcQrScan.startAnimation(ActionButtonClose);
                 eventOverviewFcNewEvent.startAnimation(ActionButtonClose);
+                eventOverviewFcInvites.startAnimation(ActionButtonClose);
                 eventOverviewFcMenu.startAnimation(ActionButtonRotateLeft);
                 eventOverviewFcQrScan.setClickable(false);
+                eventOverviewFcInvites.setClickable(false);
                 eventOverviewFcNewEvent.setClickable(false);
                 eventOverviewFcMenu.setImageResource(R.drawable.ic_plusmenu);
+                eventOverviewTvInvitationNumber.setVisibility(View.INVISIBLE);
                 fabIsOpened = false;
             }
         }
+    }
+    @Override
+    public void onResume(){
+        super.onResume();
+        eventOverviewTvInvitationNumber.setText(String.valueOf(InvitationController.getNumberOfInvitations()));
     }
 }
 
